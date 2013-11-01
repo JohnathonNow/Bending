@@ -1,0 +1,117 @@
+package Entity;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+import destruct.APPLET;
+import destruct.Player;
+import destruct.Server;
+import destruct.World;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.nio.ByteBuffer;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author John
+ */
+public class GustEntity extends Entity{
+    public int maker = 0;
+    public int radius = 16;
+    public GustEntity(int x, int y, int hspeed, int vspeed, int ma)
+    {
+        X = x;
+        Y = y;
+        xspeed = hspeed;
+        yspeed = vspeed;
+        maker = ma;
+    }
+    @Override
+    public void onDraw(Graphics G, int viewX, int viewY) {
+        if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
+        {
+            G.setColor(Color.lightGray);
+            int deg = r.nextInt(360);
+            G.fillArc((X-1)-viewX, (Y-1)-viewY, 2, 2, deg, 15);
+            deg = r.nextInt(360);
+            G.fillArc((X-2)-viewX, (Y-2)-viewY, 4, 4, deg, 15);
+            G.setColor(Color.white);
+            deg = r.nextInt(360);
+            G.fillArc((X-3)-viewX, (Y-3)-viewY, 6, 6, deg, 15);
+            deg = r.nextInt(360);
+            G.fillArc((X-4)-viewX, (Y-4)-viewY, 8, 8, deg, 15);
+        }
+    }
+
+    @Override
+    public void onUpdate(World apples) {
+       if (!apples.inBounds(X, Y)||apples.checkCollision(X, Y))
+       {
+           alive = false;
+           //apples.explode(X, Y, 32, 8, 16);
+       }
+       for (Player p:apples.playerList)
+       {
+           if (maker!=p.ID&&p.checkCollision(X, Y))
+           {
+               alive = false;
+           }
+       }
+       /*if (yspeed<12)
+       {
+           yspeed++;
+       }*/
+    }
+
+    @Override
+    public void cerealize(ByteBuffer out) {
+        try {
+            Server.putString(out,  this.getClass().getName());
+            out.putInt(X);
+            out.putInt(Y);
+            out.putInt(xspeed);
+            out.putInt(yspeed);
+            out.putInt(maker);
+        } catch (Exception ex) {
+            Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public static void reconstruct(ByteBuffer in, World world) {
+        try {
+            world.entityList.add(new GustEntity(in.getInt(),in.getInt(),in.getInt(),in.getInt(),in.getInt()));
+        } catch (Exception ex) {
+            Logger.getLogger(GustEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    @Override
+    public void onServerUpdate(Server lol)
+{
+    if (collided(lol.earth))
+       {
+           lol.earth.ground.ClearCircle(X, Y, radius);
+           lol.sendMessage(Server.DIG, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius));
+           alive = false;
+       }
+}
+    
+    private boolean collided(World w)
+    {
+        double direction = APPLET.pointDir(previousX, previousY, X, Y);
+        int speed = (int)APPLET.pointDis(previousX, previousY, X, Y);
+        for (int i = 0; i <= speed; i++)
+        {
+            if (w.checkCollision(X+(int)APPLET.lengthdir_x(i,direction),Y+(int)APPLET.lengthdir_y(i,direction)))
+            {
+                X = X+(int)APPLET.lengthdir_x(i,direction);
+                Y = Y+(int)APPLET.lengthdir_y(i,direction);
+                return true;
+            }
+        }
+        return false;
+    }
+}
