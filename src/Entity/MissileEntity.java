@@ -36,13 +36,13 @@ public class MissileEntity extends Entity{
             G.setColor(Color.white);
             
             int deg = r.nextInt(360);
-            G.fillArc((X-1)-viewX, (Y-1)-viewY, 2, 2, deg, 60);
+            G.fillArc((int)(X-1)-viewX, (int)(Y-1)-viewY, 2, 2, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-2)-viewX, (Y-2)-viewY, 4, 4, deg, 60);
+            G.fillArc((int)(X-2)-viewX, (int)(Y-2)-viewY, 4, 4, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-3)-viewX, (Y-3)-viewY, 6, 6, deg, 60);
+            G.fillArc((int)(X-3)-viewX, (int)(Y-3)-viewY, 6, 6, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-4)-viewX, (Y-4)-viewY, 8, 8, deg, 60);
+            G.fillArc((int)(X-4)-viewX, (int)(Y-4)-viewY, 8, 8, deg, 60);
         }
     }
 
@@ -55,7 +55,7 @@ public class MissileEntity extends Entity{
        }
        for (Player p:apples.playerList)
        {
-           if (maker!=p.ID&&p.checkCollision(X, Y))
+           if (maker!=p.ID&&p.checkCollision((int)X, (int)Y))
            {
                alive = false;
            }
@@ -70,10 +70,10 @@ public class MissileEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

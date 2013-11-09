@@ -42,10 +42,10 @@ public class SandEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.YELLOW);
-            G.fillArc((X-3)-viewX, (Y-3)-viewY, 6, 6, 0, 360);
+            G.fillArc((int)(X-3)-viewX, (int)(Y-3)-viewY, 6, 6, 0, 360);
             
             G.setColor(Color.GRAY);
-            G.fillArc((X-2)-viewX, (Y-2)-viewY, 4, 4, s1, a1);
+            G.fillArc((int)(X-2)-viewX, (int)(Y-2)-viewY, 4, 4, s1, a1);
         }
     }
 
@@ -59,7 +59,7 @@ public class SandEntity extends Entity{
        }
        for (Player p:apples.playerList)
        {
-           if (maker!=p.ID&&p.checkCollision(X, Y))
+           if (maker!=p.ID&&p.checkCollision((int)X, (int)Y))
            {
                alive = false;
            }
@@ -85,8 +85,8 @@ public void onServerUpdate(Server lol)
     if (!lol.earth.inBounds(X, Y)||lol.earth.checkCollision(X, Y))
        {
            radius/=2;
-           lol.earth.ground.FillCircleW(X, Y, radius, World.SAND);
-           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.SAND));
+           lol.earth.ground.FillCircleW((int)X, (int)Y, radius, World.SAND);
+           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).put(World.SAND));
        }
 }
 

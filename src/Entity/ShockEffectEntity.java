@@ -30,13 +30,13 @@ public class ShockEffectEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.yellow);
-            int x = X+radius-r.nextInt(radius*2)-viewX;
-            int y =  Y+radius-r.nextInt(radius*2)-viewY;
+            int x = (int)X+radius-r.nextInt(radius*2)-viewX;
+            int y =  (int)Y+radius-r.nextInt(radius*2)-viewY;
             G.drawLine(x,y, x+radius-r.nextInt(radius*2), y+radius-r.nextInt(radius*2));
-            G.drawLine(x+radius-r.nextInt(radius*2), y+radius-r.nextInt(radius*2), X+radius-r.nextInt(radius*2)-viewX, Y+radius-r.nextInt(radius*2)-viewY);
+            G.drawLine((int)x+radius-r.nextInt(radius*2), y+radius-r.nextInt(radius*2), (int)X+radius-r.nextInt(radius*2)-viewX, (int)Y+radius-r.nextInt(radius*2)-viewY);
             
             G.setColor(Color.white);
-            G.drawLine(X+radius-r.nextInt(radius*2)-viewX, Y+radius-r.nextInt(radius*2)-viewY, X+radius-r.nextInt(radius*2)-viewX, Y+radius-r.nextInt(radius*2)-viewY);
+            G.drawLine((int)X+radius-r.nextInt(radius*2)-viewX, (int)Y+radius-r.nextInt(radius*2)-viewY, (int)X+radius-r.nextInt(radius*2)-viewX, (int)Y+radius-r.nextInt(radius*2)-viewY);
         }
     }
 

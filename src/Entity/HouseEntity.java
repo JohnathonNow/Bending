@@ -38,8 +38,8 @@ public class HouseEntity extends Entity{
         X = x;
         Y = y;
         houseW = w; houseH = h;
-        houseX=X-houseW;
-        houseY=Y-houseH;
+        houseX=(int)X-houseW;
+        houseY=(int)Y-houseH;
         xspeed = 0;
         yspeed = 0;
         setPoints();

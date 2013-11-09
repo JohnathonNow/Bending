@@ -24,7 +24,7 @@ public abstract class Entity extends Object{
         return this;
     }
     public static final byte explosion = 0, groundinator = 2, house = 3, missile = 4, water = 5, enemy = 6, effect = 7;
-    public int X, Y, yspeed, xspeed, previousX, previousY;
+    public float X, Y, yspeed, xspeed, previousX, previousY;
     public boolean alive = true;
     public boolean getAlive()
     {
@@ -36,19 +36,19 @@ public abstract class Entity extends Object{
     }
     public int getX()
     {
-        return X;
+        return (int)X;
     }
     public int getY()
     {
-        return Y;
+        return (int)Y;
     }
     public int getXspeed()
     {
-        return xspeed;
+        return (int)xspeed;
     }
     public int getYspeed()
     {
-        return yspeed;
+        return (int)yspeed;
     }
     public void setX(int x)
     {

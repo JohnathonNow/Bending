@@ -37,16 +37,16 @@ public class BuritoEntity extends Entity{
             G.setColor(Color.ORANGE);
             for (int i = 0; i < 4; i ++)
             {
-                G.fillArc(X-viewX+(i*2)-4, Y-viewY, 4, 4, 0, 360);
+                G.fillArc((int)X-viewX+(i*2)-4, (int)Y-viewY, 4, 4, 0, 360);
             }
             G.setColor(Color.RED);
-            G.fillArc(4+X-viewX, Y-viewY, 3, 3, 0, 360);
+            G.fillArc(4+(int)X-viewX, (int)Y-viewY, 3, 3, 0, 360);
         }
     }
     int next = 0;
     @Override
     public void onUpdate(World apples) {
-       if (!apples.inBounds(X, Y)||apples.checkCollision(X, Y))
+       if (!apples.inBounds((int)X, (int)Y)||apples.checkCollision((int)X, (int)Y))
        {
            
            alive = false;
@@ -70,10 +70,10 @@ public void onServerUpdate(Server lol)
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

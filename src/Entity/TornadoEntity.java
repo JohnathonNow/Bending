@@ -33,27 +33,27 @@ public class TornadoEntity extends Entity{
         {
             G.setColor(Color.white);
             int deg = r.nextInt(360);
-            G.fillArc((X-1)-viewX, (Y)-viewY, 2, 1, deg, 60);
+            G.fillArc((int)(X-1)-viewX, (int)(Y)-viewY, 2, 1, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-2)-viewX, (Y-4)-viewY, 4, 3, deg, 60);
+            G.fillArc((int)(X-2)-viewX, (int)(Y-4)-viewY, 4, 3, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-3)-viewX, (Y-7)-viewY, 6, 5, deg, 60);
+            G.fillArc((int)(X-3)-viewX, (int)(Y-7)-viewY, 6, 5, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-4)-viewX, (Y-11)-viewY, 8, 7, deg, 60);
+            G.fillArc((int)(X-4)-viewX, (int)(Y-11)-viewY, 8, 7, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-5)-viewX, (Y-14)-viewY, 10, 9, deg, 60);
+            G.fillArc((int)(X-5)-viewX, (int)(Y-14)-viewY, 10, 9, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-6)-viewX, (Y-17)-viewY, 12, 11, deg, 60);
+            G.fillArc((int)(X-6)-viewX, (int)(Y-17)-viewY, 12, 11, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-7)-viewX, (Y-20)-viewY, 14, 13, deg, 60);
+            G.fillArc((int)(X-7)-viewX, (int)(Y-20)-viewY, 14, 13, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-8)-viewX, (Y-23)-viewY, 16, 15, deg, 60);
+            G.fillArc((int)(X-8)-viewX, (int)(Y-23)-viewY, 16, 15, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-9)-viewX, (Y-26)-viewY, 18, 17, deg, 60);
+            G.fillArc((int)(X-9)-viewX, (int)(Y-26)-viewY, 18, 17, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-10)-viewX, (Y-29)-viewY, 20, 19, deg, 60);
+            G.fillArc((int)(X-10)-viewX, (int)(Y-29)-viewY, 20, 19, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-11)-viewX, (Y-32)-viewY, 22, 21, deg, 60);
+            G.fillArc((int)(X-11)-viewX, (int)(Y-32)-viewY, 22, 21, deg, 60);
         }
     }
     public int life = 100;
@@ -85,9 +85,9 @@ public class TornadoEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

@@ -35,24 +35,24 @@ public class PumpkinEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.ORANGE);
-                G.fillArc((X-16)-viewX, (Y-10)-viewY, 32, 20, 0, 360);
+                G.fillArc((int)(X-16)-viewX, (int)(Y-10)-viewY, 32, 20, 0, 360);
             G.setColor(Color.BLACK);
-                G.drawArc((X-16)-viewX, (Y-10)-viewY, 32, 20, 0, 360);
-                G.drawArc((X-13)-viewX, (Y-10)-viewY, 26, 20, 0, 360);
-                G.drawArc((X-10)-viewX, (Y-10)-viewY, 20, 20, 0, 360);
-                G.drawArc((X-6)-viewX, (Y-10)-viewY, 12, 20, 0, 360);
-                G.drawArc((X-3)-viewX, (Y-12)-viewY, 6, 4, 0, 360);
-                G.drawRect((X-2)-viewX, (Y-14)-viewY, 4, 6);
-                G.drawArc((X-2)-viewX, (Y-16)-viewY, 4, 3, 0, 360);
+                G.drawArc((int)(X-16)-viewX, (int)(Y-10)-viewY, 32, 20, 0, 360);
+                G.drawArc((int)(X-13)-viewX, (int)(Y-10)-viewY, 26, 20, 0, 360);
+                G.drawArc((int)(X-10)-viewX, (int)(Y-10)-viewY, 20, 20, 0, 360);
+                G.drawArc((int)(X-6)-viewX, (int)(Y-10)-viewY, 12, 20, 0, 360);
+                G.drawArc((int)(X-3)-viewX, (int)(Y-12)-viewY, 6, 4, 0, 360);
+                G.drawRect((int)(X-2)-viewX, (int)(Y-14)-viewY, 4, 6);
+                G.drawArc(((int)X-2)-viewX, (int)(Y-16)-viewY, 4, 3, 0, 360);
             G.setColor(brown);
-                G.fillArc((X-3)-viewX, (Y-11)-viewY, 7, 3, 0, 360);
-                G.fillRect((X-1)-viewX, (Y-13)-viewY, 3, 3);
-                G.fillArc((X-2)-viewX, (Y-16)-viewY, 4, 3, 0, 360);
+                G.fillArc((int)(X-3)-viewX, (int)(Y-11)-viewY, 7, 3, 0, 360);
+                G.fillRect((int)(X-1)-viewX, (int)(Y-13)-viewY, 3, 3);
+                G.fillArc((int)(X-2)-viewX, (int)(Y-16)-viewY, 4, 3, 0, 360);
                 //G.drawArc((X-3)-viewX, (Y-10)-viewY, 6, 20, 0, 360);
                if (near)
                {
                    G.setColor(Color.BLACK);
-                   G.drawString("PRESS C TO UNLOCK", X-(G.getFontMetrics().stringWidth("PRESS C TO UNLOCK")/2)-viewX, Y-32-viewY);
+                   G.drawString("PRESS C TO UNLOCK", (int)X-(G.getFontMetrics().stringWidth("PRESS C TO UNLOCK")/2)-viewX, (int)Y-32-viewY);
                }
         }
     }
@@ -123,8 +123,8 @@ public class PumpkinEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
+            out.putInt((int)X);
+            out.putInt((int)Y);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
         }

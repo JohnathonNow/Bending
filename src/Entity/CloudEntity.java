@@ -32,7 +32,7 @@ public class CloudEntity extends Entity{
         G.setColor(Color.DARK_GRAY);
             for (int i = 0; i < 14; i++)
             {
-                G.fillArc(X+20-r.nextInt(80)-viewX, Y+10-r.nextInt(20)-viewY-10, 20+r.nextInt(40), 5+r.nextInt(15), 0, 360);
+                G.fillArc((int)X+20-r.nextInt(80)-viewX, (int)Y+10-r.nextInt(20)-viewY-10, 20+r.nextInt(40), 5+r.nextInt(15), 0, 360);
             }
     }
 
@@ -51,7 +51,7 @@ public class CloudEntity extends Entity{
 
         if (r.nextInt(50)==5)
         {
-            int x = X+40-r.nextInt(80), y = Y-15;
+            int x = (int)X+40-r.nextInt(80), y = (int)Y-15;
             int Iw = Server.getID();
             lol.earth.entityList.add((new EnergyEntity(x,y,0,5,maker).setID(Iw)));
             lol.sendMessage(Server.LIGHTNING,ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));

@@ -36,7 +36,7 @@ public class IceShardEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.CYAN);
-            G.drawLine((X-xspeed)-viewX, (Y-yspeed)-viewY, X-viewX, Y-viewY);
+            G.drawLine((int)(X-xspeed)-viewX, (int)(Y-yspeed)-viewY, (int)X-viewX, (int)Y-viewY);
             
         }
     }
@@ -68,10 +68,10 @@ public class IceShardEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
            Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,15 +91,15 @@ public void onServerUpdate(Server lol)
     if (lol.earth.checkCollision(X, Y))
        {
            radius=16;
-           lol.earth.ground.FillCircleW(X, Y, 54, World.ICE);
-           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(54).put(World.ICE));
+           lol.earth.ground.FillCircleW((int)X, (int)Y, 54, World.ICE);
+           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(54).put(World.ICE));
            alive = false;
        }
     if (time++>1)
     {
         time = 0;
-         lol.earth.ground.freeze(previousX-(xspeed*4), previousY-(yspeed*4), 54);
-         lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt(previousX-(xspeed*4)).putInt(previousY-(yspeed*4)).putInt(54));
+         lol.earth.ground.freeze((int)(previousX-(xspeed*4)), (int)(previousY-(yspeed*4)), 54);
+         lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int)(previousX-(xspeed*4))).putInt((int)(previousY-(yspeed*4))).putInt(54));
     }
 }
     

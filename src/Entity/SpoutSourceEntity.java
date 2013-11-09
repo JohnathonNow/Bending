@@ -32,7 +32,7 @@ public class SpoutSourceEntity extends Entity{
 
     @Override
     public void onUpdate(World apples) {
-      apples.entityList.add(new SpoutEntity(X,Y,0,-10,maker));
+      apples.entityList.add(new SpoutEntity((int)X,(int)Y,0,-10,maker));
       if (life--<0)
       {
           alive = false;
@@ -51,8 +51,8 @@ public void onServerUpdate(Server lol)
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
+            out.putInt((int)X);
+            out.putInt((int)Y);
             out.putInt(life);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

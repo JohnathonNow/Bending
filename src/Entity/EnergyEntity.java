@@ -55,8 +55,8 @@ public class EnergyEntity extends Entity{
 
     @Override
     public void onUpdate(World apples) {
-        P.addPoint(X+5-r.nextInt(10), Y+5-r.nextInt(10));
-       if (!apples.inBounds(X+xspeed, Y+yspeed)||apples.checkCollision(X, Y))
+        P.addPoint((int)X+5-r.nextInt(10), (int)Y+5-r.nextInt(10));
+       if (apples.checkCollision(X, Y))
        {
                decay = 5;
                xspeed = 0;
@@ -86,7 +86,7 @@ public void onServerUpdate(Server lol)
            radius*=3;
            alive = false;
            //lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
-           lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).putInt(200).putInt(maker));
+           lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).putInt(200).putInt(maker));
        }
     for (Player p:lol.playerList)
        {
@@ -94,7 +94,7 @@ public void onServerUpdate(Server lol)
            {
                alive = false;
                lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).putInt(200).putInt(maker));
+                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).putInt(200).putInt(maker));
            }
        }
 }

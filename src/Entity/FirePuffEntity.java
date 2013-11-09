@@ -42,7 +42,7 @@ public class FirePuffEntity extends Entity{
             Composite c = g.getComposite();
             g.setComposite(Additive.additive);
             g.setColor(yes);
-            g.fillArc(((X-radius)-viewX)*3, ((Y-radius)-viewY)*3, radius*6,radius*6, 0, 360);
+            g.fillArc(((int)(X-radius)-viewX)*3, (int)((Y-radius)-viewY)*3, radius*6,radius*6, 0, 360);
             g.setComposite(c);
             
         }
@@ -52,7 +52,7 @@ public class FirePuffEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.BLACK);
-            G.fillArc((X-radius)-viewX, (Y-radius)-viewY, radius*2,radius*2, 0, 360); 
+            G.fillArc((int)(X-radius)-viewX, (int)(Y-radius)-viewY, radius*2,radius*2, 0, 360); 
         }
     }
     int next = 0;
@@ -86,17 +86,17 @@ public void onServerUpdate(Server lol)
         if (lol.earth.inBounds(X, Y)&&collided(lol.earth))//lol.earth.ground.cellData[X][Y]==World.WATER
         {
             alive = false;
-            lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(this.MYID));
+            lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(this.MYID));
         }
 }
     @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

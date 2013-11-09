@@ -27,7 +27,7 @@ public class World implements Serializable{
     public Random random = new Random();
     public CollisionChecker ground;
     final public CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
-    public int x = 450, y = 0;
+    public float x = 450, y = 0;
     public int floatiness = 0;
     public short status = 0;
     /*
@@ -666,12 +666,12 @@ public class World implements Serializable{
     int toKeepMove = 0, jumpHeight = 900;
     int osc = 1;
     boolean keepMoving = false;
-    public boolean isSolid(int x, int y)
+    public boolean isSolid(float x, float y)
     {
         try
         {
             if (!inBounds(x,y)) return true;
-            return (ground.cellData[x][y]==GROUND||ground.cellData[x][y]==TREE||ground.cellData[x][y]==SAND||ground.cellData[x][y]==STONE||ground.cellData[x][y]==ICE||ground.cellData[x][y]==CRYSTAL);
+            return (ground.cellData[(int)x][(int)y]==GROUND||ground.cellData[(int)x][(int)y]==TREE||ground.cellData[(int)x][(int)y]==SAND||ground.cellData[(int)x][(int)y]==STONE||ground.cellData[(int)x][(int)y]==ICE||ground.cellData[(int)x][(int)y]==CRYSTAL);
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
@@ -690,12 +690,12 @@ public class World implements Serializable{
             return false;
         }
     }
-        public boolean isLiquid(int x, int y)
+        public boolean isLiquid(float x, float y)
         {
         try
         {
             if (!inBounds(x,y)) return false;
-            return (ground.cellData[x][y]==OIL||ground.cellData[x][y]==WATER||ground.cellData[x][y]==LAVA);
+            return (ground.cellData[(int)x][(int)y]==OIL||ground.cellData[(int)x][(int)y]==WATER||ground.cellData[(int)x][(int)y]==LAVA);
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
@@ -761,7 +761,7 @@ public class World implements Serializable{
                 if (inBounds(x+move,y+(int)vspeed))
                 {
                         float slope;
-                        int toMove = move, XXX1 = x+3, YYY1 = y-4, XXX2 = x-3, YYY2 = y-4;
+                        float toMove = move, XXX1 = x+3, YYY1 = y-4, XXX2 = x-3, YYY2 = y-4;
                         if (isLiquid(x,y))
                         {
                             toMove*=APPLET.swimmingSpeed;
@@ -803,8 +803,8 @@ public class World implements Serializable{
                         {
                             toMove = toKeepMove;
                         }
-                        int deltaX = !(isSolid(x+toMove,y+(int)vspeed)||isSolid(x+toMove,y))?toMove:0;;
-                        x+=deltaX;
+                        float deltaX = !(isSolid(x+toMove,y+(int)vspeed)||isSolid(x+toMove,y))?toMove:0;;
+                        x+=deltaX*deltaTime();
                         leftArmAngle+=deltaX*osc*4;
                         rightArmAngle-=deltaX*osc*4;
                         if (leftArmAngle>180)
@@ -858,7 +858,7 @@ public class World implements Serializable{
                 {
                     vspeed = (int)(-10*jump);
                     toKeepMove = move*2;
-                    jumpHeight = y;
+                    jumpHeight = (int)y;
                     if (APPLET.shortJump)
                     {
                         toKeepMove = 0;
@@ -1003,7 +1003,7 @@ public class World implements Serializable{
            // int incX, incY;
             //incX = (int)APPLET.lengthdir_x(APPLET.pointDis(x, y, mouseX, mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
            // incY = (int)APPLET.lengthdir_y(APPLET.pointDis(x, y, mouseX, mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
-            viewX = Math.min(Math.max((x-150)+incX,0),wIdTh-301);
+            viewX = (int)Math.min(Math.max((x-150)+incX,0),wIdTh-301);
            /* if ((x-150)+incX>wIdTh-300)
             {
                 incX=(wIdTh-300)-(x-150);
@@ -1012,7 +1012,7 @@ public class World implements Serializable{
             {
                 incX=(-(x-150));
             }*/
-            viewY = Math.min(Math.max((y-150)+incY,0),hEigHt-300);
+            viewY = (int)Math.min(Math.max((y-150)+incY,0),hEigHt-300);
             if (dead)
             {
                 viewX = viewdX;
@@ -1046,18 +1046,18 @@ try            {drawTerrain((Graphics2D)g);} catch (Exception e){e.printStackTra
             public static Polygon firePolygonred = new Polygon(), firePolygonyellow = new Polygon(), firePolygonorange = new Polygon();
             public void drawPlayers(Graphics g)
             {
-                int offs = x % 8;
+                float offs = x % 8;
        if ((status&World.ST_INVISIBLE)==0)
        {
          if (!done)
         {
             //x+=move;
-            g.drawArc(((x-2)-viewX)*3, ((y-10)-viewY)*3, 4, 4, 0, 360);
-            g.drawLine(((x)-viewX)*3, ((y-6)-viewY)*3, ((x)-viewX)*3, ((y-3)-viewY)*3);
-            g.drawLine(((x-2)-viewX)*3, ((y-4)-viewY)*3, ((x+2)-viewX)*3, ((y-4)-viewY)*3);
+            g.drawArc((int)((x-2)-viewX)*3, (int)((y-10)-viewY)*3, 4, 4, 0, 360);
+            g.drawLine((int)((x)-viewX)*3, (int)((y-6)-viewY)*3, (int)((x)-viewX)*3, (int)((y-3)-viewY)*3);
+            g.drawLine((int)((x-2)-viewX)*3, (int)((y-4)-viewY)*3, (int)((x+2)-viewX)*3, (int)((y-4)-viewY)*3);
             
-            g.drawLine(((x)-viewX)*3, ((y-3)-viewY)*3, ((x+offs-2)-viewX)*3, ((y)-viewY)*3);
-            g.drawLine(((x)-viewX)*3, ((y-3)-viewY)*3, ((x+2-offs)-viewX)*3, ((y)-viewY)*3);
+            g.drawLine((int)((x)-viewX)*3, (int)((y-3)-viewY)*3, (int)((x+offs-2)-viewX)*3, (int)((y)-viewY)*3);
+            g.drawLine((int)((x)-viewX)*3, (int)((y-3)-viewY)*3, (int)((x+2-offs)-viewX)*3, (int)((y)-viewY)*3);
         }
         else
         {
@@ -1074,8 +1074,8 @@ try            {drawTerrain((Graphics2D)g);} catch (Exception e){e.printStackTra
             Graphics2D g2 = (Graphics2D)g;
             AffineTransform  swag = g2.getTransform();
             g2.scale(left,1);
-            g2.drawImage(bodyParts[0], (x-viewX)*3*left+(left<0?-18:0), (y-yUp-6-viewY)*3, null);
-            g2.drawImage(bodyParts[1], (int)(x+2-((bodyParts[1].getWidth(null)-23)/5)-viewX)*3*left+(left<0?-(6+(bodyParts[1].getWidth(null)-23)):0), ((y-yUp-16-((bodyParts[1].getHeight(null)-31))/3)-viewY)*3, null);
+            g2.drawImage(bodyParts[0], (int)(x-viewX)*3*left+(left<0?-18:0), (int)(y-yUp-6-viewY)*3, null);
+            g2.drawImage(bodyParts[1], (int)(x+2-((bodyParts[1].getWidth(null)-23)/5)-viewX)*3*left+(left<0?-(6+(bodyParts[1].getWidth(null)-23)):0), (int)((y-yUp-16-((bodyParts[1].getHeight(null)-31))/3)-viewY)*3, null);
             double ffs = Math.toRadians(((4-offs)*6));
             AffineTransform  previousAT = g2.getTransform();
             int ddd = bodyParts[3].getWidth(null);
@@ -1137,8 +1137,8 @@ try            {drawTerrain((Graphics2D)g);} catch (Exception e){e.printStackTra
             
             
             
-            g2.drawImage(bodyParts[4], (x+1-viewX)*3*left, ((y-yUp+7)-viewY)*3, null);
-            g2.drawImage(bodyParts[4], (x+5-viewX)*3*left, ((y-yUp+7)-viewY)*3, null);
+            g2.drawImage(bodyParts[4], (int)(x+1-viewX)*3*left, (int)((y-yUp+7)-viewY)*3, null);
+            g2.drawImage(bodyParts[4], (int)(x+5-viewX)*3*left, (int)((y-yUp+7)-viewY)*3, null);
             
             
             g2.translate((x+5-viewX)*3*left, ((y+13)-viewY-yUp)*3);
@@ -1153,12 +1153,12 @@ try            {drawTerrain((Graphics2D)g);} catch (Exception e){e.printStackTra
             g2.scale(left, 1);
             if (((status&ST_FLAMING))!=0)
             {
-                drawFire(g2,(x+4-viewX)*3,(y-viewY)*3);
+                drawFire(g2,(int)(x+4-viewX)*3,(int)(y-viewY)*3);
             }
             if (((status&ST_DRAIN))!=0)
             {
                 g2.setColor(Color.BLACK);
-                g2.drawArc((x-viewX-(AURA_RADIUS/2))*3, (y-viewY-(AURA_RADIUS))*3, AURA_RADIUS*3, AURA_RADIUS*3, random.nextInt(360), random.nextInt(90));
+                g2.drawArc((int)(x-viewX-(AURA_RADIUS/2))*3, (int)(y-viewY-(AURA_RADIUS))*3, AURA_RADIUS*3, AURA_RADIUS*3, random.nextInt(360), random.nextInt(90));
             }
             g2.setTransform(swag);
         }
@@ -1275,20 +1275,20 @@ if (!playerList.isEmpty())
         jump = 0;
         vspeed = 0;
     }
-        public boolean inBounds(int i1, int i2)
+        public boolean inBounds(float i1, float i2)
     {
         return (i1>=0&&i1<wIdTh&&i2>=0&&i2<hEigHt);
     }
-        public boolean checkCollision(int x, int y)
+        public boolean checkCollision(float x, float y)
     {
         return (isSolid(x,y));
     }
-               public boolean checkCollision(int x, int y, int r)
+               public boolean checkCollision(float x, float y, float r)
     {
         if (!inBounds(x,y)) return true;
-         for (int i1 = Math.max(x-(r+1),0); i1 < Math.min(x+(r+1),ground.w); i1 ++)
+         for (float i1 = Math.max(x-(r+1),0); i1 < Math.min(x+(r+1),ground.w); i1 ++)
             {
-                for (int i2 = Math.max(y-(r+1),0); i2 < Math.min(y+(r+1),ground.h); i2 ++)
+                for (float i2 = Math.max(y-(r+1),0); i2 < Math.min(y+(r+1),ground.h); i2 ++)
                 {
                     if (Math.round(Math.sqrt(Math.pow(i1-x,2)+Math.pow(i2-y,2))) < (r/2)+.1)
                     {
@@ -1556,7 +1556,17 @@ if (!playerList.isEmpty())
         int[] rgbArr = getRGBArray(rgb);
         return Color.RGBtoHSB(rgbArr[RED], rgbArr[GREEN], rgbArr[BLUE], null);
     }
-    
+    static long oldTime = 0;
+    public static void setTime()
+    {
+        oldTime = System.nanoTime();
+    }
+    public static float deltaTime()
+    {
+        float lol = ((System.nanoTime()-oldTime))/(25f*1000000f);
+        System.out.println("Delta Time: "+lol);
+        return lol;
+    }
     public static final int ALPHA = 0;
     public static final int RED = 1;
     public static final int GREEN = 2;

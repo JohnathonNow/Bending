@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class EnemyEntity extends Entity{
     public int HP = 500;
-    public int move = 0;
+    public float move = 0;
     public int target = 0;
     public int timer = 0;
     public int id = 0;
@@ -39,7 +39,7 @@ public class EnemyEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.RED);
-            G.fillArc((X-30)-viewX, (Y-30)-viewY, 60, 60, 0, 360);
+            G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
         }
      //   System.out.println("HI!");
     }
@@ -74,7 +74,7 @@ public class EnemyEntity extends Entity{
             if (apples.inBounds(X+move,Y+yspeed))
             {
                 float slope;
-                int toMove = move, XXX1 = X+3, YYY1 = Y-4, XXX2 = X-3, YYY2 = Y-4;
+                float toMove = move, XXX1 = X+3, YYY1 = Y-4, XXX2 = X-3, YYY2 = Y-4;
                 while (true)
                 {
                     YYY1+=1;
@@ -145,7 +145,7 @@ public class EnemyEntity extends Entity{
         if (timer++>90)
         {
             //System.out.println(X);
-            handle.sendMessage(Server.AI,ByteBuffer.allocate(28).putInt(X).putInt(Y).putInt(move).putInt(yspeed).putInt(HP).putInt(MYID).putInt(target));
+            handle.sendMessage(Server.AI,ByteBuffer.allocate(28).putInt((int)X).putInt((int)Y).putInt((int)move).putInt((int)yspeed).putInt((int)HP).putInt(MYID).putInt(target));
             timer = 0;
         }
     }
@@ -153,10 +153,10 @@ public class EnemyEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(move);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)move);
+            out.putInt((int)yspeed);
             out.putInt(HP);
             out.putInt(target);
             out.putInt(id);

@@ -30,7 +30,7 @@ public class ExplosionEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(c);
-            G.fillArc((X-radius)-viewX, (Y-radius)-viewY, radius*2, radius*2, 0, 360);
+            G.fillArc(((int)X-radius)-viewX, ((int)Y-radius)-viewY, radius*2, radius*2, 0, 360);
         }
     }
     Color c = Color.RED;

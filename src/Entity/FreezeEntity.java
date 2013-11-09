@@ -36,9 +36,9 @@ public class FreezeEntity extends Entity{
         {
             Graphics2D g2d = (Graphics2D)G;
             G.setColor(Color.cyan);
-            G.drawLine(previousX-viewX, previousY-viewY, X-viewX,Y-viewY);
+            G.drawLine((int)previousX-viewX, (int)previousY-viewY, (int)X-viewX,(int)Y-viewY);
             G.setColor(Color.white);
-            G.drawLine(previousX-viewX, (previousY+1)-viewY, X-viewX,Y+1-viewY);
+            G.drawLine((int)previousX-viewX, (int)(previousY+1)-viewY, (int)X-viewX,(int)Y+1-viewY);
         }
     }
 
@@ -53,12 +53,12 @@ public class FreezeEntity extends Entity{
        yspeed+=gravity;
         if (life++==10)
         {
-            apples.entityList.add(new SnowEntity(X,Y,xspeed+1,yspeed+1,maker));
-            apples.entityList.add(new SnowEntity(X,Y,xspeed+1,yspeed-1,maker));
-            apples.entityList.add(new SnowEntity(X,Y,xspeed-1,yspeed+1,maker));
-            apples.entityList.add(new SnowEntity(X,Y,xspeed-1,yspeed-1,maker));
-            apples.entityList.add(new SnowEntity(X,Y,xspeed,yspeed+1,maker));
-            apples.entityList.add(new SnowEntity(X,Y,xspeed+1,yspeed,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed+1,(int)yspeed+1,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed+1,(int)yspeed-1,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed-1,(int)yspeed+1,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed-1,(int)yspeed-1,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed,(int)yspeed+1,maker));
+            apples.entityList.add(new SnowEntity((int)X,(int)Y,(int)xspeed+1,(int)yspeed,maker));
         //    lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(24).putInt(5).putInt(X).putInt(Y).putInt(xspeed).putInt(yspeed).putInt(maker));
         }
        /*if (yspeed<12)
@@ -71,8 +71,8 @@ public void onServerUpdate(Server lol)
 {
     if ((!lol.earth.inBounds(X, Y))||lol.earth.checkCollision(X, Y))
        {
-           lol.earth.ground.freeze(X, Y, radius*4);
-           lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius*4));
+           lol.earth.ground.freeze((int)X, (int)Y, radius*4);
+           lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius*4));
            alive = false;
        }
 }
@@ -82,10 +82,10 @@ public void onServerUpdate(Server lol)
         try {
            
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

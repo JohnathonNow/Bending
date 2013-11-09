@@ -35,8 +35,8 @@ public class StaticShotEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(radius==0?Color.blue:Color.red);
-            G.drawArc((X-3)-viewX, (Y-3)-viewY, 6, 6, 0, 360);
-            G.drawLine((X-2)-viewX, Y-viewY, (X+2)-viewX, Y-viewY);
+            G.drawArc(((int)X-3)-viewX, (int)(Y-3)-viewY, 6, 6, 0, 360);
+            G.drawLine((int)(X-2)-viewX, (int)Y-viewY, (int)(X+2)-viewX, (int)Y-viewY);
         }
     }
 
@@ -63,10 +63,10 @@ public class StaticShotEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,7 +89,7 @@ public void onServerUpdate(Server lol)
            {
                 alive = false;
                 lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).putInt(200).putInt(0));//maker
+                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).putInt(200).putInt(0));//maker
                 return;
            }
        }

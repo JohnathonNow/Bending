@@ -8,12 +8,13 @@ package destruct;
 /*TodoList:
 * */
 import Entity.*;
+import static destruct.World.setTime;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.*; 
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -662,7 +663,7 @@ public class APPLET extends JPanel implements Runnable{
                                         }
                                         hurt(12);
                                         killMessage = "~ was electrified by `.";
-                                        if (world.inBounds(world.x, world.y)&&world.ground.cellData[world.x][world.y]==World.WATER)
+                                        if (world.inBounds(world.x, world.y)&&world.ground.cellData[(int)world.x][(int)world.y]==World.WATER)
                                         {
                                             hurt(12);
                                             killMessage = "~ will never go in the water during a storm again, thanks to `!";
@@ -1108,9 +1109,9 @@ public class APPLET extends JPanel implements Runnable{
         //terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
     public Rectangle playerHitbox;
-    public boolean checkCollision(int px, int py)
+    public boolean checkCollision(float px, float py)
     {
-        playerHitbox.setLocation(world.x-playerHitbox.width/2, world.y-(World.head+10));
+        playerHitbox.setLocation((int)world.x-playerHitbox.width/2, (int)world.y-(World.head+10));
         return (playerHitbox.contains(px, py));
     }
     public void addChat(String message, Color color)
@@ -1154,8 +1155,8 @@ public class APPLET extends JPanel implements Runnable{
         
         for (int i = 0; i < resolution; i++)
         {
-            Xx = world.x-world.viewX;
-            Yy = world.y-World.head-world.viewY;
+            Xx = (int)world.x-world.viewX;
+            Yy = (int)world.y-World.head-world.viewY;
             yes = true;
             d = 0;
             dr = i*(360/resolution);
@@ -1189,6 +1190,7 @@ public class APPLET extends JPanel implements Runnable{
         
     }
     boolean refreshShadows = false;
+    long swagTime = 0;
     @Override
     public void run() {
         int counting = 150;
@@ -1196,11 +1198,19 @@ public class APPLET extends JPanel implements Runnable{
         lastTime = System.currentTimeMillis();
         while (gameAlive)
         {    
-                long l = System.currentTimeMillis()-lastTime;
-                owner.setTitle(" Packet Count: "+pc+" Lag: "+l);
+                long l = System.currentTimeMillis();
+try
+{
+                owner.setTitle(" Packet Count: "+pc+" FPS: "+(1000/(l-swagTime)));
+}
+catch (Exception e)
+{
+    
+}
+                swagTime = l;
                     try {
                             l = System.currentTimeMillis()-lastTime;
-                            while (l<25)
+                            while (l<25)//25
                             {
                                 Thread.sleep(1);
                                 l = System.currentTimeMillis()-lastTime;
@@ -1320,7 +1330,7 @@ public class APPLET extends JPanel implements Runnable{
             {
                 energico = 0;
             }
-            if (world.isType(world.x, world.y, World.LAVA))
+            if (world.isType((int)world.x, (int)world.y, World.LAVA))
             {
                 world.status|=World.ST_FLAMING;
                 killMessage = "~ burned to a crisp after fighting `!";
@@ -1345,7 +1355,7 @@ public class APPLET extends JPanel implements Runnable{
                     world.status&=~World.ST_SHOCKED;//Stop being on fire
                 }
             }
-            if (world.isIce(world.x, world.y+6))
+            if (world.isIce((int)world.x, (int)world.y+6))
             {
                 xspeed+=world.move;
                 xspeed*=1.4;
@@ -1364,7 +1374,7 @@ public class APPLET extends JPanel implements Runnable{
                     dig = 0;
                     //world.keys[KeyEvent.VK_S] = false;
                     ByteBuffer bb = ByteBuffer.allocate(24);
-                    bb.putInt(5).putInt(world.x).putInt(world.y).putInt(0).putInt(0);
+                    bb.putInt(5).putInt((int)world.x).putInt((int)world.y).putInt(0).putInt(0);
         try {
             out.addMesssage(bb,Server.AIRBENDING);
         } catch (IOException ex) {
@@ -1416,7 +1426,7 @@ public class APPLET extends JPanel implements Runnable{
                         //world.vspeed-=1;
                         xspeed+=1-random.nextInt(2);
                         xspeed*=-1;
-                        world.x = me2.X+(int)xspeed;
+                        world.x = (int)me2.X+(int)xspeed;
                         world.move = 0;
                         lastHit = me2.maker;
                         killMessage = "~ was sucked into `'s Tornado.";
@@ -1759,12 +1769,14 @@ public class APPLET extends JPanel implements Runnable{
             
             prevVspeed = world.vspeed;
           //  if (busy) continue;
-            Xp = world.x; Yp = world.y;
+            Xp = (int)world.x; Yp = (int)world.y;
        
         if (world.keys[KeyEvent.VK_SPACE])
         {
         }
+        world.setTime();
         repaint();
+                
         }
     }
     public String getKiller(int i)
@@ -1920,6 +1932,7 @@ public class APPLET extends JPanel implements Runnable{
             biggraphicsBuffer.setFont(chatFont);
         }
         setSize(owner.getSize());
+        
         setVisible(owner.isVisible());
        // Graphics2D pancakes = (Graphics2D)g;
         //double scale = owner.getHeight()/300;
@@ -1981,27 +1994,27 @@ public class APPLET extends JPanel implements Runnable{
 //                graphicsBuffer.fill(hideFromMe);
                 //graphicsBuffer.setPaint(null);
                 graphicsBuffer.setColor(Color.black);
-                graphicsBuffer.drawRect(world.x-world.viewX-16, world.y-world.viewY-64, 32, 4);
+                graphicsBuffer.drawRect((int)world.x-world.viewX-16, (int)world.y-world.viewY-64, 32, 4);
                 if (world.keys[KeyEvent.VK_S])
                 {
-                    graphicsBuffer.drawRect(world.x-world.viewX-16, world.y-world.viewY-61, 32, 4);
+                    graphicsBuffer.drawRect((int)world.x-world.viewX-16, (int)world.y-world.viewY-61, 32, 4);
                 }
                 if (lungs<maxlungs)
                 {
-                    graphicsBuffer.drawRect(world.x-world.viewX-16, world.y-world.viewY-66, 32, 4);
+                    graphicsBuffer.drawRect((int)world.x-world.viewX-16, (int)world.y-world.viewY-66, 32, 4);
                 }
                 graphicsBuffer.drawRect(0, 0, 4, 300);
                 graphicsBuffer.setColor(Color.green);
-                graphicsBuffer.drawRect(world.x-world.viewX-15, world.y-world.viewY-63, (int)(30d*((double)HP/(double)MAXHP)), 2);
+                graphicsBuffer.drawRect((int)world.x-world.viewX-15, (int)world.y-world.viewY-63, (int)(30d*((double)HP/(double)MAXHP)), 2);
                 if (lungs<maxlungs)
                 {
                       graphicsBuffer.setColor(Color.white);
-                      graphicsBuffer.drawRect(world.x-world.viewX-15, world.y-world.viewY-67, (int)(30d*((double)lungs/(double)maxlungs)), 2);
+                      graphicsBuffer.drawRect((int)world.x-world.viewX-15, (int)world.y-world.viewY-67, (int)(30d*((double)lungs/(double)maxlungs)), 2);
                 }
                 if (world.keys[KeyEvent.VK_S])
                 {
                       graphicsBuffer.setColor(Color.RED);
-                      graphicsBuffer.drawRect(world.x-world.viewX-15, world.y-world.viewY-60, (int)(30d*((double)dig/(double)100)), 2);
+                      graphicsBuffer.drawRect((int)world.x-world.viewX-15, (int)world.y-world.viewY-60, (int)(30d*((double)dig/(double)100)), 2);
                 }
                 if (dpyeng>energico)
                 {
@@ -2379,7 +2392,7 @@ public int hurt(double pain)
                 pain = 1;
             }
             energico -= pain*50;
-            world.entityList.add(new ShockEffectEntity(world.x,world.y,6+(int)pain));
+            world.entityList.add(new ShockEffectEntity((int)world.x,(int)world.y,6+(int)pain));
         }
     }
     HP -= pain;

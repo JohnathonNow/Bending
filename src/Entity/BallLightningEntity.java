@@ -36,19 +36,19 @@ public class BallLightningEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.yellow);
-            int x = X+5-r.nextInt(10)-viewX;
-            int y =  Y+5-r.nextInt(10)-viewY;
+            int x = (int)X+5-r.nextInt(10)-viewX;
+            int y =  (int)Y+5-r.nextInt(10)-viewY;
             G.drawLine(x,y, x+5-r.nextInt(10), y+5-r.nextInt(10));
-            G.drawLine(x+5-r.nextInt(10), y+5-r.nextInt(10), X+5-r.nextInt(10)-viewX, Y+5-r.nextInt(10)-viewY);
+            G.drawLine(x+5-r.nextInt(10), y+5-r.nextInt(10), (int)X+5-r.nextInt(10)-viewX, (int)Y+5-r.nextInt(10)-viewY);
             
             G.setColor(Color.white);
-            G.drawLine(X+5-r.nextInt(10)-viewX, Y+5-r.nextInt(10)-viewY, X+5-r.nextInt(10)-viewX, Y+5-r.nextInt(10)-viewY);
+            G.drawLine((int)X+5-r.nextInt(10)-viewX, (int)Y+5-r.nextInt(10)-viewY, (int)X+5-r.nextInt(10)-viewX, (int)Y+5-r.nextInt(10)-viewY);
         }
     }
 
     @Override
     public void onUpdate(World apples) {
-       if (!apples.inBounds(X, Y)||apples.checkCollision(X, Y))
+       if (!apples.inBounds((int)X, (int)Y)||apples.checkCollision((int)X, (int)Y))
        {
            
            alive = false;

@@ -53,16 +53,16 @@ public class HillEntity extends Entity{
             G.scale(3, 3);
             G.translate(-viewx, -viewy);
             G.setColor(Color.BLACK);
-            G.drawArc(X-48, Y-48, 96, 96, 0, 360);
+            G.drawArc((int)X-48, (int)Y-48, 96, 96, 0, 360);
             G.setTransform(prevTrans);
     }
     @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,7 +80,7 @@ public class HillEntity extends Entity{
     public void onDraw(Graphics G, int viewX, int viewY) {
  //       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         G.setColor(Color.WHITE);
-        G.fillArc(X-48-viewX, Y-48-viewY, 96, 96, 0, 360);
+        G.fillArc((int)X-48-viewX, (int)Y-48-viewY, 96, 96, 0, 360);
     }
 
     @Override

@@ -25,7 +25,7 @@ import static destruct.ResourceLoader.loadIcon;
  */
 public abstract class Spell {
     public int ID;
-    public int X, Y, mx, my, subID = 0, maker = 0;
+    public float X, Y, mx, my, subID = 0, maker = 0;
     public boolean locked = false;
     public int unlockXP = 0;
     public static ArrayList<Spell> spells=new ArrayList<>(), passives=new ArrayList<>();
@@ -135,7 +135,7 @@ public abstract class Spell {
             public void getMessage(OrderedOutputStream out)
         {
             ByteBuffer bb = ByteBuffer.allocate(24);
-            bb.putInt(subID).putInt(X).putInt(Y).putInt(mx).putInt(my);
+            bb.putInt((int)subID).putInt((int)X).putInt((int)Y).putInt((int)mx).putInt((int)my);
         try {
             out.addMesssage(bb,ID);
         } catch (IOException ex) {
@@ -818,7 +818,7 @@ public abstract class Spell {
                                         {
                                             app.energico+=100;
                                         }
-                                        if (app.world.inBounds(app.world.x, app.world.y-World.head+4)&&app.world.ground.cellData[app.world.x][app.world.y+4]==World.SAND)
+                                        if (app.world.inBounds((int)app.world.x, (int)(app.world.y-World.head+4))&&app.world.ground.cellData[(int)app.world.x][(int)app.world.y+4]==World.SAND)
                                         {
                                             app.energico+=200;
                                         }
@@ -1057,7 +1057,7 @@ public abstract class Spell {
                         my = app.world.mouseY+app.world.viewY;
                                 X = mx;
                                         Y = my;
-                                        if (app.world.ground.cellData[X][Y]!=World.WATER)
+                                        if (app.world.ground.cellData[(int)X][(int)Y]!=World.WATER)
                                         {
                                             app.energico+=this.getCost();
                                             return;
@@ -1203,7 +1203,7 @@ public static class BreathUnderWater extends Waterbending
         }
         @Override
         public void getPassiveAction(APPLET app) {
-            if (app.world.inBounds(app.world.x, app.world.y)&&app.energico>0&&app.world.isType(app.world.x,app.world.y,World.WATER))
+            if (app.world.inBounds(app.world.x, app.world.y)&&app.energico>0&&app.world.isType((int)app.world.x,(int)app.world.y,World.WATER))
             {
                 if (app.HP<app.MAXHP)
                 {
@@ -1263,7 +1263,7 @@ public static class WaterTreading extends Waterbending
         @Override
         public void getPassiveAction(APPLET app) {
             APPLET.swimmingSpeed = 1+(0.23*(double)(number));
-            if (app.world.inBounds(app.world.x, app.world.y)&&app.world.ground.cellData[app.world.x][app.world.y]==World.WATER)
+            if (app.world.inBounds(app.world.x, app.world.y)&&app.world.ground.cellData[(int)app.world.x][(int)app.world.y]==World.WATER)
             {
                 app.lungs = app.maxlungs;
             }

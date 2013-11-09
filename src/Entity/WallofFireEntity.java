@@ -38,7 +38,7 @@ public class WallofFireEntity extends Entity{
     }
     public boolean checkCollision(Rectangle r)
     {
-        hitBox.setLocation(X-1, Y);
+        hitBox.setLocation((int)X-1, (int)Y);
         return hitBox.intersects(r);
     }
     @Override
@@ -49,14 +49,14 @@ public class WallofFireEntity extends Entity{
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
             g.setColor(new Color(255,r.nextInt(255),0,r.nextInt(255)));
-                g.fillArc((X-6)-viewX, (Y-6)-viewY, 12,12, 0, 360); 
+                g.fillArc(((int)X-6)-viewX, (int)(Y-6)-viewY, 12,12, 0, 360); 
                 for (int y = 0; y < 30; y+=3)
                 {
                     for (int i = 0; i < 4; i++)
                     {
                         int e1 = 6-r.nextInt(12), e2 = 6-r.nextInt(12);
                         g.setColor(new Color(255,r.nextInt(255),0,r.nextInt(255)));
-                        g.fillArc((X+e1)-viewX, (Y+e2+y)-viewY, e1, e2, 0, 360); 
+                        g.fillArc((int)(X+e1)-viewX,(int) (Y+e2+y)-viewY, e1, e2, 0, 360); 
                     }
                 }
             g.setComposite(c);
@@ -89,10 +89,10 @@ public void onServerUpdate(Server lol)
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

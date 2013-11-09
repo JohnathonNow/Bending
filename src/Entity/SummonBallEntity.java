@@ -37,17 +37,17 @@ public class SummonBallEntity extends Entity{
             G.setColor(Color.darkGray);
             
             int deg = r.nextInt(360);
-            G.fillArc((X-1)-viewX, (Y-1)-viewY, 2, 2, deg, 60);
+            G.fillArc((int)(X-1)-viewX, (int)(Y-1)-viewY, 2, 2, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-2)-viewX, (Y-2)-viewY, 4, 4, deg, 60);
+            G.fillArc((int)(X-2)-viewX, (int)(Y-2)-viewY, 4, 4, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-3)-viewX, (Y-3)-viewY, 6, 6, deg, 60);
+            G.fillArc((int)(X-3)-viewX, (int)(Y-3)-viewY, 6, 6, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-4)-viewX, (Y-4)-viewY, 8, 8, deg, 60);
+            G.fillArc((int)(X-4)-viewX, (int)(Y-4)-viewY, 8, 8, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-5)-viewX, (Y-5)-viewY, 10, 10, deg, 60);
+            G.fillArc((int)(X-5)-viewX, (int)(Y-5)-viewY, 10, 10, deg, 60);
             deg = r.nextInt(360);
-            G.fillArc((X-8)-viewX, (Y-8)-viewY, 16, 16, deg, 60);
+            G.fillArc(((int)X-8)-viewX, (int)(Y-8)-viewY, 16, 16, deg, 60);
         }
     }
 
@@ -65,8 +65,8 @@ public class SummonBallEntity extends Entity{
        {
            alive = false;
            int yay = Server.getID();
-           lol.earth.entityList.add(new EnemyEntity(X,Y,0,0,maker).setID(yay));
-           lol.sendMessage(Server.DARKNESS,ByteBuffer.allocate(28).putInt(10).putInt(X).putInt(Y).putInt(0).putInt(0).putInt(maker).putInt(yay));
+           lol.earth.entityList.add(new EnemyEntity((int)X,(int)Y,0,0,maker).setID(yay));
+           lol.sendMessage(Server.DARKNESS,ByteBuffer.allocate(28).putInt(10).putInt((int)X).putInt((int)Y).putInt(0).putInt(0).putInt(maker).putInt(yay));
            //apples.explode(X, Y, 32, 8, 16);
        }
     }
@@ -74,10 +74,10 @@ public class SummonBallEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

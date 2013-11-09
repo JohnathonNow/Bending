@@ -27,7 +27,7 @@ public class GroundinatorEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.GREEN);
-            G.fillArc((X-1)-viewX, (Y-1)-viewY, 2, 2, 0, 360);
+            G.fillArc((int)(X-1)-viewX, (int)(Y-1)-viewY, 2, 2, 0, 360);
         }
     }
 
@@ -36,7 +36,7 @@ public class GroundinatorEntity extends Entity{
        if (!apples.inBounds(X, Y)||apples.checkCollision(X, Y))
        {
            alive = false;
-           apples.unexplode(X, Y, 32, 8, 16);
+           apples.unexplode((int)X, (int)Y, 32, 8, 16);
        }
        if (yspeed<12)
        {

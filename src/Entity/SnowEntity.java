@@ -36,7 +36,7 @@ public class SnowEntity extends Entity{
         {
             Graphics2D g2d = (Graphics2D)G;
             G.setColor(Color.white);
-            G.fillArc(X-viewX-1,Y-viewY-1,2,2,0,360);
+            G.fillArc((int)X-viewX-1,(int)Y-viewY-1,2,2,0,360);
         }
     }
 int timer = 0;
@@ -64,8 +64,8 @@ public void onServerUpdate(Server lol)
 {
     if ((!lol.earth.inBounds(X, Y))||lol.earth.checkCollision(X, Y))
        {
-           lol.earth.ground.freeze(X, Y, radius*2);
-           lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius*4));
+           lol.earth.ground.freeze((int)X, (int)Y, radius*2);
+           lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius*4));
            alive = false;
        }
 
@@ -75,10 +75,10 @@ public void onServerUpdate(Server lol)
         try {
            
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

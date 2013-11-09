@@ -55,7 +55,7 @@ public class FlameThrowerEntity extends Entity{
             {
             master = lol.getPlayer(maker);
             }
-            int x = X+5-r.nextInt(10), y = Y+5-r.nextInt(10);
+            int x = (int)X+5-r.nextInt(10), y = (int)Y+5-r.nextInt(10);
             int Iw = Server.getID();
             int mx = MX,my = MY;
             lol.earth.entityList.add((new FirePuffEntity(x,y,mx,my,maker).setID(Iw)));

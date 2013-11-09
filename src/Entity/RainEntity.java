@@ -32,7 +32,7 @@ public class RainEntity extends Entity{
         G.setColor(Color.GRAY);
             for (int i = 0; i < 14; i++)
             {
-                G.fillArc(X+20-r.nextInt(80)-viewX, Y+10-r.nextInt(20)-viewY-10, 20+r.nextInt(40), 5+r.nextInt(15), 0, 360);
+                G.fillArc((int)X+20-r.nextInt(80)-viewX, (int)Y+10-r.nextInt(20)-viewY-10, 20+r.nextInt(40), 5+r.nextInt(15), 0, 360);
             }
     }
 
@@ -51,12 +51,12 @@ public class RainEntity extends Entity{
 
         if (r.nextInt(12)==5)
         {
-            int x = X+40-r.nextInt(80), y = Y-15;
+            int x = (int)X+40-r.nextInt(80), y = (int)Y-15;
             int Iw = Server.getID();
             //lol.earth.entityList.add((new WaterBallEntity(x,y,0,0,maker).setID(Iw)));
             //lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
-            lol.earth.ground.puddle(x, Y, 10);
-            lol.sendMessage(Server.PUDDLE, ByteBuffer.allocate(40).putInt(x).putInt(Y).putInt(10));
+            lol.earth.ground.puddle(x, (int)Y, 10);
+            lol.sendMessage(Server.PUDDLE, ByteBuffer.allocate(40).putInt(x).putInt((int)Y).putInt(10));
         }
         if (life--<0)
            {

@@ -129,8 +129,8 @@ public final class Server implements Runnable{
         try {
             SocialSecurity = new ServerSocket(25565);
             playerAcceptor.start();
-            spawnX = earth.x;
-            spawnY = earth.y;
+            spawnX = (int)earth.x;
+            spawnY = (int)earth.y;
             earth.lol=this;
             loadMap(1);
             startExpander();
@@ -141,11 +141,13 @@ public final class Server implements Runnable{
                 public void run()
                 { 
                     long lastTime = System.currentTimeMillis();
-                    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
                     while (gameRunning)
                     {
+                        long l = System.currentTimeMillis();
+                        //System.out.println("Server FPS: "+(1000/(l-swagTime)));
+                        swagTime = l;
                         try {
-                            long l = System.currentTimeMillis()-lastTime;
+                            l = System.currentTimeMillis()-lastTime;
                             while (l<25)
                             {
                                 Thread.sleep(1);
@@ -209,6 +211,7 @@ public final class Server implements Runnable{
     public String IP = "";
     boolean gameRunning = true, accepting = true;
     ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
+    long swagTime = 0;
     @Override
     public void run() {
         while (gameRunning&&accepting)
@@ -307,7 +310,7 @@ public final class Server implements Runnable{
                                 {
                                     call = 0;
                                     ByteBuffer aIMessage = ByteBuffer.allocate(1000);
-                                    aIMessage.putInt(e.X).putInt(e.Y).putInt(e.HP).putInt(e.move).putInt(e.yspeed).putInt(e.target).putInt(e.id);
+                                    aIMessage.putInt((int)e.X).putInt((int)e.Y).putInt(e.HP).putInt((int)e.move).putInt((int)e.yspeed).putInt(e.target).putInt(e.id);
                                     sendMessage(AI, aIMessage);
                                 }
                             }

@@ -34,21 +34,21 @@ public class RodEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.gray);
-            G.fillRect(X-2-viewX, Y-32-viewY, 4, 32);
+            G.fillRect((int)X-2-viewX, (int)Y-32-viewY, 4, 32);
             G.setColor(Color.darkGray);
-            G.fillRect(X-16-viewX, Y-4-viewY, 32, 4);
+            G.fillRect((int)X-16-viewX, (int)Y-4-viewY, 32, 4);
             G.setColor(Color.lightGray);
-            G.fillArc(X-4-viewX, Y-36-viewY-4, 8, 8, 0, 360);
+            G.fillArc((int)X-4-viewX, (int)Y-36-viewY-4, 8, 8, 0, 360);
             G.setColor(Color.black);
-            G.drawRect(X-2-viewX, Y-32-viewY, 4, 32);
-            G.drawRect(X-16-viewX, Y-4-viewY, 32, 4);
-            G.drawArc(X-4-viewX, Y-36-viewY-4, 8, 8, 0, 360);
+            G.drawRect((int)X-2-viewX, (int)Y-32-viewY, 4, 32);
+            G.drawRect((int)X-16-viewX, (int)Y-4-viewY, 32, 4);
+            G.drawArc((int)X-4-viewX, (int)Y-36-viewY-4, 8, 8, 0, 360);
             G.setColor(Color.YELLOW);
             int dir = r.nextInt(360), dis = 8+r.nextInt(16);
-            int xx = X + (int)APPLET.lengthdir_x(dis,dir)-viewX, yy = Y +  (int)APPLET.lengthdir_y(dis, dir) - 34-viewY;
+            int xx = (int)X + (int)APPLET.lengthdir_x(dis,dir)-viewX, yy = (int)Y +  (int)APPLET.lengthdir_y(dis, dir) - 34-viewY;
             dir = r.nextInt(360); dis = 8+r.nextInt(16);
             int xxx = xx + (int)APPLET.lengthdir_x(dis,dir), yyy = yy +  (int)APPLET.lengthdir_y(dis, dir);
-            G.drawLine(X-viewX, Y-34-viewY, xx, yy);
+            G.drawLine((int)X-viewX, (int)Y-34-viewY, xx, yy);
             G.drawLine(xx, yy, xxx, yyy);
         }
     }
@@ -88,9 +88,9 @@ public class RodEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);

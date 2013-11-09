@@ -24,7 +24,7 @@ public EffectEntity(int x, int y, int xs, int ys, int lifee, Color ce)
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
        G.setColor(c);
-            G.drawLine(X-viewX,Y-viewY,(X+2*xspeed)-viewX,(Y+2*yspeed)-viewY);
+            G.drawLine((int)X-viewX,(int)Y-viewY,(int)(X+2*xspeed)-viewX,(int)(Y+2*yspeed)-viewY);
     }
 
     @Override

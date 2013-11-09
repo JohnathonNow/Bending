@@ -36,7 +36,7 @@ public class ShardEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.DARK_GRAY);
-            G.drawLine((X-xspeed)-viewX, (Y-yspeed)-viewY, X-viewX, Y-viewY);
+            G.drawLine((int)(X-xspeed)-viewX, (int)(Y-yspeed)-viewY, (int)X-viewX, (int)Y-viewY);
             
         }
     }
@@ -68,10 +68,10 @@ public class ShardEntity extends Entity{
     public void cerealize(ByteBuffer out) {
         try {
            Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,8 +90,8 @@ public void onServerUpdate(Server lol)
     if (collided(lol.earth))
        {
            radius*=3;
-           lol.earth.ground.ClearCircle(X, Y, radius);
-           lol.sendMessage(Server.DIG, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius));
+           lol.earth.ground.ClearCircle((int)X, (int)Y, radius);
+           lol.sendMessage(Server.DIG, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius));
            alive = false;
        }
 }

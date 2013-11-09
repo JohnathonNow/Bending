@@ -43,12 +43,12 @@ public class RockEntity extends Entity{
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
             G.setColor(Color.DARK_GRAY);
-            G.fillArc((X-radius/2)-viewX, (Y-radius/2)-viewY, radius, radius, 0, 360);
+            G.fillArc((int)(X-radius/2)-viewX, (int)(Y-radius/2)-viewY, radius, radius, 0, 360);
             
             G.setColor(Color.GRAY);
-            G.fillArc((X-2)-viewX, (Y-2)-viewY, 4, 4, s1, a1);
-            G.fillArc((X-4)-viewX, (Y-4)-viewY, 8, 8, s2, a2);
-            G.fillArc((X-6)-viewX, (Y-6)-viewY, 12, 12, s3, a3);
+            G.fillArc(((int)X-2)-viewX, (int)(Y-2)-viewY, 4, 4, s1, a1);
+            G.fillArc((int)(X-4)-viewX, (int)(Y-4)-viewY, 8, 8, s2, a2);
+            G.fillArc((int)(X-6)-viewX, (int)(Y-6)-viewY, 12, 12, s3, a3);
         }
     }
 
@@ -84,8 +84,8 @@ public void onServerUpdate(Server lol)
     if (!lol.earth.inBounds(X+xspeed, Y+yspeed)||lol.earth.checkCollision(X+xspeed, Y+yspeed))
        {
            radius*=3;
-           lol.earth.ground.FillCircleW(X+xspeed, Y+yspeed, 96, World.STONE);
-           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt(X+xspeed).putInt(Y+yspeed).putInt(96).put(World.STONE));
+           lol.earth.ground.FillCircleW((int)(X+xspeed), (int)(Y+yspeed), 96, World.STONE);
+           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int)(X+xspeed)).putInt((int)(Y+yspeed)).putInt(96).put(World.STONE));
        }
 }
 

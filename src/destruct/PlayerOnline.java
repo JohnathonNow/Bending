@@ -492,8 +492,8 @@ public class PlayerOnline extends Player implements Runnable{
             //out.flush();
             toSend.putInt(handle.earth.ground.w);
             toSend.putInt(handle.earth.ground.h);
-            toSend.putInt(handle.earth.x);
-            toSend.putInt(handle.earth.y);
+            toSend.putInt((int)handle.earth.x);
+            toSend.putInt((int)handle.earth.y);
             toSend.putInt(handle.mapRotation);
             toSend.putInt(handle.gameMode);
             //System.out.println(handle.earth.ground.w+" x "+handle.earth.ground.h);

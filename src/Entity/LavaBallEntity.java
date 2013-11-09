@@ -40,12 +40,12 @@ public class LavaBallEntity extends Entity{
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
             g.setColor(new Color(255,r.nextInt(255),0,r.nextInt(255)));
-                g.fillArc((X-6)-viewX, (Y-6)-viewY, 12,12, 0, 360); 
+                g.fillArc((int)(X-6)-viewX, (int)(Y-6)-viewY, 12,12, 0, 360); 
             for (int i = 0; i < 4; i++)
             {
                 int e1 = 6-r.nextInt(12), e2 = 6-r.nextInt(12);
                 g.setColor(new Color(255,r.nextInt(255),0,r.nextInt(255)));
-                g.fillArc((X+e1)-viewX, (Y+e2)-viewY, e1, e2, 0, 360); 
+                g.fillArc((int)(X+e1)-viewX, (int)(Y+e2)-viewY, e1, e2, 0, 360); 
             }
             g.setComposite(c);
         }
@@ -73,11 +73,11 @@ public void onServerUpdate(Server lol)
 {
         for (Player p:lol.playerList)
         {
-            if (p.ID!=maker&&p.checkCollision(X, Y))
+            if (p.ID!=maker&&p.checkCollision((int)X, (int)Y))
             {
                 radius=24;
-               lol.earth.ground.FillCircleW(X, Y, radius, World.LAVA);
-               lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.LAVA));
+               lol.earth.ground.FillCircleW((int)X, (int)Y, radius, World.LAVA);
+               lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).put(World.LAVA));
                alive = false;
                return;
             }
@@ -85,14 +85,14 @@ public void onServerUpdate(Server lol)
         if (lol.earth.checkCollision(X, Y))
        {
            radius=24;
-           lol.earth.ground.FillCircleW(X, Y, radius, World.LAVA);
-           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.LAVA));
+           lol.earth.ground.FillCircleW((int)X, (int)Y, radius, World.LAVA);
+           lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(radius).put(World.LAVA));
            alive = false;
        }
        if (lol.earth.inBounds(X, Y)&&collided(lol.earth))//lol.earth.ground.cellData[X][Y]==World.WATER
        {
            alive = false;
-           lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(this.MYID));
+           lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int)X).putInt((int)Y).putInt(this.MYID));
        }
 }
     private boolean collided(World w)
@@ -116,10 +116,10 @@ public void onServerUpdate(Server lol)
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out,  this.getClass().getName());
-            out.putInt(X);
-            out.putInt(Y);
-            out.putInt(xspeed);
-            out.putInt(yspeed);
+            out.putInt((int)X);
+            out.putInt((int)Y);
+            out.putInt((int)xspeed);
+            out.putInt((int)yspeed);
             out.putInt(maker);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
