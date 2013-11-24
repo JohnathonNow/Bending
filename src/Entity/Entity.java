@@ -77,8 +77,8 @@ public abstract class Entity extends Object{
     {
         previousX = X;
         previousY = Y;
-        X += xspeed;
-        Y += yspeed;
+        X += xspeed*World.deltaTime();
+        Y += yspeed*World.deltaTime();
     }
         public double lengthdir_x(double R, double T)
     {
@@ -95,6 +95,10 @@ public abstract class Entity extends Object{
     public double pointDis(double x1, double y1, double x2, double y2)
     {
        return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+    }
+    public double distanceToEntity(Entity e)
+    {
+        return pointDis(X,Y,e.X,e.Y);
     }
     public void drawOverlay(Graphics g, int viewx, int viewy)
     {

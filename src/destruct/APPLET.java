@@ -129,7 +129,7 @@ public class APPLET extends JPanel implements Runnable{
     
     public static void main(String args[])
     {
-        System.out.println("Loading BENDING v 2.013.10.3");
+        System.out.println("Loading BENDING v 2.013.11.17");
         
         gameAlive = true;
         Spell.init();
@@ -1489,6 +1489,18 @@ catch (Exception e)
                         killMessage = "~ was set ablaze by `.";
                     }
                 }
+                if (e instanceof EnemyEntity)
+                {
+                    EnemyEntity me3 = (EnemyEntity)e;
+                    if (checkCollision(me3.X,me3.Y)&&me3.master!=ID&&(gameMode>0?badTeam.contains(me3.master) :true))
+                    {
+                        hurt(7);
+                        world.vspeed-=4;
+                        xspeed+=4-random.nextInt(8);
+                        lastHit = me3.master;
+                        killMessage = "~ was defeated by `'s dark minion.";
+                    }
+                }
                 if (e instanceof BuritoEntity)
                 {
                     BuritoEntity me3 = (BuritoEntity)e;
@@ -1774,9 +1786,9 @@ catch (Exception e)
         if (world.keys[KeyEvent.VK_SPACE])
         {
         }
-        world.setTime();
+        
         repaint();
-                
+             World.setTime();   
         }
     }
     public String getKiller(int i)
@@ -2140,7 +2152,7 @@ catch (Exception e)
                 else
                 {
                     biggraphicsBuffer.drawString("You were defeated, press space to get back in on the action!", 128, 128);
-                    biggraphicsBuffer.drawString("In the meantime, use A and W to switch loadouts.", 128, 144);
+                    biggraphicsBuffer.drawString("In the meantime, use S and W to switch loadouts.", 128, 144);
                     biggraphicsBuffer.drawString("Forced respawn in "+(1+((400-forcedRespawn)/40))+"...", 128, 160);
                 }
                 if (chatActive)

@@ -61,7 +61,7 @@ public class LavaBallEntity extends Entity{
        if (next++>2)
        {
             next = 0;
-            yspeed+=gravity;
+            yspeed+=gravity*World.deltaTime();
        }
        /*if (yspeed<12)
        {

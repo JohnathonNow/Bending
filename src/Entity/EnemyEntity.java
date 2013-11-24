@@ -25,14 +25,16 @@ public class EnemyEntity extends Entity{
     public int target = 0;
     public int timer = 0;
     public int id = 0;
-    public EnemyEntity(int x, int y, int hspeed, int vspeed, int hp)
+    public int master = 0;
+    public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma)
     {
         X = x;
         Y = y;
         xspeed = hspeed;
         yspeed = vspeed;
         move = hspeed;
-        HP = hp;
+        HP = 500;
+        master = ma;
     }
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
@@ -40,6 +42,8 @@ public class EnemyEntity extends Entity{
         {
             G.setColor(Color.RED);
             G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
+            G.setColor(Color.black);
+            G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
         }
      //   System.out.println("HI!");
     }
@@ -50,7 +54,7 @@ public class EnemyEntity extends Entity{
             for (Player p:apples.playerList)
             {
                 dis = pointDis(X,Y,p.x,p.y);
-                if (dis<min)
+                if (dis<min&&p.ID!=master)
                 {
                     min = (int)dis;
                     target = p.ID;
@@ -58,16 +62,25 @@ public class EnemyEntity extends Entity{
                     else{ move = -2;}
                 }
             }
+            if (min>300)
+            {
+                move = 0;
+            }
             if (!apples.serverWorld)
             {
                 dis = pointDis(X,Y,apples.x,apples.y);
-                if (dis<min)
+                if (dis<min&&apples.ID!=master)
                 {
                     target = -1;
                     if (apples.x>X){ move = 2;}
                     else{ move = -2;}
+                    if (dis>300)
+                    {
+                        move = 0;
+                    }
                 }
             }
+            
         if (!apples.isSolid(X,Y-40))
             {
             Y-=40;
@@ -129,11 +142,16 @@ public class EnemyEntity extends Entity{
     }
     @Override
     public void onServerUpdate(Server handle) {
+        if (HP<=0)
+        {
+            handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
+            this.setAlive(false);
+        }
         int min = 9999;
             for (PlayerOnline p:handle.playerList)
             {
                 double dis = pointDis(X,Y,p.x,p.y);
-                if (dis<min)
+                if (dis<min&&p.ID!=master)
                 {
                     min = (int)dis;
                     target = p.ID;
@@ -141,7 +159,10 @@ public class EnemyEntity extends Entity{
                     else{ move = -2;}
                 }
             }
-
+            if (min>300)
+            {
+                move = 0;
+            }
         if (timer++>90)
         {
             //System.out.println(X);

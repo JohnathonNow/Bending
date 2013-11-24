@@ -5,10 +5,29 @@
 ///TODO: FIX NETWORKING
 package destruct;
 
+import Entity.BallLightningEntity;
+import Entity.BuritoEntity;
 import Entity.EnemyEntity;
 import Entity.Entity;
+import Entity.FireBallEntity;
+import Entity.FireJumpEntity;
+import Entity.FirePuffEntity;
+import Entity.GustEntity;
 import Entity.HillEntity;
+import Entity.IceShardEntity;
+import Entity.LavaBallEntity;
+import Entity.MissileEntity;
 import Entity.PumpkinEntity;
+import Entity.RockEntity;
+import Entity.SandEntity;
+import Entity.ShardEntity;
+import Entity.SnowEntity;
+import Entity.SoulDrainEntity;
+import Entity.SpoutEntity;
+import Entity.TornadoEntity;
+import Entity.WallofFireEntity;
+import static destruct.APPLET.pointDis;
+import static destruct.World.oldTime;
 import java.awt.Polygon;
 import java.io.DataInputStream;
 import java.io.File;
@@ -123,6 +142,17 @@ public final class Server implements Runnable{
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    static long oldTime = 0;
+    public static void setTime()
+    {
+        oldTime = System.nanoTime();
+    }
+    public static float deltaTime()
+    {
+        float lol = ((System.nanoTime()-oldTime))/(25f*1000000f);
+        System.out.println("Delta Time: "+lol);
+        return lol;
+    }
     Thread worldHandle, udplistener;
     public Server()
     {
@@ -144,7 +174,7 @@ public final class Server implements Runnable{
                     while (gameRunning)
                     {
                         long l = System.currentTimeMillis();
-                        //System.out.println("Server FPS: "+(1000/(l-swagTime)));
+//                        System.out.println("Server FPS: "+(1000/(l-swagTime)));
                         swagTime = l;
                         try {
                             l = System.currentTimeMillis()-lastTime;
@@ -161,6 +191,7 @@ public final class Server implements Runnable{
                         {
                             continue;
                         }
+//                        System.out.println(""+World.deltaTime());
                         earth.onUpdate();
                         if (nextVote*3>playerList.size()*2)
                         {
@@ -181,8 +212,8 @@ public final class Server implements Runnable{
                             //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                         }
             //            earth.ground.ShowData();
-                        
-                        
+                        handleAI();
+                        World.setTime();
                     }
                 }
             };
@@ -628,6 +659,128 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
               fos.close();
 
 }
+    public void handleAI()
+    {
+        for (Entity ai:earth.entityList)
+        {
+            if (ai instanceof EnemyEntity)
+            {
+                EnemyEntity AI = (EnemyEntity)ai;
+                for (Entity e:earth.entityList)
+                {
+                    if (ai.distanceToEntity(e)<32&&ai!=e)
+                    {
+                        if (e instanceof MissileEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=70;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof TornadoEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=100;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof GustEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=40;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof RockEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=120;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof FireBallEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=200;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof FirePuffEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=20;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof BuritoEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=500;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof LavaBallEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=300;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof SoulDrainEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP+=100;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof FireJumpEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=200;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof ShardEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=160;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof SandEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=200;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof IceShardEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=100;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof SnowEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=30;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof SpoutEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=30;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof BallLightningEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=100;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                        if (e instanceof WallofFireEntity)
+                        {
+                            e.setAlive(false);
+                            AI.HP-=400;
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
     private class UDPThread implements Runnable
     {
         @Override

@@ -182,6 +182,7 @@ public class World implements Serializable{
                                 bodyParts[i] = ResourceLoader.loadImage("http://www.johnbot.net78.net/ThesePicturesAreSoGreatThatJustLookingAtThemWillCauseTheEndOfTheWorld/p"+(i+1)+"_"+parts[i]+".png", "p"+(i+1)+"_"+parts[i]+".png");
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.white, new Color(colors[i]));
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.lightGray, new Color(colors2[i]));
+                                bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], new Color(0xBEBEBE) , new Color(colors2[i]).darker());
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -1564,7 +1565,8 @@ if (!playerList.isEmpty())
     public static float deltaTime()
     {
         float lol = ((System.nanoTime()-oldTime))/(25f*1000000f);
-        System.out.println("Delta Time: "+lol);
+        //System.out.println("Delta Time: "+lol);
+        lol = 1;
         return lol;
     }
     public static final int ALPHA = 0;

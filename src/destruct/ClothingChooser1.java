@@ -556,7 +556,7 @@ public void loadClothing()
                             {
 //                                System.out.println("YES");
                                 stuff[i] = ResourceLoader.loadImageNoHash("http://west-it.webs.com/bodyParts/p"+(i+1)+"_"+cloths[i]+".png", "p"+(i+1)+"_"+cloths[i]+".png");
-                                stuff[i] = World.changeColor(World.changeColor((BufferedImage)stuff[i], Color.white, colors[i]),Color.LIGHT_GRAY,colors2[i]);
+                                stuff[i] = World.changeColor(World.changeColor(World.changeColor((BufferedImage)stuff[i], Color.white, colors[i]),Color.LIGHT_GRAY,colors2[i]),new Color(0xBEBEBE),colors2[i].darker());
                             }
                             done = true;
                          painting();

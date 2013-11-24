@@ -48,6 +48,7 @@ public class Player {
                                 bodyParts[i] = ResourceLoader.loadImageNoHash("http://west-it.webs.com/bodyParts/p"+(i+1)+"_"+parts[i]+".png", "p"+(i+1)+"_"+parts[i]+".png");
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.white, new Color(colorss[i]));
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.lightGray, new Color(colorss2[i]));
+                                bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], new Color(0xBEBEBE), new Color(colorss2[i]).darker());
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
