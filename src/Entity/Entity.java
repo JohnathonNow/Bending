@@ -18,6 +18,7 @@ import java.util.Random;
 public abstract class Entity extends Object{
     public static Random r = new Random();
     public int MYID = 0;
+    public int maker;
     public Entity setID(int MYID)
     {
         this.MYID = MYID;

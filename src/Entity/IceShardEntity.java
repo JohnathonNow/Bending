@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class IceShardEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public int gravity = 0;
     public IceShardEntity(int x, int y, int hspeed, int vspeed, int ma)

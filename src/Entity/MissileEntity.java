@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class MissileEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public MissileEntity(int x, int y, int hspeed, int vspeed, int ma)
     {

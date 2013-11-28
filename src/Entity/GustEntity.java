@@ -12,7 +12,6 @@ import destruct.World;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class GustEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public GustEntity(int x, int y, int hspeed, int vspeed, int ma)
     {

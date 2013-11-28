@@ -86,7 +86,8 @@ public final class Server implements Runnable{
                 TEAMDEATHMATCH = 1,
                 FREEFORALL = -1,
                 KINGOFTHEHILL = -2,
-                THEHIDDEN = 2;
+                THEHIDDEN = 2,
+                SURVIVAL = 3;
         public static final byte //MESSAGE IDs
             UDPMOVE = 0;
         public static int MYID = 0;
@@ -153,6 +154,8 @@ public final class Server implements Runnable{
         System.out.println("Delta Time: "+lol);
         return lol;
     }
+    int index = 0;
+    long oldTim;
     Thread worldHandle, udplistener;
     public Server()
     {
@@ -166,6 +169,7 @@ public final class Server implements Runnable{
             startExpander();
 //            udplistener = new Thread(new UDPThread());
   //          udplistener.start();
+            
             worldHandle = new Thread(){
                 @Override
                 public void run()
@@ -191,6 +195,7 @@ public final class Server implements Runnable{
                         {
                             continue;
                         }
+                        index++;
 //                        System.out.println(""+World.deltaTime());
                         earth.onUpdate();
                         if (nextVote*3>playerList.size()*2)
@@ -202,6 +207,21 @@ public final class Server implements Runnable{
                             if (playerList.size()>1&&playerList.get(0).score>=(playerList.size()-1))
                             {
                                 expander.interrupt();
+                            }
+                        }
+                        if (gameMode==SURVIVAL)
+                        {
+                            long tim = System.currentTimeMillis();
+                            if (tim-oldTim>1000*20)
+                            {
+                                oldTim = tim;
+                                for (int i = 0; i <= 5; i++)
+                                {
+                                    int yay = getID(), xxxx = earth.random.nextInt(earth.wIdTh);
+
+                                    earth.entityList.add(new EnemyEntity(xxxx,0,0,0,-2).setID(yay));
+                                    sendMessage(Server.DARKNESS,ByteBuffer.allocate(28).putInt(10).putInt(xxxx).putInt(0).putInt(0).putInt(0).putInt(-2).putInt(yay));
+                                }
                             }
                         }
                        // fixStuff();
@@ -266,13 +286,20 @@ public final class Server implements Runnable{
             }
             else
             {
-                if ((team1.size()>team2.size()))
+                if (gameMode==SURVIVAL)
                 {
-                    team2.add(pID);
+                    team1.add(pID);
                 }
                 else
                 {
-                    team1.add(pID);
+                    if ((team1.size()>team2.size()))
+                    {
+                        team2.add(pID);
+                    }
+                    else
+                    {
+                        team1.add(pID);
+                    }
                 }
             }
             pID++;
@@ -428,9 +455,9 @@ public String getKiller(int i)
     }
     return "NULL";
 }
-public Player getPlayer(int i)
+public PlayerOnline getPlayer(int i)
 {
-    for (Player p:playerList)
+    for (PlayerOnline p:playerList)
     {
         if (p.ID==i)
         {
@@ -504,7 +531,7 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                     yes = getKiller(winner)+" won the round!";
                     sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length()*4+4).putInt(0xFF0000),yes));
                 }
-                gameMode = choose(FREEFORALL,TEAMDEATHMATCH,KINGOFTHEHILL,THEHIDDEN);
+                gameMode = choose(FREEFORALL,TEAMDEATHMATCH,KINGOFTHEHILL,THEHIDDEN,SURVIVAL);
                 Collections.shuffle(playerList);
                 team1.clear();
                 team2.clear();
@@ -529,18 +556,31 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                 }
                 else
                 {
-                    for (int index = 0; index < playerList.size(); index++)
+                    if (gameMode==THEHIDDEN)
                     {
-                        id = playerList.get(index).ID;
-                        if (index%2==0)
+                        for (int index = 0; index < playerList.size(); index++)
                         {
+                            id = playerList.get(index).ID;
                             team1.add(id);
                             System.out.println(playerList.get(index).username+" joined red");
+                            
                         }
-                        else
+                    }
+                    else
+                    {
+                        for (int index = 0; index < playerList.size(); index++)
                         {
-                            team2.add(id);
-                            System.out.println(playerList.get(index).username+" joined blue");
+                            id = playerList.get(index).ID;
+                            if (index%2==0)
+                            {
+                                team1.add(id);
+                                System.out.println(playerList.get(index).username+" joined red");
+                            }
+                            else
+                            {
+                                team2.add(id);
+                                System.out.println(playerList.get(index).username+" joined blue");
+                            }
                         }
                     }
                 }
@@ -559,6 +599,9 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                     break;
                     case THEHIDDEN:
                         gm = "The Hidden";
+                    break;
+                    case SURVIVAL:
+                        gm = "Survival";
                     break;
                 }
                 yes = "The next game type will be "+gm+".";
@@ -668,108 +711,125 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                 EnemyEntity AI = (EnemyEntity)ai;
                 for (Entity e:earth.entityList)
                 {
-                    if (ai.distanceToEntity(e)<32&&ai!=e)
+                    if (ai.distanceToEntity(e)<32&&ai!=e&&e.alive)
                     {
                         if (e instanceof MissileEntity)
                         {
                             e.setAlive(false);
+                            AI.lastHit = e.maker;
                             AI.HP-=70;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof TornadoEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=100;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof GustEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=40;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof RockEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=120;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof FireBallEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=200;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof FirePuffEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=20;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof BuritoEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=500;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof LavaBallEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=300;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof SoulDrainEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP+=100;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof FireJumpEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=200;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof ShardEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=160;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof SandEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=200;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof IceShardEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=100;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof SnowEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=30;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof SpoutEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=30;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof BallLightningEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP-=100;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof WallofFireEntity)
                         {
+                            AI.lastHit = e.maker;
                             e.setAlive(false);
-                            AI.HP-=400;
+                            AI.HP-=222;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                     }

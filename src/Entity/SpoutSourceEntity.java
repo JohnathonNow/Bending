@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class SpoutSourceEntity extends Entity{
     public int life = 0;
-    public int maker = 0;
+//    public int maker = 0;
     public SpoutSourceEntity(int x, int y, int l, int m)
     {
         X = x;

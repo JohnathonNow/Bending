@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class WallofFireEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int height = 30;
     public int width = 2;
     public int gravity = 0;

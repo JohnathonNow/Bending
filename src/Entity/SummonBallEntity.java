@@ -6,7 +6,6 @@ package Entity;
 
 
 import static Entity.Entity.r;
-import destruct.Player;
 import destruct.Server;
 import destruct.World;
 import java.awt.Color;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class SummonBallEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public SummonBallEntity(int x, int y, int hspeed, int vspeed, int ma)
     {

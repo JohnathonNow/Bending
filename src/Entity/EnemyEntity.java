@@ -7,10 +7,11 @@ package Entity;
 
 import destruct.Player;
 import destruct.PlayerOnline;
+import destruct.ResourceLoader;
 import destruct.Server;
 import destruct.World;
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,8 @@ public class EnemyEntity extends Entity{
     public int timer = 0;
     public int id = 0;
     public int master = 0;
+    public int lastHit = -2;
+    static BufferedImage sprite = ResourceLoader.loadImage("http://west-it.webs.com/Bending/evil.png","evil.png");;
     public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma)
     {
         X = x;
@@ -37,13 +40,15 @@ public class EnemyEntity extends Entity{
         master = ma;
     }
     @Override
-    public void onDraw(Graphics G, int viewX, int viewY) {
+    public void drawOverlay(Graphics G, int viewX, int viewY) {
+        
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
-            G.setColor(Color.RED);
-            G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
-            G.setColor(Color.black);
-            G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
+//            G.setColor(Color.RED);
+//            G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
+//            G.setColor(Color.black);
+//            G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
+            G.drawImage(sprite, (int)((X-viewX)*3f)-32, (int)((Y-viewY)*3f)-32, null);
         }
      //   System.out.println("HI!");
     }
@@ -51,23 +56,23 @@ public class EnemyEntity extends Entity{
     public void onUpdate(World apples) {
         int min = 9999;
         double dis;
-            for (Player p:apples.playerList)
-            {
-                dis = pointDis(X,Y,p.x,p.y);
-                if (dis<min&&p.ID!=master)
-                {
-                    min = (int)dis;
-                    target = p.ID;
-                    if (p.x>X){ move = 2;}
-                    else{ move = -2;}
-                }
-            }
-            if (min>300)
-            {
-                move = 0;
-            }
             if (!apples.serverWorld)
             {
+                for (Player p:apples.playerList)
+                {
+                    dis = pointDis(X,Y,p.x,p.y);
+                    if (dis<min&&p.ID!=master)
+                    {
+                        min = (int)dis;
+                        target = p.ID;
+                        if (p.x>X){ move = 2;}
+                        else{ move = -2;}
+                    }
+                }
+                if (min>300)
+                {
+                    move = 0;
+                }
                 dis = pointDis(X,Y,apples.x,apples.y);
                 if (dis<min&&apples.ID!=master)
                 {
@@ -80,7 +85,10 @@ public class EnemyEntity extends Entity{
                     }
                 }
             }
-            
+            if (apples.isSolid(X+(move*8),Y-4)&&apples.isSolid(X, Y+3))
+            {
+                yspeed=-10;
+            }
         if (!apples.isSolid(X,Y-40))
             {
             Y-=40;
@@ -146,6 +154,15 @@ public class EnemyEntity extends Entity{
         {
             handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
             this.setAlive(false);
+            if (Server.gameMode==Server.SURVIVAL)
+            {
+                PlayerOnline P = handle.getPlayer(lastHit);
+                if (P!=null)
+                {
+                    P.score++;
+                    handle.sendMessage(Server.SCORE, ByteBuffer.allocate(24).putInt(P.ID).putInt(P.score));
+                }
+            }
         }
         int min = 9999;
             for (PlayerOnline p:handle.playerList)
@@ -163,6 +180,7 @@ public class EnemyEntity extends Entity{
             {
                 move = 0;
             }
+            
         if (timer++>90)
         {
             //System.out.println(X);
@@ -195,6 +213,11 @@ public class EnemyEntity extends Entity{
             //System.out.println("IM BACK!");
             world.entityList.add(new EnemyEntity(in.getInt(),in.getInt(),in.getInt(),in.getInt(),in.getInt()).addStuff(in.getInt(),in.getInt()));
         
+    }
+
+    @Override
+    public void onDraw(Graphics G, int viewX, int viewY) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

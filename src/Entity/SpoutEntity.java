@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class SpoutEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 8;
     public int gravity = 1;
     int a1, a2, a3;

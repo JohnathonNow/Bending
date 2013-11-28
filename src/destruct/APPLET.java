@@ -1492,7 +1492,7 @@ catch (Exception e)
                 if (e instanceof EnemyEntity)
                 {
                     EnemyEntity me3 = (EnemyEntity)e;
-                    if (checkCollision(me3.X,me3.Y)&&me3.master!=ID&&(gameMode>0?badTeam.contains(me3.master) :true))
+                    if (checkCollision(me3.X,me3.Y)&&me3.master!=ID&&(gameMode>0?!myTeam.contains(me3.master):true))
                     {
                         hurt(7);
                         world.vspeed-=4;

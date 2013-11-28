@@ -20,7 +20,7 @@ public class FlameThrowerEntity extends Entity{
 
 
     int life = 60;
-    int maker;
+//    int maker;
     int MX, MY;
     public FlameThrowerEntity(int x, int y,int mx, int my, int ID)
     {

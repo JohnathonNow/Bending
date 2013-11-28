@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class PumpkinEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public static Color brown = new Color(0xCC6600);
     public PumpkinEntity(int x, int y)

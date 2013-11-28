@@ -19,7 +19,7 @@ public class RainEntity extends Entity{
 
 
     int life = 250;
-    int maker;
+//    int maker;
     public RainEntity(int x, int y, int ID)
     {
         X = x;

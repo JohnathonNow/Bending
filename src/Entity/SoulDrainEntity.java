@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author John
  */
 public class SoulDrainEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public SoulDrainEntity(int x, int y, int hspeed, int vspeed, int ma)
     {

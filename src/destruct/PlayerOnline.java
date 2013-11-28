@@ -102,6 +102,9 @@ public class PlayerOnline extends Player implements Runnable{
                     case Server.THEHIDDEN:
                         gm = "The Hidden";
                     break;
+                    case Server.SURVIVAL:
+                        gm = "Survival";
+                    break;
                 }
                 gm = "The next game type will be "+gm+".";
                 out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length()*4+4).putInt(0x00FF3C),gm),Server.MESSAGE);

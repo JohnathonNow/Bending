@@ -145,7 +145,23 @@ public class ResourceLoader {
             }
                 }
     }
-    
+    public static  BufferedImage loadImageFromPC(String name)
+    {
+        
+        BufferedImage toReturn;
+                while (true)
+                {
+            try 
+            {
+                toReturn = (BufferedImage)(ImageIO.read(new File(name)));
+                return toReturn;
+            } 
+            catch (IOException ex)
+            {
+                //Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                }
+    }
     public static RealClip loadSound(String src, String name)
     {
         RealClip clip = null;

@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
  * @author John
  */
 public class SandEntity extends Entity{
-    public int maker = 0;
+//    public int maker = 0;
     public int radius = 16;
     public int gravity = 1;
     int a1, a2, a3;
