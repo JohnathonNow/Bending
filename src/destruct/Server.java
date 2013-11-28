@@ -773,7 +773,7 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                         {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
-                            AI.HP+=100;
+                            AI.HP-=100;
                             sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
                         }
                         if (e instanceof FireJumpEntity)

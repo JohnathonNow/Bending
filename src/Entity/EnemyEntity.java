@@ -28,11 +28,13 @@ public class EnemyEntity extends Entity{
     public int id = 0;
     public int master = 0;
     public int lastHit = -2;
-    static BufferedImage sprite = ResourceLoader.loadImage("http://west-it.webs.com/Bending/evil.png","evil.png");;
+    float drawX = 0, drawY = 0;
+    static BufferedImage sprite = ResourceLoader.loadImage("http://west-it.webs.com/Bending/evil.png","evil.png");
+    int air = 100;
     public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma)
     {
-        X = x;
-        Y = y;
+        drawX = X = x;
+        drawY = Y = y;
         xspeed = hspeed;
         yspeed = vspeed;
         move = hspeed;
@@ -48,10 +50,13 @@ public class EnemyEntity extends Entity{
 //            G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
 //            G.setColor(Color.black);
 //            G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
-            G.drawImage(sprite, (int)((X-viewX)*3f)-32, (int)((Y-viewY)*3f)-32, null);
+            G.drawImage(sprite, (int)((drawX-viewX)*3f)-32, (int)((drawY-viewY)*3f)-32, null);
         }
      //   System.out.println("HI!");
     }
+    boolean jump = false;
+    float jumpMove = 0;
+    boolean inAir = false;
     @Override
     public void onUpdate(World apples) {
         int min = 9999;
@@ -67,6 +72,14 @@ public class EnemyEntity extends Entity{
                         target = p.ID;
                         if (p.x>X){ move = 2;}
                         else{ move = -2;}
+                        if (p.y<Y-64)
+                        {
+                            jump = true;
+                        }
+                        else
+                        {
+                            jump = false;
+                        }
                     }
                 }
                 if (min>300)
@@ -83,11 +96,58 @@ public class EnemyEntity extends Entity{
                     {
                         move = 0;
                     }
+                    if (apples.y<Y-64)
+                    {
+                        jump = true;
+                    }
+                    else
+                    {
+                        jump = false;
+                    }
+                }
+                if (move==0)
+                {
+                    for (Player p:apples.playerList)
+                    {
+                        dis = pointDis(X,Y,p.x,p.y);
+                        if (dis<min&&p.ID==master)
+                        {
+                            min = (int)dis;
+                            target = p.ID;
+                            if (p.x>X){ move = 1;}
+                            else{ move = -1;}
+                            if (p.y<Y-128)
+                            {
+                                jump = true;
+                            }
+                        }
+                    }
+                    dis = pointDis(X,Y,apples.x,apples.y);
+                    if (dis<min&&apples.ID==master)
+                    {
+                        target = -1;
+                        if (apples.x>X){ move = 1;}
+                        else{ move = -1;}
+                        if (apples.y<Y-128)
+                        {
+                            jump = true;
+                        }
+                    }
                 }
             }
-            if (apples.isSolid(X+(move*8),Y-4)&&apples.isSolid(X, Y+3))
+            if ((apples.isSolid(X+(move*8),Y-4)||jump)&&apples.isSolid(X, Y+3))
             {
-                yspeed=-10;
+                jumpMove = move*2;
+                yspeed=-6;
+                inAir = true;
+            }
+            if (inAir)
+            {
+                move = jumpMove;
+                if (apples.isSolid(X, Y+3))
+                {
+                    inAir = false;
+                }
             }
         if (!apples.isSolid(X,Y-40))
             {
@@ -147,9 +207,12 @@ public class EnemyEntity extends Entity{
             {
                 yspeed=0;
             }
+            drawX += (X-drawX)/2;
+            drawY += (Y-drawY)/2;
     }
     @Override
     public void onServerUpdate(Server handle) {
+        jump = false;
         if (HP<=0)
         {
             handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
@@ -174,13 +237,62 @@ public class EnemyEntity extends Entity{
                     target = p.ID;
                     if (p.x>X){ move = 2;}
                     else{ move = -2;}
+                    
+                    if (p.y<Y-64)
+                        {
+                            jump = true;
+                        }
+                        else
+                        {
+                            jump = false;
+                        }
                 }
             }
             if (min>300)
             {
                 move = 0;
+                for (PlayerOnline p:handle.playerList)
+                {
+                    double dis = pointDis(X,Y,p.x,p.y);
+                    if (dis<min&&p.ID==master)
+                    {
+                        min = (int)dis;
+                        target = p.ID;
+                        if (p.x>X){ move = 1;}
+                            else{ move = -1;}
+                        
+                        if (p.y<Y-128)
+                        {
+                            jump = true;
+                        }
+                        else
+                        {
+                            jump = false;
+                        }
+                    }
+                }
             }
-            
+            if (!handle.earth.isType((int)X, (int)Y,World.AIR))
+            {
+                if (air--<0)
+                {
+                    HP-=2;
+                }
+            }
+            else
+            {
+                air = 100;
+            }
+            if (handle.earth.isType((int)X, (int)Y,World.LAVA))
+            {
+                HP-=2;
+            }
+            if ((handle.earth.isSolid(X+(move*8),Y-4)||jump)&&handle.earth.isSolid(X, Y+3))
+            {
+                jumpMove = move*3/2;
+                yspeed=-6;
+                inAir = true;
+            }
         if (timer++>90)
         {
             //System.out.println(X);
