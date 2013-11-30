@@ -5,13 +5,10 @@ package Entity;
  */
 
 
-import BlendModes.Additive;
 import destruct.Server;
 import destruct.World;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,17 +31,12 @@ public class FirePuffEntity extends Entity{
     }
     Color yes = new Color(0xFF0000);
     @Override
-    public void drawOverlay(Graphics G, int viewX, int viewY)
+    public void drawAdditive(Graphics G, int viewX, int viewY)
     {
         if (X>viewX&&X<viewX+300&&Y>viewY&&Y<viewY+300)
         {
-            Graphics2D g = (Graphics2D)G;
-            Composite c = g.getComposite();
-            g.setComposite(Additive.additive);
-            g.setColor(yes);
-            g.fillArc(((int)(X-radius)-viewX)*3, (int)((Y-radius)-viewY)*3, radius*6,radius*6, 0, 360);
-            g.setComposite(c);
-            
+            G.setColor(yes);
+            G.fillArc(((int)(X-radius)-viewX)*3, (int)((Y-radius)-viewY)*3, radius*6,radius*6, 0, 360);
         }
     }
     @Override

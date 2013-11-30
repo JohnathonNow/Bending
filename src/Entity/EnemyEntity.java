@@ -120,6 +120,10 @@ public class EnemyEntity extends Entity{
                             {
                                 jump = true;
                             }
+                            else
+                            {
+                                jump = false;
+                            }
                         }
                     }
                     dis = pointDis(X,Y,apples.x,apples.y);
@@ -132,10 +136,14 @@ public class EnemyEntity extends Entity{
                         {
                             jump = true;
                         }
+                        else
+                        {
+                            jump = false;
+                        }
                     }
                 }
             }
-            if ((apples.isSolid(X+(move*8),Y-4)||jump)&&apples.isSolid(X, Y+3))
+            if (((move!=0&&apples.isSolid(X+(move*8),Y-4))||jump)&&apples.isSolid(X, Y+3))
             {
                 jumpMove = move*2;
                 yspeed=-6;
@@ -287,7 +295,7 @@ public class EnemyEntity extends Entity{
             {
                 HP-=2;
             }
-            if ((handle.earth.isSolid(X+(move*8),Y-4)||jump)&&handle.earth.isSolid(X, Y+3))
+            if (((move!=0&&handle.earth.isSolid(X+(move*8),Y-4))||jump)&&handle.earth.isSolid(X, Y+3))
             {
                 jumpMove = move*3/2;
                 yspeed=-6;

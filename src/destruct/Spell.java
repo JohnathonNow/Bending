@@ -83,6 +83,7 @@ public abstract class Spell {
         spells.add(Spell.getDarkSpell(1)); 
         spells.add(Spell.getDarkSpell(2)); 
         spells.add(Spell.getDarkSpell(3));
+        spells.add(Spell.getDarkSpell(4));
         
         spells.add(new Burito());
         
@@ -269,8 +270,8 @@ public abstract class Spell {
                 return new DarkAura();
             case 3:
                 return new DarkSummonBall();
-            case 5:
-                return new LightningRod();
+            case 4:
+                return new DarkTeleport();
             case 6:
                 return new LightningShield();
         }
@@ -2140,7 +2141,56 @@ public static class WaterTreading extends Waterbending
             return "<html>An intermediate darkness spell<br>High Energy Cost<br>For five seconds, nearby players are hurt</html>";
         }
     }
-    
+    public static class DarkTeleport extends Spell
+    {
+        public DarkTeleport()
+        {
+            ID = Server.DARKNESS;
+            subID = 5;
+            locked = true;
+            unlockXP = 5000;
+            try {
+                icon = loadIcon("http://west-it.webs.com/spells/teleport.png");
+            } catch (Exception ex) {
+                Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+        @Override
+        public void getAction(APPLET app) {
+            mx = app.world.mouseX+app.world.viewX;
+            my = app.world.mouseY+app.world.viewY;
+            if (APPLET.pointDis(app.world.x, app.world.y, mx, my)<600)
+            {
+                app.world.x = mx;
+                app.world.y = my;
+                app.sendMovement();
+                app.energico = 0;
+            }
+            else
+            {
+                app.energico+=getCost();
+            }
+        }
+
+        @Override
+        public int getCost() {
+            return 1000;
+        }
+        @Override
+        public String getName() {
+           return "Dark Gate";
+        }
+
+        @Override
+        public void getPassiveAction(APPLET app) {
+           // throw new UnsupportedOperationException("Not supported yet.");
+        }
+        @Override public String getTip()
+        {
+            return "<html>An intermediate darkness spell<br>Total Energy Cost<br>Teleport to a point of your choice</html>";
+        }
+    }
     
     
     

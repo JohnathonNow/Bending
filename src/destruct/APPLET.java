@@ -7,6 +7,7 @@ package destruct;
 //package destructableterrain;
 /*TodoList:
 * */
+import BlendModes.Additive;
 import Entity.*;
 import static destruct.World.setTime;
 import java.awt.*;
@@ -2096,8 +2097,13 @@ catch (Exception e)
             {
                 e.drawOverlay(biggraphicsBuffer,world.viewX,world.viewY);
             }
-            
-
+            Composite c = biggraphicsBuffer.getComposite();
+            biggraphicsBuffer.setComposite(Additive.additive);
+            for (Entity e:world.entityList)
+            {
+                e.drawAdditive(biggraphicsBuffer,world.viewX,world.viewY);
+            }
+            biggraphicsBuffer.setComposite(c);
             if (chatActive)
             {
                 biggraphicsBuffer.setColor(Color.gray);

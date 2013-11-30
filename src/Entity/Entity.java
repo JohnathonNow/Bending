@@ -104,6 +104,10 @@ public abstract class Entity extends Object{
     public void drawOverlay(Graphics g, int viewx, int viewy)
     {
     }
+    public void drawAdditive(Graphics g, int viewx, int viewy)
+    {
+        
+    }
     public void onServerUpdate(Server lol)
     {
         
