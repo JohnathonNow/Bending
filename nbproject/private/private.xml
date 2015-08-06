@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="4">
-        <file>
-            <url>src/destruct/ClothingChooser1.java</url>
-            <bookmark id="4">
-                <name/>
-                <line>164</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
-            <url>src/destruct/APPLET.java</url>
-            <bookmark id="2">
-                <name/>
-                <line>494</line>
-                <key/>
-            </bookmark>
-            <bookmark id="3">
-                <name/>
-                <line>1841</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/ConnectToDatabase.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/ResourceLoader.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/PassiveChooser1.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/World.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/Player.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/APPLET.java</file>
+            <file>file:/B:/Dropbox/Projects/NetBeansProjects/Bending/src/destruct/PlayerOnline.java</file>
+        </group>
+    </open-files>
 </project-private>

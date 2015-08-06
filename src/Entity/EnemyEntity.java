@@ -10,6 +10,7 @@ import destruct.PlayerOnline;
 import destruct.ResourceLoader;
 import destruct.Server;
 import destruct.World;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
@@ -29,6 +30,7 @@ public class EnemyEntity extends Entity{
     public int master = 0;
     public int lastHit = -2;
     float drawX = 0, drawY = 0;
+    String name;
     static BufferedImage sprite = ResourceLoader.loadImage("http://west-it.webs.com/Bending/evil.png","evil.png");
     int air = 100;
     public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma)
@@ -51,6 +53,8 @@ public class EnemyEntity extends Entity{
 //            G.setColor(Color.black);
 //            G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
             G.drawImage(sprite, (int)((drawX-viewX)*3f)-32, (int)((drawY-viewY)*3f)-32, null);
+            G.setColor(Color.DARK_GRAY);
+            G.drawString(name, (int)((X-(name.length())+3)-viewX)*3, (int)(Y-viewY-24)*3);
         }
      //   System.out.println("HI!");
     }
@@ -60,6 +64,10 @@ public class EnemyEntity extends Entity{
     @Override
     public void onUpdate(World apples) {
         int min = 9999;
+        if (name == null)
+        {
+            name = apples.getPlayerName(master);
+        }
         double dis;
             if (!apples.serverWorld)
             {

@@ -4,25 +4,70 @@
  */
 package destruct;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public  final class ConnectToDatabase {
+        String base = "http://72.92.89.110:1024";//"http://johnbot.net78.net";//"http://72.92.89.250:1024";//;//;//;//;//
+        Properties p;
+        boolean offline = true;
     public static ConnectToDatabase INSTANCE()
     {
         return new ConnectToDatabase();
     }
     public ConnectToDatabase()
     {
+        p = new Properties();
+        (new File(ResourceLoader.dir)).mkdirs();
+            if (new File(ResourceLoader.dir+"login.xyz").exists())
+            {
+                try {
+                p.load(new FileInputStream(new File(ResourceLoader.dir+"login.xyz")));
+            } catch (Exception ex) {
+                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+            if (p.isEmpty())
+            {
+                p.setProperty("servers", "Enter IP,enterip,0");
+                p.setProperty("spells", "");
+                p.setProperty("xp", "0");
+                p.setProperty("outfit", "");
+                p.setProperty("unlocks", "");
+            try {
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            } catch (Exception ex) {
+                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        defaultBase();
     }
-    String base = "http://71.175.73.85:1024";//"http://johnbot.net78.net";//"http://72.92.89.250:1024";//;//;//;//;//
+    private void defaultBase()
+    {
+        if (offline) return;
+                            InputStream is = null;
+        try {
+            URL WI = new URL("http://www.west-it.webs.com/yes.txt");//new URL("http://static.cbslocal.com/schoolclosings/production/cbs/kyw/NEWSROOM/webexport_number.htm");
+            is = WI.openStream();
+            Scanner sc = new Scanner(is);
+            base = sc.next();
+            sc.close();
+        } catch (IOException ex) {
+        }
+    }
         public boolean verify(String ver)
     {
+        if (offline) return true;
         boolean tor = false;
         try {
             //String userQuery = "UPDATE Accounts SET Active=1 WHERE Verify = '"+ver+"'";
@@ -57,11 +102,22 @@ public  final class ConnectToDatabase {
     }
     public ArrayList<String> getServers()
     {
+        ArrayList<String> toReturn;
+        if (offline)
+        {
+           toReturn = new ArrayList<>();
+           StringTokenizer st = new StringTokenizer(p.getProperty("servers"));
+           while (st.hasMoreElements())
+           {
+               toReturn.add(st.nextToken(","));
+           }
+           return toReturn;
+        }
         try {
             //String userQuery = "SELECT ServerName,ServerIP FROM Pants";
             //return connect(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
             URL steve = new URL(base+"/getServers.php");
-            ArrayList<String> toReturn;
+            
             try (Scanner read = new Scanner(steve.openStream())) {
                 String e = read.next();
                 toReturn = new ArrayList<>();
@@ -71,7 +127,6 @@ public  final class ConnectToDatabase {
                 e = read.next();
             }
             }
-                
                 return toReturn;
         } catch (Exception ex) {
             error(ex);
@@ -80,6 +135,7 @@ public  final class ConnectToDatabase {
     }
     public void updateCount(String ip, int c)
     {
+        if (offline) return;
         try {
             //String userQuery = "SELECT ServerName,ServerIP FROM Pants";
             //return connect(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -95,7 +151,8 @@ public  final class ConnectToDatabase {
     }
     public boolean logIn(String user, String pass)
     {
-        boolean tor = false;
+        if (offline) return true;
+         boolean tor = false;
         try {
             //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -118,6 +175,28 @@ public  final class ConnectToDatabase {
     public int[][] getSpells(String user, String pass)
     {
         int tor[][];
+        if (offline)
+        {
+            
+              StringTokenizer st = new StringTokenizer(p.getProperty("spells"),",");
+                if (st.countTokens()!=30)
+                {
+                    return new int[][]{{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};
+                }
+                tor = new int[6][5];
+                for (int y = 0; y < 5; y++)
+                {
+                    tor[5][y] = Integer.parseInt(st.nextToken());
+                }
+                for (int y = 0; y < 5; y++)
+                {
+                    for (int i = 0; i < tor[0].length; i++)
+                    {
+                        tor[y][i] = Integer.parseInt(st.nextToken());
+                    }
+                }
+                return tor;
+        }
         try {
             //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -157,6 +236,10 @@ public  final class ConnectToDatabase {
     }
     public int getXP(String user, String pass)
     {
+        if (offline)
+        {
+            return Integer.parseInt(p.getProperty("xp"));
+        }
         try {
             //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -180,6 +263,19 @@ public  final class ConnectToDatabase {
     }
                      public void postXP(int xp, String username)
     {
+        if (offline)
+        {
+            try
+            {
+                p.setProperty("xp", ""+xp);
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
         try {
                 //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
                 //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -194,6 +290,24 @@ public  final class ConnectToDatabase {
      public void getOutfit(String user, String pass)
     {
         int tor[];
+        if (offline)
+        {
+            StringTokenizer st = new StringTokenizer(p.getProperty("outfit"),",");
+                int total = st.countTokens()/3;
+                for (int i = 0; i < total; i++)
+                {
+                    APPLET.Clothing[i] = Byte.parseByte(st.nextToken());
+                }
+                for (int i = 0; i < total; i++)
+                {
+                    APPLET.Colors[i] = Integer.parseInt(st.nextToken());
+                }
+                 for (int i = 0; i < total; i++)
+                {
+                    APPLET.Colors2[i] = Integer.parseInt(st.nextToken());
+                }
+                 return;
+        }
         try {
             //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -229,6 +343,19 @@ public  final class ConnectToDatabase {
     }
     public void postSpells(String spells, String username)
     {
+        if (offline)
+        {
+            try
+            {
+                p.setProperty("spells", spells);
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
         try {
                 //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
                 //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -242,6 +369,19 @@ public  final class ConnectToDatabase {
     }
     public void postUnlocks(String username)
     {
+        if (offline)
+        {
+            try
+            {
+                p.setProperty("unlocks", ""+APPLET.unlocks);
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
         try {
                 //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
                 //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -255,6 +395,11 @@ public  final class ConnectToDatabase {
     }
     public void getUnlocks(String user, String pass)
     {
+        if (offline)
+        {
+            APPLET.unlocks.construct(p.getProperty("unlocks"));
+            return;
+        }
         try {
             //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -277,6 +422,19 @@ public  final class ConnectToDatabase {
     }
             public void postOutfit(String outfit, String username)
     {
+        if (offline)
+        {
+            try
+            {
+                p.setProperty("outfit",outfit);
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
         try {
                 //String userQuery = "SELECT User,Pass FROM Accounts WHERE User = '"+user+"' AND Pass='"+pass+"' AND Active=1";
                 //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -290,6 +448,19 @@ public  final class ConnectToDatabase {
     }
     public void addServer(String name, String IP)
     {
+        if (offline)
+        {
+            try
+            {
+                p.setProperty("servers", p.getProperty("servers")+","+name+","+IP+","+0);
+                p.store(new FileOutputStream(new File(ResourceLoader.dir+"login.xyz")), "");
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
         try {
             //String userQuery = "INSERT INTO Pants (ServerName, ServerIP) VALUES ('"+name+"', '"+IP+"');";
             //connectatize(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
@@ -352,10 +523,11 @@ public  final class ConnectToDatabase {
     {
         if (base.equals("http://johnbot.net78.net"))
         {
-            base = "http://72.92.89.250:1024";
+            defaultBase();
         }
         else
         {
+            //defaultBase();
             base = "http://johnbot.net78.net";
         }
     }

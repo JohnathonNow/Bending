@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -40,28 +41,35 @@ public class AppletActionListener implements ActionListener{
                 if (!currentlyLoggedIn)
                 {
                     pointer.loggedOn = false;
-                    pointer.repaint(); 
+                    //pointer.repaint(); 
                     return;
                 }
                 pointer.notDone = false;
                 //owner.setResizable(true);
                 pointer.username = APPLET.jtb.getText();
                 pointer.serverIP = (String)pointer.hosts[pointer.menu.getSelectedIndex()];
-                pointer.init();
-                pointer.start();
-                pointer.spellselection.setVisible(false);
-                pointer.spellselection.choochootrain.setVisible(false);
-                APPLET.immaKeepTabsOnYou.setSelectedIndex(0);
-                if (!pointer.failed)
+                if ("enterip".equals(pointer.serverIP))
                 {
-                    pointer.removeAll(); 
-                    pointer.owner.setBackground(Color.black);
+                    pointer.serverIP = JOptionPane.showInputDialog("Server IP?");
+                }
+                pointer.init();
+                if (pointer.start())
+                {
+                    pointer.spellselection.setVisible(false);
+                    pointer.spellselection.choochootrain.setVisible(false);
+                    APPLET.immaKeepTabsOnYou.setSelectedIndex(0);
+                    if (!pointer.failed)
+                    {
+                        pointer.removeAll(); 
+                        pointer.owner.setBackground(Color.black);
+                    }
                 }
                 else
-                {
-                    pointer.loggedOn = false;
-                    pointer.repaint(); 
-                }
+                    {
+                        pointer.loggedOn = false;
+                        pointer.notDone = true;
+                        pointer.repaint(); 
+                    }
             }
         }
         if (command.equals(pointer.hosting.getText()))

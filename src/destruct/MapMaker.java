@@ -43,25 +43,25 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
      * Creates new form MapMaker
      */
     int www = 900, hhh = 900;
-      public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8, CRYSTAL = 9;
+      public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8, CRYSTAL = 9, ETHER = 10;
       byte writeData[][] = new byte[www][hhh];
-      public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint, crystalPaint;
+      public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint, crystalPaint,etherPaint;
 
-      TexturePaint doodles[] = new TexturePaint[]{skyPaint,grassPaint,null,null,null,sandPaint,stonePaint,barkPaint,icePaint, crystalPaint};
-      BufferedImage Grass,Sky,Sand,Stone,screenBuffer,Bark,Ice,LavaLand,Crystal, bigscreenBuffer;
+      TexturePaint doodles[] = new TexturePaint[]{skyPaint,grassPaint,null,null,null,sandPaint,stonePaint,barkPaint,icePaint, crystalPaint,etherPaint};
+      BufferedImage Grass,Sky,Sand,Stone,screenBuffer,Bark,Ice,LavaLand,Crystal, bigscreenBuffer, Ether;
     int kind = 0;
     public final byte liquidList[] = {WATER, OIL, LAVA, SAND};
     public final int liquidStats[][] = new int[liquidList.length][6];
     public final byte solidList[] = {SAND, GROUND, STONE, TREE, ICE};
     public final byte aList[] = new byte[127];
-    String dir = System.getenv("APPDATA")+"\\Bending\\";
+    String dir = System.getenv("APPDATA")+File.separator+"Bending"+File.separator;
     public final ArrayList<BrushStroke> bufferedStrokes;
-       Color[] colors = new Color[]{Color.BLACK,Color.GREEN,Color.BLUE,Color.LIGHT_GRAY,Color.RED,Color.YELLOW,Color.GRAY,Color.ORANGE,Color.cyan};
+       Color[] colors = new Color[]{Color.BLACK,Color.GREEN,Color.BLUE,Color.LIGHT_GRAY,Color.RED,Color.YELLOW,Color.GRAY,Color.ORANGE,Color.cyan,Color.cyan};
     public MapMaker() {
         bufferedStrokes = new ArrayList<>();
         
                     //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
-                    File yay = new File(dir+"maps\\");
+                    File yay = new File(dir+"maps"+File.separator);
                     System.err.println(yay.mkdirs());
           try {
               initComponents();
@@ -100,13 +100,15 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
                   LavaLand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
                   skyPaint = new TexturePaint(Sky,new Rectangle(200,200));
                   Crystal =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
+                  Ether =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/ether.png","ether.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
         grassPaint = new TexturePaint(Grass,new Rectangle(256,256));
         sandPaint = new TexturePaint(Sand,new Rectangle(256,256));
         stonePaint = new TexturePaint(Stone,new Rectangle(256,256));
         barkPaint = new TexturePaint(Bark,new Rectangle(256,256));
         icePaint = new TexturePaint(Ice,new Rectangle(256,256));
         crystalPaint = new TexturePaint(Crystal,new Rectangle(256,256));
-        doodles = new TexturePaint[]{skyPaint,grassPaint,null,null,null,sandPaint,stonePaint,barkPaint,icePaint, crystalPaint};
+        etherPaint = new TexturePaint(Ether,new Rectangle(100,100));
+        doodles = new TexturePaint[]{skyPaint,grassPaint,null,null,null,sandPaint,stonePaint,barkPaint,icePaint, crystalPaint,etherPaint};
         EditingPane.setSize(www, hhh);
         bg.setPaint(skyPaint);
         bg.fillRect(0, 0, www, hhh);
@@ -146,6 +148,7 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         jScrollPane1 = new javax.swing.JScrollPane();
         EditingPane = new JPanelImpl();
         jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -251,7 +254,7 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
 
         jScrollPane1.setWheelScrollingEnabled(false);
 
-        EditingPane.setMaximumSize(new java.awt.Dimension(2000, 2000));
+        EditingPane.setMaximumSize(new java.awt.Dimension(8000, 8000));
         EditingPane.setMinimumSize(new java.awt.Dimension(300, 300));
         EditingPane.setPreferredSize(new java.awt.Dimension(2000, 2000));
         EditingPane.setRequestFocusEnabled(false);
@@ -276,6 +279,13 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton12ActionPerformed(evt);
+            }
+        });
+
+        jButton13.setText("Ether");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
             }
         });
 
@@ -326,15 +336,24 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 927, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
+                        .addGap(99, 99, 99)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                            .addComponent(buffering, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -343,17 +362,7 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
                                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buffering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -361,9 +370,9 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -383,17 +392,18 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton11))
                             .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(41, 41, 41)
                         .addComponent(jButton9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(buffering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(buffering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -465,6 +475,10 @@ kind = CRYSTAL;        // TODO add your handling code here:
         loadPicture();
     }//GEN-LAST:event_jButton12ActionPerformed
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+kind = ETHER;        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton13ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -504,6 +518,7 @@ kind = CRYSTAL;        // TODO add your handling code here:
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -539,7 +554,7 @@ public void save()
                   lll.mkdir();
               }
               String name = JOptionPane.showInputDialog("Save as?");
-              File file = new File(dir+"maps\\"+name+".ter");
+              File file = new File(dir+"maps"+File.separator+name+".ter");
               
               fos = new DataOutputStream(new FileOutputStream(file));
               fos.writeInt(www);
@@ -560,7 +575,7 @@ public void load()
           try {
              
               String name = JOptionPane.showInputDialog("Load what?");
-              File file = new File(dir+"maps\\"+name+".ter");
+              File file = new File(dir+"maps"+File.separator+name+".ter");
               if (!file.exists())
               {
                   JOptionPane.showMessageDialog(rootPane, "File Not Found!");
@@ -617,51 +632,44 @@ public void loadPicture()
               EditingPane.setSize(www, hhh);
               bg.setPaint(skyPaint);
               bg.fillRect(0, 0, www, hhh);
+              int color, red, blue, green;
               for (int cx = 0; cx<www; cx++)
               {
                   for (int cy = 0; cy<hhh; cy++)
                   {
-                      switch (loaded.getRGB(cx, cy))
-                      {
-                          default:
-                          case 0xFFFFFFFF:
-                              toSet = World.AIR;
-                          break;
-                          case 0xFF8000FF:
-                              toSet = World.CRYSTAL;
-                          break;
-                          case 0xFF00FF00:
-                              toSet = World.GROUND;
-                          break;
-                          case 0xFF00FFFF:
-                              toSet = World.ICE;
-                          break;
-                          case 0xFFFF0000:
-                              toSet = World.LAVA;
-                          break;
-                          case 0xFF000000:
-                              toSet = World.OIL;
-                          break;
-                          case 0xFFFFFF00:
-                              toSet = World.SAND;
-                          break;
-                          case 0xFFC0C0C0:
-                              toSet = World.STONE;
-                          break;
-                          case 0xFF804000:
-                              toSet = World.TREE;
-                          break;
-                          case 0xFF0000FF:
-                              toSet = World.WATER;
-                          break;
-                      }
-                      writeData[cx][cy] = toSet;
-                  }
+                        color = loaded.getRGB(cx, cy);
+                        red = getRed(color);
+                        blue = getBlue(color);
+                        green = getGreen(color);
+                        if (red>200&&blue>200&&green>200){writeData[cx][cy] = World.AIR;continue;}
+                        if (red>100&&blue>200&&green<20){writeData[cx][cy] = World.CRYSTAL;continue;}
+                        if (red<50&&blue>100&&green>40){writeData[cx][cy] = World.ETHER;continue;}
+                        if (red<100&&blue<100&&green>200){writeData[cx][cy] = World.GROUND;continue;}
+                        if (red<100&&blue>200&&green>200){writeData[cx][cy] = World.ICE;continue;}
+                        if (red>200&&blue<20&&green<20){writeData[cx][cy] = World.LAVA;continue;}
+                        if (red<20&&blue<20&&green<20){writeData[cx][cy] = World.OIL;continue;}
+                        if (red>200&&blue<20&&green>200){writeData[cx][cy] = World.SAND;continue;}
+                        if (red>100&&blue>100&&green>100){writeData[cx][cy] = World.STONE;continue;}
+                        if (red>100&&blue<20&&green<256){writeData[cx][cy] = World.TREE;continue;}
+                        if (red<20&&blue>200&&green<20){writeData[cx][cy] = World.WATER;continue;}
+                       }
               }
               drawTerrain();
           } catch (Exception ex) {
               Logger.getLogger(MapMaker.class.getName()).log(Level.SEVERE, null, ex);
           }
+}
+public static int getRed(int argb)
+{
+    return 0xFF & (argb >> 16);
+}
+public static int getBlue(int argb)
+{
+    return 0xFF & argb;
+}
+public static int getGreen(int argb)
+{
+    return 0xFF & (argb >> 8 );
 }
 double max = 1;
                     double count = 0;

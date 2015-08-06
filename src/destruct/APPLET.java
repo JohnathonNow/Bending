@@ -9,7 +9,6 @@ package destruct;
 * */
 import BlendModes.Additive;
 import Entity.*;
-import static destruct.World.setTime;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
@@ -64,7 +63,7 @@ public class APPLET extends JPanel implements Runnable{
     boolean notDone = true;
     boolean ignored = true;
     Image doubleBuffer;
-    BufferedImage Grass,Sky,Sand,Stone,screenBuffer,Bark,Ice,LavaLand, Crystal, bigscreenBuffer;
+    BufferedImage Grass,Sky,Sand,Stone,screenBuffer,Bark,Ice,LavaLand, Crystal, ether, bigscreenBuffer;
     static BufferedImage bimage;
     Graphics2D graphicsBuffer, biggraphicsBuffer;
     URL base;// = getDocumentBase();
@@ -109,14 +108,15 @@ public class APPLET extends JPanel implements Runnable{
     SpellList1 spellselection;
     protected static JFrame container;
     protected static JTabbedPane immaKeepTabsOnYou;
-    int prevMove;
+    double prevMove;
     short turnVisible = -1, removeAura = -1;
     public APPLET()
     {
         super();
                     //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
-        new File(ResourceLoader.dir+"images\\").mkdirs();
-        new File(ResourceLoader.dir+"sounds\\").mkdirs();
+        new File(ResourceLoader.dir).mkdirs();
+        new File(ResourceLoader.dir+"images").mkdirs();
+        new File(ResourceLoader.dir+"sounds").mkdirs();
         try {
             bimage = ResourceLoader.loadImage("http://west-it.webs.com/Bending/AgedPaper.png","AgedPaper.png");
             Thread.sleep(100);
@@ -130,7 +130,7 @@ public class APPLET extends JPanel implements Runnable{
     
     public static void main(String args[])
     {
-        System.out.println("Loading BENDING v 2.013.11.17");
+        System.out.println("Loading BENDING v 2.013.12.24"+System.getProperty("os.name")+File.separator);
         
         gameAlive = true;
         Spell.init();
@@ -449,7 +449,8 @@ public class APPLET extends JPanel implements Runnable{
             Ice =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/iceTexture.png","iceTexture.png");
             Crystal =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");
             LavaLand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");
-            //me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
+            ether = ResourceLoader.loadImage("http://west-it.webs.com/Bending/ether.png","ether.png");
+//me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
             //container.requestFocus();
         //me.transferFocus();
         //me.requestFocus();
@@ -469,12 +470,12 @@ public class APPLET extends JPanel implements Runnable{
     static byte[] Clothing = new byte[]{1,1,1,1,1,1};
     static int[] Colors = new int[]{Color.red.getRGB(),Color.orange.getRGB(),Color.red.getRGB(),Color.orange.getRGB(),Color.black.getRGB(),Color.orange.getRGB()};
         static int[] Colors2 = new int[]{Color.red.getRGB(),Color.orange.getRGB(),Color.red.getRGB(),Color.orange.getRGB(),Color.black.getRGB(),Color.orange.getRGB()};
-    public void start()
+    public boolean start()
     {
         try {
             connection = new Socket(serverIP,25565);
             isAlive = true;
-            world = new World(false,900, 900, createImage(900,900), Grass,Sand, Sky, Stone, Bark, Ice, LavaLand, Crystal);
+            world = new World(false,900, 900, createImage(900,900), Grass,Sand, Sky, Stone, Bark, Ice, LavaLand, Crystal, ether);
             world.load(Clothing,Colors,Colors2);
             // entityList.add(new HouseEntity(750,300,200,300));
              
@@ -926,6 +927,10 @@ public class APPLET extends JPanel implements Runnable{
                                         world.entityList.add(new BuritoEntity(Xx,Yy,mX,mY,ma).setID(iw));
                                         fireCast.start(-3f);
                                     break;
+                                    case 10://Fire ball
+                                        world.entityList.add(new FireDoom(Xx,Yy,mX,mY,ma).setID(iw));
+                                        fireCast.start(-3f);
+                                    break;
                                 }
                             break;
                             case Server.DARKNESS:  
@@ -1104,9 +1109,11 @@ public class APPLET extends JPanel implements Runnable{
         repaint();
         started = true;
        } catch (Exception ex) {
-            Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            
             failed = true;
+            return false;
         }
+        return true;
         //terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
     public Rectangle playerHitbox;
@@ -1760,7 +1767,7 @@ catch (Exception e)
         world.onUpdate();
                     
                     
-            if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed))||(Math.signum(prevMove)!=Math.signum(world.move))) || counting++ > 200)))
+            if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed))||((prevMove)!=(world.move))) || counting++ > 200)))
             {
                 counting = 0;
                 try {
@@ -1834,7 +1841,7 @@ catch (Exception e)
     }
     return "NO";
         } catch (IOException | HeadlessException ex) {
-            Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
             return "localhost";
         }
     }
@@ -2318,6 +2325,8 @@ catch (Exception e)
         lastHit = ID;
 //        System.out.println(world.wIdTh+" x "+world.hEigHt);
         world.ground.cellData = new byte[world.ground.w][world.ground.h];
+        world.username = username;
+        world.idddd = ID;
                 //system.out.println(world.ground.w+" x "+world.ground.h);
         //byte buffer[] = new byte[world.ground.h*world.ground.w];
         //toRead.get(buffer);

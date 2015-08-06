@@ -52,6 +52,7 @@ public class BuritoEntity extends Entity{
            alive = false;
            //apples.explode(X, Y, 32, 8, 16);
        }
+       apples.ground.FillCircleW((int)X, (int)Y, (int)Math.sqrt(xspeed*xspeed+yspeed*yspeed), World.LAVA);
        if (next++>4)
        {
             next = 0;

@@ -280,15 +280,24 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                switch (E)
                {
                    case KeyEvent.VK_A:
-                       pointer.world.move=-2;
+                       if (pointer.world.move>-2)
+                       {
+                            pointer.world.move=-2;
+                            pointer.world.fr = 0;
+                       }
                    break;
                    case KeyEvent.VK_D:
-                       pointer.world.move=2;
+                       if (pointer.world.move<2)
+                       {
+                            pointer.world.move=2;
+                            pointer.world.fr = 0;
+                       }
                    break;
                    case KeyEvent.VK_W:
                        if (!pointer.world.keys[KeyEvent.VK_S])
                        {
                          pointer.world.jump=(float)APPLET.runningSpeed;
+                         
                        }
                      //  sendMovement();
                    break;
@@ -388,9 +397,10 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
         } catch (Exception ex) {
             Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
         }
-                    if (pointer.world.move<0) {
-            pointer.world.move=0;
-        }
+//                    if (pointer.world.move<0) {
+//            pointer.world.move=0;
+//        }
+        pointer.world.fr = .1;
             break;
             case KeyEvent.VK_D:
                 try {
@@ -398,8 +408,9 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
         } catch (Exception ex) {
             Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
         }
-                if (pointer.world.move>0)
-                pointer.world.move=0;
+//                if (pointer.world.move>0)
+//                pointer.world.move=0;
+                pointer.world.fr = .1;
             break;
             case KeyEvent.VK_W:
                 try {

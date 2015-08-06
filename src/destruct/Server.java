@@ -12,6 +12,7 @@ import Entity.Entity;
 import Entity.FireBallEntity;
 import Entity.FireJumpEntity;
 import Entity.FirePuffEntity;
+import Entity.GuardianEntity;
 import Entity.GustEntity;
 import Entity.HillEntity;
 import Entity.IceShardEntity;
@@ -26,8 +27,6 @@ import Entity.SoulDrainEntity;
 import Entity.SpoutEntity;
 import Entity.TornadoEntity;
 import Entity.WallofFireEntity;
-import static destruct.APPLET.pointDis;
-import static destruct.World.oldTime;
 import java.awt.Polygon;
 import java.io.DataInputStream;
 import java.io.File;
@@ -87,7 +86,8 @@ public final class Server implements Runnable{
                 FREEFORALL = -1,
                 KINGOFTHEHILL = -2,
                 THEHIDDEN = 2,
-                SURVIVAL = 3;
+                SURVIVAL = 3,
+                DEFENDER = 4;
         public static final byte //MESSAGE IDs
             UDPMOVE = 0;
         public static int MYID = 0;
@@ -375,7 +375,7 @@ public final class Server implements Runnable{
                         }
              
          }
-         Thread expander;
+         public Thread expander;
 public void startExpander()
 {
              expander = new Thread(new Runnable(){
@@ -467,7 +467,7 @@ public PlayerOnline getPlayer(int i)
     return null;
 }
 
-String dir = System.getenv("APPDATA")+"\\Bending\\";
+String dir = System.getenv("APPDATA")+File.separator+"Bending"+File.separator;
     public void loadMap(int i)
     {  
         nextVote = 0;
@@ -531,7 +531,7 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                     yes = getKiller(winner)+" won the round!";
                     sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length()*4+4).putInt(0xFF0000),yes));
                 }
-                gameMode = choose(FREEFORALL,TEAMDEATHMATCH,KINGOFTHEHILL,THEHIDDEN,SURVIVAL);
+                gameMode = choose(FREEFORALL,TEAMDEATHMATCH,KINGOFTHEHILL,THEHIDDEN,SURVIVAL,DEFENDER);
                 Collections.shuffle(playerList);
                 team1.clear();
                 team2.clear();
@@ -603,15 +603,30 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                     case SURVIVAL:
                         gm = "Survival";
                     break;
+                    case DEFENDER:
+                        gm = "Defender";
+                    break;
                 }
                 yes = "The next game type will be "+gm+".";
 
                 sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length()*4+4).putInt(0x00FF3C),yes));
+                if (gameMode==Server.DEFENDER)
+                {
+                    for (PlayerOnline P:playerList)
+                    {
+                        gm = "You will be a"+(team1.contains(P.ID)?" defender.":"n attacker.");
+                        try {
+                            P.out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length()*4+4).putInt(0x00FF3C),gm),Server.MESSAGE);
+                        } catch (IOException ex) {
+                        }
+                    }
+                }
         Arrays.fill(score, 0);
         earth.ground.ClearCircleStrong(150, 150, 9000);
         File mapsFolder = new File(dir+"maps");
+        System.out.println(mapsFolder.getPath());
         File[] mapFiles = mapsFolder.listFiles();
-        if (mapFiles.length == 0)
+        if (mapFiles==null||mapFiles.length == 0)
         {
             switch (i)
             {
@@ -668,15 +683,19 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
             }
         }
         //earth.entityList.add(new EnemyEntity(300,300,0,0,500).setID(Server.getID()));
-        earth.entityList.add(new PumpkinEntity(earth.wIdTh/2,earth.hEigHt/2).floor(earth).setID(Server.getID()));
         switch (gameMode)
                 {
                     default:
+                        earth.entityList.clear();
                     break;
                     case KINGOFTHEHILL:
                         earth.entityList.add(new HillEntity(earth.wIdTh/2,earth.hEigHt/2,0,0).setID(Server.getID()));
                     break;
+                    case DEFENDER:
+                        earth.entityList.add(new GuardianEntity(earth.wIdTh/4,earth.hEigHt/2,0,0,-2).setID(Server.getID()));
+                    break;
                 }
+        earth.entityList.add(new PumpkinEntity(earth.wIdTh/2,earth.hEigHt/2).floor(earth).setID(Server.getID()));
         for (PlayerOnline p:playerList)
         {
             p.writeWorld();
@@ -711,7 +730,7 @@ String dir = System.getenv("APPDATA")+"\\Bending\\";
                 EnemyEntity AI = (EnemyEntity)ai;
                 for (Entity e:earth.entityList)
                 {
-                    if (ai.distanceToEntity(e)<32&&ai!=e&&e.alive)
+                    if (ai.distanceToEntity(e)<16&&ai!=e&&e.alive)
                     {
                         if (e instanceof MissileEntity)
                         {

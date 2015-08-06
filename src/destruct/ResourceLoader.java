@@ -31,6 +31,7 @@ public class ResourceLoader {
             {
                     
                     File f = new File(filename);
+                    f.getParentFile().mkdirs();
                     if (f.exists())
                     {
                         return;
@@ -55,7 +56,7 @@ public class ResourceLoader {
             }
 
     }
- static String dir = System.getenv("APPDATA")+"\\Bending\\";
+ static String dir = System.getenv("APPDATA")+File.separator+"Bending"+File.separator;
  public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
     public static  BufferedImage loadImage(String src, String name)
     {
@@ -70,7 +71,7 @@ public class ResourceLoader {
 //                    System.out.println(name);
             try {
                     //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
-                    downloadResource(dir+"images\\"+name,src);
+                    downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 
             {
@@ -78,7 +79,7 @@ public class ResourceLoader {
             }
             try 
             {
-                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images\\"+name)));
+                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images"+File.separator+name)));
                 imageTable.put(name, toReturn);
                 return toReturn;
             } 
@@ -101,7 +102,7 @@ public class ResourceLoader {
 //                    System.out.println(src);
             try {
                     //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
-                    downloadResource(dir+"images\\"+name,src);
+                    downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 
             {
@@ -109,7 +110,7 @@ public class ResourceLoader {
             }
             try 
             {
-                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images\\"+name)));
+                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images"+File.separator+name)));
                 imageTable.put(name, toReturn);
                 return new ImageIcon(toReturn);
             } 
@@ -128,7 +129,7 @@ public class ResourceLoader {
 //                    System.out.println(name);
             try {
                     //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
-                    downloadResource(dir+"images\\"+name,src);
+                    downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 
             {
@@ -136,7 +137,7 @@ public class ResourceLoader {
             }
             try 
             {
-                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images\\"+name)));
+                toReturn = (BufferedImage)(ImageIO.read(new File(dir+"images"+File.separator+name)));
                 return toReturn;
             } 
             catch (IOException ex)
@@ -166,8 +167,8 @@ public class ResourceLoader {
     {
         RealClip clip = null;
         try {
-            downloadResource(dir+"sounds\\"+name,src);
-            clip =  new RealClip(new File(dir+"sounds\\"+name));
+            downloadResource(dir+"sounds"+File.separator+name,src);
+            clip =  new RealClip(new File(dir+"sounds"+File.separator+name));
         } catch (Exception ex) {
             Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
         }

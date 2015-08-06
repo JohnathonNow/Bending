@@ -86,6 +86,25 @@ public abstract class Spell {
         spells.add(Spell.getDarkSpell(4));
         
         spells.add(new Burito());
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(noSpell);
+        spells.add(new FireMaster());
+        
+        
         
         passives.add(Spell.noSpell);
         passives.add(Spell.getAirSpell(3));
@@ -2256,6 +2275,55 @@ public static class WaterTreading extends Waterbending
             //throw new UnsupportedOperationException("Not supported yet.");
                         X = app.world.x;
                         Y = app.world.y-World.head;
+                        app.HP-=15;
+                                mx = app.world.viewX;
+                                        my = app.world.mouseY-app.world.viewY;
+                                        double direction = 360-APPLET.pointDir(app.world.x-app.world.viewX,app.world.y-World.head-app.world.viewY,app.world.mouseX,app.world.mouseY);
+                    //direction+=180;
+                    mx=((int)(APPLET.lengthdir_x(12,direction)));
+                    my=((int)(APPLET.lengthdir_y(12,direction)));
+                    maker=ID;
+                        getMessage(app.out);
+        }
+
+        @Override
+        public int getCost() {
+            return 0;
+        }
+        @Override
+        public String getName() {
+           return "Burito";
+        }
+         @Override public String getTip()
+    {
+        return "<html>HAX<br>Moderate Health Cost</html>";
+    }
+ 
+
+        @Override
+        public void getPassiveAction(APPLET app) {
+        //    throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+     public static class FireMaster extends Spell
+    {
+        public FireMaster()
+        {
+            ID = Server.FIREBENDING;
+            subID = 10;
+            locked = true;
+             try {
+                icon = (loadIcon("http://west-it.webs.com/spells/fireball.png"));
+            } catch (Exception ex) {
+                Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+        @Override
+        public void getAction(APPLET app) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+                        X = app.world.x;
+                        Y = app.world.y-World.head;
                         if (app.world.isLiquid(X, Y))
                         {
                             app.energico+=50;
@@ -2272,11 +2340,11 @@ public static class WaterTreading extends Waterbending
 
         @Override
         public int getCost() {
-            return 750;
+            return 100;
         }
         @Override
         public String getName() {
-           return "Burito";
+           return "Fire Master";
         }
          @Override public String getTip()
     {

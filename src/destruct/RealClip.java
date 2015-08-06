@@ -31,6 +31,7 @@ public class RealClip {
         clips[playing].stop();
         clips[playing].setFramePosition(0);
         clips[playing].start();
+        
         if (++playing>=max)
         {
             playing = 0;
@@ -38,6 +39,7 @@ public class RealClip {
     }
     public void start(float volume)
     {
+        String recentkeys;
         ((FloatControl) clips[playing].getControl((FloatControl.Type.MASTER_GAIN))).setValue(volume);
         start();
     }

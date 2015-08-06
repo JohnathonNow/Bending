@@ -105,9 +105,17 @@ public class PlayerOnline extends Player implements Runnable{
                     case Server.SURVIVAL:
                         gm = "Survival";
                     break;
+                    case Server.DEFENDER:
+                        gm = "Defender";
+                    break;
                 }
                 gm = "The next game type will be "+gm+".";
                 out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length()*4+4).putInt(0x00FF3C),gm),Server.MESSAGE);
+                if (Server.gameMode==Server.DEFENDER)
+                {
+                    gm = "You will be a"+(handle.team1.contains(ID)?" defender.":"n attacker.");
+                    out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length()*4+4).putInt(0x00FF3C),gm),Server.MESSAGE);
+                }
                 for (PlayerOnline p:handle.playerList)
                 {
                     if (p.ID!=ID)
@@ -389,6 +397,9 @@ public class PlayerOnline extends Player implements Runnable{
                      break;
                      case 9:
                          handle.earth.entityList.add(new BuritoEntity(Xx,Yy,mX,mY,ID).setID(Iw));
+                     break;
+                     case 10:
+                         handle.earth.entityList.add(new FireDoom(Xx,Yy,mX,mY,ID).setID(Iw));
                      break;
                  }
                  handle.sendMessage(Server.FIREBENDING,ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy).putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
