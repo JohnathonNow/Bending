@@ -12,6 +12,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,24 +33,17 @@ public class ResourceLoader {
     	FileOutputStream fout = null;
             try
             {
-                    
-                    File f = new File(filename);
-                    f.getParentFile().mkdirs();
-                    if (f.exists())
-                    {
-                        return;
-                    }
-                    fout = new FileOutputStream(f);
-                    in = new BufferedInputStream(new URL(urlString).openStream());
-                    byte data[] = new byte[1024];
-                    int count;
-                    while ((count = in.read(data, 0, 1024)) != -1)
-                    {
-                            fout.write(data, 0, count);
-                    }
+                    new File(filename).mkdirs();
+                    URLConnection openConnection = new URL(urlString).openConnection();
+                    openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+                    in = new BufferedInputStream(openConnection.getInputStream());
+                    System.out.println(urlString);
+                    Files.copy(in, Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println(filename);
             }
-        catch (MalformedURLException ex) {
-//            ex.printStackTrace();
+        catch (Exception ex) {
+            System.err.println("ok...");
+            ex.printStackTrace();
         }            finally
             {
                     if (in != null)
@@ -70,12 +67,12 @@ public class ResourceLoader {
                 {
 //                    System.out.println(name);
             try {
-                    //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
+                    //bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                     downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 
             {
-                //Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
             }
             try 
             {
@@ -91,7 +88,7 @@ public class ResourceLoader {
     }
      public static  ImageIcon loadIcon(String src)
     {
-        String name = src.replaceAll("http://west-it.webs.com/spells/","");
+        String name = src.replaceAll("https://west-it.webs.com/spells/","");
         if (imageTable.containsKey(src))
         {
             return new ImageIcon(imageTable.get(src));
@@ -101,7 +98,7 @@ public class ResourceLoader {
                 {
 //                    System.out.println(src);
             try {
-                    //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
+                    //bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                     downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 
@@ -128,7 +125,7 @@ public class ResourceLoader {
                 {
 //                    System.out.println(name);
             try {
-                    //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
+                    //bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                     downloadResource(dir+"images"+File.separator+name,src);
             } 
             catch (Exception ex) 

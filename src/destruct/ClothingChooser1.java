@@ -37,7 +37,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable{
         owner = mine;
 //        g = canvas.getGraphics();
         try {
-            background = ResourceLoader.loadImage("http://west-it.webs.com/Bending/Capture.PNG", "Capture.PNG");
+            background = ResourceLoader.loadImage("https://west-it.webs.com/Bending/Capture.PNG", "Capture.PNG");
         } catch (Exception ex) {
 //            ex.printStackTrace();
         }
@@ -555,7 +555,7 @@ public void loadClothing()
                             for (int i = 0; i < cloths.length; i++)
                             {
 //                                System.out.println("YES");
-                                stuff[i] = ResourceLoader.loadImageNoHash("http://west-it.webs.com/bodyParts/p"+(i+1)+"_"+cloths[i]+".png", "p"+(i+1)+"_"+cloths[i]+".png");
+                                stuff[i] = ResourceLoader.loadImageNoHash("https://west-it.webs.com/bodyParts/p"+(i+1)+"_"+cloths[i]+".png", "p"+(i+1)+"_"+cloths[i]+".png");
                                 stuff[i] = World.changeColor(World.changeColor(World.changeColor((BufferedImage)stuff[i], Color.white, colors[i]),Color.LIGHT_GRAY,colors2[i]),new Color(0xBEBEBE),colors2[i].darker());
                             }
                             done = true;

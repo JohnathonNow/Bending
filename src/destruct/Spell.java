@@ -117,7 +117,7 @@ public abstract class Spell {
         passives.add(Spell.getFireSpell(6)); 
         passives.add(Spell.getLightningSpell(6)); 
         passives.add(Spell.getLightningSpell(7)); 
-            lockedImage =(loadIcon("http://west-it.webs.com/spells/lockedSpell.png"));
+            lockedImage =(loadIcon("https://west-it.webs.com/spells/lockedSpell.png"));
      //   System.out.println("YAY5");
         for (int i = 0; i < spells.size(); i++)
         {
@@ -301,7 +301,7 @@ public abstract class Spell {
         {
             ID = Server.AIRBENDING;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airSpell.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airSpell.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -343,7 +343,7 @@ public abstract class Spell {
             ID = Server.AIRBENDING;
             subID = 1;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airJump.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airJump.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -389,7 +389,7 @@ public abstract class Spell {
             ID = Server.AIRBENDING;
             subID = 2;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airTornado.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airTornado.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -429,7 +429,7 @@ public abstract class Spell {
             ID = Server.AIRBENDING;
             subID = 4;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airGust.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airGust.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -481,7 +481,7 @@ public abstract class Spell {
             ID = Server.AIRBENDING;
             subID = 5;
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/airAir.png", "airAir.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/airAir.png", "airAir.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -524,7 +524,7 @@ public abstract class Spell {
             subID = 3;
             
                  try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airrun.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airrun.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -571,7 +571,7 @@ public abstract class Spell {
             subID = 7;
             
                  try {
-                icon = (loadIcon("http://west-it.webs.com/spells/airfloat.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/airfloat.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -617,7 +617,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 0;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthRock.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthRock.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -668,7 +668,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 1;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earth.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earth.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -726,7 +726,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 2;
               try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthShard.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthShard.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -771,7 +771,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 4;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthSand.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthSand.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -821,7 +821,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 5;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthwos.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthwos.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -871,7 +871,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 3;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthshield.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthshield.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -929,7 +929,7 @@ public abstract class Spell {
             ID = Server.EARTHBENDING;
             subID = 7;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/earthstance.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/earthstance.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -969,7 +969,7 @@ public abstract class Spell {
             ID = Server.WATERBENDING;
             subID = 0;
                try {
-                icon = (loadIcon("http://west-it.webs.com/spells/waterSpell.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/waterSpell.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1019,7 +1019,7 @@ public abstract class Spell {
             ID = Server.WATERBENDING;
             subID = 1;
               try {
-                icon = (loadIcon("http://west-it.webs.com/spells/freezeSpell.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/freezeSpell.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1064,7 +1064,7 @@ public abstract class Spell {
             ID = Server.WATERBENDING;
             subID = 2;
               try {
-                icon = (loadIcon("http://west-it.webs.com/spells/waterspout.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/waterspout.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1110,7 +1110,7 @@ public abstract class Spell {
             ID = Server.WATERBENDING;
             subID = 4;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/watershard.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/watershard.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1160,7 +1160,7 @@ public abstract class Spell {
         {
             ID = Server.WATERBENDING;
             subID = 6;
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/waterStorm.png","waterStorm.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/waterStorm.png","waterStorm.png"));
         }
        
         @Override
@@ -1199,7 +1199,7 @@ public static class BreathUnderWater extends Waterbending
             ID = Server.WATERBENDING;
             subID = 3;
                try {
-                icon = (loadIcon("http://west-it.webs.com/spells/BreathUnderWater.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/BreathUnderWater.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1258,7 +1258,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.WATERBENDING;
             subID = 23;
                try {
-                icon = (loadIcon("http://west-it.webs.com/spells/waterswim.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/waterswim.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1309,7 +1309,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 0;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/fireball.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/fireball.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1360,7 +1360,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 1;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/lava.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/lava.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1405,7 +1405,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 5;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/flamer.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/flamer.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1446,7 +1446,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 4;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/fireWall.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/fireWall.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1486,7 +1486,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 2;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/firejump.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/firejump.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1534,7 +1534,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 3;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/firecharge.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/firecharge.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1593,7 +1593,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.FIREBENDING;
             subID = 7;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/fireproof.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/fireproof.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1635,7 +1635,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 250;
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/lightningstrike.png","lightningstrike.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstrike.png","lightningstrike.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1687,7 +1687,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 500;
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/lightningstorm.png","lightningstorm.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstorm.png","lightningstorm.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1733,7 +1733,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 750;
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/lightningball.png","lightningball.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningball.png","lightningball.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1783,7 +1783,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 1000;
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/lightningmine.png","lightningmine.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningmine.png","lightningmine.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1831,7 +1831,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 1250;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/shocktower.png");
+                icon = loadIcon("https://west-it.webs.com/spells/shocktower.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1874,7 +1874,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.LIGHTNING;
             subID = 4;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/lightningshield.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/lightningshield.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1933,7 +1933,7 @@ public static class WaterTreading extends Waterbending
             ID = Server.LIGHTNING;
             subID = 4;
             try {
-                icon = (loadIcon("http://west-it.webs.com/spells/lightningovercharge.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/lightningovercharge.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1994,7 +1994,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 2000;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/salt.png");
+                icon = loadIcon("https://west-it.webs.com/spells/salt.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2035,7 +2035,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 2500;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/shadowBall.png");
+                icon = loadIcon("https://west-it.webs.com/spells/shadowBall.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2082,7 +2082,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 3500;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/shadowSummon.png");
+                icon = loadIcon("https://west-it.webs.com/spells/shadowSummon.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2129,7 +2129,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 3000;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/aura.png");
+                icon = loadIcon("https://west-it.webs.com/spells/aura.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2169,7 +2169,7 @@ public static class WaterTreading extends Waterbending
             locked = true;
             unlockXP = 5000;
             try {
-                icon = loadIcon("http://west-it.webs.com/spells/teleport.png");
+                icon = loadIcon("https://west-it.webs.com/spells/teleport.png");
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2227,7 +2227,7 @@ public static class WaterTreading extends Waterbending
         public NOSPELL()
         {
             try {
-                icon = new ImageIcon(ResourceLoader.loadImage("http://west-it.webs.com/spells/nospell.png","nospell.png"));
+                icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/nospell.png","nospell.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2264,7 +2264,7 @@ public static class WaterTreading extends Waterbending
             subID = 9;
             locked = true;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/fireball.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/fireball.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2313,7 +2313,7 @@ public static class WaterTreading extends Waterbending
             subID = 10;
             locked = true;
              try {
-                icon = (loadIcon("http://west-it.webs.com/spells/fireball.png"));
+                icon = (loadIcon("https://west-it.webs.com/spells/fireball.png"));
             } catch (Exception ex) {
                 Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2358,4 +2358,4 @@ public static class WaterTreading extends Waterbending
         }
     }
 }
-//http://west-it.webs.com/spells/BreathUnderWater.png
+//https://west-it.webs.com/spells/BreathUnderWater.png

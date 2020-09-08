@@ -24,7 +24,7 @@ public class GuardianEntity extends EnemyEntity{
     {
         super(x,y,hspeed,vspeed,ma);
         HP = 5000;
-        sprite = (ResourceLoader.loadImage("http://west-it.webs.com/Bending/guardian.png","guardian.png"));//,new Color(255,46,0),Color.BLUE);
+        sprite = (ResourceLoader.loadImage("https://west-it.webs.com/Bending/guardian.png","guardian.png"));//,new Color(255,46,0),Color.BLUE);
     }
     @Override
     public void drawOverlay(Graphics G, int viewX, int viewY) {

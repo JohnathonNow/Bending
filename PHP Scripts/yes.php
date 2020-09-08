@@ -9,5 +9,5 @@ $request2 = "SELECT User FROM Accounts WHERE Verify = '" . $name . "'";
 $result2 = mysql_query($request2);
 $row = mysql_fetch_array($result2);
 echo "Account " . $row['User'] . " successfully verified!";
-header( 'Location: http://www.west-it.webs.com' ) ;
+header( 'Location: https://www.west-it.webs.com' ) ;
 ?>

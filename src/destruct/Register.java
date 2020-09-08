@@ -166,7 +166,7 @@ this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
               + "just use the type the following code<br>"
               + "into the verification box: <b>"+verify+"</b><br>"
               + "Alternatively, click the following link:<br>"
-                + "<a href = \"http://johnbot.net78.net/yes.php?name="+verify+"\"> Verify Account </a></h1>");*/
+                + "<a href = \"https://johnbot.net78.net/yes.php?name="+verify+"\"> Verify Account </a></h1>");*/
         PHPMail(mail,verify);
         if (success)
         {
@@ -197,7 +197,7 @@ this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 public void PHPMail(String to, String name)
 {
         try {
-           URL steve = new URL("http://johnbot.net78.net/emailCredentials.php?to="+to+"&name="+name);
+           URL steve = new URL("https://johnbot.net78.net/emailCredentials.php?to="+to+"&name="+name);
            steve.openConnection().getContent();
         } catch (Exception ex) {
             Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);

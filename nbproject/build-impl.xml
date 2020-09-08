@@ -19,7 +19,7 @@ is divided into following sections:
   - cleanup
 
         -->
-<project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="Bending-impl">
+<project xmlns:j2seproject1="https://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="https://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="https://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="Bending-impl">
     <import file="jnlp-impl.xml"/>
     <fail message="Please build using Ant 1.8.0 or higher.">
         <condition>
@@ -192,7 +192,12 @@ is divided into following sections:
                 </not>
             </and>
         </condition>
-        <property name="javac.fork" value="${jdkBug6558476}"/>
+        <condition else="false" property="javac.fork">
+            <or>
+                <istrue value="${jdkBug6558476}"/>
+                <istrue value="${javac.external.vm}"/>
+            </or>
+        </condition>
         <property name="jar.index" value="false"/>
         <property name="jar.index.metainf" value="${jar.index}"/>
         <property name="copylibs.rebase" value="true"/>
@@ -218,6 +223,7 @@ is divided into following sections:
         <condition else="" property="testng.debug.mode" value="-mixed">
             <istrue value="${junit+testng.available}"/>
         </condition>
+        <property name="java.failonerror" value="true"/>
     </target>
     <target name="-post-init">
         <!-- Empty placeholder for easier customization. -->
@@ -236,7 +242,7 @@ is divided into following sections:
         <fail unless="dist.jar">Must set dist.jar</fail>
     </target>
     <target name="-init-macrodef-property">
-        <macrodef name="property" uri="http://www.netbeans.org/ns/j2se-project/1">
+        <macrodef name="property" uri="https://www.netbeans.org/ns/j2se-project/1">
             <attribute name="name"/>
             <attribute name="value"/>
             <sequential>
@@ -245,7 +251,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-ap-cmdline-properties" if="ap.supported.internal" name="-init-macrodef-javac-with-processors">
-        <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="javac" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${src.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
@@ -286,7 +292,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-ap-cmdline-properties" name="-init-macrodef-javac-without-processors" unless="ap.supported.internal">
-        <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="javac" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${src.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
@@ -319,7 +325,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-javac-with-processors,-init-macrodef-javac-without-processors" name="-init-macrodef-javac">
-        <macrodef name="depend" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="depend" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${src.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
@@ -331,7 +337,7 @@ is divided into following sections:
                 </depend>
             </sequential>
         </macrodef>
-        <macrodef name="force-recompile" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="force-recompile" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${build.classes.dir}" name="destdir"/>
             <sequential>
                 <fail unless="javac.includes">Must set javac.includes</fail>
@@ -374,7 +380,7 @@ is divided into following sections:
         <property name="test.binaryexcludes" value=""/>
     </target>
     <target if="${nb.junit.single}" name="-init-macrodef-junit-single" unless="${nb.junit.batch}">
-        <macrodef name="junit" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="junit" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -397,7 +403,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-batch" unless="${nb.junit.single}">
-        <macrodef name="junit" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="junit" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -428,7 +434,7 @@ is divided into following sections:
     </target>
     <target depends="-init-macrodef-junit-init,-init-macrodef-junit-single, -init-macrodef-junit-batch" if="${junit.available}" name="-init-macrodef-junit"/>
     <target if="${testng.available}" name="-init-macrodef-testng">
-        <macrodef name="testng" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="testng" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -456,7 +462,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target name="-init-macrodef-test-impl">
-        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-impl" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -468,7 +474,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-junit" if="${junit.available}" name="-init-macrodef-junit-impl">
-        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-impl" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -482,7 +488,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-testng" if="${testng.available}" name="-init-macrodef-testng-impl">
-        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-impl" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -496,7 +502,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-test-impl,-init-macrodef-junit-impl,-init-macrodef-testng-impl" name="-init-macrodef-test">
-        <macrodef name="test" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -516,7 +522,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target if="${junit.available}" name="-init-macrodef-junit-debug" unless="${nb.junit.batch}">
-        <macrodef name="junit-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="junit-debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -541,7 +547,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-debug-batch">
-        <macrodef name="junit-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="junit-debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -573,7 +579,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-junit-debug,-init-macrodef-junit-debug-batch" if="${junit.available}" name="-init-macrodef-junit-debug-impl">
-        <macrodef name="test-debug-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-debug-impl" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -587,7 +593,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target if="${testng.available}" name="-init-macrodef-testng-debug">
-        <macrodef name="testng-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="testng-debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${main.class}" name="testClass"/>
             <attribute default="" name="testMethod"/>
             <element name="customize2" optional="true"/>
@@ -614,7 +620,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-testng-debug" if="${testng.available}" name="-init-macrodef-testng-debug-impl">
-        <macrodef name="testng-debug-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="testng-debug-impl" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${main.class}" name="testClass"/>
             <attribute default="" name="testMethod"/>
             <element implicit="true" name="customize2" optional="true"/>
@@ -626,7 +632,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-junit-debug-impl" if="${junit.available}" name="-init-macrodef-test-debug-junit">
-        <macrodef name="test-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -648,7 +654,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target depends="-init-macrodef-testng-debug-impl" if="${testng.available}" name="-init-macrodef-test-debug-testng">
-        <macrodef name="test-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="test-debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="**" name="testincludes"/>
@@ -694,7 +700,7 @@ is divided into following sections:
             <sequential>
                 <property environment="env"/>
                 <resolve name="profiler.current.path" value="${profiler.info.pathvar}"/>
-                <java classname="@{classname}" dir="${profiler.info.dir}" fork="true" jvm="${profiler.info.jvm}">
+                <java classname="@{classname}" dir="${profiler.info.dir}" failonerror="${java.failonerror}" fork="true" jvm="${profiler.info.jvm}">
                     <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
                     <jvmarg value="${profiler.info.jvmargs.agent}"/>
                     <jvmarg line="${profiler.info.jvmargs}"/>
@@ -720,7 +726,7 @@ is divided into following sections:
                 end of pre NB7.2 profiling section
             -->
     <target depends="-init-debug-args" name="-init-macrodef-nbjpda">
-        <macrodef name="nbjpdastart" uri="http://www.netbeans.org/ns/j2se-project/1">
+        <macrodef name="nbjpdastart" uri="https://www.netbeans.org/ns/j2se-project/1">
             <attribute default="${main.class}" name="name"/>
             <attribute default="${debug.classpath}" name="classpath"/>
             <attribute default="" name="stopclassname"/>
@@ -732,7 +738,7 @@ is divided into following sections:
                 </nbjpdastart>
             </sequential>
         </macrodef>
-        <macrodef name="nbjpdareload" uri="http://www.netbeans.org/ns/j2se-project/1">
+        <macrodef name="nbjpdareload" uri="https://www.netbeans.org/ns/j2se-project/1">
             <attribute default="${build.classes.dir}" name="dir"/>
             <sequential>
                 <nbjpdareload>
@@ -764,12 +770,12 @@ is divided into following sections:
         </condition>
     </target>
     <target depends="-init-debug-args" name="-init-macrodef-debug">
-        <macrodef name="debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="debug" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${main.class}" name="classname"/>
             <attribute default="${debug.classpath}" name="classpath"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" dir="${work.dir}" fork="true">
+                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true">
                     <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
                     <jvmarg line="${debug-args-line}"/>
                     <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
@@ -790,13 +796,13 @@ is divided into following sections:
         </macrodef>
     </target>
     <target name="-init-macrodef-java">
-        <macrodef name="java" uri="http://www.netbeans.org/ns/j2se-project/1">
+        <macrodef name="java" uri="https://www.netbeans.org/ns/j2se-project/1">
             <attribute default="${main.class}" name="classname"/>
             <attribute default="${run.classpath}" name="classpath"/>
             <attribute default="jvm" name="jvm"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" dir="${work.dir}" fork="true">
+                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true">
                     <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
                     <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>
                     <redirector errorencoding="${runtime.encoding}" inputencoding="${runtime.encoding}" outputencoding="${runtime.encoding}"/>
@@ -815,7 +821,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target name="-init-macrodef-copylibs">
-        <macrodef name="copylibs" uri="http://www.netbeans.org/ns/j2se-project/3">
+        <macrodef name="copylibs" uri="https://www.netbeans.org/ns/j2se-project/3">
             <attribute default="${manifest.file}" name="manifest"/>
             <element name="customize" optional="true"/>
             <sequential>
@@ -846,7 +852,7 @@ is divided into following sections:
         </macrodef>
     </target>
     <target name="-init-presetdef-jar">
-        <presetdef name="jar" uri="http://www.netbeans.org/ns/j2se-project/1">
+        <presetdef name="jar" uri="https://www.netbeans.org/ns/j2se-project/1">
             <jar compress="${jar.compress}" index="${jar.index}" jarfile="${dist.jar}">
                 <j2seproject1:fileset dir="${build.classes.dir}" excludes="${dist.archive.excludes}"/>
             </jar>

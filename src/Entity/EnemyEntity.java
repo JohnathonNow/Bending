@@ -31,7 +31,7 @@ public class EnemyEntity extends Entity{
     public int lastHit = -2;
     float drawX = 0, drawY = 0;
     String name;
-    static BufferedImage sprite = ResourceLoader.loadImage("http://west-it.webs.com/Bending/evil.png","evil.png");
+    static BufferedImage sprite = ResourceLoader.loadImage("https://west-it.webs.com/Bending/evil.png","evil.png");
     int air = 100;
     public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma)
     {

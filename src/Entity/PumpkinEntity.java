@@ -5,7 +5,6 @@ package Entity;
  */
 
 
-import destruct.APPLET;
 import destruct.Server;
 import destruct.World;
 import java.awt.Color;
@@ -101,8 +100,8 @@ public class PumpkinEntity extends Entity{
             if (apples.keys[KeyEvent.VK_C])
             {
                 alive = false;
-                APPLET.unlocks.set(0, 1, true);
-                APPLET.CTD.postRSSfeed(APPLET.username + " found a rare item!","A Viking Helmet!");
+                //APPLET.unlocks.set(0, 1, true);
+                //APPLET.CTD.postRSSfeed(APPLET.username + " found a rare item!","A Viking Helmet!");
             }
         }
        }

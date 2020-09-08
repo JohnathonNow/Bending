@@ -13,7 +13,7 @@ General Public License Version 2 only ("GPL") or the Common
 Development and Distribution License("CDDL") (collectively, the
 "License"). You may not use this file except in compliance with the
 License. You can obtain a copy of the License at
-http://www.netbeans.org/cddl-gplv2.html
+https://www.netbeans.org/cddl-gplv2.html
 or nbbuild/licenses/CDDL-GPL-2-CP. See the License for the
 specific language governing permissions and limitations under the
 License.  When distributing the software, include this License Header
@@ -44,7 +44,7 @@ Version 2 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
 -->
 
-<project name="jnlp-impl" default="default" basedir=".." xmlns:jnlp="http://www.netbeans.org/ns/j2se-project/jnlp" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3">
+<project name="jnlp-impl" default="default" basedir=".." xmlns:jnlp="https://www.netbeans.org/ns/j2se-project/jnlp" xmlns:j2seproject3="https://www.netbeans.org/ns/j2se-project/3">
 
     <property name="jnlp.file.name.default" value="launch.jnlp"/>
     <property name="jnlp.dest.dir" location="dist"/>
@@ -258,7 +258,7 @@ made subject to such option by the copyright holder.
     <!-- JNLP archiving -->
 
     <target name="-init-macrodef-extend-manifest">
-        <macrodef name="extend-manifest" uri="http://www.netbeans.org/ns/j2se-project/jnlp">
+        <macrodef name="extend-manifest" uri="https://www.netbeans.org/ns/j2se-project/jnlp">
             <element name="customize"/>
             <sequential>
                 <manifest file="${tmp.manifest.file}" mode="update">

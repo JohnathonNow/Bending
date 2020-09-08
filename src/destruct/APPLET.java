@@ -113,12 +113,12 @@ public class APPLET extends JPanel implements Runnable{
     public APPLET()
     {
         super();
-                    //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
+                    //bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         new File(ResourceLoader.dir).mkdirs();
         new File(ResourceLoader.dir+"images").mkdirs();
         new File(ResourceLoader.dir+"sounds").mkdirs();
         try {
-            bimage = ResourceLoader.loadImage("http://west-it.webs.com/Bending/AgedPaper.png","AgedPaper.png");
+            bimage = ResourceLoader.loadImage("https://west-it.webs.com/Bending/AgedPaper.png","AgedPaper.png");
             Thread.sleep(100);
         } catch (Exception ex) {
 //            ex.printStackTrace();
@@ -358,7 +358,7 @@ public class APPLET extends JPanel implements Runnable{
                  
                  final PopupMenu pop = new PopupMenu();
                          me.trayIcon =
-                new TrayIcon(ResourceLoader.loadImage("http://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.png"));
+                new TrayIcon(ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.png"));
                         me.trayIcon.setToolTip("DestructibleTerrain");
                          MenuItem exitItem = new MenuItem("Exit");
                           MenuItem hideItem = new MenuItem("Hide");
@@ -441,15 +441,15 @@ public class APPLET extends JPanel implements Runnable{
         try {
             loggedOn = true;
             temp = "C:";//(System.getenv("TEMP"));
-            Grass = ResourceLoader.loadImage("http://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.jpg");
-            Sky =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/SkyTexture.jpg","SkyTexture.jpg");
-            Sand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/SandTexture.jpg","SandTexture.jpg");
-            Stone =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/StoneTexture.jpg","StoneTexture.jpg");
-            Bark =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/BarkTexture.jpg","BarkTexture.jpg");
-            Ice =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/iceTexture.png","iceTexture.png");
-            Crystal =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");
-            LavaLand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");
-            ether = ResourceLoader.loadImage("http://west-it.webs.com/Bending/ether.png","ether.png");
+            Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.jpg");
+            Sky =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg","SkyTexture.jpg");
+            Sand =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg","SandTexture.jpg");
+            Stone =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/StoneTexture.jpg","StoneTexture.jpg");
+            Bark =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/BarkTexture.jpg","BarkTexture.jpg");
+            Ice =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/iceTexture.png","iceTexture.png");
+            Crystal =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");
+            LavaLand =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");
+            ether = ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png","ether.png");
 //me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
             //container.requestFocus();
         //me.transferFocus();
@@ -480,6 +480,7 @@ public class APPLET extends JPanel implements Runnable{
             // entityList.add(new HouseEntity(750,300,200,300));
              
              connection.setKeepAlive(true);
+             connection.setTcpNoDelay(true);
              out = new OrderedOutputStream(connection.getOutputStream());
              input = connection.getInputStream();
              //out.write(Server.LOGIN);
@@ -1814,7 +1815,7 @@ catch (Exception e)
     public String addHost()
     {
         try {
-            URL whatismyip = new URL("http://checkip.amazonaws.com/");
+            URL whatismyip = new URL("https://checkip.amazonaws.com/");
     BufferedReader in = new BufferedReader(new InputStreamReader(
                     whatismyip.openStream()));
 
@@ -2555,8 +2556,8 @@ return row.getExtra();
 return null;
 }
 }
-    RealClip airCast = ResourceLoader.loadSound("http://west-it.webs.com/sounds/airCast.wav","aircast.wav");
-    RealClip fireCast = ResourceLoader.loadSound("http://west-it.webs.com/sounds/fireCast.wav","firecast.wav");
+    RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav","aircast.wav");
+    RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav","firecast.wav");
     public void drawChat()
     {
         for (int i = 0; i < chat.length; i ++)

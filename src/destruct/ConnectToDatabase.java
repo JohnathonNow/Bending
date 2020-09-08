@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public  final class ConnectToDatabase {
-        String base = "http://72.92.89.110:1024";//"http://johnbot.net78.net";//"http://72.92.89.250:1024";//;//;//;//;//
+        String base = "https://72.92.89.110:1024";//"https://johnbot.net78.net";//"https://72.92.89.250:1024";//;//;//;//;//
         Properties p;
         boolean offline = true;
     public static ConnectToDatabase INSTANCE()
@@ -57,7 +57,7 @@ public  final class ConnectToDatabase {
         if (offline) return;
                             InputStream is = null;
         try {
-            URL WI = new URL("http://www.west-it.webs.com/yes.txt");//new URL("http://static.cbslocal.com/schoolclosings/production/cbs/kyw/NEWSROOM/webexport_number.htm");
+            URL WI = new URL("https://www.west-it.webs.com/yes.txt");//new URL("https://static.cbslocal.com/schoolclosings/production/cbs/kyw/NEWSROOM/webexport_number.htm");
             is = WI.openStream();
             Scanner sc = new Scanner(is);
             base = sc.next();
@@ -158,7 +158,7 @@ public  final class ConnectToDatabase {
             //ArrayList<String> signin = log(Susername, Spassword, "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery); 
             //return signin.size()>1?true:false;
             URL steve = new URL(base+"/login.php?username="+user+"&password="+pass);
-            // URL steve = new URL("http://192.168.137.66/login.php?username="+user+"&password="+pass);
+            // URL steve = new URL("https://192.168.137.66/login.php?username="+user+"&password="+pass);
             String req;
             try (Scanner read = new Scanner(steve.openStream())) {
                 req = read.next();
@@ -521,14 +521,14 @@ public  final class ConnectToDatabase {
     }
     public void error(Throwable ex)
     {
-        if (base.equals("http://johnbot.net78.net"))
+        if (base.equals("https://johnbot.net78.net"))
         {
             defaultBase();
         }
         else
         {
             //defaultBase();
-            base = "http://johnbot.net78.net";
+            base = "https://johnbot.net78.net";
         }
     }
 }

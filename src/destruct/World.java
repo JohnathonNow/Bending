@@ -204,7 +204,7 @@ public class World implements Serializable{
                         try {
                             for (int i = 0; i < parts.length; i++)
                             {
-                                bodyParts[i] = ResourceLoader.loadImage("http://www.johnbot.net78.net/ThesePicturesAreSoGreatThatJustLookingAtThemWillCauseTheEndOfTheWorld/p"+(i+1)+"_"+parts[i]+".png", "p"+(i+1)+"_"+parts[i]+".png");
+                                bodyParts[i] = ResourceLoader.loadImage("https://west-it.webs.com/bodyParts/p"+(i+1)+"_"+parts[i]+".png", "p"+(i+1)+"_"+parts[i]+".png");
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.white, new Color(colors[i]));
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], Color.lightGray, new Color(colors2[i]));
                                 bodyParts[i] = World.changeColor((BufferedImage)bodyParts[i], new Color(0xBEBEBE) , new Color(colors2[i]).darker());

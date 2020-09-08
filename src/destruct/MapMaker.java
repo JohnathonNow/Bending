@@ -60,7 +60,7 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
     public MapMaker() {
         bufferedStrokes = new ArrayList<>();
         
-                    //bimage = ImageIO.read(new URL("http://west-it.webs.com/AgedPaper.png"));
+                    //bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                     File yay = new File(dir+"maps"+File.separator);
                     System.err.println(yay.mkdirs());
           try {
@@ -91,16 +91,16 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         liquidStats[aList[SAND]][3] = 50;
               EditingPane.addMouseMotionListener(this);
               jScrollPane1.addMouseMotionListener(this);
-              Grass = ResourceLoader.loadImage("http://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.jpg");
-                  Sky =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/SkyTexture.jpg","SkyTexture.jpg");//ImageIO.read(new URL("http://west-it.webs.com/.jpg"));
-                  Sand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/SandTexture.jpg","SandTexture.jpg");//ImageIO.read(new URL("http://west-it.webs.com/.jpg"));
-                  Stone = ResourceLoader.loadImage("http://west-it.webs.com/Bending/StoneTexture.jpg","StoneTexture.jpg");//ImageIO.read(new URL("http://west-it.webs.com/.jpg"));
-                  Bark =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/BarkTexture.jpg","BarkTexture.jpg");//ImageIO.read(new URL("http://west-it.webs.com/.jpg"));
-                  Ice =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/iceTexture.png","iceTexture.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
-                  LavaLand =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
+              Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg","GrassTexture.jpg");
+                  Sky =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg","SkyTexture.jpg");//ImageIO.read(new URL("https://west-it.webs.com/.jpg"));
+                  Sand =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg","SandTexture.jpg");//ImageIO.read(new URL("https://west-it.webs.com/.jpg"));
+                  Stone = ResourceLoader.loadImage("https://west-it.webs.com/Bending/StoneTexture.jpg","StoneTexture.jpg");//ImageIO.read(new URL("https://west-it.webs.com/.jpg"));
+                  Bark =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/BarkTexture.jpg","BarkTexture.jpg");//ImageIO.read(new URL("https://west-it.webs.com/.jpg"));
+                  Ice =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/iceTexture.png","iceTexture.png");//ImageIO.read(new URL("https://west-it.webs.com/.png"));
+                  LavaLand =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png","lavalandTexture.png");//ImageIO.read(new URL("https://west-it.webs.com/.png"));
                   skyPaint = new TexturePaint(Sky,new Rectangle(200,200));
-                  Crystal =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
-                  Ether =  ResourceLoader.loadImage("http://west-it.webs.com/Bending/ether.png","ether.png");//ImageIO.read(new URL("http://west-it.webs.com/.png"));
+                  Crystal =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/crystalTexture.png","crystalTexture.png");//ImageIO.read(new URL("https://west-it.webs.com/.png"));
+                  Ether =  ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png","ether.png");//ImageIO.read(new URL("https://west-it.webs.com/.png"));
         grassPaint = new TexturePaint(Grass,new Rectangle(256,256));
         sandPaint = new TexturePaint(Sand,new Rectangle(256,256));
         stonePaint = new TexturePaint(Stone,new Rectangle(256,256));
@@ -488,7 +488,7 @@ kind = ETHER;        // TODO add your handling code here:
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see https://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
