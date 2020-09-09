@@ -1,0 +1,13 @@
+com.johnwesthoff.destruct:bending:jar:1.0-SNAPSHOT
++- org.junit.jupiter:junit-jupiter-api:jar:5.6.0:test
+   +- org.apiguardian:apiguardian-api:jar:1.1.0:test
+   +- org.opentest4j:opentest4j:jar:1.2.0:test
+   \- org.junit.platform:junit-platform-commons:jar:1.6.0:test
+      \- (org.apiguardian:apiguardian-api:jar:1.1.0:test - omitted for duplicate)
+\- org.junit.jupiter:junit-jupiter-engine:jar:5.6.0:test
+   +- (org.apiguardian:apiguardian-api:jar:1.1.0:test - omitted for duplicate)
+   +- org.junit.platform:junit-platform-engine:jar:1.6.0:test
+      +- (org.apiguardian:apiguardian-api:jar:1.1.0:test - omitted for duplicate)
+      +- (org.opentest4j:opentest4j:jar:1.2.0:test - omitted for duplicate)
+      \- (org.junit.platform:junit-platform-commons:jar:1.6.0:test - omitted for duplicate)
+   \- (org.junit.jupiter:junit-jupiter-api:jar:5.6.0:test - omitted for duplicate)
