@@ -16,15 +16,9 @@ public class AdditiveCompositeContext implements CompositeContext {
   };
 
   public void compose(Raster src, Raster dstIn, WritableRaster dstOut) {
-    int w1 = src.getWidth();
-    int h1 = src.getHeight();
     int chan1 = src.getNumBands();
-    int w2 = dstIn.getWidth();
-    int h2 = dstIn.getHeight();
     int chan2 = dstIn.getNumBands();
 
-    int minw = Math.min(w1, w2);
-    int minh = Math.min(h1, h2);
     int minCh = Math.min(chan1, chan2);
 
     // This bit is horribly inefficient,
