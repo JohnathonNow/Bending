@@ -49,7 +49,6 @@ public class GuardianEntity extends EnemyEntity {
         if (!apples.isSolid(X, Y - 40)) {
             Y -= 40;
             if (apples.inBounds(X + move, Y + yspeed)) {
-                float slope;
                 float toMove = move, XXX1 = X + 3, YYY1 = Y - 4, XXX2 = X - 3, YYY2 = Y - 4;
                 while (true) {
                     YYY1 += 1;

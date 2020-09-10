@@ -6,7 +6,6 @@ package com.johnwesthoff.bending.entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +33,6 @@ public class SnowEntity extends Entity {
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
-            Graphics2D g2d = (Graphics2D) G;
             G.setColor(Color.white);
             G.fillArc((int) X - viewX - 1, (int) Y - viewY - 1, 2, 2, 0, 360);
         }

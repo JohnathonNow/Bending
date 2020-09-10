@@ -4,7 +4,6 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import static com.johnwesthoff.bending.entity.Entity.r;
 
 import java.awt.Color;
 import java.awt.Graphics;

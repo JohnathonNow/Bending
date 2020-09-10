@@ -9,7 +9,6 @@ import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.nio.ByteBuffer;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

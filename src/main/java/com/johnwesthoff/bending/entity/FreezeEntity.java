@@ -6,7 +6,6 @@ package com.johnwesthoff.bending.entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +33,6 @@ public class FreezeEntity extends Entity {
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
-            Graphics2D g2d = (Graphics2D) G;
             G.setColor(Color.cyan);
             G.drawLine((int) previousX - viewX, (int) previousY - viewY, (int) X - viewX, (int) Y - viewY);
             G.setColor(Color.white);

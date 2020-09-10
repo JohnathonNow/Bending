@@ -53,8 +53,7 @@ public class RainEntity extends Entity {
     public void onServerUpdate(Server lol) {
 
         if (r.nextInt(12) == 5) {
-            int x = (int) X + 40 - r.nextInt(80), y = (int) Y - 15;
-            int Iw = Server.getID();
+            int x = (int) X + 40 - r.nextInt(80);
             // lol.earth.entityList.add((new WaterBallEntity(x,y,0,0,maker).setID(Iw)));
             // lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
             lol.earth.ground.puddle(x, (int) Y, 10);

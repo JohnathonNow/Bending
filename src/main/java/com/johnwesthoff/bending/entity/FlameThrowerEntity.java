@@ -4,7 +4,6 @@
  */
 package com.johnwesthoff.bending.entity;
 
-import static com.johnwesthoff.bending.entity.Entity.r;
 
 import java.awt.Graphics;
 import java.nio.ByteBuffer;

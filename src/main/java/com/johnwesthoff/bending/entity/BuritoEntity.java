@@ -22,7 +22,7 @@ public class BuritoEntity extends Entity {
     public int radius = 16;
     public int gravity = 1;
 
-    public BuritoEntity(int x, int y, int hspeed, int vspeed, int ma) {
+    public BuritoEntity(final int x, final int y, final int hspeed, final int vspeed, final int ma) {
         X = x;
         Y = y;
         xspeed = hspeed;
@@ -31,7 +31,7 @@ public class BuritoEntity extends Entity {
     }
 
     @Override
-    public void onDraw(Graphics G, int viewX, int viewY) {
+    public void onDraw(final Graphics G, final int viewX, final int viewY) {
         if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
             // g.setComposite(new Additive());
             G.setColor(Color.ORANGE);
@@ -46,7 +46,7 @@ public class BuritoEntity extends Entity {
     int next = 0;
 
     @Override
-    public void onUpdate(World apples) {
+    public void onUpdate(final World apples) {
         if (!apples.inBounds((int) X, (int) Y) || apples.checkCollision((int) X, (int) Y)) {
 
             alive = false;
@@ -63,11 +63,11 @@ public class BuritoEntity extends Entity {
     }
 
     @Override
-    public void onServerUpdate(Server lol) {
+    public void onServerUpdate(final Server lol) {
     }
 
     @Override
-    public void cerealize(ByteBuffer out) {
+    public void cerealize(final ByteBuffer out) {
         try {
             Server.putString(out, this.getClass().getName());
             out.putInt((int) X);
@@ -75,30 +75,15 @@ public class BuritoEntity extends Entity {
             out.putInt((int) xspeed);
             out.putInt((int) yspeed);
             out.putInt(maker);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private boolean collided(World w) {
-        double xx = X;
-        double yy = Y;
-        for (int i = 0; i < 16; i++) {
-            if (w.inBounds((int) xx, (int) yy) && w.ground.cellData[(int) xx][(int) yy] == World.WATER) {
-                X = (int) xx;
-                Y = (int) yy;
-                return true;
-            }
-            xx += xspeed / 16d;
-            yy += yspeed / 16d;
-        }
-        return false;
-    }
-
-    public static void reconstruct(ByteBuffer in, World world) {
+    public static void reconstruct(final ByteBuffer in, final World world) {
         try {
             world.entityList.add(new BuritoEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             Logger.getLogger(BuritoEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
