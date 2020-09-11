@@ -1803,11 +1803,11 @@ public class APPLET extends JPanel implements Runnable {
     @Override
     public void update(Graphics GameGraphics) {
         if (doubleBuffer == null) {
-            doubleBuffer = createImage(900, 900);
+            doubleBuffer = createImage(1920, 1080);
         }
         Graphics DoubleBufferGraphics = doubleBuffer.getGraphics();
         DoubleBufferGraphics.setColor(this.getBackground());
-        DoubleBufferGraphics.fillRect(0, 0, 900, 900);
+        DoubleBufferGraphics.fillRect(0, 0, 1920, 1080);
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
         paint(GameGraphics);
@@ -1821,11 +1821,11 @@ public class APPLET extends JPanel implements Runnable {
             return;
         }
         if (screenBuffer == null) {
-            screenBuffer = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
+            screenBuffer = new BufferedImage(853, 480, BufferedImage.TYPE_INT_ARGB);
             graphicsBuffer = screenBuffer.createGraphics();
         }
         if (bigscreenBuffer == null) {
-            bigscreenBuffer = new BufferedImage(900, 900, BufferedImage.TYPE_INT_ARGB);
+            bigscreenBuffer = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
             biggraphicsBuffer = bigscreenBuffer.createGraphics();
             biggraphicsBuffer.setFont(chatFont);
         }
@@ -1852,7 +1852,7 @@ public class APPLET extends JPanel implements Runnable {
                     passiveList[spellBook].onSpawn(this);
                     spellselection.setVisible(false);
                 }
-                biggraphicsBuffer.drawImage(bimage, 0, 0, 900, 900, null);
+                biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(), null);
                 biggraphicsBuffer.setColor(Color.white);
                 biggraphicsBuffer.fillRect(399, 199, 100, 50);
                 biggraphicsBuffer.setColor(Color.black);
@@ -1951,9 +1951,7 @@ public class APPLET extends JPanel implements Runnable {
                 graphicsBuffer.drawRect(1, 1, 2, (int) (300d * ((double) energico / (double) maxeng)));
 
                 // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
-                biggraphicsBuffer.drawImage(screenBuffer,
-                        (bigscreenBuffer.getWidth() - bigscreenBuffer.getHeight()) / 2, 0, bigscreenBuffer.getHeight(),
-                        bigscreenBuffer.getHeight(), this);
+                biggraphicsBuffer.drawImage(screenBuffer,0, 0, bigscreenBuffer.getWidth(),bigscreenBuffer.getHeight(), this);
                 world.drawPlayers(biggraphicsBuffer);
 
                 for (Entity e : world.entityList) {
@@ -2059,7 +2057,7 @@ public class APPLET extends JPanel implements Runnable {
                 }
             }
         }
-        g.drawImage(bigscreenBuffer, (getWidth() - getHeight()) / 2, 0, getHeight(), getHeight(), null);
+        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
     }
 
     Font chatFont = new Font("Arial", Font.BOLD, 18);

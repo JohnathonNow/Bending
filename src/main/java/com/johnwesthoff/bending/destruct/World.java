@@ -66,7 +66,7 @@ public class World implements Serializable {
     public final byte aList[] = new byte[127];
     public int miGenH = 300, maGenH = 300;
     Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
-    BufferedImage Iter = new BufferedImage(312, 312, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage Iter = new BufferedImage(865, 492, BufferedImage.TYPE_INT_ARGB);
     Graphics2D Gter = Iter.createGraphics();
     int idinator = 0;
     double fr;
@@ -916,12 +916,12 @@ public class World implements Serializable {
         // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
         // incY = (int)APPLET.lengthdir_y(APPLET.pointDis(x, y, mouseX,
         // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
-        viewX = (int) Math.min(Math.max((x - 150) + incX, 0), wIdTh - 301);
+        viewX = (int) Math.min(Math.max((x - 427) + incX, 0), wIdTh - 854);
         /*
          * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
          * { incX=(-(x-150)); }
          */
-        viewY = (int) Math.min(Math.max((y - 150) + incY, 0), hEigHt - 300);
+        viewY = (int) Math.min(Math.max((y - 240) + incY, 0), hEigHt - 480);
         if (dead) {
             viewX = viewdX;
             viewY = viewdY;
@@ -1131,7 +1131,7 @@ public class World implements Serializable {
 
             // G2.drawImage(Iter, -3, -3, null);
             Gter.setPaint(map == 1 ? nightPaint : skyPaint);//
-            Gter.fillRect(0, 0, 308, 308);
+            Gter.fillRect(0, 0, 853, 480);
 
             // for (int X = xx; X<xx+300; X++)
             // {
@@ -1147,37 +1147,37 @@ public class World implements Serializable {
             // }
             // }
 
-            for (int X = xx; X < xx + 300; X++) {
-                for (int Y = yy; Y < yy + 300; Y++) {
+            for (int X = xx; X < xx + 853; X++) {
+                for (int Y = yy; Y < yy + 480; Y++) {
                     switch (ground.cellData[X][Y]) {
                         default:
                             break;
                         case GROUND:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, 853), Math.min(Y + 3 - yy, 480),
                                     Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
