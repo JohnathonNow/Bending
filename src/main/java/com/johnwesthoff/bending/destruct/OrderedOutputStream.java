@@ -21,8 +21,8 @@ public final class OrderedOutputStream implements Runnable {
     private final PriorityBlockingQueue<Message> stack;
     private boolean active = true;
     private long mesID = 0;
-    private boolean access = false;
-    Object holding = this;
+
+    private static final int STACK_CHECK_SLEEP = 1;
 
     public OrderedOutputStream(final OutputStream output) {
         this.output = output;
@@ -44,7 +44,7 @@ public final class OrderedOutputStream implements Runnable {
                     // output.flush();
                     Server.writeByteBuffer(toSend.getBytes(), output);
                 }
-                Thread.sleep(1);
+                Thread.sleep(STACK_CHECK_SLEEP);
             } catch (IOException | InterruptedException ex) {
                 active = false;
                 Logger.getLogger(OrderedOutputStream.class.getName()).log(Level.SEVERE, null, ex);
@@ -52,33 +52,16 @@ public final class OrderedOutputStream implements Runnable {
         }
     }
 
+    /**
+     * Add a message to the stack. This method is thread-safe.
+     * @param BB
+     * @param ID
+     * @throws IOException If this {@link OrderedOutputStream} is no longer active
+     */
     public void addMesssage(ByteBuffer BB, byte ID) throws IOException {
-        while (access) {
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+        synchronized (stack) {
+            stack.add(new Message(BB, ID));
         }
-        access = true;
-        stack.add(new Message(BB, ID));
-        access = false;
-        if (!active) {
-            throw new IOException();
-        }
-    }
-
-    public void addMesssage(ByteBuffer BB, byte ID, Object e) throws IOException {
-        while (access && holding != e) {
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        access = true;
-        stack.add(new Message(BB, ID));
-        access = false;
         if (!active) {
             throw new IOException();
         }
@@ -88,16 +71,6 @@ public final class OrderedOutputStream implements Runnable {
         output.close();
         stack.clear();
         active = false;
-    }
-
-    public void blockAccess(Object e) {
-        access = true;
-        holding = e;
-    }
-
-    public void unBlockAccess() {
-        access = false;
-        holding = this;
     }
 
     void addMesssage(ByteBuffer bb, int ID) throws IOException {
