@@ -140,57 +140,61 @@ public final class Server implements Runnable {
             worldHandle = new Thread() {
                 @Override
                 public void run() {
-                    long lastTime = System.currentTimeMillis();
+                    long lastTime = System.nanoTime();
+                    double delta = 0;
                     while (gameRunning) {
-                        long l = System.currentTimeMillis();
-                        // System.out.println("Server FPS: "+(1000/(l-swagTime)));
-                        swagTime = l;
                         try {
-                            l = System.currentTimeMillis() - lastTime;
-                            while (l < 25) {
-                                Thread.sleep(1);
-                                l = System.currentTimeMillis() - lastTime;
-                            }
-                        } catch (InterruptedException ex) {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e2) {
+                            // TODO Auto-generated catch block
+                            e2.printStackTrace();
                         }
-                        lastTime = System.currentTimeMillis();
+                        long l = System.nanoTime();
+                        delta += (l - lastTime) / (1000000000 / 40.0d);
+
+                        swagTime = l;
+                        lastTime = l;
 
                         if (earth == null) {
+                            delta = 0;
                             continue;
                         }
-                        index++;
-                        // System.out.println(""+World.deltaTime());
-                        earth.onUpdate();
-                        if (nextVote * 3 > playerList.size() * 2) {
-                            expander.interrupt();// muwahahaa
-                        }
-                        if (gameMode == THEHIDDEN) {
-                            if (playerList.size() > 1 && playerList.get(0).score >= (playerList.size() - 1)) {
-                                expander.interrupt();
+                        while (delta >= 1) {
+                            delta-=1;
+                            index++;
+                            // System.out.println(""+World.deltaTime());
+                            earth.onUpdate();
+                            if (nextVote * 3 > playerList.size() * 2) {
+                                expander.interrupt();// muwahahaa
                             }
-                        }
-                        if (gameMode == SURVIVAL) {
-                            long tim = System.currentTimeMillis();
-                            if (tim - oldTim > 1000 * 20) {
-                                oldTim = tim;
-                                for (int i = 0; i <= 5; i++) {
-                                    int yay = getID(), xxxx = earth.random.nextInt(earth.wIdTh);
-
-                                    earth.entityList.add(new EnemyEntity(xxxx, 0, 0, 0, -2).setID(yay));
-                                    sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(10).putInt(xxxx)
-                                            .putInt(0).putInt(0).putInt(0).putInt(-2).putInt(yay));
+                            if (gameMode == THEHIDDEN) {
+                                if (playerList.size() > 1 && playerList.get(0).score >= (playerList.size() - 1)) {
+                                    expander.interrupt();
                                 }
                             }
+                            if (gameMode == SURVIVAL) {
+                                long tim = System.currentTimeMillis();
+                                if (tim - oldTim > 1000 * 20) {
+                                    oldTim = tim;
+                                    for (int i = 0; i <= 5; i++) {
+                                        int yay = getID(), xxxx = earth.random.nextInt(earth.wIdTh);
+
+                                        earth.entityList.add(new EnemyEntity(xxxx, 0, 0, 0, -2).setID(yay));
+                                        sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(10).putInt(xxxx)
+                                                .putInt(0).putInt(0).putInt(0).putInt(-2).putInt(yay));
+                                    }
+                                }
+                            }
+                            // fixStuff();
+                            // System.out.println(lastTime);
+                            try {
+                                earth.ground.handleWater();
+                            } catch (Exception ex) {
+                                // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            // earth.ground.ShowData();
+                            handleAI();
                         }
-                        // fixStuff();
-                        // System.out.println(lastTime);
-                        try {
-                            earth.ground.handleWater();
-                        } catch (Exception ex) {
-                            // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        // earth.ground.ShowData();
-                        handleAI();
                         World.setTime();
                     }
                 }

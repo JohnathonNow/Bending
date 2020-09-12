@@ -254,12 +254,12 @@ public class World implements Serializable {
                 miny = Math.max(viewY - 325, 0);
                 maxy = Math.min(viewY + 625, h - 2);
                 // minx = 0;
-                if (serverWorld) {
+                //if (serverWorld) {
                     minx = 0;
                     maxx = w - 1;
                     miny = 0;
                     maxy = h - 2;
-                }
+                //}
                 for (int x = minx; x < maxx; x++) {
                     for (int y = maxy; y > miny; y--) {
                         if (aList[cellData[x][y]] == -1) {
@@ -964,7 +964,7 @@ public class World implements Serializable {
             firePolygonorange = new Polygon();
 
     public void drawPlayers(Graphics g) {
-        float offs = x % 8;
+        float offs = 0;//x % 8;
         if ((status & World.ST_INVISIBLE) == 0) {
             if (!done) {
                 // x+=move;
