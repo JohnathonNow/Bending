@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.Server;
 import com.johnwesthoff.bending.destruct.World;
 
@@ -32,7 +32,7 @@ public class FireDoom extends Entity {
 
     @Override
     public void onDraw(final Graphics G, final int viewX, final int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             // g.setComposite(new Additive());
             G.setColor(Color.ORANGE);
             for (int i = 0; i < 4; i++) {
