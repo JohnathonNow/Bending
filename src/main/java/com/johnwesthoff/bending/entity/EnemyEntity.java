@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.Player;
 import com.johnwesthoff.bending.destruct.PlayerOnline;
 import com.johnwesthoff.bending.destruct.ResourceLoader;
@@ -47,7 +48,7 @@ public class EnemyEntity extends Entity {
     @Override
     public void drawOverlay(Graphics G, int viewX, int viewY) {
 
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             // G.setColor(Color.RED);
             // G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
             // G.setColor(Color.black);

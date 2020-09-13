@@ -12,7 +12,7 @@ import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.Server;
 import com.johnwesthoff.bending.destruct.World;
 
@@ -44,7 +44,7 @@ public class WallofFireEntity extends Entity {
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             Graphics2D g = (Graphics2D) G;
             Composite c = g.getComposite();
             // g.setComposite(new Additive());

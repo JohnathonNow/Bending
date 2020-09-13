@@ -42,7 +42,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
             return;
         }
         int button = e.getButton();
-        double scale = pointer.owner.getHeight() / 300d;
+        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -75,7 +75,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / 300d;
+        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -84,7 +84,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / 300d;
+        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -100,13 +100,13 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
             if (pointer.world == null) {
                 return;
             }
-            double scale = pointer.owner.getHeight() / 300d;
+            double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
             pointer.world.mouseX = (int) ((scale * pointer.getWidth())
                     * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
             // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
             pointer.world.mouseY = (int) ((scale * pointer.getHeight())
                     * (e.getPoint().y / (double) pointer.getHeight()));
-            pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
+            pointer.world.mouseX = (int) (e.getX() / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
             // world.mouseY = (e.getY()/scale);
 
