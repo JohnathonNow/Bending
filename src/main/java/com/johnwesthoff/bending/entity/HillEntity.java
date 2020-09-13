@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.PlayerOnline;
 import com.johnwesthoff.bending.destruct.Server;
 import com.johnwesthoff.bending.destruct.World;
@@ -50,7 +51,7 @@ public class HillEntity extends Entity {
     public void drawOverlay(Graphics g, int viewx, int viewy) {
         Graphics2D G = (Graphics2D) g;
         AffineTransform prevTrans = G.getTransform();
-        G.scale(3, 3);
+        G.scale(Constants.WIDTH_SCALE, Constants.HEIGHT_SCALE);
         G.translate(-viewx, -viewy);
         G.setColor(Color.BLACK);
         G.drawArc((int) X - 48, (int) Y - 48, 96, 96, 0, 360);
