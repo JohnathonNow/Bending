@@ -7,7 +7,7 @@ package com.johnwesthoff.bending.entity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.Server;
 import com.johnwesthoff.bending.destruct.World;
 
@@ -28,7 +28,7 @@ public class ShockEffectEntity extends Entity {
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.yellow);
             int x = (int) X + radius - r.nextInt(radius * 2) - viewX;
             int y = (int) Y + radius - r.nextInt(radius * 2) - viewY;

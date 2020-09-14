@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.APPLET;
 import com.johnwesthoff.bending.destruct.Player;
 import com.johnwesthoff.bending.destruct.Server;
@@ -33,7 +33,7 @@ public class StaticShotEntity extends Entity {
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(radius == 0 ? Color.blue : Color.red);
             G.drawArc(((int) X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, 360);
             G.drawLine((int) (X - 2) - viewX, (int) Y - viewY, (int) (X + 2) - viewX, (int) Y - viewY);

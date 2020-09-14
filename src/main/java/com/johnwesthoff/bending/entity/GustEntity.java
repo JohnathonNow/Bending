@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.APPLET;
 import com.johnwesthoff.bending.destruct.Player;
 import com.johnwesthoff.bending.destruct.Server;
@@ -33,7 +33,7 @@ public class GustEntity extends Entity {
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.lightGray);
             int deg = r.nextInt(360);
             G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, deg, 15);

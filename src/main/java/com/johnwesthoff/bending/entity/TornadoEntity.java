@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.Server;
 import com.johnwesthoff.bending.destruct.World;
 
@@ -30,7 +30,7 @@ public class TornadoEntity extends Entity {
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.white);
             int deg = r.nextInt(360);
             G.fillArc((int) (X - 1) - viewX, (int) (Y) - viewY, 2, 1, deg, 60);

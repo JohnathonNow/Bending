@@ -66,7 +66,7 @@ public class World implements Serializable {
     public final byte aList[] = new byte[127];
     public int miGenH = 300, maGenH = 300;
     Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
-    BufferedImage Iter = new BufferedImage(312, 312, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT+12, Constants.HEIGHT_INT+12, BufferedImage.TYPE_INT_ARGB);
     Graphics2D Gter = Iter.createGraphics();
     int idinator = 0;
     double fr;
@@ -827,7 +827,7 @@ public class World implements Serializable {
         if (burn++ > 2) {
             firePolygonred.reset();
             int xx[] = new int[12], yy[] = new int[12];
-            xx[0] = (0) * 3;
+            xx[0] = (0) * Constants.WIDTH_SCALE;
             yy[0] = (0);
             firePolygonred.addPoint(xx[0], yy[0]);
             int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
@@ -916,16 +916,24 @@ public class World implements Serializable {
         // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
         // incY = (int)APPLET.lengthdir_y(APPLET.pointDis(x, y, mouseX,
         // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
-        viewX = (int) Math.min(Math.max((x - 150) + incX, 0), wIdTh - 301);
+        viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT+1)/2) + incX, 0),Math.max(0,wIdTh - Constants.WIDTH_INT-1));
         /*
          * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
          * { incX=(-(x-150)); }
          */
-        viewY = (int) Math.min(Math.max((y - 150) + incY, 0), hEigHt - 300);
+        viewY = (int) Math.min(Math.max((y - Constants.HEIGHT_INT/2) + incY, 0), Math.max(0,hEigHt - Constants.HEIGHT_INT));
         if (dead) {
             viewX = viewdX;
             viewY = viewdY;
         }
+        
+        if (viewX < 0) {
+            viewX = 0;
+        }
+        if (viewY < 0) {
+            viewY = 0;
+        }
+        
 
         try {
             ground.handleWater();
@@ -968,16 +976,15 @@ public class World implements Serializable {
         if ((status & World.ST_INVISIBLE) == 0) {
             if (!done) {
                 // x+=move;
-                g.drawArc((int) ((x - 2) - viewX) * 3, (int) ((y - 10) - viewY) * 3, 4, 4, 0, 360);
-                g.drawLine((int) ((x) - viewX) * 3, (int) ((y - 6) - viewY) * 3, (int) ((x) - viewX) * 3,
-                        (int) ((y - 3) - viewY) * 3);
-                g.drawLine((int) ((x - 2) - viewX) * 3, (int) ((y - 4) - viewY) * 3, (int) ((x + 2) - viewX) * 3,
-                        (int) ((y - 4) - viewY) * 3);
+                g.drawArc((int) ((x - 2) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 10) - viewY) * Constants.HEIGHT_SCALE, 4, 4, 0, 360);
+                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 6) - viewY) * Constants.HEIGHT_SCALE, (int) ((x) - viewX) * Constants.WIDTH_SCALE,
+                        (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE);
+                g.drawLine((int) ((x - 2) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 4) - viewY) * Constants.HEIGHT_SCALE, (int) ((x + 2) - viewX) * Constants.WIDTH_SCALE,
+                        (int) ((y - 4) - viewY) * Constants.HEIGHT_SCALE);
 
-                g.drawLine((int) ((x) - viewX) * 3, (int) ((y - 3) - viewY) * 3, (int) ((x + offs - 2) - viewX) * 3,
-                        (int) ((y) - viewY) * 3);
-                g.drawLine((int) ((x) - viewX) * 3, (int) ((y - 3) - viewY) * 3, (int) ((x + 2 - offs) - viewX) * 3,
-                        (int) ((y) - viewY) * 3);
+                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE, (int) ((x + offs - 2) - viewX) * Constants.WIDTH_SCALE,
+                        (int) ((y) - viewY) * Constants.HEIGHT_SCALE);
+                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE, (int) ((x + 2 - offs) - viewX) * Constants.WIDTH_SCALE,                        (int) ((y) - viewY) * Constants.HEIGHT_SCALE);
             } else {
                 int yUp = 20;
 
@@ -990,12 +997,12 @@ public class World implements Serializable {
                 Graphics2D g2 = (Graphics2D) g;
                 AffineTransform swag = g2.getTransform();
                 g2.scale(left, 1);
-                g2.drawImage(bodyParts[0], (int) (x - viewX) * 3 * left + (left < 0 ? -18 : 0),
-                        (int) (y - yUp - 6 - viewY) * 3, null);
+                g2.drawImage(bodyParts[0], (int) (x - viewX) * Constants.WIDTH_SCALE * left + (left < 0 ? -18 : 0),
+                        (int) (y - yUp - 6 - viewY) * Constants.HEIGHT_SCALE, null);
                 g2.drawImage(bodyParts[1],
-                        (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * 3 * left
+                        (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.WIDTH_SCALE * left
                                 + (left < 0 ? -(6 + (bodyParts[1].getWidth(null) - 23)) : 0),
-                        (int) ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * 3, null);
+                        (int) ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * Constants.HEIGHT_SCALE, null);
                 double ffs = Math.toRadians(((4 - offs) * 6));
                 if (vspeed != 0)
                     ffs = Math.toRadians(((4 - 5) * 6));
@@ -1003,50 +1010,50 @@ public class World implements Serializable {
                 int ddd = bodyParts[3].getWidth(null);
                 // System.out.println(ddd);
                 if (ddd == 48) {
-                    g2.translate((x - 3 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
+                    g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
                     g2.translate(
-                            (((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * 2.95
+                            (((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * (Constants.WIDTH_SCALE-0.05)
                                     + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * 3);
+                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(leftArmAngle - 90), (left == 1) ? 17 : 13, 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((x + 9 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
+                    g2.translate((x + 9 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(rightArmAngle - 90), 0, 2);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
                     g2.translate(
-                            (((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * 2.95) * left
+                            (((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * (Constants.WIDTH_SCALE-0.05)) * left
                                     + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * 3);
+                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(rightArmAngle - 90), 12, 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
                 } else {
-                    g2.translate((x - 3 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
+                    g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * 3) * left,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * 3);
+                    g2.translate((((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * Constants.WIDTH_SCALE) * left,
+                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((x + 9 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
+                    g2.translate((x + 9 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * 3,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * 3);
+                    g2.translate((((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * Constants.WIDTH_SCALE,
+                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
@@ -1064,26 +1071,26 @@ public class World implements Serializable {
                 // g2.drawImage(bodyParts[3], 0, 0, null);
                 // g2.setTransform(previousAT);
 
-                g2.drawImage(bodyParts[4], (int) (x + 1 - viewX) * 3 * left, (int) ((y - yUp + 7) - viewY) * 3, null);
-                g2.drawImage(bodyParts[4], (int) (x + 5 - viewX) * 3 * left, (int) ((y - yUp + 7) - viewY) * 3, null);
+                g2.drawImage(bodyParts[4], (int) (x + 1 - viewX) * Constants.WIDTH_SCALE * left, (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
+                g2.drawImage(bodyParts[4], (int) (x + 5 - viewX) * Constants.WIDTH_SCALE * left, (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
 
-                g2.translate((x + 5 - viewX) * 3 * left, ((y + 13) - viewY - yUp) * 3);
+                g2.translate((x + 5 - viewX) * Constants.WIDTH_SCALE * left, ((y + 13) - viewY - yUp) * Constants.HEIGHT_SCALE);
                 g2.rotate(ffs);
                 g2.drawImage(bodyParts[5], 0, 0, null);
                 g2.setTransform(previousAT);
 
-                g2.translate((x + 1 - viewX) * 3 * left, ((y + 13) - viewY - yUp) * 3);
+                g2.translate((x + 1 - viewX) * Constants.WIDTH_SCALE * left, ((y + 13) - viewY - yUp) * Constants.HEIGHT_SCALE);
                 g2.rotate(-ffs);
                 g2.drawImage(bodyParts[5], 0, 0, null);
                 g2.setTransform(previousAT);
                 g2.scale(left, 1);
                 if (((status & ST_FLAMING)) != 0) {
-                    drawFire(g2, (int) (x + 4 - viewX) * 3, (int) (y - viewY) * 3);
+                    drawFire(g2, (int) (x + 4 - viewX) * Constants.WIDTH_SCALE, (int) (y - viewY) * Constants.HEIGHT_SCALE);
                 }
                 if (((status & ST_DRAIN)) != 0) {
                     g2.setColor(Color.BLACK);
-                    g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2)) * 3, (int) (y - viewY - (AURA_RADIUS)) * 3,
-                            AURA_RADIUS * 3, AURA_RADIUS * 3, random.nextInt(360), random.nextInt(90));
+                    g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE, (int) (y - viewY - (AURA_RADIUS)) * Constants.HEIGHT_SCALE,
+                            AURA_RADIUS * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
                 g2.setTransform(swag);
             }
@@ -1093,12 +1100,12 @@ public class World implements Serializable {
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
                 if (((r.status & ST_FLAMING)) != 0) {
-                    drawFire(g, (r.x + 4 - viewX) * 3, (r.y - viewY) * 3);
+                    drawFire(g, (r.x + 4 - viewX) * Constants.WIDTH_SCALE, (r.y - viewY) * Constants.HEIGHT_SCALE);
                 }
                 if (((r.status & ST_DRAIN)) != 0) {
                     g.setColor(Color.BLACK);
-                    g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * 3, (r.y - viewY - (AURA_RADIUS)) * 3, AURA_RADIUS * 3,
-                            AURA_RADIUS * 3, random.nextInt(360), random.nextInt(90));
+                    g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE, (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
+                            AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
             }
         }
@@ -1131,7 +1138,7 @@ public class World implements Serializable {
 
             // G2.drawImage(Iter, -3, -3, null);
             Gter.setPaint(map == 1 ? nightPaint : skyPaint);//
-            Gter.fillRect(0, 0, 308, 308);
+            Gter.fillRect(0, 0, Constants.WIDTH_INT, Constants.HEIGHT_INT);
 
             // for (int X = xx; X<xx+300; X++)
             // {
@@ -1147,37 +1154,37 @@ public class World implements Serializable {
             // }
             // }
 
-            for (int X = xx; X < xx + 300; X++) {
-                for (int Y = yy; Y < yy + 300; Y++) {
+            for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
+                for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
                     switch (ground.cellData[X][Y]) {
                         default:
                             break;
                         case GROUND:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X + 3 - xx, 300), Math.min(Y + 3 - yy, 300),
+                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
                                     Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
@@ -1194,7 +1201,8 @@ public class World implements Serializable {
             }
             G2.drawImage(Iter, -3, -3, null);
         } catch (Exception e) {
-
+            System.err.println("X: " + viewX +"\tY:" + viewY);
+            e.printStackTrace();
         }
     }
 

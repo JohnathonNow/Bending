@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
+import com.johnwesthoff.bending.destruct.Constants;
 import com.johnwesthoff.bending.destruct.PlayerOnline;
 import com.johnwesthoff.bending.destruct.ResourceLoader;
 import com.johnwesthoff.bending.destruct.Server;
@@ -34,7 +34,7 @@ public class GuardianEntity extends EnemyEntity {
         G.drawRect(64, 64, 900 - 128, 4);
         G.setColor(Color.red);
         G.fillRect(64, 64, (int) ((900f) * (HP / 5000f)) - 128, 4);
-        if (X > viewX && X < viewX + 300 && Y > viewY && Y < viewY + 300) {
+        if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             // G.setColor(Color.RED);
             // G.fillArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, 360);
             // G.setColor(Color.black);
