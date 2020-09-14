@@ -972,7 +972,7 @@ public class World implements Serializable {
             firePolygonorange = new Polygon();
 
     public void drawPlayers(Graphics g) {
-        float offs = 0;//x % 8;
+        float offs = x % 8;
         if ((status & World.ST_INVISIBLE) == 0) {
             if (!done) {
                 // x+=move;

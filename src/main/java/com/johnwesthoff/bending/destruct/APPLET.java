@@ -1846,9 +1846,9 @@ public class APPLET extends JPanel implements Runnable {
             biggraphicsBuffer = bigscreenBuffer.createGraphics();
             biggraphicsBuffer.setFont(chatFont);
         }
-        setSize(owner.getSize());
+        //setSize(owner.getSize());
 
-        setVisible(owner.isVisible());
+        //setVisible(owner.isVisible());
         // Graphics2D pancakes = (Graphics2D)g;
         // double scale = owner.getHeight()/300;
         // pancakes.scale(scale, scale);
