@@ -2153,10 +2153,7 @@ public class APPLET extends JPanel implements Runnable {
             goodTeam = false;
         }
         for (Player p : world.playerList) {
-            p.myTeam = false;
-            if (myTeam.contains(p.ID) && gameMode > 0) {
-                p.myTeam = true;
-            }
+            p.myTeam = myTeam.contains(p.ID) && gameMode > 0;
         }
         HP = MAXHP;
         passiveList[spellBook].onSpawn(this);
