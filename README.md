@@ -22,9 +22,9 @@ Building + Running
 
 As of 2020 the game can be built using maven and Java 8+. Simply clone this repo, cd into its root,
 and run `mvn package`. This will create a jar file under the target directory, which can be run through
-`java -jar ./target/bending-1.0-SNAPSHOT.jar`
+`java -jar ./target/bending.jar`
 
-If you don't want to build it yourself, you can simply download the latest release
+If you don't want to build it yourself, you can simply [download the latest release](https://github.com/JohnathonNow/Bending/releases/latest/download/bending.jar)
 from this page and run that jar file.
 
 Playing
