@@ -127,7 +127,7 @@ public class APPLET extends JPanel implements Runnable {
     Polygon lineOfSight = new Polygon();
 
     public static void main(String args[]) {
-        System.out.println("Loading BENDING v 2.013.12.24" + System.getProperty("os.name") + File.separator);
+        System.out.println("Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
 
         gameAlive = true;
         Spell.init();
@@ -1190,14 +1190,15 @@ public class APPLET extends JPanel implements Runnable {
         double delta = 0;
         while (gameAlive) {
             try {
-				Thread.sleep(10);
-			} catch (InterruptedException e2) {
+				//Thread.yield();
+			} catch (Exception e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
             long now = System.nanoTime();
            
-            delta += (now - lastTime) / (1000000000 / 40.0d);
+            delta += (now - lastTime) / (1000000000 / Constants.FPS);
+            owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
             lastTime = now;
 
             if (!owner.isVisible()) {
@@ -1693,18 +1694,12 @@ public class APPLET extends JPanel implements Runnable {
                 if (world.keys[KeyEvent.VK_SPACE]) {
                 }
 
-            }
-            repaint();
-            /*
-            if ((now - swagTime) >= (1000000000 / 120.0d)) {   
-                try {
-                    owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - swagTime)));
-                } catch (Exception e) {
-    
-                }
+    }
+    draw();
+            if ((now - swagTime) >= (1000000000 / Constants.FPS/2)) {   
+                repaint(); 
                 swagTime = now;
             }
-            */
             World.setTime();
         }
     }
@@ -1837,6 +1832,15 @@ public class APPLET extends JPanel implements Runnable {
             super.paint(g);
             return;
         }
+        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
+    }
+
+
+    
+    public void draw() {
+        if (notDone) {
+            return;
+        }
         if (screenBuffer == null) {
             screenBuffer = new BufferedImage(Constants.WIDTH_INT, Constants.HEIGHT_INT, BufferedImage.TYPE_INT_ARGB);
             graphicsBuffer = screenBuffer.createGraphics();
@@ -1846,12 +1850,6 @@ public class APPLET extends JPanel implements Runnable {
             biggraphicsBuffer = bigscreenBuffer.createGraphics();
             biggraphicsBuffer.setFont(chatFont);
         }
-        //setSize(owner.getSize());
-
-        //setVisible(owner.isVisible());
-        // Graphics2D pancakes = (Graphics2D)g;
-        // double scale = owner.getHeight()/300;
-        // pancakes.scale(scale, scale);
         graphicsBuffer.setColor(Color.black);
         if (world != null) {
 
@@ -1966,7 +1964,15 @@ public class APPLET extends JPanel implements Runnable {
 
                 graphicsBuffer.setColor(purple);
                 graphicsBuffer.drawRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                if (world.keys[KeyEvent.VK_ALT]) {
+                    graphicsBuffer.setColor(Color.red);
+                    this.checkCollision(0, 0);
+                    AffineTransform prevTrans = graphicsBuffer.getTransform();
+                    graphicsBuffer.translate(-world.viewX, -world.viewY);
+                    graphicsBuffer.draw(playerHitbox);
+                    graphicsBuffer.setTransform(prevTrans);
 
+                }
                 // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
                 biggraphicsBuffer.drawImage(screenBuffer,0, 0, bigscreenBuffer.getWidth(),bigscreenBuffer.getHeight(), this);
                 world.drawPlayers(biggraphicsBuffer);
@@ -2002,7 +2008,7 @@ public class APPLET extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("" + p.score, 512, 256 + 16 + (i * 16));
                     }
                 }
-
+                /*
                 if (world.keys[KeyEvent.VK_ALT]) {
                     biggraphicsBuffer.setColor(Color.red);
                     this.checkCollision(0, 0);
@@ -2013,6 +2019,7 @@ public class APPLET extends JPanel implements Runnable {
                     biggraphicsBuffer.setTransform(prevTrans);
 
                 }
+                */
                 if (world.dead) {
                     biggraphicsBuffer.setColor(deadbg);
                     biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
@@ -2075,8 +2082,9 @@ public class APPLET extends JPanel implements Runnable {
                 }
             }
         }
-        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
     }
+
+
 
     Font chatFont = new Font("Arial", Font.BOLD, 18);
     Font nameFont = new Font("Arial", Font.BOLD, 12);
