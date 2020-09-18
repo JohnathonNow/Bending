@@ -6,6 +6,8 @@ package com.johnwesthoff.bending.util.network;
 
 import java.util.StringTokenizer;
 
+import com.johnwesthoff.bending.Client;
+
 /**
  *
  * @author John

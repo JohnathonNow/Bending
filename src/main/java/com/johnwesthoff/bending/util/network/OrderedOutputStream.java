@@ -11,7 +11,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.Server;
 
 /**
  *
@@ -75,11 +75,11 @@ public final class OrderedOutputStream implements Runnable {
         active = false;
     }
 
-    void addMesssage(ByteBuffer bb, int ID) throws IOException {
+    public void addMesssage(ByteBuffer bb, int ID) throws IOException {
         this.addMesssage(bb, (byte) ID);
     }
 
-    private final class Message implements Comparable {
+    public final class Message implements Comparable {
         private final ByteBuffer BB;
         private final byte ID;
         private final long constructionTime;

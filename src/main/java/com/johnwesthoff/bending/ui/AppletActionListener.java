@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game.ui;
+package com.johnwesthoff.bending.ui;
 
-import static com.johnwesthoff.bending.game.Client.currentlyLoggedIn;
+import static com.johnwesthoff.bending.Client.currentlyLoggedIn;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -18,11 +18,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.johnwesthoff.bending.game.Client;
-import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 

@@ -7,10 +7,11 @@ package com.johnwesthoff.bending.entity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
-import com.johnwesthoff.bending.game.Constants;
-import com.johnwesthoff.bending.game.Player;
-import com.johnwesthoff.bending.game.Server;
-import com.johnwesthoff.bending.game.World;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *

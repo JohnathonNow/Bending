@@ -18,6 +18,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
+
 public final class ConnectToDatabase {
     String base = "https://72.92.89.110:1024";// "https://johnbot.net78.net";//"https://72.92.89.250:1024";//;//;//;//;//
     Properties p;

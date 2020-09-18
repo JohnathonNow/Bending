@@ -18,10 +18,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.game.Client;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.util.audio.RealClip;
 /**
  *
@@ -56,7 +57,7 @@ public class ResourceLoader {
 
     }
 
-    static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
+    public static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
     public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
 
     public static BufferedImage loadImage(final String src, final String name) {

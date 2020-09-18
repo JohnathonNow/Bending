@@ -2,16 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.game.ResourceLoader.loadIcon;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.util.network.OrderedOutputStream;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.*;
 
 /*
  * Energy cost table:

@@ -1,4 +1,4 @@
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending;
 
 public class Constants {
     public static final int WIDTH_INT = 640; //960

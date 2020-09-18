@@ -10,9 +10,10 @@ import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.johnwesthoff.bending.game.Constants;
-import com.johnwesthoff.bending.game.Server;
-import com.johnwesthoff.bending.game.World;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *

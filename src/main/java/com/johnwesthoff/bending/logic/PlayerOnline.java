@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.logic;
 
 import java.awt.Polygon;
 import java.io.IOException;
@@ -10,21 +10,50 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.entity.*;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.BallLightningEntity;
+import com.johnwesthoff.bending.entity.BuritoEntity;
+import com.johnwesthoff.bending.entity.CloudEntity;
+import com.johnwesthoff.bending.entity.EnergyEntity;
+import com.johnwesthoff.bending.entity.Entity;
+import com.johnwesthoff.bending.entity.FireBallEntity;
+import com.johnwesthoff.bending.entity.FireDoom;
+import com.johnwesthoff.bending.entity.FireJumpEntity;
+import com.johnwesthoff.bending.entity.FlameThrowerEntity;
+import com.johnwesthoff.bending.entity.FreezeEntity;
+import com.johnwesthoff.bending.entity.GustEntity;
+import com.johnwesthoff.bending.entity.IceShardEntity;
+import com.johnwesthoff.bending.entity.LavaBallEntity;
+import com.johnwesthoff.bending.entity.MissileEntity;
+import com.johnwesthoff.bending.entity.RainEntity;
+import com.johnwesthoff.bending.entity.RockEntity;
+import com.johnwesthoff.bending.entity.RodEntity;
+import com.johnwesthoff.bending.entity.SandEntity;
+import com.johnwesthoff.bending.entity.ShardEntity;
+import com.johnwesthoff.bending.entity.SoulDrainEntity;
+import com.johnwesthoff.bending.entity.SpoutSourceEntity;
+import com.johnwesthoff.bending.entity.StaticShotEntity;
+import com.johnwesthoff.bending.entity.SummonBallEntity;
+import com.johnwesthoff.bending.entity.TornadoEntity;
+import com.johnwesthoff.bending.entity.WallofFireEntity;
+import com.johnwesthoff.bending.entity.WaterBallEntity;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
 /**
  *
  * @author John
  */
 public class PlayerOnline extends Player implements Runnable {
-    Socket playerSocket;
-    InputStream in;
-    OrderedOutputStream out;
+    public Socket playerSocket;
+    public InputStream in;
+    public OrderedOutputStream out;
     public boolean ready = false;
-    Server handle;
+    public Server handle;
     public boolean alive = true;
-    boolean loggedIn = false, voted = false;
-    ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
+    public boolean loggedIn = false, voted = false;
+    public ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public PlayerOnline(int X, int Y, Socket s, int ide, Server h) {
         super(X, Y, new byte[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 });
@@ -56,9 +85,9 @@ public class PlayerOnline extends Player implements Runnable {
         }
     }
 
-    byte cloth[];
-    int[] colord, colord2;
-    int UDPPORT;
+    public byte cloth[];
+    public int[] colord, colord2;
+    public int UDPPORT;
 
     public void getInput() throws IOException {
 

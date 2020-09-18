@@ -9,10 +9,10 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.game.Client;
-import com.johnwesthoff.bending.game.Player;
-import com.johnwesthoff.bending.game.Server;
-import com.johnwesthoff.bending.game.World;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *

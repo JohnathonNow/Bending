@@ -8,15 +8,18 @@
  *
  * Created on Nov 24, 2012, 10:38:32 PM
  */
-package com.johnwesthoff.bending.game.ui;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JColorChooser;
 
-import com.johnwesthoff.bending.game.Client;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *

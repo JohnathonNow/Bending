@@ -1,18 +1,39 @@
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending;
 
-import com.johnwesthoff.bending.entity.*;
-import com.johnwesthoff.bending.util.graphics.*;
-import com.johnwesthoff.bending.util.network.*;
-import com.johnwesthoff.bending.game.logic.*;
-import com.johnwesthoff.bending.game.ui.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.MenuItem;
+import java.awt.Polygon;
+import java.awt.PopupMenu;
+import java.awt.Rectangle;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,94 +44,164 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.AbstractTableModel;
+
+import com.johnwesthoff.bending.entity.BallLightningEntity;
+import com.johnwesthoff.bending.entity.BuritoEntity;
+import com.johnwesthoff.bending.entity.CloudEntity;
+import com.johnwesthoff.bending.entity.EffectEntity;
+import com.johnwesthoff.bending.entity.EnemyEntity;
+import com.johnwesthoff.bending.entity.EnergyEntity;
+import com.johnwesthoff.bending.entity.Entity;
+import com.johnwesthoff.bending.entity.FireBallEntity;
+import com.johnwesthoff.bending.entity.FireDoom;
+import com.johnwesthoff.bending.entity.FireJumpEntity;
+import com.johnwesthoff.bending.entity.FirePuffEntity;
+import com.johnwesthoff.bending.entity.FlameThrowerEntity;
+import com.johnwesthoff.bending.entity.FreezeEntity;
+import com.johnwesthoff.bending.entity.GustEntity;
+import com.johnwesthoff.bending.entity.IceShardEntity;
+import com.johnwesthoff.bending.entity.LavaBallEntity;
+import com.johnwesthoff.bending.entity.MissileEntity;
+import com.johnwesthoff.bending.entity.RainEntity;
+import com.johnwesthoff.bending.entity.RockEntity;
+import com.johnwesthoff.bending.entity.RodEntity;
+import com.johnwesthoff.bending.entity.SandEntity;
+import com.johnwesthoff.bending.entity.ShardEntity;
+import com.johnwesthoff.bending.entity.ShockEffectEntity;
+import com.johnwesthoff.bending.entity.SnowEntity;
+import com.johnwesthoff.bending.entity.SoulDrainEntity;
+import com.johnwesthoff.bending.entity.SpoutEntity;
+import com.johnwesthoff.bending.entity.SpoutSourceEntity;
+import com.johnwesthoff.bending.entity.StaticShotEntity;
+import com.johnwesthoff.bending.entity.SteamEntity;
+import com.johnwesthoff.bending.entity.SummonBallEntity;
+import com.johnwesthoff.bending.entity.TornadoEntity;
+import com.johnwesthoff.bending.entity.WallofFireEntity;
+import com.johnwesthoff.bending.entity.WaterBallEntity;
+import com.johnwesthoff.bending.logic.AppletInputListener;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.Spell;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.ui.AppletActionListener;
+import com.johnwesthoff.bending.ui.ClothingChooser1;
+import com.johnwesthoff.bending.ui.Register;
+import com.johnwesthoff.bending.ui.ServerGUI;
+import com.johnwesthoff.bending.ui.SpellList1;
+import com.johnwesthoff.bending.ui.Verify;
+import com.johnwesthoff.bending.util.audio.RealClip;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.OrderedOutputStream;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
 /**
  *
  * @author Family
  */
 public class Client extends JPanel implements Runnable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     public boolean goodTeam = false;
-    String chat[] = { "", "", "", "", "", "", "", "", "", "" };
-    Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
+    public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
+    public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
             Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
-    int score = 0;
-    int mapRotation = 0;
-    boolean chatActive = false;
-    String chatMessage = "";
+    public int score = 0;
+    public int mapRotation = 0;
+    public boolean chatActive = false;
+    public String chatMessage = "";
     public int gameMode = 1;
     public int fireTime = 0;
-    Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
+    public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
-    static AppletActionListener actioner;
-    static AppletInputListener inputer;
-    ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
+    public static AppletActionListener actioner;
+    public static AppletInputListener inputer;
+    public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
-    int port = 25565;
+    public int port = 25565;
     public Properties userpassinfo;
     public ClothingChooser1 cc = new ClothingChooser1(this);
-    double engrecharge = 4;
-    Random random = new Random();
-    String serverIP = "LocalHost";
+    public double engrecharge = 4;
+    public Random random = new Random();
+    public String serverIP = "LocalHost";
     public Thread mainProcess;
-	Thread udpthread;
-    DatagramSocket udpconnection;
-    boolean notDone = true;
-    boolean ignored = true;
-    Image doubleBuffer;
-    BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
-    static BufferedImage bimage;
-    Graphics2D graphicsBuffer, biggraphicsBuffer;
-    URL base;// = getDocumentBase();
-    String temp;
+	public Thread udpthread;
+    public DatagramSocket udpconnection;
+    public boolean notDone = true;
+    public boolean ignored = true;
+    public Image doubleBuffer;
+    public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
+    public static BufferedImage bimage;
+    public Graphics2D graphicsBuffer, biggraphicsBuffer;
+    public URL base;// = getDocumentBase();
+    public String temp;
     public static String username;
-    World world;
-    double killingSpree = 0;
+    public World world;
+    public double killingSpree = 0;
     public boolean loggedOn = false;
     public Server hostingPlace;
     public int spellBook = 0;
-    LinkedList<World> worldList = new LinkedList<>();
+    public LinkedList<World> worldList = new LinkedList<>();
     public long lastTime = 0;
     public InputStream input;
     public OrderedOutputStream out;
     public Socket connection;
     public JFrame owner;
-    short MAXHP, HP = MAXHP = 100;
+    public short MAXHP, HP = MAXHP = 100;
     public static boolean gameAlive = true;
-    int maxlungs, lungs = maxlungs = 100;
-    static double runningSpeed = 1d, swimmingSpeed = 1d;
-    static Client thisone;
+    public int maxlungs, lungs = maxlungs = 100;
+    public static double runningSpeed = 1d, swimmingSpeed = 1d;
+    public static Client thisone;
     public static int XP = 0;
     public double prevVspeed = 0;
     public static boolean shortJump = false;
-    String killMessage = "~ was defeated by `.";
-    int timeToHeal = 0;
+    public String killMessage = "~ was defeated by `.";
+    public int timeToHeal = 0;
     public JComboBox menu;
     public JButton connect, hosting, refresh, register, verify, ChooseSpells, chooseclothing, mapMaker;
     public JCheckBox JRB;
-    String[] hosts = new String[1];
+    public String[] hosts = new String[1];
     public static JTextField jtb = new JTextField();
     public JPasswordField jtp = new JPasswordField();
-    JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
+    public JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
     public static ConnectToDatabase CTD;
-    Register form = new Register();
-    Verify exactly = new Verify();
-    SystemTray ST;
+    public Register form = new Register();
+    public Verify exactly = new Verify();
+    public SystemTray ST;
     public TrayIcon trayIcon;
-    Spell[][] spellList;
-    Spell[] passiveList;
-    int leftClick = 0, rightClick = 1, midClick = 2;
-    double xspeed = 0;
+    public Spell[][] spellList;
+    public Spell[] passiveList;
+    public int leftClick = 0, rightClick = 1, midClick = 2;
+    public double xspeed = 0;
     public SpellList1 spellselection;
     public static JFrame container;
-    protected static JTabbedPane immaKeepTabsOnYou;
-    double prevMove;
-    short turnVisible = -1, removeAura = -1;
+    public static JTabbedPane immaKeepTabsOnYou;
+    public double prevMove;
+    public short turnVisible = -1, removeAura = -1;
 
     public Client() {
         super();
@@ -457,14 +548,14 @@ public class Client extends JPanel implements Runnable {
     public int ID = 0;
     public boolean started = false;
     // @Override
-    short dig = 0;
-    boolean loggedIn = false;
+    public short dig = 0;
+    public boolean loggedIn = false;
     public boolean failed = false;
     public Thread communication;
-    static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
-    static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+    public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
+    public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
-    static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+            public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
@@ -1121,13 +1212,13 @@ public class Client extends JPanel implements Runnable {
         chatcolor[chat.length - 1] = color;
     }
 
-    boolean busy = false;
-    int lastHit = -1;
-    byte sendcount = 0;
-    ArrayList<int[]> stuff = new ArrayList<>();
-    boolean isAlive = true;
-    Area hideFromMe = new Area(), box = new Area(new Rectangle(0, 0, 300, 300));
-    Thread expander;
+    public boolean busy = false;
+    public int lastHit = -1;
+    public byte sendcount = 0;
+    public ArrayList<int[]> stuff = new ArrayList<>();
+    public boolean isAlive = true;
+    public Area hideFromMe = new Area(), box = new Area(new Rectangle(0, 0, 300, 300));
+    public Thread expander;
 
     // @Override
     public void destroy() {
@@ -1135,10 +1226,10 @@ public class Client extends JPanel implements Runnable {
         gameAlive = false;
     }
 
-    boolean sendRequest = true;
-    int Xp = 0, Yp = 0;
-    int pc = 0;
-    Color Clear = new Color(0, 0, 0, 0);
+    public boolean sendRequest = true;
+    public int Xp = 0, Yp = 0;
+    public int pc = 0;
+    public Color Clear = new Color(0, 0, 0, 0);
 
     public void calculateLoS() {
         lineOfSight.reset();
@@ -1185,8 +1276,8 @@ public class Client extends JPanel implements Runnable {
 
     }
 
-    boolean refreshShadows = false;
-    long swagTime = 0;
+    public boolean refreshShadows = false;
+    public long swagTime = 0;
 
     @Override
     public void run() {
@@ -1727,7 +1818,7 @@ public class Client extends JPanel implements Runnable {
         return "No One";
     }
 
-    double knockbackDecay = 1;
+    public double knockbackDecay = 1;
 
     public String addHost() {
         try {
@@ -1759,9 +1850,9 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    String names[];// = new String[yay.size()/3];
-    String counts[];// = new String[yay.size()/3];
-    Thread pinger;
+    public String names[];// = new String[yay.size()/3];
+    public String counts[];// = new String[yay.size()/3];
+    public Thread pinger;
 
     public void getHosts() {
         ArrayList<String> yay = null;
@@ -2100,8 +2191,8 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    Font chatFont = new Font("Arial", Font.BOLD, 18);
-    Font nameFont = new Font("Arial", Font.BOLD, 12);
+    public Font chatFont = new Font("Arial", Font.BOLD, 18);
+    public Font nameFont = new Font("Arial", Font.BOLD, 12);
 
     public void sendMessage(final String s) {
         sendMessage(s, 0x3333FF);
@@ -2213,7 +2304,7 @@ public class Client extends JPanel implements Runnable {
         busy = false;
     }
 
-    boolean expand = false;
+    public boolean expand = false;
 
     public void sendMovement() {
         if (ID == -1) {
@@ -2262,7 +2353,7 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    int shockdrain = 0;
+    public int shockdrain = 0;
 
     public int hurt(double pain) {
         if (passiveList[spellBook].getName().equals("Lightning Shield")) {
@@ -2304,8 +2395,8 @@ public class Client extends JPanel implements Runnable {
         return false;
     }
 
-    String hostIP = "";
-    String serverName = "";
+    public String hostIP = "";
+    public String serverName = "";
     public ServerGUI sgui;
 
     public void serverOutput() {
@@ -2414,8 +2505,8 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
-    RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
+    public RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
+    public RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
 
     public void drawChat() {
         for (int i = 0; i < chat.length; i++) {
@@ -2427,9 +2518,9 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    static long authCode = -1;
+    public static long authCode = -1;
 
-    static protected long getAuth() {
+    static public long getAuth() {
         if (authCode == -1) {
             try {
                 final long s1111I11I11 = Client.class.getFields().length;

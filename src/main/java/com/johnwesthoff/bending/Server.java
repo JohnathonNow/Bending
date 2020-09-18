@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 ///TODO: FIX NETWORKING
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending;
 
 import java.awt.Polygon;
 import java.io.DataInputStream;
@@ -45,6 +45,11 @@ import com.johnwesthoff.bending.entity.SoulDrainEntity;
 import com.johnwesthoff.bending.entity.SpoutEntity;
 import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.entity.WallofFireEntity;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.UDPPacket;
 
 /**
  *
@@ -61,7 +66,7 @@ public final class Server implements Runnable {
     public static final byte // MESSAGE IDs
     UDPMOVE = 0;
     public static int MYID = 0;
-    protected int nextVote = 0;
+    public int nextVote = 0;
 
     public static int getID() {
         return MYID++;
@@ -84,7 +89,7 @@ public final class Server implements Runnable {
     public static int gameMode = 1;
     static Random random = new Random();
 
-    public static int choose(int... e) {
+    public static int choose(final int... e) {
         return (e[random.nextInt(e.length)]);
     }
 
@@ -96,15 +101,15 @@ public final class Server implements Runnable {
             SocialSecurity.close();
             try {
                 if (!playerList.isEmpty()) {
-                    for (PlayerOnline p : playerList)
+                    for (final PlayerOnline p : playerList)
                         p.killMe();
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
             }
             gameRunning = false;
             playerList.clear();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -116,7 +121,7 @@ public final class Server implements Runnable {
     }
 
     public static float deltaTime() {
-        float lol = ((System.nanoTime() - oldTime)) / (25f * 1000000f);
+        final float lol = ((System.nanoTime() - oldTime)) / (25f * 1000000f);
         System.out.println("Delta Time: " + lol);
         return lol;
     }
@@ -145,11 +150,11 @@ public final class Server implements Runnable {
                     while (gameRunning) {
                         try {
                             Thread.sleep(1);
-                        } catch (InterruptedException e2) {
+                        } catch (final InterruptedException e2) {
                             // TODO Auto-generated catch block
                             e2.printStackTrace();
                         }
-                        long l = System.nanoTime();
+                        final long l = System.nanoTime();
                         delta += (l - lastTime) / (1000000000 / 40.0d);
 
                         swagTime = l;
@@ -160,7 +165,7 @@ public final class Server implements Runnable {
                             continue;
                         }
                         while (delta >= 1) {
-                            delta-=1;
+                            delta -= 1;
                             index++;
                             // System.out.println(""+World.deltaTime());
                             earth.onUpdate();
@@ -173,11 +178,11 @@ public final class Server implements Runnable {
                                 }
                             }
                             if (gameMode == SURVIVAL) {
-                                long tim = System.currentTimeMillis();
+                                final long tim = System.currentTimeMillis();
                                 if (tim - oldTim > 1000 * 20) {
                                     oldTim = tim;
                                     for (int i = 0; i <= 5; i++) {
-                                        int yay = getID(), xxxx = earth.random.nextInt(earth.wIdTh);
+                                        final int yay = getID(), xxxx = earth.random.nextInt(earth.wIdTh);
 
                                         earth.entityList.add(new EnemyEntity(xxxx, 0, 0, 0, -2).setID(yay));
                                         sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(10).putInt(xxxx)
@@ -189,7 +194,7 @@ public final class Server implements Runnable {
                             // System.out.println(lastTime);
                             try {
                                 earth.ground.handleWater();
-                            } catch (Exception ex) {
+                            } catch (final Exception ex) {
                                 // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             // earth.ground.ShowData();
@@ -200,21 +205,21 @@ public final class Server implements Runnable {
                 }
             };
             worldHandle.start();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static Server main2(String[] args) {
-        Server me = new Server();
+    public static Server main2(final String[] args) {
+        final Server me = new Server();
         me.IP = args[0];
         return me;
         // me.port = Integer.getInteger(WhyMustJavaBeSoArguementative[0]);
         // me.earth.ground.ClearCircle(100, 100, 400);
     }
 
-    public static void main(String[] args) {
-        Server me = new Server();
+    public static void main(final String[] args) {
+        final Server me = new Server();
         me.IP = args[0];
         // me.port = Integer.getInteger(WhyMustJavaBeSoArguementative[0]);
         // me.earth.ground.ClearCircle(100, 100, 400);
@@ -231,7 +236,7 @@ public final class Server implements Runnable {
         while (gameRunning && accepting) {
 
             try {
-                Socket toAdd = (SocialSecurity.accept());
+                final Socket toAdd = (SocialSecurity.accept());
                 toAdd.setKeepAlive(false);
                 toAdd.setTcpNoDelay(true);
                 playerList.add(new PlayerOnline(spawnX, spawnY, toAdd, pID, this));
@@ -264,8 +269,8 @@ public final class Server implements Runnable {
         }
     }
 
-    public void newPlayer(int id, String user) {
-        for (PlayerOnline p : playerList) {
+    public void newPlayer(final int id, final String user) {
+        for (final PlayerOnline p : playerList) {
             if (id != p.ID) {
                 p.writeNewPlayer(id, user);
             }
@@ -273,28 +278,29 @@ public final class Server implements Runnable {
 
     }
 
-    public void sendMessage(byte id, ByteBuffer mes) {
-        for (PlayerOnline p : playerList) {
+    public void sendMessage(final byte id, final ByteBuffer mes) {
+        for (final PlayerOnline p : playerList) {
             try {
                 // p.out.write(id);
                 // Server.writeByteBuffer(mes, p.out);
                 p.out.addMesssage(mes, id);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public void movePlayer(int id, int x, int y, int m, int v, int la, int ra, short st, short hp) {
-        for (PlayerOnline p : playerList) {
+    public void movePlayer(final int id, final int x, final int y, final int m, final int v, final int la, final int ra,
+            final short st, final short hp) {
+        for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
                 p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp);
             }
         }
     }
 
-    public void moveRelative(int x, int y) {
-        for (PlayerOnline p : playerList) {
+    public void moveRelative(final int x, final int y) {
+        for (final PlayerOnline p : playerList) {
             p.writeMovePlayer(p.ID, p.x + x, p.y + y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
                     p.status, p.HP);
         }
@@ -304,13 +310,13 @@ public final class Server implements Runnable {
 
     public void fixStuff() {
         call++;
-        for (Entity p : earth.entityList) {
+        for (final Entity p : earth.entityList) {
             if (p instanceof EnemyEntity) {
-                EnemyEntity e = (EnemyEntity) p;
+                final EnemyEntity e = (EnemyEntity) p;
                 e.onServerUpdate(this);
                 if (call > 100) {
                     call = 0;
-                    ByteBuffer aIMessage = ByteBuffer.allocate(1000);
+                    final ByteBuffer aIMessage = ByteBuffer.allocate(1000);
                     aIMessage.putInt((int) e.X).putInt((int) e.Y).putInt(e.HP).putInt((int) e.move)
                             .putInt((int) e.yspeed).putInt(e.target).putInt(e.id);
                     sendMessage(AI, aIMessage);
@@ -330,7 +336,7 @@ public final class Server implements Runnable {
                     loadMap(mapRotation);
                     try {
                         Thread.sleep(5 * 60 * 1000);
-                    } catch (InterruptedException ex) {
+                    } catch (final InterruptedException ex) {
                         // Up! Time for a new map!
                     }
                 }
@@ -339,54 +345,54 @@ public final class Server implements Runnable {
         expander.start();
     }
 
-    int mapRotation = 0;
-    int maxMap = 1;
+    public int mapRotation = 0;
+    public int maxMap = 1;
 
-    public static void writeByteBuffer(ByteBuffer toSend, OutputStream output) throws IOException {
+    public static void writeByteBuffer(final ByteBuffer toSend, final OutputStream output) throws IOException {
 
-        byte yay[] = new byte[toSend.position()];// toSend.slice().array();
+        final byte yay[] = new byte[toSend.position()];// toSend.slice().array();
         // S System.a
         System.arraycopy(toSend.array(), 0, yay, 0, toSend.position());
         // output.write(toSend.position());
-        byte[] size = ByteBuffer.allocate(4).putInt(yay.length).array();
+        final byte[] size = ByteBuffer.allocate(4).putInt(yay.length).array();
         // System.err.println(yay.length);
         output.write(size);
         output.write(yay);
         output.flush();
     }
 
-    public static ByteBuffer putString(ByteBuffer yes, String y) {
+    public static ByteBuffer putString(final ByteBuffer yes, final String y) {
         yes.putInt(y.length());
         yes.put(y.getBytes());
         return yes;
     }
 
-    public static String getString(ByteBuffer yes) {
-        byte[] dst = new byte[yes.getInt()];
+    public static String getString(final ByteBuffer yes) {
+        final byte[] dst = new byte[yes.getInt()];
         yes.get(dst);
         return new String(dst);
     }
 
-    public static ByteBuffer readByteBuffer(InputStream in) throws IOException {
-        ByteBuffer size = ByteBuffer.allocate(4);
+    public static ByteBuffer readByteBuffer(final InputStream in) throws IOException {
+        final ByteBuffer size = ByteBuffer.allocate(4);
 
         size.put((byte) in.read());
         size.put((byte) in.read());
         size.put((byte) in.read());
         size.put((byte) in.read());
         size.rewind();
-        int howMuchData = size.getInt();
+        final int howMuchData = size.getInt();
         // System.err.println(howMuchData);
         int total = 0;
-        byte[] buf = new byte[howMuchData];
+        final byte[] buf = new byte[howMuchData];
         while (total < howMuchData) {
             total += in.read(buf, total, howMuchData - total);
         }
         return ByteBuffer.wrap(buf);
     }
 
-    public String getKiller(int i) {
-        for (Player p : playerList) {
+    public String getKiller(final int i) {
+        for (final Player p : playerList) {
             if (p.ID == i) {
                 return p.username;
             }
@@ -394,8 +400,8 @@ public final class Server implements Runnable {
         return "NULL";
     }
 
-    public PlayerOnline getPlayer(int i) {
-        for (PlayerOnline p : playerList) {
+    public PlayerOnline getPlayer(final int i) {
+        for (final PlayerOnline p : playerList) {
             if (p.ID == i) {
                 return p;
             }
@@ -405,7 +411,7 @@ public final class Server implements Runnable {
 
     String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
 
-    public void loadMap(int i) {
+    public void loadMap(final int i) {
         nextVote = 0;
         if (++mapRotation > maxMap) {
             mapRotation = 0;
@@ -415,7 +421,7 @@ public final class Server implements Runnable {
         if (gameMode == TEAMDEATHMATCH) {
             int score1 = 0, score2 = 0;
             String teamname1 = "", teamname2 = "";
-            for (PlayerOnline p : playerList) {
+            for (final PlayerOnline p : playerList) {
                 if (team1.contains(p.ID)) {
                     score1 += p.score;
                     teamname1 += p.username + " ";
@@ -438,11 +444,11 @@ public final class Server implements Runnable {
         } else {
             int max = -1;
             int winner = 0;
-            for (Entity e : earth.entityList) {
+            for (final Entity e : earth.entityList) {
                 e.setAlive(false);
             }
             earth.entityList.clear();
-            for (PlayerOnline P : playerList) {
+            for (final PlayerOnline P : playerList) {
                 if (P.score > max) {
                     max = P.score;
                     winner = P.ID;
@@ -455,7 +461,7 @@ public final class Server implements Runnable {
         Collections.shuffle(playerList);
         team1.clear();
         team2.clear();
-        for (PlayerOnline P : playerList) {
+        for (final PlayerOnline P : playerList) {
             P.score = 0;
         }
         int id;
@@ -516,20 +522,20 @@ public final class Server implements Runnable {
 
         sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0x00FF3C), yes));
         if (gameMode == Server.DEFENDER) {
-            for (PlayerOnline P : playerList) {
+            for (final PlayerOnline P : playerList) {
                 gm = "You will be a" + (team1.contains(P.ID) ? " defender." : "n attacker.");
                 try {
                     P.out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length() * 4 + 4).putInt(0x00FF3C), gm),
                             Server.MESSAGE);
-                } catch (IOException ex) {
+                } catch (final IOException ex) {
                 }
             }
         }
         Arrays.fill(score, 0);
         earth.ground.ClearCircleStrong(150, 150, 9000);
-        File mapsFolder = new File(dir + "maps");
+        final File mapsFolder = new File(dir + "maps");
         System.out.println(mapsFolder.getPath());
-        File[] mapFiles = mapsFolder.listFiles();
+        final File[] mapFiles = mapsFolder.listFiles();
         if (mapFiles == null || mapFiles.length == 0) {
             switch (i) {
                 default:
@@ -545,7 +551,7 @@ public final class Server implements Runnable {
                     }
                     break;
                 case 2:
-                    Polygon P = new Polygon();
+                    final Polygon P = new Polygon();
                     P.addPoint(0, 900);
                     P.addPoint(25, 800);
                     P.addPoint(100, 600);
@@ -561,16 +567,16 @@ public final class Server implements Runnable {
                     break;
             }
         } else {
-            Random r = new Random();
+            final Random r = new Random();
             boolean invalid = true;
             while (invalid) {
-                int toPick = r.nextInt(mapFiles.length);
-                File chosen = mapFiles[toPick];
+                final int toPick = r.nextInt(mapFiles.length);
+                final File chosen = mapFiles[toPick];
                 if (chosen != null && chosen.isFile() && chosen.canRead() && chosen.getName().endsWith(".ter")) {
                     try {
                         loadMap(chosen);
                         invalid = false;
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
 
                     }
                 }
@@ -590,23 +596,23 @@ public final class Server implements Runnable {
                 break;
         }
         earth.entityList.add(new PumpkinEntity(earth.wIdTh / 2, earth.hEigHt / 2).floor(earth).setID(Server.getID()));
-        for (PlayerOnline p : playerList) {
+        for (final PlayerOnline p : playerList) {
             p.writeWorld();
         }
     }
 
-    public void loadMap(File f) throws Exception {
+    public void loadMap(final File f) throws Exception {
         DataInputStream fos;
         System.out.println("LOADING MAP: " + f.getName());
         fos = new DataInputStream(new FileInputStream(f));
-        int xxxxxx = fos.readInt(), yyyyy = fos.readInt();
+        final int xxxxxx = fos.readInt(), yyyyy = fos.readInt();
         earth.ground.cellData = new byte[xxxxxx][yyyyy];
         earth.ground.w = xxxxxx;
         earth.ground.h = yyyyy;
         earth.wIdTh = xxxxxx;
         earth.hEigHt = yyyyy;
         for (int i = 0; i < earth.ground.cellData.length; i++) {
-            byte in[] = new byte[yyyyy];
+            final byte in[] = new byte[yyyyy];
             fos.read(in);
             earth.ground.cellData[i] = in;
         }
@@ -615,10 +621,10 @@ public final class Server implements Runnable {
     }
 
     public void handleAI() {
-        for (Entity ai : earth.entityList) {
+        for (final Entity ai : earth.entityList) {
             if (ai instanceof EnemyEntity) {
-                EnemyEntity AI = (EnemyEntity) ai;
-                for (Entity e : earth.entityList) {
+                final EnemyEntity AI = (EnemyEntity) ai;
+                for (final Entity e : earth.entityList) {
                     if (ai.distanceToEntity(e) < 16 && ai != e && e.alive) {
                         if (e instanceof MissileEntity) {
                             e.setAlive(false);
@@ -739,7 +745,7 @@ public final class Server implements Runnable {
                 waffles.setBroadcast(true);
                 while (true) {
                     // System.out.println("YES!");
-                    UDPPacket e = UDPPacket.read(waffles);
+                    final UDPPacket e = UDPPacket.read(waffles);
                     // System.out.println("GOT SOMETHING!" + e.ID);
                     switch (e.ID) {
                         default:
@@ -747,17 +753,17 @@ public final class Server implements Runnable {
                             break;
                         case UDPMOVE:
                             // System.out.println("MOVE IT");
-                            int player = e.getInt();
-                            short x = e.geShortt();
-                            short y = e.geShortt();
-                            short move = e.geShortt();
-                            short vspeed = e.geShortt();
-                            short lan = e.geShortt();
-                            short ran = e.geShortt();
+                            final int player = e.getInt();
+                            final short x = e.geShortt();
+                            final short y = e.geShortt();
+                            final short move = e.geShortt();
+                            final short vspeed = e.geShortt();
+                            final short lan = e.geShortt();
+                            final short ran = e.geShortt();
                             // System.out.println("REC FROM "+e.packet.getPort()+" ; "+playerList.size());
 
                             for (int i = 0; i < playerList.size(); i++) {
-                                PlayerOnline po = playerList.get(i);
+                                final PlayerOnline po = playerList.get(i);
                                 // waffles.disconnect();
                                 // System.err.println(" CHECKING "+i);
                                 if (po.ID == player) {
@@ -769,7 +775,7 @@ public final class Server implements Runnable {
                                     po.vspeed = vspeed;
                                 } else {
                                     // System.out.println("writing to "+po.UDPPORT);
-                                    UDPPacket toSend = UDPPacket.allocate(4 * 6, Server.UDPMOVE);
+                                    final UDPPacket toSend = UDPPacket.allocate(4 * 6, Server.UDPMOVE);
                                     toSend.putInt(player);
                                     toSend.putShort((short) x);
                                     toSend.putShort((short) y);
@@ -785,7 +791,7 @@ public final class Server implements Runnable {
 
                     }
                 }
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

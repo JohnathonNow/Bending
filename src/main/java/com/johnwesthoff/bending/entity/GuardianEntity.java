@@ -8,11 +8,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import com.johnwesthoff.bending.game.Constants;
-import com.johnwesthoff.bending.game.PlayerOnline;
-import com.johnwesthoff.bending.game.ResourceLoader;
-import com.johnwesthoff.bending.game.Server;
-import com.johnwesthoff.bending.game.World;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+
+
 
 /**
  *

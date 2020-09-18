@@ -2,10 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.logic;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -14,7 +19,14 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.johnwesthoff.bending.entity.*;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.Entity;
+import com.johnwesthoff.bending.entity.ExplosionEntity;
+import com.johnwesthoff.bending.entity.HouseEntity;
+import com.johnwesthoff.bending.entity.WaterEntity;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *
@@ -24,7 +36,7 @@ public class World implements Serializable {
     public int incX, incY;
     public Random random = new Random();
     public CollisionChecker ground;
-    final public CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
+    public final CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
     public float x = 450, y = 0;
     public int floatiness = 0;
     public short status = 0;
@@ -41,7 +53,7 @@ public class World implements Serializable {
     public static final int AURA_RADIUS = 96;
     public int wIdTh = 900, hEigHt = 900;
     public int viewX = 0, viewY = 0, viewxX = 0, viewyY = 0, viewdX = 0, viewdY = 0;
-    final public ArrayList<Player> playerList = new ArrayList<>();
+    public final ArrayList<Player> playerList = new ArrayList<>();
     public boolean serverWorld = false, dead = false;
     // public Image terrain;
     public BufferedImage Grass, Sky, Sand, Stone, Ice, Night, Crystal, Ether, Bark;// at the moon
@@ -65,11 +77,11 @@ public class World implements Serializable {
     public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
     public final byte aList[] = new byte[127];
     public int miGenH = 300, maGenH = 300;
-    Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
-    BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT+12, Constants.HEIGHT_INT+12, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D Gter = Iter.createGraphics();
-    int idinator = 0;
-    double fr;
+    public Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
+    public BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT+12, Constants.HEIGHT_INT+12, BufferedImage.TYPE_INT_ARGB);
+    public Graphics2D Gter = Iter.createGraphics();
+    public int idinator = 0;
+    public double fr;
     public Server lol;
 
     public World() {
@@ -171,10 +183,10 @@ public class World implements Serializable {
     }
 
     public Image[] bodyParts;// Body, head, ua, la, ul, ll
-    Thread loader;
-    boolean done = false;
-    String username;
-    int idddd;
+    public Thread loader;
+    public boolean done = false;
+    public String username;
+    public int idddd;
 
     public String getPlayerName(int id) {
         if (id == idddd) {
@@ -218,8 +230,8 @@ public class World implements Serializable {
 
     public final class CollisionChecker {
         public byte[][] cellData = new byte[wIdTh][hEigHt];
-        int w = wIdTh, h = hEigHt;
-        Thread collisionProcess;
+        public int w = wIdTh, h = hEigHt;
+        public Thread collisionProcess;
 
         CollisionChecker(int sizex, int sizey) {
             cellData = new byte[sizex][sizey];
@@ -639,9 +651,9 @@ public class World implements Serializable {
 
     }
 
-    int toKeepMove = 0, jumpHeight = 900;
-    int osc = 1;
-    boolean keepMoving = false;
+    public int toKeepMove = 0, jumpHeight = 900;
+    public int osc = 1;
+    public boolean keepMoving = false;
 
     public boolean isSolid(double x, double y) {
         try {
@@ -684,7 +696,7 @@ public class World implements Serializable {
         }
     }
 
-    double xVel = 0;
+    public double xVel = 0;
 
     public void onUpdate() {
         if (serverWorld) {
@@ -951,9 +963,9 @@ public class World implements Serializable {
 
     }
 
-    int left = 1;
+    public int left = 1;
     public static int burn = 0;
-    double leftArmAngle = 90, rightArmAngle = 90;
+    public double leftArmAngle = 90, rightArmAngle = 90;
 
     public void drawEntities(Graphics g) {
         for (int i = 0; i < entityList.size(); i++) {

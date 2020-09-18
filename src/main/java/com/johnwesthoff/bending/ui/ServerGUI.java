@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
+
 import javax.swing.JFrame;
 
 /**

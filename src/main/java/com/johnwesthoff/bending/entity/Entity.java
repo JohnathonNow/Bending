@@ -8,8 +8,8 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import com.johnwesthoff.bending.game.Server;
-import com.johnwesthoff.bending.game.World;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *

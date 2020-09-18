@@ -2,13 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.logic.Spell;
 
 /**
  *
@@ -20,8 +23,8 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
      * Creates new form SpellList
      */
     Client app;
-    SpellChooser1 choochootrain;
-    PassiveChooser1 choochootrain2;
+    public SpellChooser1 choochootrain;
+    public PassiveChooser1 choochootrain2;
 
     public SpellList1(Client a1) {
         initComponents();
@@ -419,8 +422,8 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    protected javax.swing.JLabel USER;
-    protected javax.swing.JLabel XP;
+    public javax.swing.JLabel USER;
+    public javax.swing.JLabel XP;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

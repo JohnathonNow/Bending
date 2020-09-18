@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.game;
+package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.game.Client.shortJump;
+import static com.johnwesthoff.bending.Client.shortJump;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -14,7 +14,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 
 /**
  *
@@ -91,8 +95,8 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
         }
     }
 
-    int setTo = -1;
-    int doublecast = 0;
+    public int setTo = -1;
+    public int doublecast = 0;
 
     @Override
     public void mouseReleased(MouseEvent e) {
