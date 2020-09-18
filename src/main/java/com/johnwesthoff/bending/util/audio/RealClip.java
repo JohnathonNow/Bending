@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.util.audio;
 
 import java.io.File;
 import javax.sound.sampled.AudioSystem;

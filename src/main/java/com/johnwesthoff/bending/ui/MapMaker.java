@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -29,9 +29,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.util.network;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +17,8 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Client;
 
 public final class ConnectToDatabase {
     String base = "https://72.92.89.110:1024";// "https://johnbot.net78.net";//"https://72.92.89.250:1024";//;//;//;//;//
@@ -34,7 +36,7 @@ public final class ConnectToDatabase {
             try {
                 p.load(new FileInputStream(new File(ResourceLoader.dir + "login.xyz")));
             } catch (Exception ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (p.isEmpty()) {
@@ -46,7 +48,7 @@ public final class ConnectToDatabase {
             try {
                 p.store(new FileOutputStream(new File(ResourceLoader.dir + "login.xyz")), "");
             } catch (Exception ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         defaultBase();
@@ -300,13 +302,13 @@ public final class ConnectToDatabase {
             StringTokenizer st = new StringTokenizer(p.getProperty("outfit"), ",");
             int total = st.countTokens() / 3;
             for (int i = 0; i < total; i++) {
-                APPLET.Clothing[i] = Byte.parseByte(st.nextToken());
+                Client.Clothing[i] = Byte.parseByte(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                APPLET.Colors[i] = Integer.parseInt(st.nextToken());
+                Client.Colors[i] = Integer.parseInt(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                APPLET.Colors2[i] = Integer.parseInt(st.nextToken());
+                Client.Colors2[i] = Integer.parseInt(st.nextToken());
             }
             return;
         }
@@ -328,13 +330,13 @@ public final class ConnectToDatabase {
             StringTokenizer st = new StringTokenizer(req, ",");
             int total = st.countTokens() / 3;
             for (int i = 0; i < total; i++) {
-                APPLET.Clothing[i] = Byte.parseByte(st.nextToken());
+                Client.Clothing[i] = Byte.parseByte(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                APPLET.Colors[i] = Integer.parseInt(st.nextToken());
+                Client.Colors[i] = Integer.parseInt(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                APPLET.Colors2[i] = Integer.parseInt(st.nextToken());
+                Client.Colors2[i] = Integer.parseInt(st.nextToken());
             }
             // System.out.println(tor);
         } catch (MalformedURLException | NumberFormatException ex) {
@@ -370,7 +372,7 @@ public final class ConnectToDatabase {
     public void postUnlocks(String username) {
         if (offline) {
             try {
-                p.setProperty("unlocks", "" + APPLET.unlocks);
+                p.setProperty("unlocks", "" + Client.unlocks);
                 p.store(new FileOutputStream(new File(ResourceLoader.dir + "login.xyz")), "");
             } catch (IOException ex) {
                 Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -383,7 +385,7 @@ public final class ConnectToDatabase {
             // ArrayList<String> signin = log(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery);
             // return signin.size()>1?true:false;
-            URL steve = new URL(base + "/postUnlocks.php?username=" + username + "&spells=" + APPLET.unlocks);
+            URL steve = new URL(base + "/postUnlocks.php?username=" + username + "&spells=" + Client.unlocks);
             Scanner read = new Scanner(steve.openStream());
             read.next();
         } catch (IOException ex) {
@@ -393,7 +395,7 @@ public final class ConnectToDatabase {
 
     public void getUnlocks(String user, String pass) {
         if (offline) {
-            APPLET.unlocks.construct(p.getProperty("unlocks"));
+            Client.unlocks.construct(p.getProperty("unlocks"));
             return;
         }
         try {
@@ -411,7 +413,7 @@ public final class ConnectToDatabase {
                 Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
             // System.err.println(req);
-            APPLET.unlocks.construct(req);
+            Client.unlocks.construct(req);
 
             // System.out.println(tor);
         } catch (MalformedURLException | NumberFormatException ex) {

@@ -1,15 +1,39 @@
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending;
 
-import com.johnwesthoff.bending.blendmodes.Additive;
-import com.johnwesthoff.bending.entity.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.MenuItem;
+import java.awt.Polygon;
+import java.awt.PopupMenu;
+import java.awt.Rectangle;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,95 +44,166 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.AbstractTableModel;
+
+import com.johnwesthoff.bending.entity.BallLightningEntity;
+import com.johnwesthoff.bending.entity.BuritoEntity;
+import com.johnwesthoff.bending.entity.CloudEntity;
+import com.johnwesthoff.bending.entity.EffectEntity;
+import com.johnwesthoff.bending.entity.EnemyEntity;
+import com.johnwesthoff.bending.entity.EnergyEntity;
+import com.johnwesthoff.bending.entity.Entity;
+import com.johnwesthoff.bending.entity.FireBallEntity;
+import com.johnwesthoff.bending.entity.FireDoom;
+import com.johnwesthoff.bending.entity.FireJumpEntity;
+import com.johnwesthoff.bending.entity.FirePuffEntity;
+import com.johnwesthoff.bending.entity.FlameThrowerEntity;
+import com.johnwesthoff.bending.entity.FreezeEntity;
+import com.johnwesthoff.bending.entity.GustEntity;
+import com.johnwesthoff.bending.entity.IceShardEntity;
+import com.johnwesthoff.bending.entity.LavaBallEntity;
+import com.johnwesthoff.bending.entity.MissileEntity;
+import com.johnwesthoff.bending.entity.RainEntity;
+import com.johnwesthoff.bending.entity.RockEntity;
+import com.johnwesthoff.bending.entity.RodEntity;
+import com.johnwesthoff.bending.entity.SandEntity;
+import com.johnwesthoff.bending.entity.ShardEntity;
+import com.johnwesthoff.bending.entity.ShockEffectEntity;
+import com.johnwesthoff.bending.entity.SnowEntity;
+import com.johnwesthoff.bending.entity.SoulDrainEntity;
+import com.johnwesthoff.bending.entity.SpoutEntity;
+import com.johnwesthoff.bending.entity.SpoutSourceEntity;
+import com.johnwesthoff.bending.entity.StaticShotEntity;
+import com.johnwesthoff.bending.entity.SteamEntity;
+import com.johnwesthoff.bending.entity.SummonBallEntity;
+import com.johnwesthoff.bending.entity.TornadoEntity;
+import com.johnwesthoff.bending.entity.WallofFireEntity;
+import com.johnwesthoff.bending.entity.WaterBallEntity;
+import com.johnwesthoff.bending.logic.AppletInputListener;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.Spell;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.ui.AppletActionListener;
+import com.johnwesthoff.bending.ui.ClothingChooser1;
+import com.johnwesthoff.bending.ui.Register;
+import com.johnwesthoff.bending.ui.ServerGUI;
+import com.johnwesthoff.bending.ui.SpellList1;
+import com.johnwesthoff.bending.ui.Verify;
+import com.johnwesthoff.bending.util.audio.RealClip;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.OrderedOutputStream;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
 /**
  *
  * @author Family
  */
-public class APPLET extends JPanel implements Runnable {
+public class Client extends JPanel implements Runnable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     public boolean goodTeam = false;
-    String chat[] = { "", "", "", "", "", "", "", "", "", "" };
-    Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
+    public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
+    public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
             Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
-    int score = 0;
-    int mapRotation = 0;
-    boolean chatActive = false;
-    String chatMessage = "";
+    public int score = 0;
+    public int mapRotation = 0;
+    public boolean chatActive = false;
+    public String chatMessage = "";
     public int gameMode = 1;
     public int fireTime = 0;
-    Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
+    public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
-    static AppletActionListener actioner;
-    static AppletInputListener inputer;
-    ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
-    static boolean currentlyLoggedIn = false;
+    public static AppletActionListener actioner;
+    public static AppletInputListener inputer;
+    public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
+    public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
-    int port = 25565;
-    Properties userpassinfo;
-    ClothingChooser1 cc = new ClothingChooser1(this);
-    double engrecharge = 4;
-    Random random = new Random();
-    String serverIP = "LocalHost";
-    Thread mainProcess, udpthread;
-    DatagramSocket udpconnection;
-    boolean notDone = true;
-    boolean ignored = true;
-    Image doubleBuffer;
-    BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
-    static BufferedImage bimage;
-    Graphics2D graphicsBuffer, biggraphicsBuffer;
-    URL base;// = getDocumentBase();
-    String temp;
+    public int port = 25565;
+    public Properties userpassinfo;
+    public ClothingChooser1 cc = new ClothingChooser1(this);
+    public double engrecharge = 4;
+    public Random random = new Random();
+    public String serverIP = "LocalHost";
+    public Thread mainProcess;
+	public Thread udpthread;
+    public DatagramSocket udpconnection;
+    public boolean notDone = true;
+    public boolean ignored = true;
+    public Image doubleBuffer;
+    public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
+    public static BufferedImage bimage;
+    public Graphics2D graphicsBuffer, biggraphicsBuffer;
+    public URL base;// = getDocumentBase();
+    public String temp;
     public static String username;
-    World world;
-    double killingSpree = 0;
-    boolean loggedOn = false;
-    Server hostingPlace;
+    public World world;
+    public double killingSpree = 0;
+    public boolean loggedOn = false;
+    public Server hostingPlace;
     public int spellBook = 0;
-    LinkedList<World> worldList = new LinkedList<>();
+    public LinkedList<World> worldList = new LinkedList<>();
     public long lastTime = 0;
-    InputStream input;
-    OrderedOutputStream out;
-    Socket connection;
+    public InputStream input;
+    public OrderedOutputStream out;
+    public Socket connection;
     public JFrame owner;
-    short MAXHP, HP = MAXHP = 100;
-    static boolean gameAlive = true;
-    int maxlungs, lungs = maxlungs = 100;
-    static double runningSpeed = 1d, swimmingSpeed = 1d;
-    static APPLET thisone;
+    public short MAXHP, HP = MAXHP = 100;
+    public static boolean gameAlive = true;
+    public int maxlungs, lungs = maxlungs = 100;
+    public static double runningSpeed = 1d, swimmingSpeed = 1d;
+    public static Client thisone;
     public static int XP = 0;
     public double prevVspeed = 0;
     public static boolean shortJump = false;
-    String killMessage = "~ was defeated by `.";
-    int timeToHeal = 0;
+    public String killMessage = "~ was defeated by `.";
+    public int timeToHeal = 0;
     public JComboBox menu;
     public JButton connect, hosting, refresh, register, verify, ChooseSpells, chooseclothing, mapMaker;
     public JCheckBox JRB;
-    String[] hosts = new String[1];
-    static JTextField jtb = new JTextField();
-    JPasswordField jtp = new JPasswordField();
-    JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
+    public String[] hosts = new String[1];
+    public static JTextField jtb = new JTextField();
+    public JPasswordField jtp = new JPasswordField();
+    public JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
     public static ConnectToDatabase CTD;
-    Register form = new Register();
-    Verify exactly = new Verify();
-    SystemTray ST;
-    TrayIcon trayIcon;
-    Spell[][] spellList;
-    Spell[] passiveList;
-    int leftClick = 0, rightClick = 1, midClick = 2;
-    double xspeed = 0;
-    SpellList1 spellselection;
-    protected static JFrame container;
-    protected static JTabbedPane immaKeepTabsOnYou;
-    double prevMove;
-    short turnVisible = -1, removeAura = -1;
+    public Register form = new Register();
+    public Verify exactly = new Verify();
+    public SystemTray ST;
+    public TrayIcon trayIcon;
+    public Spell[][] spellList;
+    public Spell[] passiveList;
+    public int leftClick = 0, rightClick = 1, midClick = 2;
+    public double xspeed = 0;
+    public SpellList1 spellselection;
+    public static JFrame container;
+    public static JTabbedPane immaKeepTabsOnYou;
+    public double prevMove;
+    public short turnVisible = -1, removeAura = -1;
 
-    public APPLET() {
+    public Client() {
         super();
         // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         new File(ResourceLoader.dir).mkdirs();
@@ -117,7 +212,7 @@ public class APPLET extends JPanel implements Runnable {
         try {
             bimage = ResourceLoader.loadImage("https://west-it.webs.com/Bending/AgedPaper.png", "AgedPaper.png");
             Thread.sleep(100);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             // ex.printStackTrace();
         }
     }
@@ -126,12 +221,12 @@ public class APPLET extends JPanel implements Runnable {
     // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
     Polygon lineOfSight = new Polygon();
 
-    public static void main(String args[]) {
+    public static void main(final String args[]) {
         System.out.println("Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
 
         gameAlive = true;
         Spell.init();
-        final APPLET me = new APPLET();
+        final Client me = new Client();
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(me);
         inputer = new AppletInputListener(me);
@@ -144,10 +239,10 @@ public class APPLET extends JPanel implements Runnable {
         container = new JFrame() {
 
             @Override
-            public void paintComponents(Graphics g) {
+            public void paintComponents(final Graphics g) {
                 // super.paintComponent(g);
 
-                g.drawImage(APPLET.bimage, 0, 0, getWidth(), getHeight(), null);
+                g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
                 super.paintComponents(g);
             }
         };
@@ -177,7 +272,7 @@ public class APPLET extends JPanel implements Runnable {
         // container.add(me);
         me.JRB = new JCheckBox() {
             @Override
-            public void paintComponent(Graphics g) {
+            public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(bimage, getX(), getY(), getWidth(), getHeight(), null);
             }
@@ -187,8 +282,8 @@ public class APPLET extends JPanel implements Runnable {
         if (new File(ResourceLoader.dir + "properties.xyz").exists()) {
             try {
                 me.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
-            } catch (Exception ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (me.userpassinfo.isEmpty()) {
@@ -197,12 +292,12 @@ public class APPLET extends JPanel implements Runnable {
             me.userpassinfo.setProperty("remember", "");
             try {
                 me.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
-            } catch (Exception ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             if (!me.userpassinfo.getProperty("remember", "").equals("")) {
-                APPLET.jtb.setText(me.userpassinfo.getProperty("username", ""));
+                Client.jtb.setText(me.userpassinfo.getProperty("username", ""));
                 me.jtp.setText(me.userpassinfo.getProperty("password", ""));
                 me.JRB.setSelected(true);
             }
@@ -212,7 +307,7 @@ public class APPLET extends JPanel implements Runnable {
         me.menu = new JComboBox() {
             @Override
             public Dimension getSize() {
-                Dimension dim = super.getSize();
+                final Dimension dim = super.getSize();
                 dim.width = 256;
                 return dim;
             }
@@ -232,15 +327,15 @@ public class APPLET extends JPanel implements Runnable {
         container.addKeyListener(inputer);
         container.addMouseListener(inputer);
         container.setResizable(true);
-        if (!(args.length > 0 && args[0].equals("APPLET"))) {
+        if (!(args.length > 0 && args[0].equals("Client"))) {
             container.setVisible(true);
         }
         me.requestFocus();
         me.add(me.jUs);
         me.jUs.setLocation(16, 16);
         me.jUs.setSize(64, 16);
-        me.add(APPLET.jtb);
-        APPLET.jtb.setLocation(96, 16);
+        me.add(Client.jtb);
+        Client.jtb.setLocation(96, 16);
         me.add(me.jPa);
         me.jPa.setLocation(16, 32);
         me.jPa.setSize(80, 16);
@@ -288,7 +383,7 @@ public class APPLET extends JPanel implements Runnable {
         me.add(me.JRB);
         me.JRB.setSize(18, 16);
         me.JRB.setLocation(80, 54);
-        JLabel cheese = new JLabel("Remember me?");
+        final JLabel cheese = new JLabel("Remember me?");
         cheese.setSize(110, 30);
         cheese.setLocation(110, 48);
         cheese.setVisible(true);
@@ -296,14 +391,14 @@ public class APPLET extends JPanel implements Runnable {
         // me.JRB.setBackground(Color.white);
         me.JRB.setVisible(true);
 
-        APPLET.jtb.setSize(300 - 128, 16);
-        APPLET.jtb.setPreferredSize(APPLET.jtb.getSize());
+        Client.jtb.setSize(300 - 128, 16);
+        Client.jtb.setPreferredSize(Client.jtb.getSize());
         // me.jtb.setLocation(16, 16);dfsdfsdf
-        APPLET.jtb.setVisible(true);
-        APPLET.jtb.requestFocus();
-        APPLET.jtb.addKeyListener(inputer);
+        Client.jtb.setVisible(true);
+        Client.jtb.requestFocus();
+        Client.jtb.addKeyListener(inputer);
         me.jtp.setSize(300 - 128, 16);
-        me.jtp.setPreferredSize(APPLET.jtb.getSize());
+        me.jtp.setPreferredSize(Client.jtb.getSize());
         // me.jtp.setLocation(16, 16);
         me.jtp.setVisible(true);
         me.jtp.requestFocus();
@@ -325,7 +420,8 @@ public class APPLET extends JPanel implements Runnable {
         UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
         immaKeepTabsOnYou.setUI(new BasicTabbedPaneUI() {
             @Override
-            protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {
+            protected int calculateTabAreaHeight(final int tab_placement, final int run_count,
+                    final int max_tab_height) {
                 return 0;
             }
         });
@@ -356,10 +452,10 @@ public class APPLET extends JPanel implements Runnable {
             me.trayIcon = new TrayIcon(
                     ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.png"));
             me.trayIcon.setToolTip("DestructibleTerrain");
-            MenuItem exitItem = new MenuItem("Exit");
-            MenuItem hideItem = new MenuItem("Hide");
-            MenuItem showItem = new MenuItem("Show");
-            MenuItem restartItem = new MenuItem("Restart");
+            final MenuItem exitItem = new MenuItem("Exit");
+            final MenuItem hideItem = new MenuItem("Hide");
+            final MenuItem showItem = new MenuItem("Show");
+            final MenuItem restartItem = new MenuItem("Restart");
             pop.add(showItem);
             pop.add(hideItem);
             pop.add(exitItem);
@@ -378,17 +474,17 @@ public class APPLET extends JPanel implements Runnable {
             me.trayIcon.addMouseListener(new MouseListener() {
 
                 @Override
-                public void mouseClicked(MouseEvent e) {
+                public void mouseClicked(final MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet.");
                 }
 
                 @Override
-                public void mousePressed(MouseEvent e) {
+                public void mousePressed(final MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet.");
                 }
 
                 @Override
-                public void mouseReleased(MouseEvent e) {
+                public void mouseReleased(final MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet.");
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         frame.setVisible(true);
@@ -399,26 +495,26 @@ public class APPLET extends JPanel implements Runnable {
                 }
 
                 @Override
-                public void mouseEntered(MouseEvent e) {
+                public void mouseEntered(final MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet.");
                 }
 
                 @Override
-                public void mouseExited(MouseEvent e) {
+                public void mouseExited(final MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet.");
                 }
             });
             {
 
             }
-            if (args.length > 0 && args[0].equals("APPLET")) {
+            if (args.length > 0 && args[0].equals("Client")) {
                 container.setVisible(false);
             } else {
                 // me.ST.add(me.trayIcon);
             }
             container.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } catch (Exception ex) {
-            Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (final Exception ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -444,30 +540,31 @@ public class APPLET extends JPanel implements Runnable {
             // me.transferFocus();
             // me.requestFocus();
             // me.validate();
-        } catch (Exception ex) {
-            Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (final Exception ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public int ID = 0;
     public boolean started = false;
     // @Override
-    short dig = 0;
-    boolean loggedIn = false;
+    public short dig = 0;
+    public boolean loggedIn = false;
     public boolean failed = false;
-    Thread communication;
-    static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
-    static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+    public Thread communication;
+    public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
+    public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
-    static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+            public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
         try {
             connection = new Socket(serverIP, 25565);
             isAlive = true;
-            world = new World(false, Constants.WIDTH_EXT, Constants.HEIGHT_EXT, createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), Grass, Sand, Sky, Stone, Bark, Ice, LavaLand,
-                    Crystal, ether);
+            world = new World(false, Constants.WIDTH_EXT, Constants.HEIGHT_EXT,
+                    createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), Grass, Sand, Sky, Stone, Bark, Ice,
+                    LavaLand, Crystal, ether);
             world.load(Clothing, Colors, Colors2);
             // entityList.add(new HouseEntity(750,300,200,300));
 
@@ -477,7 +574,7 @@ public class APPLET extends JPanel implements Runnable {
             input = connection.getInputStream();
             // out.write(Server.LOGIN);
             // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
-            ByteBuffer tt = Server
+            final ByteBuffer tt = Server
                     .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
                     .put(Clothing);
             for (int i = 0; i < Colors.length; i++) {
@@ -503,7 +600,7 @@ public class APPLET extends JPanel implements Runnable {
                 public void run() {
                     try {
                         while (gameAlive) {
-                            int read = input.read();
+                            final int read = input.read();
                             // System.out.println(read);
                             // System.out.println("MR: "+Server.MESSAGEIDs[read]);
                             pc++;
@@ -513,18 +610,18 @@ public class APPLET extends JPanel implements Runnable {
                                     world.ID = ID;
                                     break;
                                 case Server.MESSAGE:
-                                    ByteBuffer gotten = Server.readByteBuffer(input);
-                                    int color = gotten.getInt();
-                                    String message = Server.getString(gotten);
+                                    final ByteBuffer gotten = Server.readByteBuffer(input);
+                                    final int color = gotten.getInt();
+                                    final String message = Server.getString(gotten);
                                     addChat(message, new Color(color));
                                     break;
                                 case Server.LOGIN:
                                     int iid;
-                                    ByteBuffer rasputin = Server.readByteBuffer(input);
+                                    final ByteBuffer rasputin = Server.readByteBuffer(input);
                                     iid = rasputin.getInt();
                                     // iid = input.read();
-                                    String feliceNavidad = Server.getString(rasputin);
-                                    Player yes = new Player(300, 300,
+                                    final String feliceNavidad = Server.getString(rasputin);
+                                    final Player yes = new Player(300, 300,
                                             new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
                                                     rasputin.get(), rasputin.get() },
                                             new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
@@ -532,7 +629,7 @@ public class APPLET extends JPanel implements Runnable {
                                             new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
                                                     rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
                                     world.playerList.add(yes);
-                                    boolean sameTeam = rasputin.get() == 12;
+                                    final boolean sameTeam = rasputin.get() == 12;
                                     // yes.username = Server.getString(rasputin);
                                     // system.out.println("Player joined with ID:"+iid);
                                     if (sameTeam) {
@@ -548,7 +645,7 @@ public class APPLET extends JPanel implements Runnable {
                                     break;
                                 case Server.MOVE:
                                     ByteBuffer reading = Server.readByteBuffer(input);
-                                    int idtomove = reading.getShort();
+                                    final int idtomove = reading.getShort();
                                     // system.out.println("ID: "+idtomove);
                                     if (idtomove == ID) {
                                         world.x = reading.getShort();
@@ -559,7 +656,7 @@ public class APPLET extends JPanel implements Runnable {
                                         world.rightArmAngle = reading.getShort();
                                         world.status = reading.getShort();
                                     }
-                                    for (Player r : world.playerList) {
+                                    for (final Player r : world.playerList) {
                                         if (r.ID == idtomove) {
                                             // system.out.println("hi");
                                             r.x = reading.getShort();
@@ -586,19 +683,19 @@ public class APPLET extends JPanel implements Runnable {
                                     sendRequest = true;
                                     break;
                                 case Server.AI:
-                                    ByteBuffer reader = Server.readByteBuffer(input);
+                                    final ByteBuffer reader = Server.readByteBuffer(input);
                                     // putInt(e.X).putInt(e.Y).putInt(e.HP).putInt(e.move).putInt(e.yspeed).putInt(e.target).putInt(e.id);
-                                    int redX = reader.getInt();
-                                    int redY = reader.getInt();
-                                    int redmove = reader.getInt();
-                                    int redyspeed = reader.getInt();
-                                    int redHP = reader.getInt();
-                                    int redid = reader.getInt();
-                                    int tar = reader.getInt();
-                                    for (Entity p : world.entityList) {
+                                    final int redX = reader.getInt();
+                                    final int redY = reader.getInt();
+                                    final int redmove = reader.getInt();
+                                    final int redyspeed = reader.getInt();
+                                    final int redHP = reader.getInt();
+                                    final int redid = reader.getInt();
+                                    final int tar = reader.getInt();
+                                    for (final Entity p : world.entityList) {
                                         if (!(p instanceof EnemyEntity))
                                             continue;
-                                        EnemyEntity e = (EnemyEntity) p;
+                                        final EnemyEntity e = (EnemyEntity) p;
                                         if (e.MYID == redid) {
                                             e.X = redX;
                                             e.Y = redY;
@@ -630,7 +727,7 @@ public class APPLET extends JPanel implements Runnable {
                                     ix = toRead.getInt();
                                     iy = toRead.getInt();
                                     ir = toRead.getInt();
-                                    byte etg = toRead.get();
+                                    final byte etg = toRead.get();
                                     world.ground.FillCircleW(ix, iy, ir, etg);
                                     // system.out.println("FILL!");
                                     break;
@@ -639,9 +736,9 @@ public class APPLET extends JPanel implements Runnable {
                                     ix = toRead.getInt();
                                     iy = toRead.getInt();
                                     ir = toRead.getInt();
-                                    int energy = toRead.getInt();
-                                    int maker = toRead.getInt();
-                                    if (APPLET.pointDis(world.x, world.y, ix, iy) < ir) {
+                                    final int energy = toRead.getInt();
+                                    final int maker = toRead.getInt();
+                                    if (Client.pointDis(world.x, world.y, ix, iy) < ir) {
                                         energico += energy;
                                         if (maker != ID && (gameMode > 0 ? !myTeam.contains(maker) : true)) {
                                             if (maker != 0) {
@@ -668,11 +765,11 @@ public class APPLET extends JPanel implements Runnable {
                                     // system.out.println("IT's getting bigger!");
                                     busy = true;
                                     toRead = Server.readByteBuffer(input);
-                                    int newx = toRead.getInt();
-                                    int si = toRead.getInt();
-                                    byte dir = toRead.get();
+                                    final int newx = toRead.getInt();
+                                    final int si = toRead.getInt();
+                                    final byte dir = toRead.get();
                                     world.wIdTh += si;
-                                    byte list[][] = new byte[world.wIdTh][world.hEigHt];
+                                    final byte list[][] = new byte[world.wIdTh][world.hEigHt];
                                     for (int i = 0; i < world.ground.w; i++) {
                                         System.arraycopy(world.ground.cellData[i], 0, list[i], 0, world.ground.h);
                                     }
@@ -766,7 +863,7 @@ public class APPLET extends JPanel implements Runnable {
                                             world.entityList.add(new RockEntity(Xx, Yy, mX, mY, ma).setID(iw));
                                             break;
                                         case 1:// Earth Spike
-                                            Polygon P = new Polygon();
+                                            final Polygon P = new Polygon();
                                             P.addPoint(Xx + 28, Yy);
                                             P.addPoint(Xx - 28, Yy);
                                             P.addPoint(mX, mY);
@@ -788,66 +885,66 @@ public class APPLET extends JPanel implements Runnable {
                                             break;
                                         case 4:// EarthSand
                                             world.ground.sandinate(Xx, Yy, 96);
-                                            int number = buf.getInt();
+                                            final int number = buf.getInt();
                                             world.entityList.add(new SandEntity(Xx, Yy, mX, mY, ma).setID(iw));
                                             if (number > 3) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 30),
-                                                                mY + (int) APPLET.lengthdir_y(4, 30), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),
+                                                                mY + (int) Client.lengthdir_y(4, 30), ma)
                                                                         .setID(iw + 1));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -30),
-                                                                mY + (int) APPLET.lengthdir_y(4, -30), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -30),
+                                                                mY + (int) Client.lengthdir_y(4, -30), ma)
                                                                         .setID(iw + 2));
                                             }
                                             if (number > 5) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 45),
-                                                                mY + (int) APPLET.lengthdir_y(4, 45), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
+                                                                mY + (int) Client.lengthdir_y(4, 45), ma)
                                                                         .setID(iw + 3));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -45),
-                                                                mY + (int) APPLET.lengthdir_y(4, -45), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
+                                                                mY + (int) Client.lengthdir_y(4, -45), ma)
                                                                         .setID(iw + 4));
                                             }
                                             if (number > 7) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 60),
-                                                                mY + (int) APPLET.lengthdir_y(4, 60), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 60),
+                                                                mY + (int) Client.lengthdir_y(4, 60), ma)
                                                                         .setID(iw + 5));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -60),
-                                                                mY + (int) APPLET.lengthdir_y(4, -60), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -60),
+                                                                mY + (int) Client.lengthdir_y(4, -60), ma)
                                                                         .setID(iw + 6));
                                             }
                                             if (number > 12) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 15),
-                                                                mY + (int) APPLET.lengthdir_y(4, 15), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 15),
+                                                                mY + (int) Client.lengthdir_y(4, 15), ma)
                                                                         .setID(iw + 7));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -15),
-                                                                mY + (int) APPLET.lengthdir_y(4, -15), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -15),
+                                                                mY + (int) Client.lengthdir_y(4, -15), ma)
                                                                         .setID(iw + 8));
                                             }
                                             if (number > 16) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 35),
-                                                                mY + (int) APPLET.lengthdir_y(4, 35), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 35),
+                                                                mY + (int) Client.lengthdir_y(4, 35), ma)
                                                                         .setID(iw + 9));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -35),
-                                                                mY + (int) APPLET.lengthdir_y(4, -35), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -35),
+                                                                mY + (int) Client.lengthdir_y(4, -35), ma)
                                                                         .setID(iw + 10));
                                             }
                                             if (number > 20) {
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, 45),
-                                                                mY + (int) APPLET.lengthdir_y(4, 45), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
+                                                                mY + (int) Client.lengthdir_y(4, 45), ma)
                                                                         .setID(iw + 11));
                                                 world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) APPLET.lengthdir_x(4, -45),
-                                                                mY + (int) APPLET.lengthdir_y(4, -45), ma)
+                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
+                                                                mY + (int) Client.lengthdir_y(4, -45), ma)
                                                                         .setID(iw + 12));
                                             }
                                             break;
@@ -1000,13 +1097,13 @@ public class APPLET extends JPanel implements Runnable {
                                     break;
                                 case Server.DRAIN:
                                     buf = Server.readByteBuffer(input);
-                                    int hpt = buf.getInt();
+                                    final int hpt = buf.getInt();
                                     HP += hpt;
                                     break;
                                 case Server.STEAM:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
-                                    int xxxx = buf.getInt(), yyyy = buf.getInt();
+                                    final int xxxx = buf.getInt(), yyyy = buf.getInt();
                                     idtokill = buf.getInt();
                                     for (int i = 0; i < world.entityList.size(); i++) {
                                         if (world.entityList.get(i).MYID == idtokill) {
@@ -1020,7 +1117,7 @@ public class APPLET extends JPanel implements Runnable {
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
-                                    int fX2 = buf.getInt();
+                                    final int fX2 = buf.getInt();
                                     if (fX2 != fX) {
                                         if (fX == ID) {
                                             XP += 25;
@@ -1032,7 +1129,7 @@ public class APPLET extends JPanel implements Runnable {
                                                 killingSpree *= Math.E;
                                             }
                                         }
-                                        for (Player p : world.playerList) {
+                                        for (final Player p : world.playerList) {
                                             if (p.ID == fX) {
                                                 p.score++;
                                             }
@@ -1042,8 +1139,8 @@ public class APPLET extends JPanel implements Runnable {
                                 case Server.SCORE:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
-                                    int idd = buf.getInt();
-                                    int scored = buf.getInt();
+                                    final int idd = buf.getInt();
+                                    final int scored = buf.getInt();
                                     if (idd == ID) {
                                         XP += 10;
                                         CTD.postXP(XP, username);
@@ -1054,7 +1151,7 @@ public class APPLET extends JPanel implements Runnable {
                                             killingSpree *= Math.E;
                                         }
                                     }
-                                    for (Player p : world.playerList) {
+                                    for (final Player p : world.playerList) {
                                         if (p.ID == idd) {
                                             p.score = scored;
                                         }
@@ -1064,7 +1161,7 @@ public class APPLET extends JPanel implements Runnable {
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
-                                    for (Player p : world.playerList) {
+                                    for (final Player p : world.playerList) {
                                         if (p.ID == fX) {
                                             if (myTeam.contains(p.ID)) {
                                                 myTeam.remove(myTeam.indexOf(p.ID));
@@ -1080,8 +1177,8 @@ public class APPLET extends JPanel implements Runnable {
                             }
                             // Thread.sleep(25);
                         }
-                    } catch (Exception ex) {
-                        // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (final Exception ex) {
+                        // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
@@ -1090,7 +1187,7 @@ public class APPLET extends JPanel implements Runnable {
             worldList.add(world);
             repaint();
             started = true;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
 
             failed = true;
             return false;
@@ -1101,12 +1198,12 @@ public class APPLET extends JPanel implements Runnable {
 
     public Rectangle playerHitbox;
 
-    public boolean checkCollision(float px, float py) {
+    public boolean checkCollision(final float px, final float py) {
         playerHitbox.setLocation((int) world.x - playerHitbox.width / 2, (int) world.y - (World.head + 10));
         return (playerHitbox.contains(px, py));
     }
 
-    public void addChat(String message, Color color) {
+    public void addChat(final String message, final Color color) {
         for (int i = 0; i < chat.length - 1; i++) {
             chat[i] = chat[i + 1];
             chatcolor[i] = chatcolor[i + 1];
@@ -1115,13 +1212,13 @@ public class APPLET extends JPanel implements Runnable {
         chatcolor[chat.length - 1] = color;
     }
 
-    boolean busy = false;
-    int lastHit = -1;
-    byte sendcount = 0;
-    ArrayList<int[]> stuff = new ArrayList<>();
-    boolean isAlive = true;
-    Area hideFromMe = new Area(), box = new Area(new Rectangle(0, 0, 300, 300));
-    Thread expander;
+    public boolean busy = false;
+    public int lastHit = -1;
+    public byte sendcount = 0;
+    public ArrayList<int[]> stuff = new ArrayList<>();
+    public boolean isAlive = true;
+    public Area hideFromMe = new Area(), box = new Area(new Rectangle(0, 0, 300, 300));
+    public Thread expander;
 
     // @Override
     public void destroy() {
@@ -1129,10 +1226,10 @@ public class APPLET extends JPanel implements Runnable {
         gameAlive = false;
     }
 
-    boolean sendRequest = true;
-    int Xp = 0, Yp = 0;
-    int pc = 0;
-    Color Clear = new Color(0, 0, 0, 0);
+    public boolean sendRequest = true;
+    public int Xp = 0, Yp = 0;
+    public int pc = 0;
+    public Color Clear = new Color(0, 0, 0, 0);
 
     public void calculateLoS() {
         lineOfSight.reset();
@@ -1143,7 +1240,7 @@ public class APPLET extends JPanel implements Runnable {
         int dx;
         int dy;
         boolean yes;
-        int resolution = 18;
+        final int resolution = 18;
 
         for (int i = 0; i < resolution; i++) {
             Xx = (int) world.x - world.viewX;
@@ -1172,15 +1269,15 @@ public class APPLET extends JPanel implements Runnable {
             // cantSee = new
             // RadialGradientPaint(world.x-world.viewX,world.y-world.viewY,250f,new
             // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
-            Area swag = new Area(lineOfSight);
+            final Area swag = new Area(lineOfSight);
             hideFromMe.add(box);
             hideFromMe.subtract(swag);
         }
 
     }
 
-    boolean refreshShadows = false;
-    long swagTime = 0;
+    public boolean refreshShadows = false;
+    public long swagTime = 0;
 
     @Override
     public void run() {
@@ -1190,13 +1287,13 @@ public class APPLET extends JPanel implements Runnable {
         double delta = 0;
         while (gameAlive) {
             try {
-				//Thread.yield();
-			} catch (Exception e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-            long now = System.nanoTime();
-           
+                // Thread.yield();
+            } catch (final Exception e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            final long now = System.nanoTime();
+
             delta += (now - lastTime) / (1000000000 / Constants.FPS);
             owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
             lastTime = now;
@@ -1215,7 +1312,7 @@ public class APPLET extends JPanel implements Runnable {
                 delta = 0;
                 try {
                     Thread.sleep(10);
-                } catch (InterruptedException e1) {
+                } catch (final InterruptedException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
@@ -1224,7 +1321,7 @@ public class APPLET extends JPanel implements Runnable {
             if (matchOver > 0) {
                 try {
                     Thread.sleep(10);
-                } catch (InterruptedException e1) {
+                } catch (final InterruptedException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
@@ -1336,18 +1433,18 @@ public class APPLET extends JPanel implements Runnable {
                     if ((dig += 2) >= 100) {
                         dig = 0;
                         // world.keys[KeyEvent.VK_S] = false;
-                        ByteBuffer bb = ByteBuffer.allocate(24);
+                        final ByteBuffer bb = ByteBuffer.allocate(24);
                         bb.putInt(5).putInt((int) world.x).putInt((int) world.y).putInt(0).putInt(0);
                         try {
                             out.addMesssage(bb, Server.AIRBENDING);
-                        } catch (IOException ex) {
+                        } catch (final IOException ex) {
                             System.err.println(ex.getMessage());
                         }
                     }
                 } else {
                     dig = 0;
                 }
-                for (Player p : world.playerList) {
+                for (final Player p : world.playerList) {
                     if ((p.status & World.ST_DRAIN) != 0) {
                         if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
                             if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
@@ -1358,9 +1455,9 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                 }
-                for (Entity e : world.entityList) {
+                for (final Entity e : world.entityList) {
                     if (e instanceof MissileEntity) {
-                        MissileEntity me = (MissileEntity) e;
+                        final MissileEntity me = (MissileEntity) e;
                         // if (pointDis(me.X, me.Y, world.x, world.y)<me.radius*2&&me.maker!=ID)
                         if (checkCollision(me.X, me.Y) && me.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me.maker) : true)) {
@@ -1373,7 +1470,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof TornadoEntity) {
-                        TornadoEntity me2 = (TornadoEntity) e;
+                        final TornadoEntity me2 = (TornadoEntity) e;
                         if (checkCollision(me2.X, me2.Y) && me2.life < 80) {
                             hurt(1);
                             // world.vspeed-=1;
@@ -1386,7 +1483,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof GustEntity) {
-                        GustEntity me2 = (GustEntity) e;
+                        final GustEntity me2 = (GustEntity) e;
                         if (checkCollision(me2.X, me2.Y)) {
                             hurt(7);
                             world.vspeed += me2.yspeed * 2;
@@ -1398,7 +1495,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof RockEntity) {
-                        RockEntity me3 = (RockEntity) e;
+                        final RockEntity me3 = (RockEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(18);
@@ -1410,7 +1507,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof FireBallEntity) {
-                        FireBallEntity me3 = (FireBallEntity) e;
+                        final FireBallEntity me3 = (FireBallEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
@@ -1424,7 +1521,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof FirePuffEntity) {
-                        FirePuffEntity me3 = (FirePuffEntity) e;
+                        final FirePuffEntity me3 = (FirePuffEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(2);
@@ -1438,7 +1535,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof EnemyEntity) {
-                        EnemyEntity me3 = (EnemyEntity) e;
+                        final EnemyEntity me3 = (EnemyEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.master != ID
                                 && (gameMode > 0 ? !myTeam.contains(me3.master) : true)) {
                             hurt(7);
@@ -1449,7 +1546,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof BuritoEntity) {
-                        BuritoEntity me3 = (BuritoEntity) e;
+                        final BuritoEntity me3 = (BuritoEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(65);
@@ -1463,7 +1560,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof LavaBallEntity) {
-                        LavaBallEntity me3 = (LavaBallEntity) e;
+                        final LavaBallEntity me3 = (LavaBallEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             lastHit = me3.maker;
@@ -1472,25 +1569,25 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof SoulDrainEntity) {
-                        SoulDrainEntity me3 = (SoulDrainEntity) e;
+                        final SoulDrainEntity me3 = (SoulDrainEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             lastHit = me3.maker;
                             killMessage = "~'s soul was stolen by `!";
                             me3.alive = false;
-                            ByteBuffer bb = ByteBuffer.allocate(8);
+                            final ByteBuffer bb = ByteBuffer.allocate(8);
                             bb.putInt(lastHit).putInt(hurt(21));
                             world.vspeed -= 5;
                             xspeed += 7 - random.nextInt(14);
                             try {
                                 out.addMesssage(bb, Server.DRAIN);
-                            } catch (IOException ex) {
-                                // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (final IOException ex) {
+                                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }
                     if (e instanceof FireJumpEntity) {
-                        FireJumpEntity me3 = (FireJumpEntity) e;
+                        final FireJumpEntity me3 = (FireJumpEntity) e;
                         if (pointDis(me3.X, me3.Y, world.x, world.y) < me3.radius * 4 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
@@ -1503,7 +1600,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof ShardEntity) {
-                        ShardEntity me3 = (ShardEntity) e;
+                        final ShardEntity me3 = (ShardEntity) e;
                         if (pointDis(me3.X, me3.Y - World.head, world.x, world.y) < me3.radius * 4 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
@@ -1515,8 +1612,8 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof SandEntity) {
-                        SandEntity me3 = (SandEntity) e;
-                        double d = pointDis(me3.X, me3.Y, world.x, world.y);
+                        final SandEntity me3 = (SandEntity) e;
+                        final double d = pointDis(me3.X, me3.Y, world.x, world.y);
                         // System.out.println(d);
                         if (d < me3.radius * 3 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
@@ -1529,7 +1626,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof IceShardEntity) {
-                        IceShardEntity me3 = (IceShardEntity) e;
+                        final IceShardEntity me3 = (IceShardEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
@@ -1541,7 +1638,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof SnowEntity) {
-                        SnowEntity me3 = (SnowEntity) e;
+                        final SnowEntity me3 = (SnowEntity) e;
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(8);
@@ -1553,7 +1650,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof SpoutEntity) {
-                        SpoutEntity me3 = (SpoutEntity) e;
+                        final SpoutEntity me3 = (SpoutEntity) e;
                         if (checkCollision(me3.X, me3.Y)) {
                             if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                                 hurt(5);
@@ -1564,7 +1661,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof BallLightningEntity) {
-                        BallLightningEntity me3 = (BallLightningEntity) e;
+                        final BallLightningEntity me3 = (BallLightningEntity) e;
                         if (checkCollision(e.X, e.Y)) {
                             if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                                 hurt(10);
@@ -1576,7 +1673,7 @@ public class APPLET extends JPanel implements Runnable {
                         }
                     }
                     if (e instanceof WallofFireEntity) {
-                        WallofFireEntity me3 = (WallofFireEntity) e;
+                        final WallofFireEntity me3 = (WallofFireEntity) e;
                         checkCollision(me3.X, me3.Y);// Just to move the hitbox so when it is passed, it works
                         // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
                         if (me3.checkCollision(playerHitbox) && me3.maker != ID
@@ -1593,10 +1690,10 @@ public class APPLET extends JPanel implements Runnable {
                 }
 
                 if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {
-                    double direction = APPLET.pointDir(150, 150, world.mouseX, world.mouseY);
-                    double distance = APPLET.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
-                    world.incX += APPLET.lengthdir_x(distance, direction);
-                    world.incY -= APPLET.lengthdir_y(distance, direction);
+                    final double direction = Client.pointDir(150, 150, world.mouseX, world.mouseY);
+                    final double distance = Client.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
+                    world.incX += Client.lengthdir_x(distance, direction);
+                    world.incY -= Client.lengthdir_y(distance, direction);
                 }
                 if (world.dead) {
                     world.status = 0;
@@ -1625,10 +1722,10 @@ public class APPLET extends JPanel implements Runnable {
                     killingSpree = 0;
                     world.dead = true;
                     // this.chatActive = false;
-                    ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
+                    final ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
                     try {
                         out.addMesssage(die, Server.DEATH);
-                    } catch (IOException ex) {
+                    } catch (final IOException ex) {
                         // ex.printStackTrace();
                     }
                     if (lastHit == ID) {
@@ -1640,8 +1737,8 @@ public class APPLET extends JPanel implements Runnable {
                     }
                     try {
                         this.sendMovement();
-                    } catch (Exception ex) {
-                        // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (final Exception ex) {
+                        // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 if (energico < maxeng) {
@@ -1684,12 +1781,12 @@ public class APPLET extends JPanel implements Runnable {
                         if (sendRequest && sendcount++ >= 30) {
                             sendcount = 0;
                             // System.out.println("REQUEST START");
-                            ByteBuffer bb = ByteBuffer.allocate(24);
+                            final ByteBuffer bb = ByteBuffer.allocate(24);
                             out.addMesssage(bb.putInt(1), Server.MAP);
                             sendRequest = false;
                         }
-                    } catch (Exception ex) {
-                        Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (final Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                 }
@@ -1702,18 +1799,18 @@ public class APPLET extends JPanel implements Runnable {
                 if (world.keys[KeyEvent.VK_SPACE]) {
                 }
 
-    }
-    draw();
-            if ((now - swagTime) >= (1000000000 / Constants.FPS/2)) {   
-                repaint(); 
+            }
+            draw();
+            if ((now - swagTime) >= (1000000000 / Constants.FPS / 2)) {
+                repaint();
                 swagTime = now;
             }
             World.setTime();
         }
     }
 
-    public String getKiller(int i) {
-        for (Player p : world.playerList) {
+    public String getKiller(final int i) {
+        for (final Player p : world.playerList) {
             if (p.ID == i) {
                 return p.username;
             }
@@ -1721,21 +1818,21 @@ public class APPLET extends JPanel implements Runnable {
         return "No One";
     }
 
-    double knockbackDecay = 1;
+    public double knockbackDecay = 1;
 
     public String addHost() {
         try {
-            URL whatismyip = new URL("https://checkip.amazonaws.com/");
-            BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+            final URL whatismyip = new URL("https://checkip.amazonaws.com/");
+            final BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
 
             String ip = in.readLine(); // you get the IP as a String
             // System.out.println(ip);
-            int an = JOptionPane.showConfirmDialog(connect, "Host the server through the internet?", "Server Type?",
-                    JOptionPane.YES_NO_OPTION);
+            final int an = JOptionPane.showConfirmDialog(connect, "Host the server through the internet?",
+                    "Server Type?", JOptionPane.YES_NO_OPTION);
             if (an != 0) {
                 ip = InetAddress.getLocalHost().getHostAddress();
             }
-            String yes = JOptionPane.showInputDialog("Server Name?");
+            final String yes = JOptionPane.showInputDialog("Server Name?");
             if (yes != null) {
                 serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
 
@@ -1748,14 +1845,14 @@ public class APPLET extends JPanel implements Runnable {
             }
             return "NO";
         } catch (IOException | HeadlessException ex) {
-            // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             return "localhost";
         }
     }
 
-    String names[];// = new String[yay.size()/3];
-    String counts[];// = new String[yay.size()/3];
-    Thread pinger;
+    public String names[];// = new String[yay.size()/3];
+    public String counts[];// = new String[yay.size()/3];
+    public Thread pinger;
 
     public void getHosts() {
         ArrayList<String> yay = null;
@@ -1778,7 +1875,7 @@ public class APPLET extends JPanel implements Runnable {
                 counts[i / 3] = "Players:   " + yay.get(i);
             }
         }
-        Row[] newRows = new Row[names.length];
+        final Row[] newRows = new Row[names.length];
         for (int i = 0; i < newRows.length; i++) {
             newRows[i] = new Row(names[i], "PINGING", counts[i]);
         }
@@ -1794,23 +1891,23 @@ public class APPLET extends JPanel implements Runnable {
                 for (int i = 0; i < counts.length; i++) {
                     String st = "DOWN";
                     try {
-                        Scanner n = new Scanner(
+                        final Scanner n = new Scanner(
                                 Runtime.getRuntime().exec("ping " + hosts[i] + " -n 1").getInputStream());
                         while (n.hasNext()) {
                             st += n.nextLine();
                         }
                         // System.out.println(st);
-                        Pattern p = Pattern.compile("Average = (.*?)ms");
-                        Matcher m = p.matcher(st);
+                        final Pattern p = Pattern.compile("Average = (.*?)ms");
+                        final Matcher m = p.matcher(st);
                         if (m.find()) {
                             st = "PING:   " + m.group(1);
                         }
-                    } catch (IOException ex) {
+                    } catch (final IOException ex) {
                     }
                     ((Row) menu.getModel().getElementAt(i)).val = st;
                     try {
                         Thread.sleep(10);
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                         return;
                     }
                 }
@@ -1821,21 +1918,21 @@ public class APPLET extends JPanel implements Runnable {
     }
 
     @Override
-    public void update(Graphics GameGraphics) {
+    public void update(final Graphics GameGraphics) {
         if (doubleBuffer == null) {
             doubleBuffer = createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
         }
-        Graphics DoubleBufferGraphics = doubleBuffer.getGraphics();
+        final Graphics DoubleBufferGraphics = doubleBuffer.getGraphics();
         DoubleBufferGraphics.setColor(this.getBackground());
         DoubleBufferGraphics.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
-        //paint(GameGraphics);
+        // paint(GameGraphics);
         GameGraphics.drawImage(doubleBuffer, 0, 0, getWidth(), getHeight(), this);
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(final Graphics g) {
         if (notDone) {
             super.paint(g);
             return;
@@ -1843,8 +1940,6 @@ public class APPLET extends JPanel implements Runnable {
         g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
     }
 
-
-    
     public void draw() {
         if (notDone) {
             return;
@@ -1875,7 +1970,8 @@ public class APPLET extends JPanel implements Runnable {
                     passiveList[spellBook].onSpawn(this);
                     spellselection.setVisible(false);
                 }
-                biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(), null);
+                biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
+                        null);
                 biggraphicsBuffer.setColor(Color.white);
                 biggraphicsBuffer.fillRect(399, 199, 100, 50);
                 biggraphicsBuffer.setColor(Color.black);
@@ -1885,7 +1981,7 @@ public class APPLET extends JPanel implements Runnable {
                 biggraphicsBuffer.drawString("Starting match in " + (1 + (matchOver / 40)) + "...", 360, 300);
                 biggraphicsBuffer.drawString("Combatants:", 400, 326);
                 for (int i = 0; i < world.playerList.size(); i++) {
-                    Player p = world.playerList.get(i);
+                    final Player p = world.playerList.get(i);
                     biggraphicsBuffer.setColor(gameMode > 0 ? (p.myTeam ? Color.GREEN : Color.red) : Color.red);
                     biggraphicsBuffer.drawString(p.username, 424, 336 + 16 + (i * 16));
                 }
@@ -1934,9 +2030,11 @@ public class APPLET extends JPanel implements Runnable {
                     dpyeng = energico;
                 }
                 graphicsBuffer.setColor(Color.orange);
-                graphicsBuffer.fillRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
+                graphicsBuffer.fillRect(1, 1, 2,
+                        (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 graphicsBuffer.setColor(Color.red);
-                graphicsBuffer.drawRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
+                graphicsBuffer.drawRect(1, 1, 2,
+                        (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 for (int i = 0; i < 5; i++) {
                     graphicsBuffer.drawImage(spellList[spellBook][i].getImage().getImage(), 4 + i * 34, 0, 32, 16,
                             this);
@@ -1968,30 +2066,33 @@ public class APPLET extends JPanel implements Runnable {
                     }
                 }
                 graphicsBuffer.setColor(Color.BLUE);
-                graphicsBuffer.fillRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                graphicsBuffer.fillRect(1, 1, 2,
+                        (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
 
                 graphicsBuffer.setColor(purple);
-                graphicsBuffer.drawRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                graphicsBuffer.drawRect(1, 1, 2,
+                        (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
                 if (world.keys[KeyEvent.VK_ALT]) {
                     graphicsBuffer.setColor(Color.red);
                     this.checkCollision(0, 0);
-                    AffineTransform prevTrans = graphicsBuffer.getTransform();
+                    final AffineTransform prevTrans = graphicsBuffer.getTransform();
                     graphicsBuffer.translate(-world.viewX, -world.viewY);
                     graphicsBuffer.draw(playerHitbox);
                     graphicsBuffer.setTransform(prevTrans);
 
                 }
                 // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
-                biggraphicsBuffer.drawImage(screenBuffer,0, 0, bigscreenBuffer.getWidth(),bigscreenBuffer.getHeight(), this);
+                biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
+                        this);
                 world.drawPlayers(biggraphicsBuffer);
 
-                for (Entity e : world.entityList) {
+                for (final Entity e : world.entityList) {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
                 // The below lines are commented out until we get a faster way to do this
                 // Composite c = biggraphicsBuffer.getComposite();
                 // biggraphicsBuffer.setComposite(Additive.additive);
-                for (Entity e : world.entityList) {
+                for (final Entity e : world.entityList) {
                     e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
                 }
                 // biggraphicsBuffer.setComposite(c);
@@ -2010,24 +2111,22 @@ public class APPLET extends JPanel implements Runnable {
                     biggraphicsBuffer.drawString(username, 256, 256);
                     biggraphicsBuffer.drawString("" + score, 512, 256);
                     for (int i = 0; i < world.playerList.size(); i++) {
-                        Player p = world.playerList.get(i);
+                        final Player p = world.playerList.get(i);
                         biggraphicsBuffer.setColor(gameMode > 0 ? (p.myTeam ? Color.GREEN : Color.red) : Color.red);
                         biggraphicsBuffer.drawString(p.username, 256, 256 + 16 + (i * 16));
                         biggraphicsBuffer.drawString("" + p.score, 512, 256 + 16 + (i * 16));
                     }
                 }
                 /*
-                if (world.keys[KeyEvent.VK_ALT]) {
-                    biggraphicsBuffer.setColor(Color.red);
-                    this.checkCollision(0, 0);
-                    AffineTransform prevTrans = biggraphicsBuffer.getTransform();
-                    biggraphicsBuffer.scale(3, 3);
-                    biggraphicsBuffer.translate(-world.viewX, -world.viewY);
-                    biggraphicsBuffer.draw(playerHitbox);
-                    biggraphicsBuffer.setTransform(prevTrans);
-
-                }
-                */
+                 * if (world.keys[KeyEvent.VK_ALT]) { biggraphicsBuffer.setColor(Color.red);
+                 * this.checkCollision(0, 0); AffineTransform prevTrans =
+                 * biggraphicsBuffer.getTransform(); biggraphicsBuffer.scale(3, 3);
+                 * biggraphicsBuffer.translate(-world.viewX, -world.viewY);
+                 * biggraphicsBuffer.draw(playerHitbox);
+                 * biggraphicsBuffer.setTransform(prevTrans);
+                 * 
+                 * }
+                 */
                 if (world.dead) {
                     biggraphicsBuffer.setColor(deadbg);
                     biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
@@ -2092,39 +2191,37 @@ public class APPLET extends JPanel implements Runnable {
         }
     }
 
+    public Font chatFont = new Font("Arial", Font.BOLD, 18);
+    public Font nameFont = new Font("Arial", Font.BOLD, 12);
 
-
-    Font chatFont = new Font("Arial", Font.BOLD, 18);
-    Font nameFont = new Font("Arial", Font.BOLD, 12);
-
-    public void sendMessage(String s) {
+    public void sendMessage(final String s) {
         sendMessage(s, 0x3333FF);
     }
 
-    public void sendMessage(String s, int color) {
-        ByteBuffer bb = ByteBuffer.allocate(s.length() * 4 + 4);
+    public void sendMessage(final String s, final int color) {
+        final ByteBuffer bb = ByteBuffer.allocate(s.length() * 4 + 4);
         bb.putInt(color);
         Server.putString(bb, s);
         try {
             out.addMesssage(bb, Server.MESSAGE);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // ex.printStackTrace();
         }
     }
 
-    public static double lengthdir_x(double R, double T) {
+    public static double lengthdir_x(final double R, final double T) {
         return (R * (Math.cos(T * Math.PI / 180)));
     }
 
-    public static double lengthdir_y(double R, double T) {
+    public static double lengthdir_y(final double R, final double T) {
         return (-R * (Math.sin(T * Math.PI / 180)));
     }
 
-    public static double pointDir(double x1, double y1, double x2, double y2) {
+    public static double pointDir(final double x1, final double y1, final double x2, final double y2) {
         return Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
     }
 
-    public static double pointDis(double x1, double y1, double x2, double y2) {
+    public static double pointDis(final double x1, final double y1, final double x2, final double y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
@@ -2163,17 +2260,17 @@ public class APPLET extends JPanel implements Runnable {
         }
         goodTeam = true;
         if (badTeam.contains(ID)) {
-            ArrayList<Integer> TeamTemp = (ArrayList<Integer>) badTeam.clone();
+            final ArrayList<Integer> TeamTemp = (ArrayList<Integer>) badTeam.clone();
             badTeam = (ArrayList<Integer>) myTeam.clone();
             myTeam = TeamTemp;
             goodTeam = false;
         }
-        for (Player p : world.playerList) {
+        for (final Player p : world.playerList) {
             p.myTeam = myTeam.contains(p.ID) && gameMode > 0;
         }
         HP = MAXHP;
         passiveList[spellBook].onSpawn(this);
-        for (Player p : world.playerList) {
+        for (final Player p : world.playerList) {
             p.score = 0;
         }
         score = 0;
@@ -2188,7 +2285,7 @@ public class APPLET extends JPanel implements Runnable {
         // byte buffer[] = new byte[world.ground.h*world.ground.w];
         // toRead.get(buffer);
         // input.read(buffer);
-        ByteBuffer chunks[] = new ByteBuffer[world.wIdTh / 100];
+        final ByteBuffer chunks[] = new ByteBuffer[world.wIdTh / 100];
         for (int t = 0; t < chunks.length; t += 1) {
             input.read();
             // System.out.println("CHUNK");
@@ -2207,7 +2304,7 @@ public class APPLET extends JPanel implements Runnable {
         busy = false;
     }
 
-    boolean expand = false;
+    public boolean expand = false;
 
     public void sendMovement() {
         if (ID == -1) {
@@ -2215,7 +2312,7 @@ public class APPLET extends JPanel implements Runnable {
         }
         try {
             // out.write(Server.MOVE);
-            ByteBuffer toSend = ByteBuffer.allocate(4 * 4);
+            final ByteBuffer toSend = ByteBuffer.allocate(4 * 4);
             toSend.putShort((short) world.x);
             toSend.putShort((short) world.y);
             toSend.putShort((short) world.move);
@@ -2227,12 +2324,12 @@ public class APPLET extends JPanel implements Runnable {
             // Server.writeByteBuffer(toSend, out);
             out.addMesssage(toSend, Server.MOVE);
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // e.printStackTrace();
         }
     }
 
-    public void readEntityList(ByteBuffer toRead) {
+    public void readEntityList(final ByteBuffer toRead) {
         boolean done;
         world.entityList.clear();
         done = false;
@@ -2240,23 +2337,23 @@ public class APPLET extends JPanel implements Runnable {
             while (!done) {
                 if (!toRead.hasRemaining())
                     break;
-                String className = Server.getString(toRead);
-                Class[] args1 = new Class[2];
+                final String className = Server.getString(toRead);
+                final Class[] args1 = new Class[2];
                 args1[0] = ByteBuffer.class;
                 args1[1] = World.class;
                 try {
                     Class.forName(className).getMethod("reconstruct", args1).invoke(null, toRead, world);
                     world.entityList.get(world.entityList.size() - 1).setID(toRead.getInt());
                 } catch (ClassNotFoundException | NoSuchMethodException | SecurityException ex) {
-                    Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
         }
     }
 
-    int shockdrain = 0;
+    public int shockdrain = 0;
 
     public int hurt(double pain) {
         if (passiveList[spellBook].getName().equals("Lightning Shield")) {
@@ -2273,7 +2370,7 @@ public class APPLET extends JPanel implements Runnable {
         return (int) pain;
     }
 
-    public static boolean portAvailable(int port) {
+    public static boolean portAvailable(final int port) {
         if (port < 0 || port > 65535) {
             throw new IllegalArgumentException("Invalid start port: " + port);
         }
@@ -2283,13 +2380,13 @@ public class APPLET extends JPanel implements Runnable {
             ss = new ServerSocket(port);
             ss.setReuseAddress(true);
             return true;
-        } catch (IOException e) {
+        } catch (final IOException e) {
         } finally {
 
             if (ss != null) {
                 try {
                     ss.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     /* should not be thrown */
                 }
             }
@@ -2298,9 +2395,9 @@ public class APPLET extends JPanel implements Runnable {
         return false;
     }
 
-    String hostIP = "";
-    String serverName = "";
-    ServerGUI sgui;
+    public String hostIP = "";
+    public String serverName = "";
+    public ServerGUI sgui;
 
     public void serverOutput() {
         // sgui = new ServerGUI();
@@ -2308,15 +2405,15 @@ public class APPLET extends JPanel implements Runnable {
     }
 
     static class ImagePanel extends JPanel {
-        private Image image;
+        private final Image image;
 
-        public ImagePanel(Image image) {
+        public ImagePanel(final Image image) {
             this.image = image;
 
         }
 
         @Override
-        protected void paintComponent(Graphics g) {
+        protected void paintComponent(final Graphics g) {
             // super.paintComponent(g);
 
             g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
@@ -2324,7 +2421,7 @@ public class APPLET extends JPanel implements Runnable {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         // super.paintComponent(g);
 
         g.drawImage(bimage, 0, 0, getWidth(), getHeight(), null);
@@ -2334,7 +2431,7 @@ public class APPLET extends JPanel implements Runnable {
 
         private String id = "", val = "", extra = "";
 
-        public Row(String id, String val, String extra) {
+        public Row(final String id, final String val, final String extra) {
             this.id = id;
             this.val = val;
             this.extra = extra;
@@ -2360,8 +2457,8 @@ public class APPLET extends JPanel implements Runnable {
         }
 
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                boolean cellHasFocus) {
+        public Component getListCellRendererComponent(final JList list, final Object value, final int index,
+                final boolean isSelected, final boolean cellHasFocus) {
             setModel(new RowTableModel((Row) value));
             this.getColumnModel().getColumn(0).setWidth(100);
             if (isSelected) {
@@ -2373,9 +2470,9 @@ public class APPLET extends JPanel implements Runnable {
 
     private static class RowTableModel extends AbstractTableModel {
 
-        private Row row;
+        private final Row row;
 
-        public RowTableModel(Row row) {
+        public RowTableModel(final Row row) {
             this.row = row;
         }
 
@@ -2392,7 +2489,7 @@ public class APPLET extends JPanel implements Runnable {
         }
 
         @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
+        public Object getValueAt(final int rowIndex, final int columnIndex) {
             if (row == null) {
                 return "";
             }
@@ -2408,8 +2505,8 @@ public class APPLET extends JPanel implements Runnable {
         }
     }
 
-    RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
-    RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
+    public RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
+    public RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
 
     public void drawChat() {
         for (int i = 0; i < chat.length; i++) {
@@ -2421,20 +2518,20 @@ public class APPLET extends JPanel implements Runnable {
         }
     }
 
-    static long authCode = -1;
+    public static long authCode = -1;
 
-    static protected long getAuth() {
+    static public long getAuth() {
         if (authCode == -1) {
             try {
-                long s1111I11I11 = APPLET.class.getFields().length;
-                long s1I1111II11 = Server.class.getFields().length;
-                long s11I1111I1I = World.class.getFields().length;
-                long sI1I1I11I1I = PlayerOnline.class.getFields().length;
+                final long s1111I11I11 = Client.class.getFields().length;
+                final long s1I1111II11 = Server.class.getFields().length;
+                final long s11I1111I1I = World.class.getFields().length;
+                final long sI1I1I11I1I = PlayerOnline.class.getFields().length;
                 authCode = (((((sI1I1I11I1I * sI1I1I11I1I) - sI1I1I11I1I) / s1I1111II11) + s1111I11I11) * s11I1111I1I)
                         / s1I1111II11;
                 // authCode = 1;
-            } catch (Exception ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return authCode;

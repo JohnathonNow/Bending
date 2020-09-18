@@ -2,9 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.util.network;
 
 import java.util.StringTokenizer;
+
+import com.johnwesthoff.bending.Client;
 
 /**
  *
@@ -50,7 +52,7 @@ public final class StringLongBoolean {
             } else {
                 mylong[drawer] &= ~(1l << index);
             }
-            INSTANCE.postUnlocks(APPLET.jtb.getText());
+            INSTANCE.postUnlocks(Client.jtb.getText());
         }
     }
 

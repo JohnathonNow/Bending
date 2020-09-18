@@ -12,9 +12,10 @@ import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.johnwesthoff.bending.destruct.Constants;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *

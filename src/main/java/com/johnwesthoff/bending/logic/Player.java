@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.logic;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *
@@ -22,14 +24,14 @@ public class Player {
     public Rectangle playerHitbox;
     public String username = "Player";
     public int score = 0;
-    short status = 0;
+    public short status = 0;
     public Image[] bodyParts;// Body, head, ua, la, ul, ll
-    Thread loader;
-    boolean done = false;
-    short HP = 0;
-    final byte[] partss;
-    final int colorss[];
-    final int colorss2[];
+    public Thread loader;
+    public boolean done = false;
+    public short HP = 0;
+    public final byte[] partss;
+    public final int colorss[];
+    public final int colorss2[];
 
     public Player(int X, int Y, final byte[] parts, final int colors[], final int colors2[]) {
         x = X;
@@ -66,8 +68,8 @@ public class Player {
         loader.start();
     }
 
-    int left = 1;
-    double leftArmAngle = 90, rightArmAngle = 90;
+    public int left = 1;
+    public double leftArmAngle = 90, rightArmAngle = 90;
 
     public void onDraw(Graphics g, int viewX, int viewY) {
         if ((status & World.ST_INVISIBLE) != 0) {

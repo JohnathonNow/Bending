@@ -9,10 +9,10 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.destruct.APPLET;
-import com.johnwesthoff.bending.destruct.Player;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  *
@@ -89,7 +89,7 @@ public class EnergyEntity extends Entity {
                     ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(maker));
         }
         for (Player p : lol.playerList) {
-            if (APPLET.pointDis(X, Y - World.head, p.x, p.y) < 40 && maker != p.ID) {
+            if (Client.pointDis(X, Y - World.head, p.x, p.y) < 40 && maker != p.ID) {
                 alive = false;
                 lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
                 lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius)

@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 /**
  *

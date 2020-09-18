@@ -8,13 +8,18 @@
  *
  * Created on Nov 24, 2012, 10:38:32 PM
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JColorChooser;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *
@@ -28,10 +33,10 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     byte[] cloths = new byte[] { 1, 1, 1, 1, 1, 1 };
     Image[] stuff = new Image[6];
     boolean done = false;
-    APPLET owner;
+    Client owner;
     Image background;
 
-    public ClothingChooser1(APPLET mine) {
+    public ClothingChooser1(Client mine) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
@@ -46,7 +51,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics G) {
-        G.drawImage(APPLET.bimage, 0, 0, getWidth(), getHeight(), null);
+        G.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
         G.drawImage(stuff[4], 9 + 100, 60 + 12 + 200, this);
         G.drawImage(stuff[4], 24 + 100, 60 + 12 + 200, this);
 
@@ -356,7 +361,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     private void buttonHeadActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         cloths[1]++;
-        if (cloths[1] == 4 && !APPLET.unlocks.get(0, 1)) {
+        if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
             cloths[1]++;
         }
         if (cloths[1] > waffles2) {
@@ -467,7 +472,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (APPLET.currentlyLoggedIn) {
+        if (Client.currentlyLoggedIn) {
             String post = "";
             for (int i = 0; i < cloths.length; i++) {
                 post += cloths[i];
@@ -482,34 +487,34 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                 post += i == colors2.length - 1 ? "" : ",";
             }
             // System.out.println(post);
-            owner.CTD.postOutfit(post, APPLET.jtb.getText());
+            owner.CTD.postOutfit(post, Client.jtb.getText());
         } // TODO add your handling code here:
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        if (APPLET.currentlyLoggedIn) {
+        if (Client.currentlyLoggedIn) {
             loadClothing();
         }
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        APPLET.Clothing = cloths;
+        Client.Clothing = cloths;
         for (int i = 0; i < colors.length; i++) {
-            APPLET.Colors[i] = colors[i].getRGB();
-            APPLET.Colors2[i] = colors2[i].getRGB();
+            Client.Colors[i] = colors[i].getRGB();
+            Client.Colors2[i] = colors2[i].getRGB();
         }
-        APPLET.immaKeepTabsOnYou.setSelectedIndex(0);
+        Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
     public void loadClothing() {
-        owner.CTD.getOutfit(APPLET.jtb.getText(), owner.jtp.getText());
+        owner.CTD.getOutfit(Client.jtb.getText(), owner.jtp.getText());
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = new Color(APPLET.Colors[i]);
-            colors2[i] = new Color(APPLET.Colors2[i]);
+            colors[i] = new Color(Client.Colors[i]);
+            colors2[i] = new Color(Client.Colors2[i]);
         }
-        cloths = APPLET.Clothing;
+        cloths = Client.Clothing;
         getImages();
     }
 

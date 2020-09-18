@@ -2,15 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import javax.swing.*;
-import static javax.swing.SwingConstants.CENTER;
-import static javax.swing.SwingConstants.LEFT;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.logic.Spell;
 
 /**
  *
@@ -45,7 +50,7 @@ public class PassiveChooser1 extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         // super.paintComponent(g);
 
-        g.drawImage(APPLET.bimage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
     }
 
     @SuppressWarnings("unchecked")

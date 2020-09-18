@@ -2,15 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.ui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 /**
  *

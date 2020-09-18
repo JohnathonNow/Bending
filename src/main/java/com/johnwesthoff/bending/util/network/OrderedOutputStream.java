@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.util.network;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Server;
 
 /**
  *
@@ -73,11 +75,11 @@ public final class OrderedOutputStream implements Runnable {
         active = false;
     }
 
-    void addMesssage(ByteBuffer bb, int ID) throws IOException {
+    public void addMesssage(ByteBuffer bb, int ID) throws IOException {
         this.addMesssage(bb, (byte) ID);
     }
 
-    private final class Message implements Comparable {
+    public final class Message implements Comparable {
         private final ByteBuffer BB;
         private final byte ID;
         private final long constructionTime;
