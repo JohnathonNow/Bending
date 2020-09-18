@@ -1,5 +1,6 @@
 Bending
 =======
+![Build Status](https://github.com/JohnathonNow/Bending/workflows/build/badge.svg)
 
 About the Project
 -----------------
