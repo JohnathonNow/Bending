@@ -127,7 +127,7 @@ public class APPLET extends JPanel implements Runnable {
     Polygon lineOfSight = new Polygon();
 
     public static void main(String args[]) {
-        System.out.println("Loading BENDING v 2.013.12.24" + System.getProperty("os.name") + File.separator);
+        System.out.println("Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
 
         gameAlive = true;
         Spell.init();
@@ -1186,25 +1186,21 @@ public class APPLET extends JPanel implements Runnable {
     public void run() {
         int counting = 150;
         Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-        lastTime = System.currentTimeMillis();
+        lastTime = System.nanoTime();
+        double delta = 0;
         while (gameAlive) {
-            long l = System.currentTimeMillis();
             try {
-                owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000 / (l - swagTime)));
-            } catch (Exception e) {
+				//Thread.yield();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+            long now = System.nanoTime();
+           
+            delta += (now - lastTime) / (1000000000 / Constants.FPS);
+            owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
+            lastTime = now;
 
-            }
-            swagTime = l;
-            try {
-                l = System.currentTimeMillis() - lastTime;
-                while (l < 25)// 25
-                {
-                    Thread.sleep(1);
-                    l = System.currentTimeMillis() - lastTime;
-                }
-            } catch (InterruptedException ex) {
-            }
-            lastTime = System.currentTimeMillis();
             if (!owner.isVisible()) {
                 if (!SystemTray.isSupported()) {
                     if (!"".equals(hostIP)) {
@@ -1216,478 +1212,494 @@ public class APPLET extends JPanel implements Runnable {
                 // System.out.println(started);
             }
             if (!started) {
+                delta = 0;
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 continue;
             }
-
-            if (removeAura > 0) {
-                removeAura--;
-                world.status |= World.ST_DRAIN;
-                if (removeAura == 0) {
-                    world.status &= ~World.ST_DRAIN;
-                    sendMovement();
+            while (delta >= 1) {
+                delta -= 1;
+                // System.out.println(delta);
+                if (removeAura > 0) {
+                    removeAura--;
+                    world.status |= World.ST_DRAIN;
+                    if (removeAura == 0) {
+                        world.status &= ~World.ST_DRAIN;
+                        sendMovement();
+                    }
                 }
-            }
-            if (turnVisible > 0) {
-                turnVisible--;
-                world.status |= World.ST_INVISIBLE;
-                if (turnVisible == 0) {
-                    world.status &= ~World.ST_INVISIBLE;
-                    sendMovement();
-                }
-            }
-            if (gameMode == Server.THEHIDDEN) {
-                if (goodTeam) {
+                if (turnVisible > 0) {
+                    turnVisible--;
                     world.status |= World.ST_INVISIBLE;
-                    spellBook = 5;// Force use of TheHidden book
+                    if (turnVisible == 0) {
+                        world.status &= ~World.ST_INVISIBLE;
+                        sendMovement();
+                    }
+                }
+                if (gameMode == Server.THEHIDDEN) {
+                    if (goodTeam) {
+                        world.status |= World.ST_INVISIBLE;
+                        spellBook = 5;// Force use of TheHidden book
+                    } else {
+                        if (!badTeam.isEmpty()) {
+                            lastHit = badTeam.get(0);
+                        }
+                    }
+                }
+
+                if (timeToHeal++ > 30 && HP < MAXHP) {
+                    timeToHeal = 0;
+                    HP++;
+                }
+                if (!"Air Run".equals(passiveList[spellBook].getName())) {
+                    runningSpeed = 1;
+                }
+                if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
+                        && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
+                    world.floatiness = 0;
+                    maxlungs = 100;
+                }
+                if (!"Water Treader".equals(passiveList[spellBook].getName())) {
+                    swimmingSpeed = 1;
+                }
+                if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
+                    MAXHP = 100;
+                }
+                if (!"Overcharged".equals(passiveList[spellBook].getName())) {
+                    maxeng = 1000;
+                }
+                if (HP > MAXHP) {
+                    HP = MAXHP;
+                }
+                if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
+                    knockbackDecay = 1;
+                }
+                passiveList[spellBook].getPassiveAction(this);
+                if (world.x > world.wIdTh) {
+                    world.x = world.wIdTh;
+                }
+                if (world.checkCollision(world.x, world.y - World.head)
+                        || world.isLiquid(world.x, world.y - World.head)) {
+                    if (lungs-- < 0) {
+                        HP--;
+                        killMessage = "~ suffocated after fighting `...";
+                    }
                 } else {
-                    if (!badTeam.isEmpty()) {
-                        lastHit = badTeam.get(0);
+                    lungs = maxlungs;
+                }
+                if (energico < 0) {
+                    energico = 0;
+                }
+                if (world.isType((int) world.x, (int) world.y, World.LAVA)) {
+                    world.status |= World.ST_FLAMING;
+                    killMessage = "~ burned to a crisp after fighting `!";
+                }
+                if ((world.status & World.ST_FLAMING) != 0) {
+                    HP -= random.nextInt(2);
+                    if ((passiveList[spellBook].getName().equals("Fireproof"))) {
+                        energico += (inputer.doublecast * 3);
+                    }
+                    if (random.nextInt(10) == 0) {
+                        world.status &= ~World.ST_FLAMING;// Stop being on fire
                     }
                 }
-            }
-
-            if (timeToHeal++ > 30 && HP < MAXHP) {
-                timeToHeal = 0;
-                HP++;
-            }
-            if (!"Air Run".equals(passiveList[spellBook].getName())) {
-                runningSpeed = 1;
-            }
-            if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
-                    && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
-                world.floatiness = 0;
-                maxlungs = 100;
-            }
-            if (!"Water Treader".equals(passiveList[spellBook].getName())) {
-                swimmingSpeed = 1;
-            }
-            if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
-                MAXHP = 100;
-            }
-            if (!"Overcharged".equals(passiveList[spellBook].getName())) {
-                maxeng = 1000;
-            }
-            if (HP > MAXHP) {
-                HP = MAXHP;
-            }
-            if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
-                knockbackDecay = 1;
-            }
-            passiveList[spellBook].getPassiveAction(this);
-            if (world.x > world.wIdTh) {
-                world.x = world.wIdTh;
-            }
-            if (world.checkCollision(world.x, world.y - World.head) || world.isLiquid(world.x, world.y - World.head)) {
-                if (lungs-- < 0) {
-                    HP--;
-                    killMessage = "~ suffocated after fighting `...";
-                }
-            } else {
-                lungs = maxlungs;
-            }
-            if (energico < 0) {
-                energico = 0;
-            }
-            if (world.isType((int) world.x, (int) world.y, World.LAVA)) {
-                world.status |= World.ST_FLAMING;
-                killMessage = "~ burned to a crisp after fighting `!";
-            }
-            if ((world.status & World.ST_FLAMING) != 0) {
-                HP -= random.nextInt(2);
-                if ((passiveList[spellBook].getName().equals("Fireproof"))) {
-                    energico += (inputer.doublecast * 3);
-                }
-                if (random.nextInt(10) == 0) {
-                    world.status &= ~World.ST_FLAMING;// Stop being on fire
-                }
-            }
-            if ((world.status & World.ST_SHOCKED) != 0) {
-                energico -= 25;
-                if (random.nextInt(10) == 0) {
-                    world.status &= ~World.ST_SHOCKED;// Stop being on fire
-                }
-            }
-            if (world.isIce((int) world.x, (int) world.y + 6)) {
-                xspeed += world.move;
-                xspeed *= 1.4;
-                if (xspeed > 15) {
-                    xspeed = 15;
-                }
-                if (xspeed < -15) {
-                    xspeed = -15;
-                }
-            }
-            if (world.keys[KeyEvent.VK_S]) {
-                // world.move = 0;
-                if ((dig += 2) >= 100) {
-                    dig = 0;
-                    // world.keys[KeyEvent.VK_S] = false;
-                    ByteBuffer bb = ByteBuffer.allocate(24);
-                    bb.putInt(5).putInt((int) world.x).putInt((int) world.y).putInt(0).putInt(0);
-                    try {
-                        out.addMesssage(bb, Server.AIRBENDING);
-                    } catch (IOException ex) {
-                        System.err.println(ex.getMessage());
+                if ((world.status & World.ST_SHOCKED) != 0) {
+                    energico -= 25;
+                    if (random.nextInt(10) == 0) {
+                        world.status &= ~World.ST_SHOCKED;// Stop being on fire
                     }
                 }
-            } else {
-                dig = 0;
-            }
-            for (Player p : world.playerList) {
-                if ((p.status & World.ST_DRAIN) != 0) {
-                    if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
-                        if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
-                            lastHit = p.ID;
-                            killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
-                            HP--;// Lose health from aura
-                        }
+                if (world.isIce((int) world.x, (int) world.y + 6)) {
+                    xspeed += world.move;
+                    xspeed *= 1.4;
+                    if (xspeed > 15) {
+                        xspeed = 15;
+                    }
+                    if (xspeed < -15) {
+                        xspeed = -15;
                     }
                 }
-            }
-            for (Entity e : world.entityList) {
-                if (e instanceof MissileEntity) {
-                    MissileEntity me = (MissileEntity) e;
-                    // if (pointDis(me.X, me.Y, world.x, world.y)<me.radius*2&&me.maker!=ID)
-                    if (checkCollision(me.X, me.Y) && me.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me.maker) : true)) {
-                        me.alive = false;
-                        hurt(10);
-                        xspeed += 7 - random.nextInt(14);
-                        world.vspeed -= 5;
-                        lastHit = me.maker;
-                        killMessage = "~ was blown away by `.";
-                    }
-                }
-                if (e instanceof TornadoEntity) {
-                    TornadoEntity me2 = (TornadoEntity) e;
-                    if (checkCollision(me2.X, me2.Y) && me2.life < 80) {
-                        hurt(1);
-                        // world.vspeed-=1;
-                        xspeed += 1 - random.nextInt(2);
-                        xspeed *= -1;
-                        world.x = (int) me2.X + (int) xspeed;
-                        world.move = 0;
-                        lastHit = me2.maker;
-                        killMessage = "~ was sucked into `'s Tornado.";
-                    }
-                }
-                if (e instanceof GustEntity) {
-                    GustEntity me2 = (GustEntity) e;
-                    if (checkCollision(me2.X, me2.Y)) {
-                        hurt(7);
-                        world.vspeed += me2.yspeed * 2;
-                        xspeed += me2.xspeed * 2;
-                        me2.alive = false;
-                        lastHit = me2.maker;
-                        lungs = maxlungs;
-                        killMessage = "~ met `'s gust of air!";
-                    }
-                }
-                if (e instanceof RockEntity) {
-                    RockEntity me3 = (RockEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(18);
-                        world.vspeed -= 5;
-                        xspeed += 7 - random.nextInt(14);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ was built into a bridge by `.";
-                    }
-                }
-                if (e instanceof FireBallEntity) {
-                    FireBallEntity me3 = (FireBallEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(15);
-                        world.status |= World.ST_FLAMING;
-                        world.vspeed -= 7;
-                        xspeed += 9 - random.nextInt(18);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        world.status |= World.ST_FLAMING;
-                        killMessage = "~ was burninated by `.";
-                    }
-                }
-                if (e instanceof FirePuffEntity) {
-                    FirePuffEntity me3 = (FirePuffEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(2);
-                        world.status |= World.ST_FLAMING;
-                        world.vspeed -= 2;
-                        xspeed += 2 - random.nextInt(4);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        world.status |= World.ST_FLAMING;
-                        killMessage = "~ was set ablaze by `.";
-                    }
-                }
-                if (e instanceof EnemyEntity) {
-                    EnemyEntity me3 = (EnemyEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.master != ID
-                            && (gameMode > 0 ? !myTeam.contains(me3.master) : true)) {
-                        hurt(7);
-                        world.vspeed -= 4;
-                        xspeed += 4 - random.nextInt(8);
-                        lastHit = me3.master;
-                        killMessage = "~ was defeated by `'s dark minion.";
-                    }
-                }
-                if (e instanceof BuritoEntity) {
-                    BuritoEntity me3 = (BuritoEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(65);
-                        world.status |= World.ST_FLAMING;
-                        world.vspeed -= 39;
-                        xspeed += 47 - random.nextInt(94);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        world.status |= World.ST_FLAMING;
-                        killMessage = "~ shouldn't have stolen `'s burito...";
-                    }
-                }
-                if (e instanceof LavaBallEntity) {
-                    LavaBallEntity me3 = (LavaBallEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        lastHit = me3.maker;
-                        killMessage = "How did ` beat ~?";
-                        me3.alive = false;
-                    }
-                }
-                if (e instanceof SoulDrainEntity) {
-                    SoulDrainEntity me3 = (SoulDrainEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        lastHit = me3.maker;
-                        killMessage = "~'s soul was stolen by `!";
-                        me3.alive = false;
-                        ByteBuffer bb = ByteBuffer.allocate(8);
-                        bb.putInt(lastHit).putInt(hurt(21));
-                        world.vspeed -= 5;
-                        xspeed += 7 - random.nextInt(14);
-                        try {
-                            out.addMesssage(bb, Server.DRAIN);
-                        } catch (IOException ex) {
-                            // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-                if (e instanceof FireJumpEntity) {
-                    FireJumpEntity me3 = (FireJumpEntity) e;
-                    if (pointDis(me3.X, me3.Y, world.x, world.y) < me3.radius * 4 && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(15);
-                        world.status |= World.ST_FLAMING;
-                        world.vspeed += me3.yspeed * 2;
-                        xspeed += me3.xspeed;
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ was flung into orbit by `'s falcon pawnch!";
-                    }
-                }
-                if (e instanceof ShardEntity) {
-                    ShardEntity me3 = (ShardEntity) e;
-                    if (pointDis(me3.X, me3.Y - World.head, world.x, world.y) < me3.radius * 4 && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(15);
-                        world.vspeed -= 5;
-                        xspeed += 7 - random.nextInt(14);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ was sniped by `.";
-                    }
-                }
-                if (e instanceof SandEntity) {
-                    SandEntity me3 = (SandEntity) e;
-                    double d = pointDis(me3.X, me3.Y, world.x, world.y);
-                    // System.out.println(d);
-                    if (d < me3.radius * 3 && me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(2);
-                        world.vspeed -= 1;
-                        xspeed += (me3.xspeed / 64);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ was shredded by `'s shotgun.";
-                    }
-                }
-                if (e instanceof IceShardEntity) {
-                    IceShardEntity me3 = (IceShardEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(15);
-                        world.vspeed -= 5;
-                        xspeed += 7 - random.nextInt(14);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ was hit by `'s icey attack!";
-                    }
-                }
-                if (e instanceof SnowEntity) {
-                    SnowEntity me3 = (SnowEntity) e;
-                    if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(8);
-                        world.vspeed -= 3;
-                        xspeed += 3 - random.nextInt(6);
-                        lastHit = me3.maker;
-                        me3.alive = false;
-                        killMessage = "~ will need to be thawed out after fighting `!";
-                    }
-                }
-                if (e instanceof SpoutEntity) {
-                    SpoutEntity me3 = (SpoutEntity) e;
-                    if (checkCollision(me3.X, me3.Y)) {
-                        if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(5);
-                            lastHit = me3.maker;
-                        }
-                        world.vspeed -= 5;
-                        killMessage = "~ was kicked out of `'s swimming pool.";
-                    }
-                }
-                if (e instanceof BallLightningEntity) {
-                    BallLightningEntity me3 = (BallLightningEntity) e;
-                    if (checkCollision(e.X, e.Y)) {
-                        if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(10);
-                            lastHit = me3.maker;
-                            world.vspeed -= random.nextInt(22);
-                            xspeed += 18 - random.nextInt(36);
-                            killMessage = "~ was shockingly killed by `!";
-                        }
-                    }
-                }
-                if (e instanceof WallofFireEntity) {
-                    WallofFireEntity me3 = (WallofFireEntity) e;
-                    checkCollision(me3.X, me3.Y);// Just to move the hitbox so when it is passed, it works
-                    // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
-                    if (me3.checkCollision(playerHitbox) && me3.maker != ID
-                            && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                        hurt(35);
-                        me3.alive = false;
-                        lastHit = me3.maker;
-                        world.vspeed -= 8;
-                        xspeed += 9 - random.nextInt(18);
-                        world.status |= World.ST_FLAMING;
-                        killMessage = "~ smelled `'s armpits, and then died.";
-                    }
-                }
-            }
-
-            if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {
-                double direction = APPLET.pointDir(150, 150, world.mouseX, world.mouseY);
-                double distance = APPLET.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
-                world.incX += APPLET.lengthdir_x(distance, direction);
-                world.incY -= APPLET.lengthdir_y(distance, direction);
-            }
-            if (world.dead) {
-                world.status = 0;
-                world.y = -50;
-                world.x = -50;
-                // this.chatActive = false;
-                HP = MAXHP;
-                this.lungs = this.maxlungs;
-                world.move = 0;
-                world.vspeed = 0;
-                this.xspeed = 0;
-
-            }
-
-            if (HP <= 0) {
-                world.viewdX = world.viewX;
-                world.viewdY = world.viewY;
-                HP = MAXHP;
-                this.lungs = this.maxlungs;
-                world.y = -50;
-                world.x = -50;
-                if (killingSpree >= 148.413d) {
-                    CTD.postRSSfeed(username + " had a streak going",
-                            ((int) Math.log(killingSpree)) + " kills in a row!");// Anti-cheating - use logs
-                }
-                killingSpree = 0;
-                world.dead = true;
-                // this.chatActive = false;
-                ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
-                try {
-                    out.addMesssage(die, Server.DEATH);
-                } catch (IOException ex) {
-                    // ex.printStackTrace();
-                }
-                if (lastHit == ID) {
-                    XP -= 25;
-                    this.sendMessage(username + " has committed suicide.", 0xFF0436);
-                } else {
-                    this.sendMessage(killMessage.replaceAll("~", username).replaceAll("`", getKiller(lastHit)),
-                            0x04FFF8);// username + " has been defeated by "+getKiller(lastHit)
-                }
-                try {
-                    this.sendMovement();
-                } catch (Exception ex) {
-                    // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if (energico < maxeng) {
-                energico += engrecharge;
-            } else {
-                energico = maxeng;
-            }
-            if (world.keys[KeyEvent.VK_E]) {
-                world.incX += 10;
-            }
-            if (world.keys[KeyEvent.VK_Q]) {
-                world.incX -= 10;
-            }
-            if (world.keys[KeyEvent.VK_Z]) {
-                world.incX = 0;
-                world.incY = 0;
-            }
-            if (!world.isSolid(world.x + (int) xspeed, world.y)) {
-                world.x += xspeed;
-            }
-            if (world.vspeed >= 0) {
-                if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
-                    world.vspeed *= knockbackDecay;
-                }
-                xspeed *= .75 * knockbackDecay;
-                if (Math.abs(xspeed) < .001 && xspeed != 0) {
-                    xspeed = 0;
-                    sendMovement();
-                }
-            }
-            // prevMove = world.move;
-            world.onUpdate();
-
-            if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                    || counting++ > 200))) {
-                counting = 0;
-                try {
-                    sendMovement();
-                    prevMove = world.move;
-                    if (sendRequest && sendcount++ >= 30) {
-                        sendcount = 0;
-                        // System.out.println("REQUEST START");
+                if (world.keys[KeyEvent.VK_S]) {
+                    // world.move = 0;
+                    if ((dig += 2) >= 100) {
+                        dig = 0;
+                        // world.keys[KeyEvent.VK_S] = false;
                         ByteBuffer bb = ByteBuffer.allocate(24);
-                        out.addMesssage(bb.putInt(1), Server.MAP);
-                        sendRequest = false;
+                        bb.putInt(5).putInt((int) world.x).putInt((int) world.y).putInt(0).putInt(0);
+                        try {
+                            out.addMesssage(bb, Server.AIRBENDING);
+                        } catch (IOException ex) {
+                            System.err.println(ex.getMessage());
+                        }
                     }
-                } catch (Exception ex) {
-                    Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    dig = 0;
                 }
-            } else {
+                for (Player p : world.playerList) {
+                    if ((p.status & World.ST_DRAIN) != 0) {
+                        if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
+                            if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
+                                lastHit = p.ID;
+                                killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
+                                HP--;// Lose health from aura
+                            }
+                        }
+                    }
+                }
+                for (Entity e : world.entityList) {
+                    if (e instanceof MissileEntity) {
+                        MissileEntity me = (MissileEntity) e;
+                        // if (pointDis(me.X, me.Y, world.x, world.y)<me.radius*2&&me.maker!=ID)
+                        if (checkCollision(me.X, me.Y) && me.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me.maker) : true)) {
+                            me.alive = false;
+                            hurt(10);
+                            xspeed += 7 - random.nextInt(14);
+                            world.vspeed -= 5;
+                            lastHit = me.maker;
+                            killMessage = "~ was blown away by `.";
+                        }
+                    }
+                    if (e instanceof TornadoEntity) {
+                        TornadoEntity me2 = (TornadoEntity) e;
+                        if (checkCollision(me2.X, me2.Y) && me2.life < 80) {
+                            hurt(1);
+                            // world.vspeed-=1;
+                            xspeed += 1 - random.nextInt(2);
+                            xspeed *= -1;
+                            world.x = (int) me2.X + (int) xspeed;
+                            world.move = 0;
+                            lastHit = me2.maker;
+                            killMessage = "~ was sucked into `'s Tornado.";
+                        }
+                    }
+                    if (e instanceof GustEntity) {
+                        GustEntity me2 = (GustEntity) e;
+                        if (checkCollision(me2.X, me2.Y)) {
+                            hurt(7);
+                            world.vspeed += me2.yspeed * 2;
+                            xspeed += me2.xspeed * 2;
+                            me2.alive = false;
+                            lastHit = me2.maker;
+                            lungs = maxlungs;
+                            killMessage = "~ met `'s gust of air!";
+                        }
+                    }
+                    if (e instanceof RockEntity) {
+                        RockEntity me3 = (RockEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(18);
+                            world.vspeed -= 5;
+                            xspeed += 7 - random.nextInt(14);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ was built into a bridge by `.";
+                        }
+                    }
+                    if (e instanceof FireBallEntity) {
+                        FireBallEntity me3 = (FireBallEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(15);
+                            world.status |= World.ST_FLAMING;
+                            world.vspeed -= 7;
+                            xspeed += 9 - random.nextInt(18);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            world.status |= World.ST_FLAMING;
+                            killMessage = "~ was burninated by `.";
+                        }
+                    }
+                    if (e instanceof FirePuffEntity) {
+                        FirePuffEntity me3 = (FirePuffEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(2);
+                            world.status |= World.ST_FLAMING;
+                            world.vspeed -= 2;
+                            xspeed += 2 - random.nextInt(4);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            world.status |= World.ST_FLAMING;
+                            killMessage = "~ was set ablaze by `.";
+                        }
+                    }
+                    if (e instanceof EnemyEntity) {
+                        EnemyEntity me3 = (EnemyEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.master != ID
+                                && (gameMode > 0 ? !myTeam.contains(me3.master) : true)) {
+                            hurt(7);
+                            world.vspeed -= 4;
+                            xspeed += 4 - random.nextInt(8);
+                            lastHit = me3.master;
+                            killMessage = "~ was defeated by `'s dark minion.";
+                        }
+                    }
+                    if (e instanceof BuritoEntity) {
+                        BuritoEntity me3 = (BuritoEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(65);
+                            world.status |= World.ST_FLAMING;
+                            world.vspeed -= 39;
+                            xspeed += 47 - random.nextInt(94);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            world.status |= World.ST_FLAMING;
+                            killMessage = "~ shouldn't have stolen `'s burito...";
+                        }
+                    }
+                    if (e instanceof LavaBallEntity) {
+                        LavaBallEntity me3 = (LavaBallEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            lastHit = me3.maker;
+                            killMessage = "How did ` beat ~?";
+                            me3.alive = false;
+                        }
+                    }
+                    if (e instanceof SoulDrainEntity) {
+                        SoulDrainEntity me3 = (SoulDrainEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            lastHit = me3.maker;
+                            killMessage = "~'s soul was stolen by `!";
+                            me3.alive = false;
+                            ByteBuffer bb = ByteBuffer.allocate(8);
+                            bb.putInt(lastHit).putInt(hurt(21));
+                            world.vspeed -= 5;
+                            xspeed += 7 - random.nextInt(14);
+                            try {
+                                out.addMesssage(bb, Server.DRAIN);
+                            } catch (IOException ex) {
+                                // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    if (e instanceof FireJumpEntity) {
+                        FireJumpEntity me3 = (FireJumpEntity) e;
+                        if (pointDis(me3.X, me3.Y, world.x, world.y) < me3.radius * 4 && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(15);
+                            world.status |= World.ST_FLAMING;
+                            world.vspeed += me3.yspeed * 2;
+                            xspeed += me3.xspeed;
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ was flung into orbit by `'s falcon pawnch!";
+                        }
+                    }
+                    if (e instanceof ShardEntity) {
+                        ShardEntity me3 = (ShardEntity) e;
+                        if (pointDis(me3.X, me3.Y - World.head, world.x, world.y) < me3.radius * 4 && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(15);
+                            world.vspeed -= 5;
+                            xspeed += 7 - random.nextInt(14);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ was sniped by `.";
+                        }
+                    }
+                    if (e instanceof SandEntity) {
+                        SandEntity me3 = (SandEntity) e;
+                        double d = pointDis(me3.X, me3.Y, world.x, world.y);
+                        // System.out.println(d);
+                        if (d < me3.radius * 3 && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(2);
+                            world.vspeed -= 1;
+                            xspeed += (me3.xspeed / 64);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ was shredded by `'s shotgun.";
+                        }
+                    }
+                    if (e instanceof IceShardEntity) {
+                        IceShardEntity me3 = (IceShardEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(15);
+                            world.vspeed -= 5;
+                            xspeed += 7 - random.nextInt(14);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ was hit by `'s icey attack!";
+                        }
+                    }
+                    if (e instanceof SnowEntity) {
+                        SnowEntity me3 = (SnowEntity) e;
+                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(8);
+                            world.vspeed -= 3;
+                            xspeed += 3 - random.nextInt(6);
+                            lastHit = me3.maker;
+                            me3.alive = false;
+                            killMessage = "~ will need to be thawed out after fighting `!";
+                        }
+                    }
+                    if (e instanceof SpoutEntity) {
+                        SpoutEntity me3 = (SpoutEntity) e;
+                        if (checkCollision(me3.X, me3.Y)) {
+                            if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                                hurt(5);
+                                lastHit = me3.maker;
+                            }
+                            world.vspeed -= 5;
+                            killMessage = "~ was kicked out of `'s swimming pool.";
+                        }
+                    }
+                    if (e instanceof BallLightningEntity) {
+                        BallLightningEntity me3 = (BallLightningEntity) e;
+                        if (checkCollision(e.X, e.Y)) {
+                            if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                                hurt(10);
+                                lastHit = me3.maker;
+                                world.vspeed -= random.nextInt(22);
+                                xspeed += 18 - random.nextInt(36);
+                                killMessage = "~ was shockingly killed by `!";
+                            }
+                        }
+                    }
+                    if (e instanceof WallofFireEntity) {
+                        WallofFireEntity me3 = (WallofFireEntity) e;
+                        checkCollision(me3.X, me3.Y);// Just to move the hitbox so when it is passed, it works
+                        // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
+                        if (me3.checkCollision(playerHitbox) && me3.maker != ID
+                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
+                            hurt(35);
+                            me3.alive = false;
+                            lastHit = me3.maker;
+                            world.vspeed -= 8;
+                            xspeed += 9 - random.nextInt(18);
+                            world.status |= World.ST_FLAMING;
+                            killMessage = "~ smelled `'s armpits, and then died.";
+                        }
+                    }
+                }
+
+                if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {
+                    double direction = APPLET.pointDir(150, 150, world.mouseX, world.mouseY);
+                    double distance = APPLET.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
+                    world.incX += APPLET.lengthdir_x(distance, direction);
+                    world.incY -= APPLET.lengthdir_y(distance, direction);
+                }
+                if (world.dead) {
+                    world.status = 0;
+                    world.y = -50;
+                    world.x = -50;
+                    // this.chatActive = false;
+                    HP = MAXHP;
+                    this.lungs = this.maxlungs;
+                    world.move = 0;
+                    world.vspeed = 0;
+                    this.xspeed = 0;
+
+                }
+
+                if (HP <= 0) {
+                    world.viewdX = world.viewX;
+                    world.viewdY = world.viewY;
+                    HP = MAXHP;
+                    this.lungs = this.maxlungs;
+                    world.y = -50;
+                    world.x = -50;
+                    if (killingSpree >= 148.413d) {
+                        CTD.postRSSfeed(username + " had a streak going",
+                                ((int) Math.log(killingSpree)) + " kills in a row!");// Anti-cheating - use logs
+                    }
+                    killingSpree = 0;
+                    world.dead = true;
+                    // this.chatActive = false;
+                    ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
+                    try {
+                        out.addMesssage(die, Server.DEATH);
+                    } catch (IOException ex) {
+                        // ex.printStackTrace();
+                    }
+                    if (lastHit == ID) {
+                        XP -= 25;
+                        this.sendMessage(username + " has committed suicide.", 0xFF0436);
+                    } else {
+                        this.sendMessage(killMessage.replaceAll("~", username).replaceAll("`", getKiller(lastHit)),
+                                0x04FFF8);// username + " has been defeated by "+getKiller(lastHit)
+                    }
+                    try {
+                        this.sendMovement();
+                    } catch (Exception ex) {
+                        // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                if (energico < maxeng) {
+                    energico += engrecharge;
+                } else {
+                    energico = maxeng;
+                }
+                if (world.keys[KeyEvent.VK_E]) {
+                    world.incX += 10;
+                }
+                if (world.keys[KeyEvent.VK_Q]) {
+                    world.incX -= 10;
+                }
+                if (world.keys[KeyEvent.VK_Z]) {
+                    world.incX = 0;
+                    world.incY = 0;
+                }
+                if (!world.isSolid(world.x + (int) xspeed, world.y)) {
+                    world.x += xspeed;
+                }
+                if (world.vspeed >= 0) {
+                    if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
+                        world.vspeed *= knockbackDecay;
+                    }
+                    xspeed *= .75 * knockbackDecay;
+                    if (Math.abs(xspeed) < .001 && xspeed != 0) {
+                        xspeed = 0;
+                        sendMovement();
+                    }
+                }
+                // prevMove = world.move;
+                world.onUpdate();
+
+                if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
+                        || counting++ > 200))) {
+                    counting = 0;
+                    try {
+                        sendMovement();
+                        prevMove = world.move;
+                        if (sendRequest && sendcount++ >= 30) {
+                            sendcount = 0;
+                            // System.out.println("REQUEST START");
+                            ByteBuffer bb = ByteBuffer.allocate(24);
+                            out.addMesssage(bb.putInt(1), Server.MAP);
+                            sendRequest = false;
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                }
+
+                prevVspeed = world.vspeed;
+                // if (busy) continue;
+                Xp = (int) world.x;
+                Yp = (int) world.y;
+
+                if (world.keys[KeyEvent.VK_SPACE]) {
+                }
+
+    }
+    draw();
+            if ((now - swagTime) >= (1000000000 / Constants.FPS/2)) {   
+                repaint(); 
+                swagTime = now;
             }
-
-            prevVspeed = world.vspeed;
-            // if (busy) continue;
-            Xp = (int) world.x;
-            Yp = (int) world.y;
-
-            if (world.keys[KeyEvent.VK_SPACE]) {
-            }
-
-            repaint();
             World.setTime();
         }
     }
@@ -1810,7 +1822,7 @@ public class APPLET extends JPanel implements Runnable {
         DoubleBufferGraphics.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
-        paint(GameGraphics);
+        //paint(GameGraphics);
         GameGraphics.drawImage(doubleBuffer, 0, 0, getWidth(), getHeight(), this);
     }
 
@@ -1818,6 +1830,15 @@ public class APPLET extends JPanel implements Runnable {
     public void paint(Graphics g) {
         if (notDone) {
             super.paint(g);
+            return;
+        }
+        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
+    }
+
+
+    
+    public void draw() {
+        if (notDone) {
             return;
         }
         if (screenBuffer == null) {
@@ -1829,12 +1850,6 @@ public class APPLET extends JPanel implements Runnable {
             biggraphicsBuffer = bigscreenBuffer.createGraphics();
             biggraphicsBuffer.setFont(chatFont);
         }
-        setSize(owner.getSize());
-
-        setVisible(owner.isVisible());
-        // Graphics2D pancakes = (Graphics2D)g;
-        // double scale = owner.getHeight()/300;
-        // pancakes.scale(scale, scale);
         graphicsBuffer.setColor(Color.black);
         if (world != null) {
 
@@ -1949,7 +1964,15 @@ public class APPLET extends JPanel implements Runnable {
 
                 graphicsBuffer.setColor(purple);
                 graphicsBuffer.drawRect(1, 1, 2, (int) ((double)Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                if (world.keys[KeyEvent.VK_ALT]) {
+                    graphicsBuffer.setColor(Color.red);
+                    this.checkCollision(0, 0);
+                    AffineTransform prevTrans = graphicsBuffer.getTransform();
+                    graphicsBuffer.translate(-world.viewX, -world.viewY);
+                    graphicsBuffer.draw(playerHitbox);
+                    graphicsBuffer.setTransform(prevTrans);
 
+                }
                 // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
                 biggraphicsBuffer.drawImage(screenBuffer,0, 0, bigscreenBuffer.getWidth(),bigscreenBuffer.getHeight(), this);
                 world.drawPlayers(biggraphicsBuffer);
@@ -1957,12 +1980,13 @@ public class APPLET extends JPanel implements Runnable {
                 for (Entity e : world.entityList) {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                Composite c = biggraphicsBuffer.getComposite();
-                biggraphicsBuffer.setComposite(Additive.additive);
+                // The below lines are commented out until we get a faster way to do this
+                // Composite c = biggraphicsBuffer.getComposite();
+                // biggraphicsBuffer.setComposite(Additive.additive);
                 for (Entity e : world.entityList) {
                     e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                biggraphicsBuffer.setComposite(c);
+                // biggraphicsBuffer.setComposite(c);
                 if (chatActive) {
                     biggraphicsBuffer.setColor(Color.gray);
                     biggraphicsBuffer.fillRect(32, 810, biggraphicsBuffer.getFontMetrics().stringWidth(chatMessage),
@@ -1984,7 +2008,7 @@ public class APPLET extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("" + p.score, 512, 256 + 16 + (i * 16));
                     }
                 }
-
+                /*
                 if (world.keys[KeyEvent.VK_ALT]) {
                     biggraphicsBuffer.setColor(Color.red);
                     this.checkCollision(0, 0);
@@ -1995,6 +2019,7 @@ public class APPLET extends JPanel implements Runnable {
                     biggraphicsBuffer.setTransform(prevTrans);
 
                 }
+                */
                 if (world.dead) {
                     biggraphicsBuffer.setColor(deadbg);
                     biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
@@ -2057,8 +2082,9 @@ public class APPLET extends JPanel implements Runnable {
                 }
             }
         }
-        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
     }
+
+
 
     Font chatFont = new Font("Arial", Font.BOLD, 18);
     Font nameFont = new Font("Arial", Font.BOLD, 12);
@@ -2135,10 +2161,7 @@ public class APPLET extends JPanel implements Runnable {
             goodTeam = false;
         }
         for (Player p : world.playerList) {
-            p.myTeam = false;
-            if (myTeam.contains(p.ID) && gameMode > 0) {
-                p.myTeam = true;
-            }
+            p.myTeam = myTeam.contains(p.ID) && gameMode > 0;
         }
         HP = MAXHP;
         passiveList[spellBook].onSpawn(this);

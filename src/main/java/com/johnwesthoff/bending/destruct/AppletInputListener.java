@@ -44,7 +44,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
         int button = e.getButton();
         double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
         if (pointer.world != null) {
-            pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
+            pointer.world.mouseX = (int) ((e.getX()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
             pointer.world.pressX = pointer.world.mouseX;
             pointer.world.pressY = pointer.world.mouseY;
