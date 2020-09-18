@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.johnwesthoff.bending.blendmodes;
+package com.johnwesthoff.bending.util.graphics;
 
 /**
  *

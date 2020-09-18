@@ -9,11 +9,11 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.johnwesthoff.bending.destruct.Constants;
-import com.johnwesthoff.bending.destruct.APPLET;
-import com.johnwesthoff.bending.destruct.Player;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.Constants;
+import com.johnwesthoff.bending.game.Client;
+import com.johnwesthoff.bending.game.Player;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *
@@ -81,7 +81,7 @@ public class StaticShotEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         for (Player p : lol.playerList) {
-            if (APPLET.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
+            if (Client.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
                 alive = false;
                 lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
                 lol.sendMessage(Server.CHARGE,

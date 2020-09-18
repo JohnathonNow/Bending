@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game;
 
-import static com.johnwesthoff.bending.destruct.APPLET.shortJump;
+import static com.johnwesthoff.bending.game.Client.shortJump;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -21,9 +21,9 @@ import javax.swing.JFrame;
  * @author John
  */
 public class AppletInputListener implements MouseListener, KeyListener, MouseMotionListener {
-    APPLET pointer;
+    Client pointer;
 
-    public AppletInputListener(APPLET pointer) {
+    public AppletInputListener(Client pointer) {
         this.pointer = pointer;
     }
 
@@ -115,10 +115,10 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                 if (pointer.world.mouseX * 3 > 400 && pointer.world.mouseX * 3 < 500) {
                     // System.out.println("H2");
                     if (pointer.world.mouseY * 3 > 200 && pointer.world.mouseY * 3 < 250) {
-                        pointer.spellselection.XP.setText("XP: " + APPLET.XP);
-                        pointer.spellselection.USER.setText("USER: " + APPLET.jtb.getText());
+                        pointer.spellselection.XP.setText("XP: " + Client.XP);
+                        pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
                         pointer.spellselection.setVisible(true);
-                        APPLET.immaKeepTabsOnYou.setSelectedIndex(1);
+                        Client.immaKeepTabsOnYou.setSelectedIndex(1);
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                         if (setTo == -1) {
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost();
-                                pointer.world.leftArmAngle = APPLET.pointDir(
+                                pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -165,14 +165,14 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                         if (setTo == -1) {
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.midClick].getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.midClick].getCost();
-                                pointer.world.leftArmAngle = APPLET.pointDir(
+                                pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
                                         pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
-                                pointer.world.rightArmAngle = APPLET.pointDir(
+                                pointer.world.rightArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -203,7 +203,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.rightClick]
                                     .getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.rightClick].getCost();
-                                pointer.world.rightArmAngle = APPLET.pointDir(
+                                pointer.world.rightArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -293,7 +293,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                     break;
                 case KeyEvent.VK_W:
                     if (!pointer.world.keys[KeyEvent.VK_S]) {
-                        pointer.world.jump = (float) APPLET.runningSpeed;
+                        pointer.world.jump = (float) Client.runningSpeed;
 
                     }
                     // sendMovement();
@@ -320,7 +320,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                     break;
             }
         } catch (Exception ex) {
-            Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -338,21 +338,21 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                     pointer.world.status ^= World.ST_INVISIBLE;
                 }
                 if (pointer.chatMessage.contains("/embiggen")) {
-                    APPLET.container.dispose();// You can't change the state from
+                    Client.container.dispose();// You can't change the state from
                     // a listener, so kill it first
-                    if (!APPLET.container.isUndecorated()) {
-                        APPLET.container.setLocation(0, 0);
-                        APPLET.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        APPLET.container.setUndecorated(true);
+                    if (!Client.container.isUndecorated()) {
+                        Client.container.setLocation(0, 0);
+                        Client.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        Client.container.setUndecorated(true);
                     } else {
-                        APPLET.container.setExtendedState(JFrame.NORMAL);
-                        APPLET.container.setUndecorated(false);
+                        Client.container.setExtendedState(JFrame.NORMAL);
+                        Client.container.setUndecorated(false);
                     }
-                    APPLET.container.pack();
-                    APPLET.container.setVisible(true);
+                    Client.container.pack();
+                    Client.container.setVisible(true);
                 }
                 if (pointer.chatMessage.contains("/quit")) {
-                    APPLET.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
+                    Client.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
                 }
                 pointer.chatMessage = "";
                 pointer.chatActive = false;
@@ -379,7 +379,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 // if (pointer.world.move<0) {
                 // pointer.world.move=0;
@@ -390,7 +390,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 // if (pointer.world.move>0)
                 // pointer.world.move=0;
@@ -400,7 +400,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 pointer.world.jump = (byte) 0;
                 break;

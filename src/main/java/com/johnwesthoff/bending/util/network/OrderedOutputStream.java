@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.util.network;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.game.Server;
 
 /**
  *

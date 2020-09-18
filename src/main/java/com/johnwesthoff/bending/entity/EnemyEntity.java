@@ -11,12 +11,12 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.destruct.Constants;
-import com.johnwesthoff.bending.destruct.Player;
-import com.johnwesthoff.bending.destruct.PlayerOnline;
-import com.johnwesthoff.bending.destruct.ResourceLoader;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.Constants;
+import com.johnwesthoff.bending.game.Player;
+import com.johnwesthoff.bending.game.PlayerOnline;
+import com.johnwesthoff.bending.game.ResourceLoader;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *

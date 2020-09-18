@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 ///TODO: FIX NETWORKING
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game;
 
 import java.awt.Polygon;
 import java.io.DataInputStream;

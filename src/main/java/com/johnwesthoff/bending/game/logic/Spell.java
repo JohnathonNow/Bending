@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game;
 
-import static com.johnwesthoff.bending.destruct.ResourceLoader.loadIcon;
+import static com.johnwesthoff.bending.game.ResourceLoader.loadIcon;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -132,16 +132,16 @@ public abstract class Spell {
         // System.out.println("YAY");
     }
 
-    public void onSpawn(APPLET me) {
+    public void onSpawn(Client me) {
 
     }
 
     public void unlock() {
-        if (APPLET.XP >= unlockXP) {
+        if (Client.XP >= unlockXP) {
             locked = false;
         }
         if (getName().equals("Burito")) {
-            locked = !(APPLET.jtb.getText().equals("Joey") && APPLET.currentlyLoggedIn);
+            locked = !(Client.jtb.getText().equals("Joey") && Client.currentlyLoggedIn);
         }
     }
 
@@ -159,13 +159,13 @@ public abstract class Spell {
         }
     }
 
-    public abstract void getAction(APPLET app);
+    public abstract void getAction(Client app);
 
     public abstract int getCost();
 
     public abstract String getName();
 
-    public abstract void getPassiveAction(APPLET app);
+    public abstract void getPassiveAction(Client app);
 
     public String getTip() {
         return "<html>A basic air spell<br>Low Energy Cost<br>Travels in a straight line<br>Deals low damage</html>";
@@ -300,17 +300,17 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -326,7 +326,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -343,7 +343,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y;
@@ -375,7 +375,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -392,7 +392,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.mouseX + app.world.viewX;
             Y = app.world.mouseY + app.world.viewY;
@@ -417,7 +417,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -434,7 +434,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             ID = Server.AIRBENDING;
             subID = 4;
             // throw new UnsupportedOperationException("Not supported yet.");
@@ -446,10 +446,10 @@ public abstract class Spell {
                 app.energico += this.getCost();
                 return;
             }
-            double direction = APPLET.pointDir(mx, my, X, Y);
+            double direction = Client.pointDir(mx, my, X, Y);
             // direction+=180;
-            mx = -((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = -((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -470,7 +470,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -488,7 +488,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             mx = app.world.mouseX + app.world.viewX;
             my = app.world.mouseY + app.world.viewY;
@@ -514,7 +514,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -534,13 +534,13 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Airbending) {
@@ -550,7 +550,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             app.runningSpeed = 1 + (0.19 * (double) (number));
         }
 
@@ -585,13 +585,13 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Airbending) {
@@ -601,7 +601,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             app.maxlungs = 150 + (75 * number);
             app.world.floatiness = 2;
         }
@@ -634,20 +634,20 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX, app.world.y - app.world.viewY,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX, app.world.y - app.world.viewY,
                     app.world.mouseX, app.world.mouseY);
             // direction+=180;
             if (app.world.isSolid(app.world.x, app.world.y - World.head + 1)) {
                 app.energico += 50;
             }
-            mx = ((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = ((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -668,7 +668,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -685,7 +685,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             ID = Server.EARTHBENDING;
             subID = 1;
@@ -694,14 +694,14 @@ public abstract class Spell {
             X = app.world.pressX + app.world.viewX;
             Y = app.world.pressY + app.world.viewY;
 
-            double direction = APPLET.pointDir(mx, my, X, Y);
+            double direction = Client.pointDir(mx, my, X, Y);
             if ((mx == X) && (my == Y)) {
                 direction = 90;
             }
             // direction+=180;
 
-            mx = X - ((int) (APPLET.lengthdir_x(72, direction)));
-            my = Y + ((int) (APPLET.lengthdir_y(72, direction)));
+            mx = X - ((int) (Client.lengthdir_x(72, direction)));
+            my = Y + ((int) (Client.lengthdir_y(72, direction)));
             maker = ID;
             if (!app.world.isSolid(X, Y) || app.pointDis(app.world.x, app.world.y, X, Y) > 300
                     || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
@@ -743,19 +743,19 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
             if (app.world.isSolid(app.world.x, app.world.y + 4)) {
                 app.energico += 50;
             }
-            mx = ((int) (APPLET.lengthdir_x(32, direction)));
-            my = ((int) (APPLET.lengthdir_y(32, direction)));
+            mx = ((int) (Client.lengthdir_x(32, direction)));
+            my = ((int) (Client.lengthdir_y(32, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -789,20 +789,20 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
             if (app.world.isSolid(app.world.x, app.world.y + 4)) {
                 app.energico += 50;
             }
-            mx = ((int) (APPLET.lengthdir_x(18, direction)));
-            my = ((int) (APPLET.lengthdir_y(18, direction)));
+            mx = ((int) (Client.lengthdir_x(18, direction)));
+            my = ((int) (Client.lengthdir_y(18, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -823,7 +823,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -840,7 +840,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.pressX + app.world.viewX;
             Y = app.world.pressY + app.world.viewY;
@@ -873,7 +873,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -892,7 +892,7 @@ public abstract class Spell {
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Earthbending) {
@@ -903,7 +903,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             if (app.energico > 0 && app.HP < app.MAXHP) {
                 app.energico -= 150;
                 app.HP += 5;
@@ -911,7 +911,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             /*
              * if (app.energico>0) { app.energico--; }
              */
@@ -949,7 +949,7 @@ public abstract class Spell {
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Earthbending) {
@@ -960,7 +960,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             app.knockbackDecay = 0.8 - ((double) number / 10d);
             app.world.floatiness = -7 * (number + 1);
         }
@@ -988,7 +988,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -997,11 +997,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1022,7 +1022,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -1039,7 +1039,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1048,11 +1048,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = ((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1085,7 +1085,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             mx = app.world.mouseX + app.world.viewX;
             my = app.world.mouseY + app.world.viewY;
@@ -1130,7 +1130,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1139,11 +1139,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(9, direction)));
-            my = ((int) (APPLET.lengthdir_y(9, direction)));
+            mx = ((int) (Client.lengthdir_x(9, direction)));
+            my = ((int) (Client.lengthdir_y(9, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1164,7 +1164,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -1178,7 +1178,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             mx = app.world.mouseX + app.world.viewX;
             my = app.world.mouseY + app.world.viewY;
@@ -1219,13 +1219,13 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Waterbending) {
@@ -1235,7 +1235,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             if (app.world.inBounds(app.world.x, app.world.y) && app.energico > 0
                     && app.world.isType((int) app.world.x, (int) app.world.y, World.WATER)) {
                 if (app.HP < app.MAXHP) {
@@ -1277,13 +1277,13 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Waterbending) {
@@ -1293,8 +1293,8 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
-            APPLET.swimmingSpeed = 1 + (0.23 * (double) (number));
+        public void getPassiveAction(Client app) {
+            Client.swimmingSpeed = 1 + (0.23 * (double) (number));
             if (app.world.inBounds(app.world.x, app.world.y)
                     && app.world.ground.cellData[(int) app.world.x][(int) app.world.y] == World.WATER) {
                 app.lungs = app.maxlungs;
@@ -1330,7 +1330,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1339,11 +1339,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = ((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1364,7 +1364,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -1381,7 +1381,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1390,11 +1390,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1427,17 +1427,17 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(4, direction)));
-            my = ((int) (APPLET.lengthdir_y(4, direction)));
+            mx = ((int) (Client.lengthdir_x(4, direction)));
+            my = ((int) (Client.lengthdir_y(4, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -1470,7 +1470,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1511,7 +1511,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1543,7 +1543,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -1562,25 +1562,25 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Firebending) {
                     number++;
                 }
             }
-            APPLET.inputer.doublecast = number;
+            Client.inputer.doublecast = number;
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
 
             // throw new UnsupportedOperationException("Not supported yet.");
             /*
@@ -1620,21 +1620,21 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Firebending) {
                     number++;
                 }
             }
-            APPLET.inputer.doublecast = number;
+            Client.inputer.doublecast = number;
         }
 
         @Override
@@ -1664,7 +1664,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             ID = Server.LIGHTNING;
             subID = 0;
@@ -1672,11 +1672,11 @@ public abstract class Spell {
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             app.HP -= 1;
             getMessage(app.out);
@@ -1693,7 +1693,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1718,7 +1718,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.mouseX + app.world.viewX;
             Y = app.world.mouseY + app.world.viewY;
@@ -1740,7 +1740,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1765,17 +1765,17 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             app.HP -= 3;
             getMessage(app.out);
@@ -1792,7 +1792,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1817,16 +1817,16 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
             app.HP -= 5;
@@ -1843,7 +1843,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1867,7 +1867,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -1888,7 +1888,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1912,14 +1912,14 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 0;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Lightning) {
@@ -1930,7 +1930,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
 
             // throw new UnsupportedOperationException("Not supported yet.");
             /*
@@ -1970,14 +1970,14 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         int number = 0;
 
         @Override
-        public void onSpawn(APPLET me) {
+        public void onSpawn(Client me) {
             number = 1;
             for (Spell e : me.spellList[me.spellBook]) {
                 if (e instanceof Lightning) {
@@ -1988,7 +1988,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             app.maxeng = 1000 + (number * 166);
             // throw new UnsupportedOperationException("Not supported yet.");
             /*
@@ -2028,7 +2028,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             app.turnVisible = 40 * 3;
             app.world.status |= World.ST_INVISIBLE;
             app.sendMovement();
@@ -2045,7 +2045,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2069,16 +2069,16 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -2094,7 +2094,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2118,16 +2118,16 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(8, direction)));
-            my = ((int) (APPLET.lengthdir_y(8, direction)));
+            mx = ((int) (Client.lengthdir_x(8, direction)));
+            my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -2143,7 +2143,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2167,7 +2167,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             app.removeAura = 40 * 5;
             app.world.status |= World.ST_DRAIN;
             app.sendMovement();
@@ -2184,7 +2184,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2208,10 +2208,10 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             mx = app.world.mouseX + app.world.viewX;
             my = app.world.mouseY + app.world.viewY;
-            if (APPLET.pointDis(app.world.x, app.world.y, mx, my) < 600) {
+            if (Client.pointDis(app.world.x, app.world.y, mx, my) < 600) {
                 app.world.x = mx;
                 app.world.y = my;
                 app.sendMovement();
@@ -2232,7 +2232,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2259,7 +2259,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
 
         }
 
@@ -2274,7 +2274,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -2297,18 +2297,18 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             app.HP -= 15;
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = ((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -2329,7 +2329,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }
@@ -2347,7 +2347,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getAction(APPLET app) {
+        public void getAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
@@ -2356,11 +2356,11 @@ public abstract class Spell {
             }
             mx = app.world.viewX;
             my = app.world.mouseY - app.world.viewY;
-            double direction = 360 - APPLET.pointDir(app.world.x - app.world.viewX,
+            double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
             // direction+=180;
-            mx = ((int) (APPLET.lengthdir_x(12, direction)));
-            my = ((int) (APPLET.lengthdir_y(12, direction)));
+            mx = ((int) (Client.lengthdir_x(12, direction)));
+            my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
             getMessage(app.out);
         }
@@ -2381,7 +2381,7 @@ public abstract class Spell {
         }
 
         @Override
-        public void getPassiveAction(APPLET app) {
+        public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
     }

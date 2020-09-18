@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game;
 
 import java.awt.*;
 import java.awt.Graphics2D;
@@ -728,9 +728,9 @@ public class World implements Serializable {
                 double slope;
                 double toMove = move, XXX1 = x + 3, YYY1 = y - 4, XXX2 = x - 3, YYY2 = y - 4;
                 if (isLiquid(x, y)) {
-                    toMove *= APPLET.swimmingSpeed;
+                    toMove *= Client.swimmingSpeed;
                 } else {
-                    toMove *= APPLET.runningSpeed;
+                    toMove *= Client.runningSpeed;
                 }
                 while (true) {
                     YYY1 += 1;
@@ -788,7 +788,7 @@ public class World implements Serializable {
                 move *= 2;
                 // toKeepMove = move*3;
                 // jumpHeight = (int)y;
-                // if (APPLET.shortJump)
+                // if (Client.shortJump)
                 // {
                 // toKeepMove = 0;
                 // }
@@ -831,20 +831,20 @@ public class World implements Serializable {
             yy[0] = (0);
             firePolygonred.addPoint(xx[0], yy[0]);
             int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
-            xx[1] = xx[0] + (int) APPLET.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) APPLET.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
             firePolygonred.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 48 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 20 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 }
                 firePolygonred.addPoint(xx[i], yy[i]);
             }
@@ -857,20 +857,20 @@ public class World implements Serializable {
             firePolygonorange.addPoint(xx[0], yy[0]);
             dir = 100 + random.nextInt(45);
             len = 40 + random.nextInt(40);
-            xx[1] = xx[0] + (int) APPLET.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) APPLET.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
             firePolygonorange.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 40 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 12 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 }
                 firePolygonorange.addPoint(xx[i], yy[i]);
             }
@@ -883,20 +883,20 @@ public class World implements Serializable {
             firePolygonyellow.addPoint(xx[0], yy[0]);
             dir = 100 + random.nextInt(45);
             len = 32 + random.nextInt(32);
-            xx[1] = xx[0] + (int) APPLET.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) APPLET.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
             firePolygonyellow.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 32 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 4 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) APPLET.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) APPLET.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
                 }
                 firePolygonyellow.addPoint(xx[i], yy[i]);
             }
@@ -912,10 +912,10 @@ public class World implements Serializable {
 
     public void onDraw(Graphics g) {
         // int incX, incY;
-        // incX = (int)APPLET.lengthdir_x(APPLET.pointDis(x, y, mouseX,
-        // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
-        // incY = (int)APPLET.lengthdir_y(APPLET.pointDis(x, y, mouseX,
-        // mouseY)/8,APPLET.pointDir(x, y, mouseX, mouseY));
+        // incX = (int)Client.lengthdir_x(Client.pointDis(x, y, mouseX,
+        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
+        // incY = (int)Client.lengthdir_y(Client.pointDis(x, y, mouseX,
+        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
         viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT+1)/2) + incX, 0),Math.max(0,wIdTh - Constants.WIDTH_INT-1));
         /*
          * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)

@@ -9,11 +9,11 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.johnwesthoff.bending.destruct.Constants;
-import com.johnwesthoff.bending.destruct.APPLET;
-import com.johnwesthoff.bending.destruct.Player;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.Constants;
+import com.johnwesthoff.bending.game.Client;
+import com.johnwesthoff.bending.game.Player;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *
@@ -95,13 +95,13 @@ public class GustEntity extends Entity {
     }
 
     private boolean collided(World w) {
-        double direction = APPLET.pointDir(previousX, previousY, X, Y);
-        int speed = (int) APPLET.pointDis(previousX, previousY, X, Y);
+        double direction = Client.pointDir(previousX, previousY, X, Y);
+        int speed = (int) Client.pointDis(previousX, previousY, X, Y);
         for (int i = 0; i <= speed; i++) {
-            if (w.checkCollision(X + (int) APPLET.lengthdir_x(i, direction),
-                    Y + (int) APPLET.lengthdir_y(i, direction))) {
-                X = X + (int) APPLET.lengthdir_x(i, direction);
-                Y = Y + (int) APPLET.lengthdir_y(i, direction);
+            if (w.checkCollision(X + (int) Client.lengthdir_x(i, direction),
+                    Y + (int) Client.lengthdir_y(i, direction))) {
+                X = X + (int) Client.lengthdir_x(i, direction);
+                Y = Y + (int) Client.lengthdir_y(i, direction);
                 return true;
             }
         }

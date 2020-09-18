@@ -10,9 +10,9 @@ import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.johnwesthoff.bending.destruct.Constants;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.Constants;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *
@@ -96,8 +96,8 @@ public class PumpkinEntity extends Entity {
                 near = true;
                 if (apples.keys[KeyEvent.VK_C]) {
                     alive = false;
-                    // APPLET.unlocks.set(0, 1, true);
-                    // APPLET.CTD.postRSSfeed(APPLET.username + " found a rare item!","A Viking
+                    // Client.unlocks.set(0, 1, true);
+                    // Client.CTD.postRSSfeed(Client.username + " found a rare item!","A Viking
                     // Helmet!");
                 }
             }

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game.ui;
 
-import static com.johnwesthoff.bending.destruct.APPLET.currentlyLoggedIn;
+import static com.johnwesthoff.bending.game.Client.currentlyLoggedIn;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -21,21 +21,26 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.johnwesthoff.bending.game.Client;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+
 /**
  *
  * @author John
  */
 public class AppletActionListener implements ActionListener {
     ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
-    APPLET pointer;
+    Client pointer;
 
-    public AppletActionListener(APPLET pointer) {
+    public AppletActionListener(final Client pointer) {
         this.pointer = pointer;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+    public void actionPerformed(final ActionEvent e) {
+        final String command = e.getActionCommand();
         if (command.equals(pointer.connect.getText())) {
             if ((!pointer.loggedOn) && pointer.menu.getItemCount() > 0) {
                 if (!currentlyLoggedIn) {
@@ -45,7 +50,7 @@ public class AppletActionListener implements ActionListener {
                 }
                 pointer.notDone = false;
                 // owner.setResizable(true);
-                pointer.username = APPLET.jtb.getText();
+                pointer.username = Client.jtb.getText();
                 pointer.serverIP = (String) pointer.hosts[pointer.menu.getSelectedIndex()];
                 if ("enterip".equals(pointer.serverIP)) {
                     pointer.serverIP = JOptionPane.showInputDialog("Server IP?");
@@ -54,7 +59,7 @@ public class AppletActionListener implements ActionListener {
                 if (pointer.start()) {
                     pointer.spellselection.setVisible(false);
                     pointer.spellselection.choochootrain.setVisible(false);
-                    APPLET.immaKeepTabsOnYou.setSelectedIndex(0);
+                    Client.immaKeepTabsOnYou.setSelectedIndex(0);
                     if (!pointer.failed) {
                         pointer.removeAll();
                         pointer.owner.setBackground(Color.black);
@@ -67,14 +72,14 @@ public class AppletActionListener implements ActionListener {
             }
         }
         if (command.equals(pointer.hosting.getText())) {
-            if (APPLET.portAvailable(pointer.port)) {
+            if (Client.portAvailable(pointer.port)) {
                 pointer.hostingPlace = Server.main2(new String[] { "" + (pointer.hostIP = pointer.addHost()), "" });
                 pointer.hosting.setText("Started!");
-                APPLET.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                Client.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 try {
                     pointer.ST.add(pointer.trayIcon);
-                } catch (AWTException ex) {
-                    // Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (final AWTException ex) {
+                    // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 pointer.serverOutput();
                 System.err.println("Server " + pointer.serverName + " started\nwith address " + pointer.hostIP
@@ -88,15 +93,15 @@ public class AppletActionListener implements ActionListener {
             pointer.getHosts();
         }
         if (command.equals(pointer.ChooseSpells.getText())) {
-            pointer.spellselection.XP.setText("XP: " + APPLET.XP);
-            pointer.spellselection.USER.setText("USER: " + APPLET.jtb.getText());
-            APPLET.immaKeepTabsOnYou.setSelectedIndex(1);
+            pointer.spellselection.XP.setText("XP: " + Client.XP);
+            pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
+            Client.immaKeepTabsOnYou.setSelectedIndex(1);
             pointer.spellselection.setVisible(true);
         }
         if (command.equals(pointer.chooseclothing.getText())) {
             pointer.cc.setVisible(true);
             pointer.cc.loadClothing();
-            APPLET.immaKeepTabsOnYou.setSelectedIndex(4);
+            Client.immaKeepTabsOnYou.setSelectedIndex(4);
             // pointer.add(pointer.cc.getPanel());
         }
         if (command.equals("Exit")) {
@@ -122,15 +127,15 @@ public class AppletActionListener implements ActionListener {
         if (command.equals("Restart")) {
 
             try {
-                ByteBuffer die = ByteBuffer.allocate(5);
+                final ByteBuffer die = ByteBuffer.allocate(5);
                 pointer.out.addMesssage(die, Server.LOGOUT);
                 Thread.sleep(1000);
             } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 pointer.destroy();
-                APPLET.gameAlive = false;
+                Client.gameAlive = false;
                 if (pointer.connection != null) {
                     pointer.input.close();
                     pointer.out.close();
@@ -143,22 +148,22 @@ public class AppletActionListener implements ActionListener {
                     pointer.hostingPlace = null;
                 }
 
-                APPLET.container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                APPLET.container.dispose();
-                APPLET.container.removeAll();
+                Client.container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                Client.container.dispose();
+                Client.container.removeAll();
                 // this.expander.interrupt();
                 pointer.ST.remove(pointer.trayIcon);
                 pointer.removeAll();
 
-                WindowEvent windowClosing = new WindowEvent(APPLET.container, WindowEvent.WINDOW_CLOSING);
-                APPLET.container.dispatchEvent(windowClosing);
-                APPLET.container = null;
+                final WindowEvent windowClosing = new WindowEvent(Client.container, WindowEvent.WINDOW_CLOSING);
+                Client.container.dispatchEvent(windowClosing);
+                Client.container = null;
                 Thread.sleep(100);
-                APPLET.main(new String[] {});
+                Client.main(new String[] {});
                 currentlyLoggedIn = false;
 
             } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (command.equals(pointer.register.getText())) {
@@ -170,9 +175,9 @@ public class AppletActionListener implements ActionListener {
         if (command.equals(pointer.verify.getText())) {
             // exactly.setVisible(true);
             if (!currentlyLoggedIn) {
-                if (currentlyLoggedIn = pointer.CTD.logIn(APPLET.jtb.getText(), pointer.jtp.getText())) {
+                if (currentlyLoggedIn = pointer.CTD.logIn(Client.jtb.getText(), pointer.jtp.getText())) {
                     if (pointer.JRB.isSelected()) {
-                        pointer.userpassinfo.setProperty("username", APPLET.jtb.getText());
+                        pointer.userpassinfo.setProperty("username", Client.jtb.getText());
                         pointer.userpassinfo.setProperty("password", pointer.jtp.getText());
                         pointer.userpassinfo.setProperty("remember", "yes");
                     } else {
@@ -183,25 +188,25 @@ public class AppletActionListener implements ActionListener {
                     try {
                         pointer.userpassinfo
                                 .store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
-                    } catch (Exception ex) {
-                        Logger.getLogger(APPLET.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (final Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     // verify.setEnabled(false);
-                    APPLET.jtb.setEditable(false);
+                    Client.jtb.setEditable(false);
                     pointer.jtp.setEditable(false);
                     pointer.verify.setText("Log Out");
                     pointer.verify.setForeground(Color.red);
-                    APPLET.XP = pointer.CTD.getXP(APPLET.jtb.getText(), pointer.jtp.getText());
+                    Client.XP = pointer.CTD.getXP(Client.jtb.getText(), pointer.jtp.getText());
                     pointer.cc.loadClothing();
                     pointer.spellselection.loadSpells();
                     pointer.chooseclothing.setEnabled(true);
                     pointer.ChooseSpells.setEnabled(true);
                     pointer.connect.setEnabled(true);
-                    INSTANCE.getUnlocks(APPLET.jtb.getText(), pointer.jtp.getText());
+                    INSTANCE.getUnlocks(Client.jtb.getText(), pointer.jtp.getText());
                 }
             } else {
                 pointer.verify.setText("Log In");
-                APPLET.jtb.setEditable(true);
+                Client.jtb.setEditable(true);
                 pointer.jtp.setEditable(true);
                 pointer.chooseclothing.setEnabled(false);
                 pointer.ChooseSpells.setEnabled(false);

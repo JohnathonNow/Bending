@@ -8,9 +8,9 @@ package com.johnwesthoff.bending.entity;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.destruct.Player;
-import com.johnwesthoff.bending.destruct.Server;
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.Player;
+import com.johnwesthoff.bending.game.Server;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *

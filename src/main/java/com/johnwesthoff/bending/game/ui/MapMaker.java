@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
  *

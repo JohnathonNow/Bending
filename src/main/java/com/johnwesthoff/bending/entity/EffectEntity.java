@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.destruct.World;
+import com.johnwesthoff.bending.game.World;
 
 /**
  *

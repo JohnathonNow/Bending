@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.destruct;
+package com.johnwesthoff.bending.game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
