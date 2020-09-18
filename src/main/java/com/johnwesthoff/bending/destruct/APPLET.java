@@ -1221,6 +1221,14 @@ public class APPLET extends JPanel implements Runnable {
                 }
                 continue;
             }
+            if (matchOver > 0) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
             while (delta >= 1) {
                 delta -= 1;
                 // System.out.println(delta);
