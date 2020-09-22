@@ -100,7 +100,7 @@ import com.johnwesthoff.bending.entity.WaterBallEntity;
 import com.johnwesthoff.bending.logic.AppletInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
-import com.johnwesthoff.bending.logic.Spell;
+import com.johnwesthoff.bending.spells.*;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.ui.AppletActionListener;
 import com.johnwesthoff.bending.ui.ClothingChooser1;

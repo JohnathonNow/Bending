@@ -2,8 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.johnwesthoff.bending.logic;
-
+package com.johnwesthoff.bending.spells;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -15,6 +14,7 @@ import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 import static com.johnwesthoff.bending.util.network.ResourceLoader.*;

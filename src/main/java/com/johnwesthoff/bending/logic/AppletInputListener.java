@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.johnwesthoff.bending.spells.*;
 
 import javax.swing.JFrame;
 

@@ -15,7 +15,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.logic.Spell;
+import com.johnwesthoff.bending.spells.*;
 
 /**
  *
