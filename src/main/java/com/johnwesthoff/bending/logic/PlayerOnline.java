@@ -279,7 +279,6 @@ public class PlayerOnline extends Player implements Runnable {
                     case 4:
                         int number = handle.earth.ground.sandinate(Xx, Yy, 96);
                         number /= (32);
-                        System.out.println(number);
                         handle.earth.entityList.add(new SandEntity(Xx, Yy, mX, mY, ID).setID(Iw));
                         if (number > 3) {
                             handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),

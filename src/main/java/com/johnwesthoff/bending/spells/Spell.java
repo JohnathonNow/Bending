@@ -171,9 +171,26 @@ public abstract class Spell {
         }
     }
 
+    /**
+     * Executes the command for the spell as a result of a player action
+     * @param app   the client performing this action and having its state modified
+     *              as a result
+     *
+     */
     public abstract void getAction(Client app);
 
-    public abstract void getActionNetwork(World world, int xx, int yy, int mx, int my, int pid, int eid,
+    /**
+     * Executes the command for the spell as a result of a network event
+     * @param world the game state object being modified as a result of this spell
+     * @param px    the x coordinate of the casting player
+     * @param py    the y coordinate of the casting player
+     * @param mx    the x coordinate of the mouse of the casting player
+     * @param my    the y coordinate of the mouse of the casting player
+     * @param pid   the id of the casting player
+     * @param eid   the id of the first entity created by casting this spell
+     *
+     */
+    public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
             ByteBuffer buf);
 
     public abstract int getCost();
