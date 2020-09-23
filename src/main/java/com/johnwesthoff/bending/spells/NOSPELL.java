@@ -1,0 +1,53 @@
+
+package com.johnwesthoff.bending.spells;
+
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
+
+public class NOSPELL extends Spell {
+    public NOSPELL() {
+        try {
+            icon = new ImageIcon(
+                    ResourceLoader.loadImage("https://west-it.webs.com/spells/nospell.png", "nospell.png"));
+        } catch (Exception ex) {
+            Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void getAction(Client app) {
+
+    }
+
+    @Override
+    public int getCost() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return "None";
+    }
+
+    @Override
+    public void getPassiveAction(Client app) {
+    }
+
+    @Override
+    public String getTip() {
+        return "<html>Nothing</html>";
+    }
+
+    @Override
+    public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+}
+
