@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -49,7 +50,7 @@ public class WaterStorm extends Waterbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        world.entityList.add(new RainEntity(px, py, pid).setID(eid));
     }
 }
 

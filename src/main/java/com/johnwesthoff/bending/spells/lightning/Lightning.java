@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
@@ -68,7 +69,7 @@ public class Lightning extends Spell {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        world.entityList.add(new EnergyEntity(px, py, mx, my, pid).setID(eid));
     }
 }
 

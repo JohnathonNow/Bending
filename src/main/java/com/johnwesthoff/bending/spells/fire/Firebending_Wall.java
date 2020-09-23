@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
@@ -53,7 +54,7 @@ public class Firebending_Wall extends Firebending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        world.entityList.add(new WallofFireEntity(px, py, 8, 0, pid).setID(eid));
+        world.entityList.add(new WallofFireEntity(px, py, -8, 0, pid).setID(eid));
     }
 }
-

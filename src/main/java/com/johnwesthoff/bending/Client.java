@@ -793,253 +793,121 @@ public class Client extends JPanel implements Runnable {
                                     ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     int subID = buf.getInt();
-                                    int Xx = buf.getInt();
-                                    int Yy = buf.getInt();
-                                    int mX = buf.getInt();
-                                    int mY = buf.getInt();
-                                    int ma = buf.getInt();
-                                    int iw = buf.getInt();
-                                    Spell.getAirSpell(subID).getActionNetwork(world, Xx, Yy, mX, mY, ma, iw, buf);
+                                    int px = buf.getInt();
+                                    int py = buf.getInt();
+                                    int mx = buf.getInt();
+                                    int my = buf.getInt();
+                                    int pid = buf.getInt();
+                                    int eid = buf.getInt();
+                                    Spell.getAirSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid, buf);
                                     airCast.start(-30f);
                                     break;
                                 case Server.LIGHTNING:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     subID = buf.getInt();
-                                    Xx = buf.getInt();
-                                    Yy = buf.getInt();
-                                    mX = buf.getInt();
-                                    mY = buf.getInt();
-                                    ma = buf.getInt();
-                                    iw = buf.getInt();
-                                    switch (subID) {
-                                        case 0:// Fire ball
-                                            world.entityList.add(new EnergyEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 1:
-                                            world.entityList.add((new CloudEntity(Xx, Yy, ID).setID(iw)));
-                                            break;
-                                        case 2:
-                                            world.entityList.add(new BallLightningEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 3:
-                                            world.entityList.add(new StaticShotEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 5:
-                                            world.entityList.add(new RodEntity(Xx, Yy, mX, ma).setID(iw));
-                                            break;
-                                    }
+                                    px = buf.getInt();
+                                    py = buf.getInt();
+                                    mx = buf.getInt();
+                                    my = buf.getInt();
+                                    pid = buf.getInt();
+                                    eid = buf.getInt();
+                                    Spell.getLightningSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
+                                            buf);
                                     break;
                                 case Server.EARTHBENDING:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     subID = buf.getInt();
-                                    Xx = buf.getInt();
-                                    Yy = buf.getInt();
-                                    mX = buf.getInt();
-                                    mY = buf.getInt();
-                                    ma = buf.getInt();
-                                    iw = buf.getInt();
-                                    switch (subID) {
-                                        case 0:// Earth ball
-                                            world.entityList.add(new RockEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 1:// Earth Spike
-                                            final Polygon P = new Polygon();
-                                            P.addPoint(Xx + 28, Yy);
-                                            P.addPoint(Xx - 28, Yy);
-                                            P.addPoint(mX, mY);
-                                            world.ground.FillPolygon(P, World.STONE);
-                                            if (P.contains(world.x, world.y)) {
+                                    px = buf.getInt();
+                                    py = buf.getInt();
+                                    mx = buf.getInt();
+                                    my = buf.getInt();
+                                    pid = buf.getInt();
+                                    eid = buf.getInt();
+                                    if (subID == 1) {
+                                        final Polygon P = new Polygon();
+                                        P.addPoint(px + 28, py);
+                                        P.addPoint(px - 28, py);
+                                        P.addPoint(mx, my);
+                                        world.ground.FillPolygon(P, World.STONE);
+                                        if (P.contains(world.x, world.y)) {
 
-                                                world.vspeed = -4;
-                                                xspeed = mX - Xx;
-                                                world.x = mX + (int) xspeed;
-                                                world.y = mY + (int) world.vspeed;
-                                                // HP-=15;
-                                                sendMovement();
-                                            }
-                                            // world.entityList.add(new
-                                            // EffectEntity(Xx,Yy,mX,mY,random.nextInt(40),Color.WHITE));
-                                            break;
-                                        case 2:// EarthShard
-                                            world.entityList.add(new ShardEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 4:// EarthSand
-                                            world.ground.sandinate(Xx, Yy, 96);
-                                            final int number = buf.getInt();
-                                            world.entityList.add(new SandEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            if (number > 3) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),
-                                                                mY + (int) Client.lengthdir_y(4, 30), ma)
-                                                                        .setID(iw + 1));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -30),
-                                                                mY + (int) Client.lengthdir_y(4, -30), ma)
-                                                                        .setID(iw + 2));
-                                            }
-                                            if (number > 5) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                                                                mY + (int) Client.lengthdir_y(4, 45), ma)
-                                                                        .setID(iw + 3));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                                                                mY + (int) Client.lengthdir_y(4, -45), ma)
-                                                                        .setID(iw + 4));
-                                            }
-                                            if (number > 7) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 60),
-                                                                mY + (int) Client.lengthdir_y(4, 60), ma)
-                                                                        .setID(iw + 5));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -60),
-                                                                mY + (int) Client.lengthdir_y(4, -60), ma)
-                                                                        .setID(iw + 6));
-                                            }
-                                            if (number > 12) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 15),
-                                                                mY + (int) Client.lengthdir_y(4, 15), ma)
-                                                                        .setID(iw + 7));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -15),
-                                                                mY + (int) Client.lengthdir_y(4, -15), ma)
-                                                                        .setID(iw + 8));
-                                            }
-                                            if (number > 16) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 35),
-                                                                mY + (int) Client.lengthdir_y(4, 35), ma)
-                                                                        .setID(iw + 9));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -35),
-                                                                mY + (int) Client.lengthdir_y(4, -35), ma)
-                                                                        .setID(iw + 10));
-                                            }
-                                            if (number > 20) {
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                                                                mY + (int) Client.lengthdir_y(4, 45), ma)
-                                                                        .setID(iw + 11));
-                                                world.entityList.add(
-                                                        new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                                                                mY + (int) Client.lengthdir_y(4, -45), ma)
-                                                                        .setID(iw + 12));
-                                            }
-                                            break;
-                                        case 5:
-                                            // handle.earth.entityList.add(new EffectEntity(Xx,Yy,mX,mY,ma));
-
-                                            world.ground.FillRectW(Xx - 12, Yy - 12, 24, 24, World.SAND);
-                                            break;
+                                            world.vspeed = -4;
+                                            xspeed = mx - px;
+                                            world.x = mx + (int) xspeed;
+                                            world.y = my + (int) world.vspeed;
+                                            // HP-=15;
+                                            sendMovement();
+                                        }
+                                    } else {
+                                        Spell.getEarthSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
+                                                buf);
                                     }
+
                                     break;
                                 case Server.WATERBENDING:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     subID = buf.getInt();
-                                    Xx = buf.getInt();
-                                    Yy = buf.getInt();
-                                    mX = buf.getInt();
-                                    mY = buf.getInt();
-                                    ma = buf.getInt();
-                                    iw = buf.getInt();
-                                    switch (subID) {
-                                        case 0:// Water ball
-                                            world.entityList.add(new WaterBallEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 1:// Water ball
-                                            world.entityList.add(new FreezeEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 2:// Water spout
-                                            world.entityList.add(new SpoutSourceEntity(Xx, Yy, 50, ma).setID(iw));
-                                            break;
-                                        case 4:// Water spout
-                                            world.entityList.add(new IceShardEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 5: // Snow Gun
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX + 1, mY + 1, ma).setID(iw));
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX + 1, mY - 1, ma).setID(iw));
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX - 1, mY + 1, ma).setID(iw));
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX - 1, mY - 1, ma).setID(iw));
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX, mY + 1, ma).setID(iw));
-                                            world.entityList.add(new SnowEntity(Xx, Yy, mX + 1, mY, ma).setID(iw));
-                                            break;
-                                        case 6:// Water spout
-                                            world.entityList.add(new RainEntity(Xx, Yy, ma).setID(iw));
-                                            break;
+                                    px = buf.getInt();
+                                    py = buf.getInt();
+                                    mx = buf.getInt();
+                                    my = buf.getInt();
+                                    pid = buf.getInt();
+                                    eid = buf.getInt();
+                                    if (subID == 5) {
+                                        // TODO: not sure what this is
+                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my + 1, pid).setID(eid));
+                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my - 1, pid).setID(eid));
+                                        world.entityList.add(new SnowEntity(px, py, mx - 1, my + 1, pid).setID(eid));
+                                        world.entityList.add(new SnowEntity(px, py, mx - 1, my - 1, pid).setID(eid));
+                                        world.entityList.add(new SnowEntity(px, py, mx, my + 1, pid).setID(eid));
+                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my, pid).setID(eid));
+                                    } else {
+                                        Spell.getWaterSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
+                                                buf);
                                     }
                                     break;
                                 case Server.FIREBENDING:
                                     // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     subID = buf.getInt();
-                                    Xx = buf.getInt();
-                                    Yy = buf.getInt();
-                                    mX = buf.getInt();
-                                    mY = buf.getInt();
-                                    ma = buf.getInt();
-                                    iw = buf.getInt();
-                                    switch (subID) {
-                                        case 0:// Fire ball
-                                            world.entityList.add(new FireBallEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 1:// Lava ball
-                                            world.entityList.add(new LavaBallEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 2:// Fire leap
-                                            world.entityList.add(new FireJumpEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 4:// Fire wall
-                                            world.entityList.add(new WallofFireEntity(Xx, Yy, 8, 0, ma).setID(iw));
-                                            world.entityList.add(new WallofFireEntity(Xx, Yy, -8, 0, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 5:// Flamethrower
-                                            world.entityList.add(new FlameThrowerEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 6:// Flames
-                                            world.entityList.add(new FirePuffEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 9:// Fire ball
-                                            world.entityList.add(new BuritoEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
-                                        case 10:// Fire ball
-                                            world.entityList.add(new FireDoom(Xx, Yy, mX, mY, ma).setID(iw));
-                                            fireCast.start(-3f);
-                                            break;
+                                    px = buf.getInt();
+                                    py = buf.getInt();
+                                    mx = buf.getInt();
+                                    my = buf.getInt();
+                                    pid = buf.getInt();
+                                    eid = buf.getInt();
+                                    fireCast.start(-3f);
+                                    if (subID == 6) {
+                                        world.entityList.add(new FirePuffEntity(px, py, mx, my, pid).setID(eid));
+                                        // TODO: not sure what this entity is...
+                                    } else {
+                                        Spell.getFireSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
+                                                buf);
                                     }
                                     break;
                                 case Server.DARKNESS:
                                     buf = Server.readByteBuffer(input);
                                     subID = buf.getInt();
-                                    Xx = buf.getInt();
-                                    Yy = buf.getInt();
-                                    mX = buf.getInt();
-                                    mY = buf.getInt();
-                                    ma = buf.getInt();
-                                    iw = buf.getInt();
+                                    px = buf.getInt();
+                                    py = buf.getInt();
+                                    mx = buf.getInt();
+                                    my = buf.getInt();
+                                    pid = buf.getInt();
+                                    eid = buf.getInt();
                                     switch (subID) {
-                                        case 1:
-                                            world.entityList.add(new SoulDrainEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 2:
-                                            world.entityList.add(new SummonBallEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
+                                        // TODO: Not sure what 3 and 10 are for...
                                         case 3:
-                                            world.entityList.add(new SpoutSourceEntity(Xx, Yy, 50, ma).setID(iw));
+                                            world.entityList.add(new SpoutSourceEntity(px, py, 50, pid).setID(eid));
                                             break;
                                         case 10:
-                                            world.entityList.add(new EnemyEntity(Xx, Yy, mX, mY, ma).setID(iw));
+                                            world.entityList.add(new EnemyEntity(px, py, mx, my, pid).setID(eid));
                                             break;
+                                        default:
+                                            Spell.getDarkSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
+                                                    buf);
                                     }
                                     break;
                                 case Server.FREEZE:
@@ -1169,15 +1037,15 @@ public class Client extends JPanel implements Runnable {
             worldList.add(world);
             repaint();
             started = true;
-        }catch(
+        } catch (
 
-    final Exception ex)
-    {
+        final Exception ex) {
 
             failed = true;
             return false;
-        }return true;
-    // terrain.getGraphics().drawImage(Grass, 0,0,null);
+        }
+        return true;
+        // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
 
     public Rectangle playerHitbox;

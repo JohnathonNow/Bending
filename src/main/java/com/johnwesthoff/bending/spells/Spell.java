@@ -110,7 +110,7 @@ public abstract class Spell {
         spells.add(Spell.getWaterSpell(0));
         spells.add(Spell.getWaterSpell(1));
         spells.add(Spell.getWaterSpell(2));
-        spells.add(Spell.getWaterSpell(3));
+        spells.add(Spell.getWaterSpell(6));
         spells.add(Spell.getWaterSpell(4));
         // spells.add(Spell.getWaterSpell(4));
         // System.out.println("YAY4");
@@ -272,13 +272,13 @@ public abstract class Spell {
                 return new WaterbendingFreeze();
             case 2:
                 return new WaterSpout();
-            case 3:
-                return new WaterbendingShard();
             case 4:
-                return new WaterStorm();
-            case 5:
-                return new BreathUnderWater();
+                return new WaterbendingShard();
             case 6:
+                return new WaterStorm();
+            case 3:
+                return new BreathUnderWater();
+            case 23:
                 return new WaterTreading();
         }
     }

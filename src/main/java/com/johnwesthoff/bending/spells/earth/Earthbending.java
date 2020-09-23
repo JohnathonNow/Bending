@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.RockEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
@@ -64,7 +65,7 @@ public class Earthbending extends Spell {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        world.entityList.add(new RockEntity(px, py, mx, my, pid).setID(eid));
     }
 }
 

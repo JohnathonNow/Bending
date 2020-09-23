@@ -63,7 +63,7 @@ public class EarthbendingWallOfSand extends Earthbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        world.ground.FillRectW(px - 12, py - 12, 24, 24, World.SAND);
     }
 }
 
