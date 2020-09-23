@@ -173,14 +173,16 @@ public abstract class Spell {
 
     /**
      * Executes the command for the spell as a result of a player action
-     * @param app   the client performing this action and having its state modified
-     *              as a result
+     * 
+     * @param app the client performing this action and having its state modified as
+     *            a result
      *
      */
     public abstract void getAction(Client app);
 
     /**
      * Executes the command for the spell as a result of a network event
+     * 
      * @param world the game state object being modified as a result of this spell
      * @param px    the x coordinate of the casting player
      * @param py    the y coordinate of the casting player
@@ -2027,7 +2029,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2056,7 +2057,7 @@ public abstract class Spell {
 
         @Override
         public void getAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
+
             X = app.world.x;
             Y = app.world.y - World.head;
             mx = 0;
@@ -2077,7 +2078,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2125,11 +2125,6 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
 
-            // throw new UnsupportedOperationException("Not supported yet.");
-            /*
-             * if (app.energico<app.maxeng) { if (charge++>1) { app.HP--; charge = 0; }
-             * app.energico+=app.engrecharge*3; }
-             */
         }
 
         @Override
@@ -2168,7 +2163,6 @@ public abstract class Spell {
 
         @Override
         public void getAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         int number = 0;
@@ -2187,11 +2181,6 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             app.maxeng = 1000 + (number * 166);
-            // throw new UnsupportedOperationException("Not supported yet.");
-            /*
-             * if (app.energico<app.maxeng) { if (charge++>1) { app.HP--; charge = 0; }
-             * app.energico+=app.engrecharge*3; }
-             */
         }
 
         @Override
@@ -2247,7 +2236,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2301,7 +2289,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2336,7 +2323,6 @@ public abstract class Spell {
             my = app.world.mouseY - app.world.viewY;
             double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-            // direction+=180;
             mx = ((int) (Client.lengthdir_x(8, direction)));
             my = ((int) (Client.lengthdir_y(8, direction)));
             maker = ID;
@@ -2355,7 +2341,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2401,7 +2386,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2454,7 +2438,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2501,7 +2484,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2529,7 +2511,6 @@ public abstract class Spell {
 
         @Override
         public void getAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             app.HP -= 15;
@@ -2537,7 +2518,6 @@ public abstract class Spell {
             my = app.world.mouseY - app.world.viewY;
             double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-            // direction+=180;
             mx = ((int) (Client.lengthdir_x(12, direction)));
             my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
@@ -2561,7 +2541,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2570,6 +2549,8 @@ public abstract class Spell {
         }
     }
 
+
+    
     public static class FireMaster extends Spell {
         public FireMaster() {
             ID = Server.FIREBENDING;
@@ -2584,7 +2565,6 @@ public abstract class Spell {
 
         @Override
         public void getAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
             X = app.world.x;
             Y = app.world.y - World.head;
             if (app.world.isLiquid(X, Y)) {
@@ -2594,7 +2574,6 @@ public abstract class Spell {
             my = app.world.mouseY - app.world.viewY;
             double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                     app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-            // direction+=180;
             mx = ((int) (Client.lengthdir_x(12, direction)));
             my = ((int) (Client.lengthdir_y(12, direction)));
             maker = ID;
@@ -2618,7 +2597,6 @@ public abstract class Spell {
 
         @Override
         public void getPassiveAction(Client app) {
-            // throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -2627,4 +2605,3 @@ public abstract class Spell {
         }
     }
 }
-// https://west-it.webs.com/spells/BreathUnderWater.png
