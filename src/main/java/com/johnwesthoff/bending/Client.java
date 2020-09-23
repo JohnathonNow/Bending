@@ -149,7 +149,7 @@ public class Client extends JPanel implements Runnable {
     public Random random = new Random();
     public String serverIP = "LocalHost";
     public Thread mainProcess;
-	public Thread udpthread;
+    public Thread udpthread;
     public DatagramSocket udpconnection;
     public boolean notDone = true;
     public boolean ignored = true;
@@ -555,7 +555,7 @@ public class Client extends JPanel implements Runnable {
     public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
     public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
-            public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+    public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
             Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
@@ -799,25 +799,7 @@ public class Client extends JPanel implements Runnable {
                                     int mY = buf.getInt();
                                     int ma = buf.getInt();
                                     int iw = buf.getInt();
-                                    switch (subID) {
-                                        case 0:// Air ball
-                                            world.entityList.add(new MissileEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 1:// Air jump
-                                            world.entityList.add(
-                                                    new EffectEntity(Xx, Yy, mX, mY, random.nextInt(40), Color.WHITE)
-                                                            .setID(iw));
-                                            break;
-                                        case 2:// Tornado
-                                            world.entityList.add(new TornadoEntity(Xx, Yy, mX, ma).setID(iw));
-                                            break;
-                                        case 4:// Air gust
-                                            world.entityList.add(new GustEntity(Xx, Yy, mX, mY, ma).setID(iw));
-                                            break;
-                                        case 5:
-                                            world.ground.ClearCircle(Xx, Yy, 48);
-                                            break;
-                                    }
+                                    Spell.getAirSpell(subID).getActionNetwork(world, Xx, Yy, mX, mY, ma, iw, buf);
                                     airCast.start(-30f);
                                     break;
                                 case Server.LIGHTNING:
@@ -1187,13 +1169,15 @@ public class Client extends JPanel implements Runnable {
             worldList.add(world);
             repaint();
             started = true;
-        } catch (final Exception ex) {
+        }catch(
+
+    final Exception ex)
+    {
 
             failed = true;
             return false;
-        }
-        return true;
-        // terrain.getGraphics().drawImage(Grass, 0,0,null);
+        }return true;
+    // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
 
     public Rectangle playerHitbox;

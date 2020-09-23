@@ -4,6 +4,9 @@
  */
 package com.johnwesthoff.bending.spells;
 
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -14,10 +17,13 @@ import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.entity.EffectEntity;
+import com.johnwesthoff.bending.entity.GustEntity;
+import com.johnwesthoff.bending.entity.MissileEntity;
+import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
-import static com.johnwesthoff.bending.util.network.ResourceLoader.*;
 
 /*
  * Energy cost table:
@@ -166,6 +172,9 @@ public abstract class Spell {
     }
 
     public abstract void getAction(Client app);
+
+    public abstract void getActionNetwork(World world, int xx, int yy, int mx, int my, int pid, int eid,
+            ByteBuffer buf);
 
     public abstract int getCost();
 
@@ -335,6 +344,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            world.entityList.add(new MissileEntity(px, py, mx, my, pid).setID(eid));
+        }
     }
 
     public static class AirbendingJump extends Spell {
@@ -384,6 +398,12 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            world.entityList.add(new EffectEntity(px, py, mx, my, world.random.nextInt(40), Color.WHITE).setID(eid));
+        }
+
     }
 
     public static class AirbendingTornado extends Spell {
@@ -425,6 +445,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            world.entityList.add(new TornadoEntity(px, py, mx, pid).setID(eid));
         }
     }
 
@@ -479,6 +504,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+        }
     }
 
     public static class AirbendingAir extends Airbending {
@@ -522,6 +552,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            world.ground.ClearCircle(px, py, 48);
         }
     }
 
@@ -573,6 +608,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>A passive air spell<br>Move faster; Jump higher</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -626,6 +666,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A passive air spell<br>Fall more slowly<br>Have more lung capacity</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Earthbending extends Spell {
@@ -676,6 +721,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -735,6 +785,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>An intermediate earth spell<br>Moderate-High Energy Cost<br>Summon a spike from the ground</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class EarthbendingShard extends Earthbending {
@@ -781,6 +836,10 @@ public abstract class Spell {
             return "<html>A basic earth spell<br>Low-Moderate Energy Cost<br>Travels quickly in a straight line<br>Deals moderate damage</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class EarthbendingSand extends Earthbending {
@@ -832,6 +891,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class EarthbendingWallOfSand extends Earthbending {
@@ -881,6 +945,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -939,6 +1008,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A passive earth spell<br>Increase maximum health</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class EarthbendingStance extends Earthbending {
@@ -979,6 +1053,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>A passive earth spell<br>Decrease knockback</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1031,6 +1110,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class WaterbendingFreeze extends Waterbending {
@@ -1077,6 +1161,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A basic water spell<br>Low-Moderate Energy Cost<br>Highly affected by gravity<br>Freezes nearby water</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class WaterSpout extends Waterbending {
@@ -1121,6 +1210,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>An intermediate water spell<br>Moderate-High Energy Cost<br>Summon a waterspout from a water source</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1173,6 +1267,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class WaterStorm extends Waterbending {
@@ -1210,6 +1309,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>An intermediate water spell<br>Very High Energy Cost<br>Summon a storm cloud</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1269,6 +1373,11 @@ public abstract class Spell {
             return "<html>A passive water spell<br>High Energy Cost<br>Heal when in water</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
     }
 
     public static class WaterTreading extends Waterbending {
@@ -1322,6 +1431,10 @@ public abstract class Spell {
             return "<html>A passive water spell<br>Move faster through fluids</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Firebending extends Spell {
@@ -1373,6 +1486,11 @@ public abstract class Spell {
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Firebending_Lava extends Firebending {
@@ -1419,6 +1537,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>An intermediate fire spell<br>Moderate-High Energy Cost<br>Shoot a lava ball<br>Lightly effected by gravity<br>Creates a pool of lava</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Firebending_Thrower extends Firebending {
@@ -1462,6 +1585,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A basic fire spell<br>Low-Moderate Energy Cost<br>Set your foes on fire!<br>Lightly effected by gravity</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Firebending_Wall extends Firebending {
@@ -1503,6 +1631,10 @@ public abstract class Spell {
             return "<html>An advanced fire spell<br>Very Very High Energy Cost<br>Projects two separating columns of fire<br>Not effected by gravity</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class FirebendingJump extends Spell {
@@ -1551,6 +1683,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1610,6 +1747,10 @@ public abstract class Spell {
             return "<html>A passive fire spell<br>Have a chance at casting twice as many fire spells</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class FireProof extends Firebending {
@@ -1653,6 +1794,10 @@ public abstract class Spell {
             return "<html>A passive fire spell<br>Fire damage recharges your batteries</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Lightning extends Spell {
@@ -1707,6 +1852,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A basic lightning spell<br>Low Health Cost<br>Travels in a straight line<br>Deals low damage<br>Restores energy in blast vicinity</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class LightningStorm extends Lightning {
@@ -1753,6 +1903,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>An intermediate lightning spell<br>Low-Moderate Energy Cost<br>Low Health Cost<br>Fires from overhead<br>Deals low damage<br>Restores energy in blast vicinity</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1806,6 +1961,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A basic lightning spell<br>Low Health Cost<br>Lightly affected by gravity<br>Deals low damage<br>High knockback</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class LightningMine extends Lightning {
@@ -1857,6 +2017,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>An intermediate lightning spell<br>Low Health Cost<br>Low Energy Cost<br>Creates a static charge<br>Deals low damage<br></html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class LightningRod extends Lightning {
@@ -1901,6 +2066,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>An intermediate lightning spell<br>Low-Moderate Energy Cost<br>Strongly affected by gravity<br>Drains enemy energy</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -1960,6 +2130,10 @@ public abstract class Spell {
             return "<html>A passive lightning spell<br>Have a chance at converting health loss into energy loss</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class LightningOvercharge extends Lightning {
@@ -2018,6 +2192,10 @@ public abstract class Spell {
             return "<html>A passive lightning spell<br>Have more energy</html>";
         }
 
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class Darkness extends Spell {
@@ -2058,6 +2236,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>A basic darkness spell<br>Moderate Energy Cost<br>Turn invisible for a short time</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -2108,6 +2291,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>A basic darkness spell<br>Moderate-High Energy Cost<br>Steal the health of your foe<br>Unaffected by gravity</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class DarkSummonBall extends Spell {
@@ -2157,6 +2345,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>An intermediate darkness spell<br>High Energy Cost<br>Summon an undead minion</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     public static class DarkAura extends Spell {
@@ -2197,6 +2390,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>An intermediate darkness spell<br>High Energy Cost<br>For five seconds, nearby players are hurt</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -2246,6 +2444,11 @@ public abstract class Spell {
         public String getTip() {
             return "<html>An intermediate darkness spell<br>Total Energy Cost<br>Teleport to a point of your choice</html>";
         }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     ImageIcon icon;
@@ -2287,6 +2490,11 @@ public abstract class Spell {
         @Override
         public String getTip() {
             return "<html>Nothing</html>";
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -2337,6 +2545,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -2389,6 +2602,11 @@ public abstract class Spell {
         @Override
         public void getPassiveAction(Client app) {
             // throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 }

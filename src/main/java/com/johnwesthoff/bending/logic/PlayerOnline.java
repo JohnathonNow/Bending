@@ -22,10 +22,8 @@ import com.johnwesthoff.bending.entity.FireDoom;
 import com.johnwesthoff.bending.entity.FireJumpEntity;
 import com.johnwesthoff.bending.entity.FlameThrowerEntity;
 import com.johnwesthoff.bending.entity.FreezeEntity;
-import com.johnwesthoff.bending.entity.GustEntity;
 import com.johnwesthoff.bending.entity.IceShardEntity;
 import com.johnwesthoff.bending.entity.LavaBallEntity;
-import com.johnwesthoff.bending.entity.MissileEntity;
 import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.entity.RockEntity;
 import com.johnwesthoff.bending.entity.RodEntity;
@@ -35,9 +33,9 @@ import com.johnwesthoff.bending.entity.SoulDrainEntity;
 import com.johnwesthoff.bending.entity.SpoutSourceEntity;
 import com.johnwesthoff.bending.entity.StaticShotEntity;
 import com.johnwesthoff.bending.entity.SummonBallEntity;
-import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.entity.WaterBallEntity;
+import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
@@ -251,23 +249,7 @@ public class PlayerOnline extends Player implements Runnable {
                 int mX = buf.getInt();
                 int mY = buf.getInt();
                 int Iw = Server.getID();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add(new MissileEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 1:
-                        // handle.earth.entityList.add(new EffectEntity(Xx,Yy,mX,mY,ma));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new TornadoEntity(Xx, Yy, mX, ID).setID(Iw));
-                        break;
-                    case 4:
-                        handle.earth.entityList.add(new GustEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 5:
-                        handle.earth.ground.ClearCircle(Xx, Yy, 48);
-                        break;
-                }
+                Spell.getAirSpell(subID).getActionNetwork(handle.earth, Xx, Yy, mX, mY, ID, Iw, buf);
                 handle.sendMessage(Server.AIRBENDING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
                         .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
                 break;
