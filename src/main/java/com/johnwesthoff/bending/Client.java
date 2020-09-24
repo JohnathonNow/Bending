@@ -29,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -66,42 +65,30 @@ import javax.swing.table.AbstractTableModel;
 
 import com.johnwesthoff.bending.entity.BallLightningEntity;
 import com.johnwesthoff.bending.entity.BuritoEntity;
-import com.johnwesthoff.bending.entity.CloudEntity;
-import com.johnwesthoff.bending.entity.EffectEntity;
 import com.johnwesthoff.bending.entity.EnemyEntity;
-import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.FireBallEntity;
-import com.johnwesthoff.bending.entity.FireDoom;
 import com.johnwesthoff.bending.entity.FireJumpEntity;
 import com.johnwesthoff.bending.entity.FirePuffEntity;
-import com.johnwesthoff.bending.entity.FlameThrowerEntity;
-import com.johnwesthoff.bending.entity.FreezeEntity;
 import com.johnwesthoff.bending.entity.GustEntity;
 import com.johnwesthoff.bending.entity.IceShardEntity;
 import com.johnwesthoff.bending.entity.LavaBallEntity;
 import com.johnwesthoff.bending.entity.MissileEntity;
-import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.entity.RockEntity;
-import com.johnwesthoff.bending.entity.RodEntity;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.entity.ShardEntity;
 import com.johnwesthoff.bending.entity.ShockEffectEntity;
 import com.johnwesthoff.bending.entity.SnowEntity;
 import com.johnwesthoff.bending.entity.SoulDrainEntity;
 import com.johnwesthoff.bending.entity.SpoutEntity;
-import com.johnwesthoff.bending.entity.SpoutSourceEntity;
-import com.johnwesthoff.bending.entity.StaticShotEntity;
 import com.johnwesthoff.bending.entity.SteamEntity;
-import com.johnwesthoff.bending.entity.SummonBallEntity;
 import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.entity.WallofFireEntity;
-import com.johnwesthoff.bending.entity.WaterBallEntity;
 import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
-import com.johnwesthoff.bending.spells.*;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.ui.AppletActionListener;
 import com.johnwesthoff.bending.ui.ClothingChooser1;
 import com.johnwesthoff.bending.ui.Register;
@@ -149,8 +136,6 @@ public class Client extends JPanel implements Runnable {
     public Random random = new Random();
     public String serverIP = "LocalHost";
     public Thread mainProcess;
-    public Thread udpthread;
-    public DatagramSocket udpconnection;
     public boolean notDone = true;
     public boolean ignored = true;
     public Image doubleBuffer;
@@ -583,17 +568,10 @@ public class Client extends JPanel implements Runnable {
             for (int i = 0; i < Colors2.length; i++) {
                 tt.putInt(Colors2[i]);
             }
-            // int e = udpconnection.getLocalPort();
-            // System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+e);
-            // tt.putInt(e);
             tt.putInt(7);
             out.addMesssage(tt, Server.LOGIN);
-            // Server.writeByteBuffer(Server.putString(ByteBuffer.allocate(4+username.getBytes().length),username),
-            // out);
-            // out.flush();
             ID = -1;
             world.ID = ID;
-            // system.out.println("My ID is "+ID+".");
             playerHitbox = new Rectangle(0, 0, 20, 40);
             communication = new Thread() {
                 @Override

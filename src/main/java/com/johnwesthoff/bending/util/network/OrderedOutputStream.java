@@ -13,10 +13,6 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Server;
 
-/**
- *
- * @author John
- */
 public final class OrderedOutputStream implements Runnable {
     private final OutputStream output;
     private final Thread me = new Thread(this);
@@ -56,8 +52,9 @@ public final class OrderedOutputStream implements Runnable {
 
     /**
      * Add a message to the stack. This method is thread-safe.
-     * @param BB
-     * @param ID
+     * @param BB    The bytebuffer containing the data to be sent
+     * @param ID    The ID of the message to be sent - see Server
+     *              for a list of ID constants 
      * @throws IOException If this {@link OrderedOutputStream} is no longer active
      */
     public void addMesssage(ByteBuffer BB, byte ID) throws IOException {

@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -49,8 +48,6 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
-import com.johnwesthoff.bending.util.network.UDPPacket;
-
 /**
  *
  * @author John
@@ -732,67 +729,6 @@ public final class Server implements Runnable {
                 }
             } else {
                 continue;
-            }
-        }
-    }
-
-    private class UDPThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                DatagramSocket waffles;
-                waffles = new DatagramSocket(12345);
-                waffles.setBroadcast(true);
-                while (true) {
-                    // System.out.println("YES!");
-                    final UDPPacket e = UDPPacket.read(waffles);
-                    // System.out.println("GOT SOMETHING!" + e.ID);
-                    switch (e.ID) {
-                        default:
-                            // System.out.println("HRGRG");
-                            break;
-                        case UDPMOVE:
-                            // System.out.println("MOVE IT");
-                            final int player = e.getInt();
-                            final short x = e.geShortt();
-                            final short y = e.geShortt();
-                            final short move = e.geShortt();
-                            final short vspeed = e.geShortt();
-                            final short lan = e.geShortt();
-                            final short ran = e.geShortt();
-                            // System.out.println("REC FROM "+e.packet.getPort()+" ; "+playerList.size());
-
-                            for (int i = 0; i < playerList.size(); i++) {
-                                final PlayerOnline po = playerList.get(i);
-                                // waffles.disconnect();
-                                // System.err.println(" CHECKING "+i);
-                                if (po.ID == player) {
-                                    po.x = x;
-                                    po.y = y;
-                                    po.rightArmAngle = ran;
-                                    po.leftArmAngle = lan;
-                                    po.move = move;
-                                    po.vspeed = vspeed;
-                                } else {
-                                    // System.out.println("writing to "+po.UDPPORT);
-                                    final UDPPacket toSend = UDPPacket.allocate(4 * 6, Server.UDPMOVE);
-                                    toSend.putInt(player);
-                                    toSend.putShort((short) x);
-                                    toSend.putShort((short) y);
-                                    toSend.putShort((short) move);
-                                    toSend.putShort((short) vspeed);
-                                    toSend.putShort((short) lan);
-                                    toSend.putShort((short) ran);
-                                    toSend.write(waffles, po.playerSocket.getInetAddress(), po.UDPPORT);
-
-                                }
-                            }
-                            break;
-
-                    }
-                }
-            } catch (final Exception ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
