@@ -19,15 +19,16 @@ import javax.swing.JFrame;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.spells.fire.Firebending;
 
 /**
  *
  * @author John
  */
-public class AppletInputListener implements MouseListener, KeyListener, MouseMotionListener {
+public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
     Client pointer;
 
-    public AppletInputListener(Client pointer) {
+    public ClientInputListener(Client pointer) {
         this.pointer = pointer;
     }
 
@@ -46,7 +47,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
             return;
         }
         int button = e.getButton();
-        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
+        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -79,7 +80,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
+        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -88,7 +89,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
+        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -104,7 +105,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
             if (pointer.world == null) {
                 return;
             }
-            double scale = pointer.owner.getHeight() / (double)Constants.HEIGHT_INT;
+            double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
             pointer.world.mouseX = (int) ((scale * pointer.getWidth())
                     * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
             // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
@@ -147,7 +148,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Spell.Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
                                         pointer.spellList[pointer.spellBook][pointer.leftClick].getAction(pointer);
                                     }
@@ -184,7 +185,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Spell.Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
                                         pointer.spellList[pointer.spellBook][pointer.midClick].getAction(pointer);
                                     }
@@ -215,7 +216,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.rightClick] instanceof Spell.Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.rightClick] instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
                                         pointer.spellList[pointer.spellBook][pointer.rightClick].getAction(pointer);
                                     }
@@ -332,7 +333,7 @@ public class AppletInputListener implements MouseListener, KeyListener, MouseMot
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (pointer.chatActive) {
-                pointer.chatMessage = pointer.username + ": " + pointer.chatMessage;
+                pointer.chatMessage = Client.username + ": " + pointer.chatMessage;
                 pointer.sendMessage(pointer.chatMessage);
                 if (pointer.chatMessage.contains("/suicide")) {
                     pointer.HP = 0;

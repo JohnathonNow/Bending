@@ -60,7 +60,7 @@ public final class Server implements Runnable {
     LOGIN = 0, MOVE = 1, LEAVE = 2, MAP = 3, ENTITY = 4, AI = 5, MESSAGE = 6, WORLDEXPAND = 7, ENTIREWORLD = 8, DIG = 9,
             FILL = 10, ID = 11, CHUNK = 12, AIRBENDING = 13, EARTHBENDING = 14, WATERBENDING = 15, FIREBENDING = 16,
             FREEZE = 17, PUDDLE = 18, DEATH = 19, CHARGE = 20, LIGHTNING = 21, DESTROY = 22, STEAM = 23, HURT = 24,
-            SANDINATE = 25, LOGOUT = 26, SCORE = 27, DARKNESS = 28, DRAIN = 29;
+            SANDINATE = 25, LOGOUT = 26, SCORE = 27, DARKNESS = 28, DRAIN = 29, SPELL = 30;
     public static final int TEAMDEATHMATCH = 1, FREEFORALL = -1, KINGOFTHEHILL = -2, THEHIDDEN = 2, SURVIVAL = 3,
             DEFENDER = 4;
     public static final byte // MESSAGE IDs
@@ -76,7 +76,7 @@ public final class Server implements Runnable {
             "Map Request", "Entity Request", "AI Request", "Chat Message", "World Expansion", "Entire World", "Dig",
             "Fill", "ID", "Chunk", "Airbending", "Earthbending", "Boats Float In The Ocean!", "Firebending", "Freeze",
             "BOATS_IN_THE_KINDOM", "Death", "Charge", "Lightning", "Entity Kill", "Entity Steam", "Hurt", "SANDINATE",
-            "QUITTER", "POINTS", "DARKNESS", "DRAIN" };
+            "QUITTER", "POINTS", "DARKNESS", "DRAIN", "SPELL" };
     int port = 25565;
     public ArrayList<Integer> team1 = new ArrayList<>(), team2 = new ArrayList<>();
     public ArrayList<PlayerOnline> playerList = new ArrayList<>();

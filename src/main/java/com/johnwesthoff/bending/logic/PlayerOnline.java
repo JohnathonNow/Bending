@@ -4,7 +4,6 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import java.awt.Polygon;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -12,32 +11,10 @@ import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.entity.BallLightningEntity;
-import com.johnwesthoff.bending.entity.BuritoEntity;
-import com.johnwesthoff.bending.entity.CloudEntity;
-import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.entity.Entity;
-import com.johnwesthoff.bending.entity.FireBallEntity;
-import com.johnwesthoff.bending.entity.FireDoom;
-import com.johnwesthoff.bending.entity.FireJumpEntity;
-import com.johnwesthoff.bending.entity.FlameThrowerEntity;
-import com.johnwesthoff.bending.entity.FreezeEntity;
-import com.johnwesthoff.bending.entity.GustEntity;
-import com.johnwesthoff.bending.entity.IceShardEntity;
-import com.johnwesthoff.bending.entity.LavaBallEntity;
-import com.johnwesthoff.bending.entity.MissileEntity;
-import com.johnwesthoff.bending.entity.RainEntity;
-import com.johnwesthoff.bending.entity.RockEntity;
-import com.johnwesthoff.bending.entity.RodEntity;
 import com.johnwesthoff.bending.entity.SandEntity;
-import com.johnwesthoff.bending.entity.ShardEntity;
-import com.johnwesthoff.bending.entity.SoulDrainEntity;
-import com.johnwesthoff.bending.entity.SpoutSourceEntity;
-import com.johnwesthoff.bending.entity.StaticShotEntity;
-import com.johnwesthoff.bending.entity.SummonBallEntity;
-import com.johnwesthoff.bending.entity.TornadoEntity;
-import com.johnwesthoff.bending.entity.WallofFireEntity;
-import com.johnwesthoff.bending.entity.WaterBallEntity;
+import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
@@ -243,7 +220,7 @@ public class PlayerOnline extends Player implements Runnable {
                         Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(color), yes));
                 // System.out.println(new String(buff).trim());
                 break;
-            case Server.AIRBENDING:
+            case Server.SPELL:
                 buf = Server.readByteBuffer(in);
                 int subID = buf.getInt();
                 int Xx = buf.getInt();
@@ -251,220 +228,61 @@ public class PlayerOnline extends Player implements Runnable {
                 int mX = buf.getInt();
                 int mY = buf.getInt();
                 int Iw = Server.getID();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add(new MissileEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 1:
-                        // handle.earth.entityList.add(new EffectEntity(Xx,Yy,mX,mY,ma));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new TornadoEntity(Xx, Yy, mX, ID).setID(Iw));
-                        break;
-                    case 4:
-                        handle.earth.entityList.add(new GustEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 5:
-                        handle.earth.ground.ClearCircle(Xx, Yy, 48);
-                        break;
-                }
-                handle.sendMessage(Server.AIRBENDING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
-                        .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
-                break;
-            case Server.EARTHBENDING:
-                buf = Server.readByteBuffer(in);
-                subID = buf.getInt();
-                Xx = buf.getInt();
-                Yy = buf.getInt();
-                mX = buf.getInt();
-                mY = buf.getInt();
-                Iw = Server.getID();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add(new RockEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 1:
-                        // handle.earth.entityList.add(new EffectEntity(Xx,Yy,mX,mY,ma));
-                        Polygon P = new Polygon();
-                        P.addPoint(Xx + 28, Yy);
-                        P.addPoint(Xx - 28, Yy);
-                        P.addPoint(mX, mY);
-                        handle.earth.ground.FillPolygon(P, World.STONE);
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new ShardEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 4:
-                        int number = handle.earth.ground.sandinate(Xx, Yy, 96);
-                        number /= (32);
-                        System.out.println(number);
-                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        if (number > 3) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),
-                                    mY + (int) Client.lengthdir_y(4, 30), ID).setID(Iw + 1));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -30),
-                                    mY + (int) Client.lengthdir_y(4, -30), ID).setID(Iw + 2));
-                            Server.MYID += 2;
-                        }
-                        if (number > 5) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                                    mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 3));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                                    mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 4));
-                            Server.MYID += 2;
-                        }
-                        if (number > 7) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 60),
-                                    mY + (int) Client.lengthdir_y(4, 60), ID).setID(Iw + 5));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -60),
-                                    mY + (int) Client.lengthdir_y(4, -60), ID).setID(Iw + 6));
-                            Server.MYID += 2;
-                        }
-                        if (number > 12) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 15),
-                                    mY + (int) Client.lengthdir_y(4, 15), ID).setID(Iw + 7));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -15),
-                                    mY + (int) Client.lengthdir_y(4, -15), ID).setID(Iw + 8));
-                            Server.MYID += 2;
-                        }
-                        if (number > 16) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 35),
-                                    mY + (int) Client.lengthdir_y(4, 35), ID).setID(Iw + 9));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -35),
-                                    mY + (int) Client.lengthdir_y(4, -35), ID).setID(Iw + 10));
-                            Server.MYID += 2;
-                        }
-                        if (number > 20) {
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                                    mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 11));
-                            handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                                    mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 12));
-                            Server.MYID += 2;
-                        }
-                        handle.sendMessage(Server.EARTHBENDING, ByteBuffer.allocate(32).putInt(subID).putInt(Xx)
-                                .putInt(Yy).putInt(mX).putInt(mY).putInt(ID).putInt(Iw).putInt(number));
+                if (Spell.getSpell(subID) instanceof EarthbendingSand) {
+                    //TODO this code is duplicated and should not be
+                    int number = handle.earth.ground.sandinate(Xx, Yy, 96);
+                    number /= (32);
+                    handle.earth.entityList.add(new SandEntity(Xx, Yy, mX, mY, ID).setID(Iw));
+                    if (number > 3) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),
+                                mY + (int) Client.lengthdir_y(4, 30), ID).setID(Iw + 1));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -30),
+                                mY + (int) Client.lengthdir_y(4, -30), ID).setID(Iw + 2));
                         Server.MYID += 2;
-                        break;
-                    case 5:
-                        // handle.earth.entityList.add(new EffectEntity(Xx,Yy,mX,mY,ma));
-
-                        handle.earth.ground.FillRectW(Xx - 12, Yy - 12, 24, 24, World.SAND);
-                        break;
-                }
-                if (subID != 4) {
-                    handle.sendMessage(Server.EARTHBENDING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
+                    }
+                    if (number > 5) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
+                                mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 3));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
+                                mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 4));
+                        Server.MYID += 2;
+                    }
+                    if (number > 7) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 60),
+                                mY + (int) Client.lengthdir_y(4, 60), ID).setID(Iw + 5));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -60),
+                                mY + (int) Client.lengthdir_y(4, -60), ID).setID(Iw + 6));
+                        Server.MYID += 2;
+                    }
+                    if (number > 12) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 15),
+                                mY + (int) Client.lengthdir_y(4, 15), ID).setID(Iw + 7));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -15),
+                                mY + (int) Client.lengthdir_y(4, -15), ID).setID(Iw + 8));
+                        Server.MYID += 2;
+                    }
+                    if (number > 16) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 35),
+                                mY + (int) Client.lengthdir_y(4, 35), ID).setID(Iw + 9));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -35),
+                                mY + (int) Client.lengthdir_y(4, -35), ID).setID(Iw + 10));
+                        Server.MYID += 2;
+                    }
+                    if (number > 20) {
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
+                                mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 11));
+                        handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
+                                mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 12));
+                        Server.MYID += 2;
+                    }
+                    handle.sendMessage(Server.SPELL, ByteBuffer.allocate(32).putInt(subID).putInt(Xx).putInt(Yy)
+                            .putInt(mX).putInt(mY).putInt(ID).putInt(Iw).putInt(number));
+                    Server.MYID += 2;
+                } else {
+                    Spell.getSpell(subID).getActionNetwork(handle.earth, Xx, Yy, mX, mY, ID, Iw, buf);
+                    handle.sendMessage(Server.SPELL, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
                             .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
                 }
-                break;
-            case Server.WATERBENDING:
-                buf = Server.readByteBuffer(in);
-                subID = buf.getInt();
-                Xx = buf.getInt();
-                Yy = buf.getInt();
-                mX = buf.getInt();
-                Iw = Server.getID();
-                mY = buf.getInt();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add(new WaterBallEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 1:
-                        handle.earth.entityList.add(new FreezeEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new SpoutSourceEntity(Xx, Yy, 50, ID).setID(Iw));
-                        break;
-                    case 4:
-                        handle.earth.entityList.add(new IceShardEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 6:
-                        handle.earth.entityList.add(new RainEntity(Xx, Yy, ID).setID(Iw));
-                        break;
-                }
-                handle.sendMessage(Server.WATERBENDING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
-                        .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
-                break;
-            case Server.LIGHTNING:
-                buf = Server.readByteBuffer(in);
-                subID = buf.getInt();
-                Xx = buf.getInt();
-                Yy = buf.getInt();
-                mX = buf.getInt();
-                mY = buf.getInt();
-                Iw = Server.getID();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add((new EnergyEntity(Xx, Yy, mX, mY, ID).setID(Iw)));
-                        break;
-                    case 1:
-                        handle.earth.entityList.add((new CloudEntity(Xx, Yy, ID).setID(Iw)));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add((new BallLightningEntity(Xx, Yy, mX, mY, ID).setID(Iw)));
-                        break;
-                    case 3:
-                        handle.earth.entityList.add((new StaticShotEntity(Xx, Yy, mX, mY, ID).setID(Iw)));
-                        break;
-                    case 5:
-                        handle.earth.entityList.add((new RodEntity(Xx, Yy, mX, ID).setID(Iw)));
-                        break;
-                }
-                handle.sendMessage(Server.LIGHTNING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
-                        .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
-                break;
-            case Server.FIREBENDING:
-                buf = Server.readByteBuffer(in);
-                subID = buf.getInt();
-                Xx = buf.getInt();
-                Yy = buf.getInt();
-                mX = buf.getInt();
-                mY = buf.getInt();
-                Iw = Server.getID();
-                switch (subID) {
-                    case 0:
-                        handle.earth.entityList.add((new FireBallEntity(Xx, Yy, mX, mY, ID)).setID(Iw));
-                        break;
-                    case 1:
-                        handle.earth.entityList.add(new LavaBallEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new FireJumpEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 4:
-                        handle.earth.entityList.add(new WallofFireEntity(Xx, Yy, 8, 0, ID).setID(Iw));
-                        handle.earth.entityList.add(new WallofFireEntity(Xx, Yy, -8, 0, ID).setID(Iw));
-                        break;
-                    case 5:
-                        handle.earth.entityList.add(new FlameThrowerEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 9:
-                        handle.earth.entityList.add(new BuritoEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 10:
-                        handle.earth.entityList.add(new FireDoom(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                }
-                handle.sendMessage(Server.FIREBENDING, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
-                        .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
-                break;
-            case Server.DARKNESS:
-                buf = Server.readByteBuffer(in);
-                subID = buf.getInt();
-                Xx = buf.getInt();
-                Yy = buf.getInt();
-                mX = buf.getInt();
-                Iw = Server.getID();
-                mY = buf.getInt();
-                switch (subID) {
-                    case 1:
-                        handle.earth.entityList.add(new SoulDrainEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                    case 2:
-                        handle.earth.entityList.add(new SummonBallEntity(Xx, Yy, mX, mY, ID).setID(Iw));
-                        break;
-                }
-                handle.sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(subID).putInt(Xx).putInt(Yy)
-                        .putInt(mX).putInt(mY).putInt(ID).putInt(Iw));
                 break;
             case Server.DEATH:
                 buf = Server.readByteBuffer(in);

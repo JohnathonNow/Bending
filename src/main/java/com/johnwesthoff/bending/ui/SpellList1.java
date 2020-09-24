@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.logic.Spell;
+import com.johnwesthoff.bending.spells.*;
 
 /**
  *
