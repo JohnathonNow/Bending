@@ -25,10 +25,10 @@ import com.johnwesthoff.bending.spells.fire.Firebending;
  *
  * @author John
  */
-public class AppletInputListener implements MouseListener, KeyListener, MouseMotionListener {
+public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
     Client pointer;
 
-    public AppletInputListener(Client pointer) {
+    public ClientInputListener(Client pointer) {
         this.pointer = pointer;
     }
 

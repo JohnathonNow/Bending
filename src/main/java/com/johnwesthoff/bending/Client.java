@@ -97,7 +97,7 @@ import com.johnwesthoff.bending.entity.SummonBallEntity;
 import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.entity.WaterBallEntity;
-import com.johnwesthoff.bending.logic.AppletInputListener;
+import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.spells.*;
@@ -138,7 +138,7 @@ public class Client extends JPanel implements Runnable {
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
-    public static AppletInputListener inputer;
+    public static ClientInputListener inputer;
     public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
@@ -229,7 +229,7 @@ public class Client extends JPanel implements Runnable {
         final Client me = new Client();
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(me);
-        inputer = new AppletInputListener(me);
+        inputer = new ClientInputListener(me);
         thisone = me;
         me.CTD = new ConnectToDatabase();
         me.setSize(600, 600);
@@ -789,7 +789,7 @@ public class Client extends JPanel implements Runnable {
                                     readEntityList(toRead);
                                     busy = false;
                                     break;
-                                case Server.AIRBENDING:
+                                case Server.SPELL:
                                     ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     int subID = buf.getInt();
@@ -799,116 +799,7 @@ public class Client extends JPanel implements Runnable {
                                     int my = buf.getInt();
                                     int pid = buf.getInt();
                                     int eid = buf.getInt();
-                                    Spell.getAirSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid, buf);
-                                    airCast.start(-30f);
-                                    break;
-                                case Server.LIGHTNING:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    subID = buf.getInt();
-                                    px = buf.getInt();
-                                    py = buf.getInt();
-                                    mx = buf.getInt();
-                                    my = buf.getInt();
-                                    pid = buf.getInt();
-                                    eid = buf.getInt();
-                                    Spell.getLightningSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
-                                            buf);
-                                    break;
-                                case Server.EARTHBENDING:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    subID = buf.getInt();
-                                    px = buf.getInt();
-                                    py = buf.getInt();
-                                    mx = buf.getInt();
-                                    my = buf.getInt();
-                                    pid = buf.getInt();
-                                    eid = buf.getInt();
-                                    if (subID == 1) {
-                                        final Polygon P = new Polygon();
-                                        P.addPoint(px + 28, py);
-                                        P.addPoint(px - 28, py);
-                                        P.addPoint(mx, my);
-                                        world.ground.FillPolygon(P, World.STONE);
-                                        if (P.contains(world.x, world.y)) {
-
-                                            world.vspeed = -4;
-                                            xspeed = mx - px;
-                                            world.x = mx + (int) xspeed;
-                                            world.y = my + (int) world.vspeed;
-                                            // HP-=15;
-                                            sendMovement();
-                                        }
-                                    } else {
-                                        Spell.getEarthSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
-                                                buf);
-                                    }
-
-                                    break;
-                                case Server.WATERBENDING:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    subID = buf.getInt();
-                                    px = buf.getInt();
-                                    py = buf.getInt();
-                                    mx = buf.getInt();
-                                    my = buf.getInt();
-                                    pid = buf.getInt();
-                                    eid = buf.getInt();
-                                    if (subID == 5) {
-                                        // TODO: not sure what this is
-                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my + 1, pid).setID(eid));
-                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my - 1, pid).setID(eid));
-                                        world.entityList.add(new SnowEntity(px, py, mx - 1, my + 1, pid).setID(eid));
-                                        world.entityList.add(new SnowEntity(px, py, mx - 1, my - 1, pid).setID(eid));
-                                        world.entityList.add(new SnowEntity(px, py, mx, my + 1, pid).setID(eid));
-                                        world.entityList.add(new SnowEntity(px, py, mx + 1, my, pid).setID(eid));
-                                    } else {
-                                        Spell.getWaterSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
-                                                buf);
-                                    }
-                                    break;
-                                case Server.FIREBENDING:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    subID = buf.getInt();
-                                    px = buf.getInt();
-                                    py = buf.getInt();
-                                    mx = buf.getInt();
-                                    my = buf.getInt();
-                                    pid = buf.getInt();
-                                    eid = buf.getInt();
-                                    fireCast.start(-3f);
-                                    if (subID == 6) {
-                                        world.entityList.add(new FirePuffEntity(px, py, mx, my, pid).setID(eid));
-                                        // TODO: not sure what this entity is...
-                                    } else {
-                                        Spell.getFireSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
-                                                buf);
-                                    }
-                                    break;
-                                case Server.DARKNESS:
-                                    buf = Server.readByteBuffer(input);
-                                    subID = buf.getInt();
-                                    px = buf.getInt();
-                                    py = buf.getInt();
-                                    mx = buf.getInt();
-                                    my = buf.getInt();
-                                    pid = buf.getInt();
-                                    eid = buf.getInt();
-                                    switch (subID) {
-                                        // TODO: Not sure what 3 and 10 are for...
-                                        case 3:
-                                            world.entityList.add(new SpoutSourceEntity(px, py, 50, pid).setID(eid));
-                                            break;
-                                        case 10:
-                                            world.entityList.add(new EnemyEntity(px, py, mx, my, pid).setID(eid));
-                                            break;
-                                        default:
-                                            Spell.getDarkSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid,
-                                                    buf);
-                                    }
+                                    Spell.getSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid, buf);
                                     break;
                                 case Server.FREEZE:
                                     // ByteBuffer buf;
@@ -1284,14 +1175,8 @@ public class Client extends JPanel implements Runnable {
                     // world.move = 0;
                     if ((dig += 2) >= 100) {
                         dig = 0;
-                        // world.keys[KeyEvent.VK_S] = false;
-                        final ByteBuffer bb = ByteBuffer.allocate(24);
-                        bb.putInt(5).putInt((int) world.x).putInt((int) world.y).putInt(0).putInt(0);
-                        try {
-                            out.addMesssage(bb, Server.AIRBENDING);
-                        } catch (final IOException ex) {
-                            System.err.println(ex.getMessage());
-                        }
+                        Spell.getSpell(4).getAction(this);
+
                     }
                 } else {
                     dig = 0;

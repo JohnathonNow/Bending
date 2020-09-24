@@ -15,7 +15,6 @@ import com.johnwesthoff.bending.spells.Spell;
 public class AirbendingGust extends Airbending {
     public AirbendingGust() {
         ID = Server.AIRBENDING;
-        subID = 4;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/airGust.png"));
         } catch (Exception ex) {
@@ -26,7 +25,6 @@ public class AirbendingGust extends Airbending {
     @Override
     public void getAction(Client app) {
         ID = Server.AIRBENDING;
-        subID = 4;
         // throw new UnsupportedOperationException("Not supported yet.");
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;

@@ -3,6 +3,7 @@ package com.johnwesthoff.bending.spells.earth;
 
 import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
+import java.awt.Polygon;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +26,6 @@ public class EarthbendingSpike extends Earthbending {
 
     @Override
     public void getAction(Client app) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        ID = Server.EARTHBENDING;
-        subID = 1;
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;
         X = app.world.pressX + app.world.viewX;
@@ -37,7 +35,6 @@ public class EarthbendingSpike extends Earthbending {
         if ((mx == X) && (my == Y)) {
             direction = 90;
         }
-        // direction+=180;
 
         mx = X - ((int) (Client.lengthdir_x(72, direction)));
         my = Y + ((int) (Client.lengthdir_y(72, direction)));
@@ -71,7 +68,10 @@ public class EarthbendingSpike extends Earthbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Polygon P = new Polygon();
+        P.addPoint(px + 28, py);
+        P.addPoint(px - 28, py);
+        P.addPoint(mx, my);
+        world.ground.FillPolygon(P, World.STONE);
     }
 }
-

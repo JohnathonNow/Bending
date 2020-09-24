@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
 import com.johnwesthoff.bending.spells.air.AirRun;
@@ -33,8 +34,6 @@ import com.johnwesthoff.bending.spells.earth.EarthbendingShield;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSpike;
 import com.johnwesthoff.bending.spells.earth.EarthbendingStance;
 import com.johnwesthoff.bending.spells.earth.EarthbendingWallOfSand;
-import com.johnwesthoff.bending.spells.fire.Burito;
-import com.johnwesthoff.bending.spells.fire.FireMaster;
 import com.johnwesthoff.bending.spells.fire.FireProof;
 import com.johnwesthoff.bending.spells.fire.Firebending;
 import com.johnwesthoff.bending.spells.fire.FirebendingCharge;
@@ -71,8 +70,10 @@ import com.johnwesthoff.bending.util.network.OrderedOutputStream;
  * =1000 ~ Total
  */
 public abstract class Spell {
-    public int ID;
-    public float X, Y, mx, my, subID = 0, maker = 0;
+    public int ID; // class of spell
+    public float X, Y, mx, my;
+    public int subID = 0; // individual spell id
+    public int maker = 0;
     public boolean locked = false;
     public int unlockXP = 0;
     public static ArrayList<Spell> spells = new ArrayList<>(), passives = new ArrayList<>();
@@ -83,6 +84,52 @@ public abstract class Spell {
     public static Spell noSpell = new NOSPELL();
     protected ImageIcon icon;
 
+    public static void registerSpells() {
+        registerSpell(new Airbending());
+        registerSpell(new AirbendingGust());
+        registerSpell(new AirbendingJump());
+        registerSpell(new AirbendingTornado());
+        registerSpell(new AirbendingAir());
+        registerSpell(new Earthbending());
+        registerSpell(new EarthbendingSand());
+        registerSpell(new EarthbendingShard());
+        registerSpell(new EarthbendingSpike());
+        registerSpell(new EarthbendingWallOfSand());
+        registerSpell(new Waterbending());
+        registerSpell(new WaterbendingFreeze());
+        registerSpell(new WaterbendingShard());
+        registerSpell(new WaterSpout());
+        registerSpell(new WaterStorm());
+        registerSpell(new Firebending());
+        registerSpell(new FirebendingJump());
+        registerSpell(new Firebending_Lava());
+        registerSpell(new Firebending_Thrower());
+        registerSpell(new Firebending_Wall());
+        registerSpell(new Lightning());
+        registerSpell(new LightningBall());
+        registerSpell(new LightningMine());
+        registerSpell(new LightningRod());
+        registerSpell(new LightningStorm());
+        registerSpell(new Darkness());
+        registerSpell(new DarkAura());
+        registerSpell(new DarkSoulBall());
+        registerSpell(new DarkSummonBall());
+        registerSpell(new DarkTeleport());
+    }
+
+    private static void registerPassives() {
+        registerPassive(new AirRun());
+        registerPassive(new AirAffinity());
+        registerPassive(new EarthbendingStance());
+        registerPassive(new EarthbendingShield());
+        registerPassive(new BreathUnderWater());
+        registerPassive(new WaterTreading());
+        registerPassive(new FirebendingCharge());
+        registerPassive(new FireProof());
+        registerPassive(new LightningOvercharge());
+        registerPassive(new LightningShield());
+    }
+
     public static void init() {
         spells.clear();
         spellnames.clear();
@@ -92,77 +139,8 @@ public abstract class Spell {
         passivenames.clear();
         passivetips.clear();
         passiveimages.clear();
-        // System.out.println("YAY1");
-        spells.add(Spell.getAirSpell(0));
-        spells.add(Spell.getAirSpell(1));
-        spells.add(Spell.getAirSpell(2));
-        spells.add(Spell.getAirSpell(4));
-        spells.add(Spell.getAirSpell(5));
-        // spells.add(Spell.getAirSpell(3));
-        // System.out.println("YAY2");
-        spells.add(Spell.getEarthSpell(0));
-        spells.add(Spell.getEarthSpell(1));
-        spells.add(Spell.getEarthSpell(2));
-        spells.add(Spell.getEarthSpell(4));
-        spells.add(Spell.getEarthSpell(5));
-        // spells.add(Spell.getEarthSpell(3));
-        // System.out.println("YAY3");
-        spells.add(Spell.getWaterSpell(0));
-        spells.add(Spell.getWaterSpell(1));
-        spells.add(Spell.getWaterSpell(2));
-        spells.add(Spell.getWaterSpell(6));
-        spells.add(Spell.getWaterSpell(4));
-        // spells.add(Spell.getWaterSpell(4));
-        // System.out.println("YAY4");
-        spells.add(Spell.getFireSpell(0));
-        spells.add(Spell.getFireSpell(1));
-        spells.add(Spell.getFireSpell(2));
-        spells.add(Spell.getFireSpell(4));
-        spells.add(Spell.getFireSpell(5));
-        // spells.add(Spell.getFireSpell(3));
-
-        spells.add(Spell.getLightningSpell(0));
-        spells.add(Spell.getLightningSpell(1));
-        spells.add(Spell.getLightningSpell(2));
-        spells.add(Spell.getLightningSpell(3));
-        spells.add(Spell.getLightningSpell(5));
-
-        spells.add(Spell.getDarkSpell(0));
-        spells.add(Spell.getDarkSpell(1));
-        spells.add(Spell.getDarkSpell(2));
-        spells.add(Spell.getDarkSpell(3));
-        spells.add(Spell.getDarkSpell(4));
-
-        spells.add(new Burito());
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(noSpell);
-        spells.add(new FireMaster());
-
-        passives.add(Spell.noSpell);
-        passives.add(Spell.getAirSpell(3));
-        passives.add(Spell.getAirSpell(6));
-        passives.add(Spell.getEarthSpell(3));
-        passives.add(Spell.getEarthSpell(6));
-        passives.add(Spell.getWaterSpell(5));
-        passives.add(Spell.getWaterSpell(6));
-        passives.add(Spell.getFireSpell(3));
-        passives.add(Spell.getFireSpell(6));
-        passives.add(Spell.getLightningSpell(6));
-        passives.add(Spell.getLightningSpell(7));
+        registerSpells();
+        registerPassives();
         lockedImage = (loadIcon("https://west-it.webs.com/spells/lockedSpell.png"));
         // System.out.println("YAY5");
         for (int i = 0; i < spells.size(); i++) {
@@ -175,7 +153,24 @@ public abstract class Spell {
             passiveimages.add(passives.get(i).getImage());
             passivetips.add(passives.get(i).getTip());
         }
-        // System.out.println("YAY");
+    }
+
+    private static void registerSpell(Spell spell) {
+        spell.subID = spells.size();
+        spells.add(spell);
+    }
+
+    private static void registerPassive(Spell spell) {
+        spell.subID = passives.size();
+        passives.add(spell);
+    }
+    
+    public static Spell getSpell(int i){
+        return spells.get(i);
+    }
+
+    public static Spell getPassive(int i){
+        return passives.get(i);
     }
 
     public void onSpawn(Client me) {
@@ -199,7 +194,7 @@ public abstract class Spell {
         ByteBuffer bb = ByteBuffer.allocate(24);
         bb.putInt((int) subID).putInt((int) X).putInt((int) Y).putInt((int) mx).putInt((int) my);
         try {
-            out.addMesssage(bb, ID);
+            out.addMesssage(bb, Server.SPELL);
         } catch (IOException ex) {
             // ex.printStackTrace();
         }
@@ -243,123 +238,4 @@ public abstract class Spell {
         return icon;
     }
 
-    public static Spell getAirSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Airbending();
-            case 1:
-                return new AirbendingJump();
-            case 2:
-                return new AirbendingTornado();
-            case 3:
-                return new AirRun();
-            case 4:
-                return new AirbendingGust();
-            case 5:
-                return new AirbendingAir();
-            case 6:
-                return new AirAffinity();
-        }
-    }
-
-    public static Spell getWaterSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Waterbending();
-            case 1:
-                return new WaterbendingFreeze();
-            case 2:
-                return new WaterSpout();
-            case 4:
-                return new WaterbendingShard();
-            case 6:
-                return new WaterStorm();
-            case 3:
-                return new BreathUnderWater();
-            case 23:
-                return new WaterTreading();
-        }
-    }
-
-    static public Spell getEarthSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Earthbending();
-            case 1:
-                return new EarthbendingSpike();
-            case 2:
-                return new EarthbendingShard();
-            case 3:
-                return new EarthbendingShield();
-            case 4:
-                return new EarthbendingSand();
-            case 5:
-                return new EarthbendingWallOfSand();
-            case 6:
-                return new EarthbendingStance();
-        }
-    }
-
-    static public Spell getFireSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Firebending();
-            case 1:
-                return new Firebending_Lava();
-            case 2:
-                return new FirebendingJump();
-            case 4:
-                return new Firebending_Wall();
-            case 5:
-                return new Firebending_Thrower();
-            case 3:
-                return new FirebendingCharge();
-            case 6:
-                return new FireProof();
-        }
-    }
-
-    static public Spell getLightningSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Lightning();
-            case 1:
-                return new LightningStorm();
-            case 2:
-                return new LightningBall();
-            case 3:
-                return new LightningMine();
-            case 5:
-                return new LightningRod();
-            case 6:
-                return new LightningShield();
-            case 7:
-                return new LightningOvercharge();
-        }
-    }
-
-    static public Spell getDarkSpell(int i) {
-        switch (i) {
-            default:
-            case 0:
-                return new Darkness();
-            case 1:
-                return new DarkSoulBall();
-            case 2:
-                return new DarkAura();
-            case 3:
-                return new DarkSummonBall();
-            case 4:
-                return new DarkTeleport();
-            case 6:
-                return new LightningShield();
-        }
-    }
-
-    
 }
