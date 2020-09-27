@@ -66,6 +66,7 @@ public class World implements Serializable {
     public boolean keys[] = new boolean[3200];
     public float jump = 0;
     public boolean MB1, MB2, MB3;
+    public boolean fallingTerrain = false;
     public int landTexSize = 256;
     public int FPS = 0;
     public static int head = 26;
@@ -415,7 +416,7 @@ public class World implements Serializable {
          * @param Y - Y coordinate of where we want to floodfill
          */
         private void unsupport(int x, int y) {
-            if (!isUnsupportablePixel(x, y))
+            if (!isUnsupportablePixel(x, y) || !this.fallingTerrain)
                 return;
 
             LinkedList<Coordinate> q = new LinkedList<>();
