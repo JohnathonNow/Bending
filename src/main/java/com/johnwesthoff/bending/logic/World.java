@@ -35,6 +35,10 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
  * @author John
  */
 public class World implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5361438813968515971L;
     public int incX, incY;
     public Random random = new Random();
     public CollisionChecker ground;
@@ -416,7 +420,7 @@ public class World implements Serializable {
          * @param Y - Y coordinate of where we want to floodfill
          */
         private void unsupport(int x, int y) {
-            if (!isUnsupportablePixel(x, y) || !this.fallingTerrain)
+            if (!isUnsupportablePixel(x, y) || !fallingTerrain)
                 return;
 
             LinkedList<Coordinate> q = new LinkedList<>();
