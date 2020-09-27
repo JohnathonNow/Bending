@@ -454,7 +454,7 @@ public final class Server implements Runnable {
             yes = getKiller(winner) + " won the round!";
             sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0xFF0000), yes));
         }
-        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, SURVIVAL, DEFENDER);
+        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, DEFENDER);
         Collections.shuffle(playerList);
         team1.clear();
         team2.clear();
