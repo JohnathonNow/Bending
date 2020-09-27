@@ -78,8 +78,8 @@ public class World implements Serializable {
     public int flowCount = 0, maxFlow = 5000;
     public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint;
     public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8,
-            CRYSTAL = 9, ETHER = 10, UGROUND = 65, USTONE = 70, UICE = 72;
-    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE };
+            CRYSTAL = 9, ETHER = 10, JUICE = 11, UGROUND = 65, USTONE = 70, UICE = 72;
+    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE, JUICE };
     public final int liquidStats[][] = new int[liquidList.length][6];
     public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
     public final byte aList[] = new byte[127];
@@ -118,6 +118,7 @@ public class World implements Serializable {
         aList[UGROUND] = (byte) Arrays.binarySearch(liquidList, UGROUND);
         aList[UICE] = (byte) Arrays.binarySearch(liquidList, UICE);
         aList[USTONE] = (byte) Arrays.binarySearch(liquidList, USTONE);
+        aList[JUICE] = (byte) Arrays.binarySearch(liquidList, JUICE);
         // 0 is the down speed
         // 1 is the horizontal speed
         // 2 is the color
@@ -141,6 +142,11 @@ public class World implements Serializable {
         liquidStats[aList[OIL]][1] = 6;// 6
         liquidStats[aList[OIL]][2] = oilColor.getRGB();
         liquidStats[aList[OIL]][3] = 10;
+
+        liquidStats[aList[JUICE]][0] = 5;// 5
+        liquidStats[aList[JUICE]][1] = 6;// 6
+        liquidStats[aList[JUICE]][2] = new Color(23,240,16).getRGB();
+        liquidStats[aList[JUICE]][3] = 10;
 
         liquidStats[aList[SAND]][0] = 8;// 1
         liquidStats[aList[SAND]][1] = 1;// 1
@@ -1030,12 +1036,6 @@ public class World implements Serializable {
         }
 
         try {
-            ground.handleWater();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ;
-        try {
             drawTerrain((Graphics2D) g);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1322,14 +1322,10 @@ public class World implements Serializable {
                                     Math.min(Y + 3 - yy, Constants.HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-                            break;
-                        case LAVA:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-                            break;
                         case OIL:
+                        case LAVA:
+                        case JUICE:
                             Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-                            break;
                     }
                 }
             }

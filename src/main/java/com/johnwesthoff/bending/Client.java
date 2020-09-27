@@ -1136,7 +1136,14 @@ public class Client extends JPanel implements Runnable {
                 if ((world.status & World.ST_SHOCKED) != 0) {
                     energico -= 25;
                     if (random.nextInt(10) == 0) {
-                        world.status &= ~World.ST_SHOCKED;// Stop being on fire
+                        world.status &= ~World.ST_SHOCKED;// Stop being on shock
+                    }
+                }
+                if (world.inBounds(world.x, world.y) && energico > 0
+                        && world.isType((int) world.x, (int) world.y, World.JUICE)) {
+                    if (HP < MAXHP) {
+                        energico -= 40;
+                        HP++;
                     }
                 }
                 if (world.isIce((int) world.x, (int) world.y + 6)) {
@@ -1515,13 +1522,19 @@ public class Client extends JPanel implements Runnable {
                 }
 
             }
-            draw();
-            if ((now - swagTime) >= (1000000000 / Constants.FPS / 2)) {
+            try {
+                world.ground.handleWater();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if ((now - swagTime) >= (1000000000 / Constants.FPS)) {
+                draw();
                 repaint();
                 swagTime = now;
             }
             World.setTime();
         }
+
     }
 
     public String getKiller(final int i) {

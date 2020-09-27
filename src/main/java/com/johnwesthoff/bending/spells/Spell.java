@@ -54,6 +54,7 @@ import com.johnwesthoff.bending.spells.water.WaterStorm;
 import com.johnwesthoff.bending.spells.water.WaterTreading;
 import com.johnwesthoff.bending.spells.water.Waterbending;
 import com.johnwesthoff.bending.spells.water.WaterbendingFreeze;
+import com.johnwesthoff.bending.spells.water.WaterbendingHealBall;
 import com.johnwesthoff.bending.spells.water.WaterbendingShard;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
@@ -115,6 +116,7 @@ public abstract class Spell {
         registerSpell(new DarkSoulBall());
         registerSpell(new DarkSummonBall());
         registerSpell(new DarkTeleport());
+        registerSpell(new WaterbendingHealBall());
     }
 
     private static void registerPassives() {
