@@ -37,7 +37,6 @@ public class RealClip {
     }
 
     public void start(float volume) {
-        String recentkeys;
         ((FloatControl) clips[playing].getControl((FloatControl.Type.MASTER_GAIN))).setValue(volume);
         start();
     }

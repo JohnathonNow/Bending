@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-///TODO: FIX NETWORKING
 package com.johnwesthoff.bending;
 
 import java.awt.Polygon;
@@ -148,7 +143,6 @@ public final class Server implements Runnable {
                         try {
                             Thread.sleep(1);
                         } catch (final InterruptedException e2) {
-                            // TODO Auto-generated catch block
                             e2.printStackTrace();
                         }
                         final long l = System.nanoTime();

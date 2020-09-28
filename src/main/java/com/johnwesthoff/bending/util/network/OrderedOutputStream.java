@@ -76,7 +76,7 @@ public final class OrderedOutputStream implements Runnable {
         this.addMesssage(bb, (byte) ID);
     }
 
-    public final class Message implements Comparable {
+    public final class Message implements Comparable<Object> {
         private final ByteBuffer BB;
         private final byte ID;
         private final long constructionTime;

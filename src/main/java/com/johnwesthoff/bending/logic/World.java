@@ -818,7 +818,6 @@ public class World implements Serializable {
         if (!isSolid(x, y - 4)) {
             y -= 4;
             if (inBounds(x + move, y + (int) vspeed)) {
-                double slope;
                 double toMove = move, XXX1 = x + 3, YYY1 = y - 4, XXX2 = x - 3, YYY2 = y - 4;
                 if (isLiquid(x, y)) {
                     toMove *= Client.swimmingSpeed;
@@ -843,10 +842,7 @@ public class World implements Serializable {
                         break;
                     }
                 }
-                if (!keepMoving) {
-                    slope = (float) Math.round(((float) YYY1 - (float) YYY2) / ((float) XXX1 - (float) XXX2));
-                    // toMove*=slope==0?1:(Math.signum(slope)==Math.signum(move))?1.5:.75;
-                } else {
+                if (keepMoving) {
                     toMove = toKeepMove;
                 }
                 if (move > 4)
@@ -1427,7 +1423,6 @@ public class World implements Serializable {
             if (!isSolid(P.x, P.y - 4)) {
                 P.y -= 4;
                 if (inBounds(P.x + P.move, P.y + P.vspeed)) {
-                    float slope;
                     int toMove = P.move, XXX1 = P.x + 3, YYY1 = P.y - 4, XXX2 = P.x - 3, YYY2 = P.y - 4;
                     while (true) {
                         YYY1 += 1;
@@ -1447,7 +1442,6 @@ public class World implements Serializable {
                             break;
                         }
                     }
-                    slope = (float) Math.round(((float) YYY1 - (float) YYY2) / ((float) XXX1 - (float) XXX2));
                     // toMove*=slope==0?1:(Math.signum(slope)==Math.signum(P.move))?1.5:.75;
                     if (toMove > 4)
                         toMove = 4;
@@ -1558,35 +1552,6 @@ public class World implements Serializable {
             }
         }
         return image;
-    }
-
-    private static int getNewPixelRGB(int replacement, int destRGB) {
-        float[] destHSB = getHSBArray(destRGB);
-        float[] replHSB = getHSBArray(replacement);
-
-        int rgbnew = Color.HSBtoRGB(replHSB[HUE], replHSB[SATURATION], destHSB[BRIGHTNESS]);
-        return rgbnew;
-    }
-
-    private static boolean matches(int maskRGB, int destRGB) {
-        float[] hsbMask = getHSBArray(maskRGB);
-        float[] hsbDest = getHSBArray(destRGB);
-
-        if (hsbMask[HUE] == hsbDest[HUE] && hsbMask[SATURATION] == hsbDest[SATURATION]
-                && getRGBArray(destRGB)[ALPHA] != TRANSPARENT) {
-
-            return true;
-        }
-        return false;
-    }
-
-    private static int[] getRGBArray(int rgb) {
-        return new int[] { (rgb >> 24) & 0xff, (rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff };
-    }
-
-    private static float[] getHSBArray(int rgb) {
-        int[] rgbArr = getRGBArray(rgb);
-        return Color.RGBtoHSB(rgbArr[RED], rgbArr[GREEN], rgbArr[BLUE], null);
     }
 
     static long oldTime = 0;
