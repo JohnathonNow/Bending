@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.FireJumpEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -25,7 +25,7 @@ public class FirebendingJump extends Spell {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Main app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
@@ -57,7 +57,7 @@ public class FirebendingJump extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Main app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -17,7 +17,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JColorChooser;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.app.avatar.AvatarService;
+import com.johnwesthoff.bending.app.avatar.AvatarServiceFactory;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -27,20 +29,23 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
  */
 public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
+    private final AvatarService avatarService;
+
     /** Creates new form ClothingChooser */
     Color[] colors = new Color[] { Color.white, Color.white, Color.white, Color.white, Color.white, Color.white };
     Color[] colors2 = new Color[] { Color.white, Color.white, Color.white, Color.white, Color.white, Color.white };
     byte[] cloths = new byte[] { 1, 1, 1, 1, 1, 1 };
     Image[] stuff = new Image[6];
     boolean done = false;
-    Client owner;
+    Main app;
     Image background;
 
-    public ClothingChooser1(Client mine) {
+    public ClothingChooser1(Main app) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
-        owner = mine;
+        this.app = app;
+        avatarService = AvatarServiceFactory.create();
         // g = canvas.getGraphics();
         try {
             background = ResourceLoader.loadImage("https://west-it.webs.com/Bending/Capture.PNG", "Capture.PNG");
@@ -51,7 +56,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics G) {
-        G.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
+        G.drawImage(Main.bimage, 0, 0, getWidth(), getHeight(), null);
         G.drawImage(stuff[4], 9 + 100, 60 + 12 + 200, this);
         G.drawImage(stuff[4], 24 + 100, 60 + 12 + 200, this);
 
@@ -361,7 +366,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     private void buttonHeadActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         cloths[1]++;
-        if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
+        if (cloths[1] == 4 && !Main.unlocks.get(0, 1)) {
             cloths[1]++;
         }
         if (cloths[1] > waffles2) {
@@ -472,7 +477,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (Client.currentlyLoggedIn) {
+        if (Main.currentlyLoggedIn) {
             String post = "";
             for (int i = 0; i < cloths.length; i++) {
                 post += cloths[i];
@@ -487,34 +492,36 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                 post += i == colors2.length - 1 ? "" : ",";
             }
             // System.out.println(post);
-            owner.CTD.postOutfit(post, Client.jtb.getText());
+
+            avatarService.changesAppearance(post, Main.jtb.getText());
         } // TODO add your handling code here:
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        if (Client.currentlyLoggedIn) {
+        if (Main.currentlyLoggedIn) {
             loadClothing();
         }
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        Client.Clothing = cloths;
+        Main.Clothing = cloths;
         for (int i = 0; i < colors.length; i++) {
-            Client.Colors[i] = colors[i].getRGB();
-            Client.Colors2[i] = colors2[i].getRGB();
+            Main.Colors[i] = colors[i].getRGB();
+            Main.Colors2[i] = colors2[i].getRGB();
         }
-        Client.immaKeepTabsOnYou.setSelectedIndex(0);
+        Main.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
     public void loadClothing() {
-        owner.CTD.getOutfit(Client.jtb.getText(), owner.jtp.getText());
+        avatarService.getAppearance(Main.jtb.getText(), app.jtp.getText());
+
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = new Color(Client.Colors[i]);
-            colors2[i] = new Color(Client.Colors2[i]);
+            colors[i] = new Color(Main.Colors[i]);
+            colors2[i] = new Color(Main.Colors2[i]);
         }
-        cloths = Client.Clothing;
+        cloths = Main.Clothing;
         getImages();
     }
 

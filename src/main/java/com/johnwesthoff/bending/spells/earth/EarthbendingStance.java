@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -26,7 +26,7 @@ public class EarthbendingStance extends Earthbending {
     int number = 0;
 
     @Override
-    public void onSpawn(Client me) {
+    public void onSpawn(Main me) {
         number = 0;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Earthbending) {
@@ -37,7 +37,7 @@ public class EarthbendingStance extends Earthbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Main app) {
         app.knockbackDecay = 0.8 - ((double) number / 10d);
         app.world.floatiness = -7 * (number + 1);
     }

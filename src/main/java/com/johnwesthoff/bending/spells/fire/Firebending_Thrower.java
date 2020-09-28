@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.FlameThrowerEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -25,17 +25,17 @@ public class Firebending_Thrower extends Firebending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Main app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Main.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Client.lengthdir_x(4, direction)));
-        my = ((int) (Client.lengthdir_y(4, direction)));
+        mx = ((int) (Main.lengthdir_x(4, direction)));
+        my = ((int) (Main.lengthdir_y(4, direction)));
         maker = ID;
         getMessage(app.out);
     }

@@ -97,8 +97,8 @@ public class PumpkinEntity extends Entity {
                 near = true;
                 if (apples.keys[KeyEvent.VK_C]) {
                     alive = false;
-                    // Client.unlocks.set(0, 1, true);
-                    // Client.CTD.postRSSfeed(Client.username + " found a rare item!","A Viking
+                    // Main.unlocks.set(0, 1, true);
+                    // Main.CTD.postRSSfeed(Main.username + " found a rare item!","A Viking
                     // Helmet!");
                 }
             }

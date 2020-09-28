@@ -7,6 +7,8 @@ package com.johnwesthoff.bending.ui;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.johnwesthoff.bending.app.player.PlayerService;
+import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 /**
@@ -15,13 +17,16 @@ import com.johnwesthoff.bending.util.network.ConnectToDatabase;
  */
 public class Verify extends javax.swing.JFrame {
 
+    private final PlayerService playerService;
+
     /**
      * Creates new form Register
      */
-    ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public Verify() {
         initComponents();
+
+        playerService = PlayerServiceFactory.create();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
     }
@@ -86,7 +91,7 @@ public class Verify extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (INSTANCE.verify(username.getText())) {
+        if (playerService.verify(username.getText())) {
             JOptionPane.showMessageDialog(rootPane, "Verification Complete!");
         }
         setVisible(false);

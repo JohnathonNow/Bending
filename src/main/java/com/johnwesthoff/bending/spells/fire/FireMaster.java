@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.FireDoom;
 import com.johnwesthoff.bending.logic.World;
@@ -26,7 +26,7 @@ public class FireMaster extends Spell {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Main app) {
         X = app.world.x;
         Y = app.world.y - World.head;
         if (app.world.isLiquid(X, Y)) {
@@ -34,10 +34,10 @@ public class FireMaster extends Spell {
         }
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Main.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-        mx = ((int) (Client.lengthdir_x(12, direction)));
-        my = ((int) (Client.lengthdir_y(12, direction)));
+        mx = ((int) (Main.lengthdir_x(12, direction)));
+        my = ((int) (Main.lengthdir_y(12, direction)));
         maker = ID;
         getMessage(app.out);
     }
@@ -58,7 +58,7 @@ public class FireMaster extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Main app) {
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -26,13 +26,13 @@ public class LightningOvercharge extends Lightning {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Main app) {
     }
 
     int number = 0;
 
     @Override
-    public void onSpawn(Client me) {
+    public void onSpawn(Main me) {
         number = 1;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Lightning) {
@@ -43,7 +43,7 @@ public class LightningOvercharge extends Lightning {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Main app) {
         app.maxeng = 1000 + (number * 166);
     }
 

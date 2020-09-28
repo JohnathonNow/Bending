@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -25,21 +25,21 @@ public class EarthbendingSpike extends Earthbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Main app) {
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;
         X = app.world.pressX + app.world.viewX;
         Y = app.world.pressY + app.world.viewY;
 
-        double direction = Client.pointDir(mx, my, X, Y);
+        double direction = Main.pointDir(mx, my, X, Y);
         if ((mx == X) && (my == Y)) {
             direction = 90;
         }
 
-        mx = X - ((int) (Client.lengthdir_x(72, direction)));
-        my = Y + ((int) (Client.lengthdir_y(72, direction)));
+        mx = X - ((int) (Main.lengthdir_x(72, direction)));
+        my = Y + ((int) (Main.lengthdir_y(72, direction)));
         maker = ID;
-        if (!app.world.isSolid(X, Y) || Client.pointDis(app.world.x, app.world.y, X, Y) > 300
+        if (!app.world.isSolid(X, Y) || Main.pointDis(app.world.x, app.world.y, X, Y) > 300
                 || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
                 || !app.world.inBounds(mx + 56, my)) {
             app.energico += this.getCost();

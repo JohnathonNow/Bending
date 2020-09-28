@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
@@ -173,16 +173,16 @@ public abstract class Spell {
         return passives.get(i);
     }
 
-    public void onSpawn(Client me) {
+    public void onSpawn(Main me) {
 
     }
 
     public void unlock() {
-        if (Client.XP >= unlockXP) {
+        if (Main.XP >= unlockXP) {
             locked = false;
         }
         if (getName().equals("Burito")) {
-            locked = !(Client.jtb.getText().equals("Joey") && Client.currentlyLoggedIn);
+            locked = !(Main.jtb.getText().equals("Joey") && Main.currentlyLoggedIn);
         }
     }
 
@@ -203,11 +203,11 @@ public abstract class Spell {
     /**
      * Executes the command for the spell as a result of a player action
      * 
-     * @param app the client performing this action and having its state modified as
+     * @param app the game performing this action and having its state modified as
      *            a result
      *
      */
-    public abstract void getAction(Client app);
+    public abstract void getAction(Main app);
 
     /**
      * Executes the command for the spell as a result of a network event
@@ -228,7 +228,7 @@ public abstract class Spell {
 
     public abstract String getName();
 
-    public abstract void getPassiveAction(Client app);
+    public abstract void getPassiveAction(Main app);
 
     public String getTip() {
         return "<html>A basic air spell<br>Low Energy Cost<br>Travels in a straight line<br>Deals low damage</html>";

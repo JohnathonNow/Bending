@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.util.audio.RealClip;
 /**
  *
@@ -74,7 +74,7 @@ public class ResourceLoader {
                     // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                     downloadResource(dir + "images" + File.separator + name, src);
                 } catch (final Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             try {
@@ -82,7 +82,7 @@ public class ResourceLoader {
                 imageTable.put(name, toReturn);
                 return toReturn;
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -99,14 +99,14 @@ public class ResourceLoader {
                 // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 imageTable.put(name, toReturn);
                 return new ImageIcon(toReturn);
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -120,13 +120,13 @@ public class ResourceLoader {
                 // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 return toReturn;
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -139,7 +139,7 @@ public class ResourceLoader {
                 toReturn = (BufferedImage) (ImageIO.read(new File(name)));
                 return toReturn;
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -153,7 +153,7 @@ public class ResourceLoader {
             }
             clip = new RealClip(f);
         } catch (final Exception ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return clip;
     }
