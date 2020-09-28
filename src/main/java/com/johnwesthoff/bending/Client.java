@@ -38,11 +38,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -1601,37 +1598,6 @@ public class Client extends JPanel implements Runnable {
         if (pinger != null) {
             pinger.interrupt();
         }
-        Runnable waffles;
-        waffles = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < counts.length; i++) {
-                    String st = "DOWN";
-                    try {
-                        final Scanner n = new Scanner(
-                                Runtime.getRuntime().exec("ping " + hosts[i] + " -n 1").getInputStream());
-                        while (n.hasNext()) {
-                            st += n.nextLine();
-                        }
-                        // System.out.println(st);
-                        final Pattern p = Pattern.compile("Average = (.*?)ms");
-                        final Matcher m = p.matcher(st);
-                        if (m.find()) {
-                            st = "PING:   " + m.group(1);
-                        }
-                    } catch (final IOException ex) {
-                    }
-                    ((Row) menu.getModel().getElementAt(i)).val = st;
-                    try {
-                        Thread.sleep(10);
-                    } catch (final InterruptedException e) {
-                        return;
-                    }
-                }
-            }
-        };
-        //pinger = new Thread(waffles);
-        //pinger.start();
     }
 
     @Override
