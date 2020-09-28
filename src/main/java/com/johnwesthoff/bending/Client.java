@@ -1630,8 +1630,8 @@ public class Client extends JPanel implements Runnable {
                 }
             }
         };
-        pinger = new Thread(waffles);
-        pinger.start();
+        //pinger = new Thread(waffles);
+        //pinger.start();
     }
 
     @Override
