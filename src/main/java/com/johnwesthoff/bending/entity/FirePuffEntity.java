@@ -4,18 +4,16 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class FirePuffEntity extends Entity {
@@ -37,8 +35,8 @@ public class FirePuffEntity extends Entity {
     public void drawAdditive(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(yes);
-            G.fillArc(((int) (X - radius) - viewX) * 3, (int) ((Y - radius) - viewY) * 3, radius * 6, radius * 6, 0,
-                    360);
+            G.fillArc(((int) (X - radius) - viewX) * Constants.MULTIPLIER, (int) ((Y - radius) - viewY) * Constants.MULTIPLIER,
+                    radius * 6, radius * 6, 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -46,7 +44,8 @@ public class FirePuffEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.BLACK);
-            G.fillArc((int) (X - radius) - viewX, (int) (Y - radius) - viewY, radius * 2, radius * 2, 0, 360);
+            G.fillArc((int) (X - radius) - viewX, (int) (Y - radius) - viewY,
+                    radius * 2, radius * 2, 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -100,7 +99,7 @@ public class FirePuffEntity extends Entity {
         double xx = X;
         double yy = Y;
         for (int i = 0; i < 16; i++) {
-            if (w.inBounds((int) xx, (int) yy) && w.ground.cellData[(int) xx][(int) yy] == World.WATER) {
+            if (w.inBounds((int) xx, (int) yy) && w.ground.cellData[(int) xx][(int) yy] == Constants.WATER) {
                 X = (int) xx;
                 Y = (int) yy;
                 return true;

@@ -4,18 +4,16 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class FireDoom extends Entity {
@@ -37,10 +35,10 @@ public class FireDoom extends Entity {
             // g.setComposite(new Additive());
             G.setColor(Color.ORANGE);
             for (int i = 0; i < 4; i++) {
-                G.fillArc((int) X - viewX + (i * 2) - 4, (int) Y - viewY, 4, 4, 0, 360);
+                G.fillArc((int) X - viewX + (i * 2) - 4, (int) Y - viewY, 4, 4, 0, Constants.FULL_ANGLE);
             }
             G.setColor(Color.RED);
-            G.fillArc(4 + (int) X - viewX, (int) Y - viewY, 3, 3, 0, 360);
+            G.fillArc(4 + (int) X - viewX, (int) Y - viewY, 3, 3, 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -50,7 +48,7 @@ public class FireDoom extends Entity {
     public void onUpdate(final World apples) {
         if (!apples.inBounds((int) X, (int) Y) || apples.checkCollision((int) X, (int) Y)) {
             if (apples.inBounds(X, Y)) {
-                apples.ground.destroyExpansion(X, Y, World.STONE, World.LAVA);// apples.ground.cellData[(int)X][(int)Y]
+                apples.ground.destroyExpansion(X, Y, Constants.STONE, Constants.LAVA);// apples.ground.cellData[(int)X][(int)Y]
             }
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);

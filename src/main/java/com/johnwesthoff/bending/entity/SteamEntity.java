@@ -4,17 +4,15 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.nio.ByteBuffer;
-
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class SteamEntity extends Entity {
@@ -62,9 +60,9 @@ public class SteamEntity extends Entity {
             double yy = Y + (bigness * scale) - r.nextInt((int) (bigness * 2 * scale)) - (bigness * scale);
             double xxx = (bigness * .5 * scale) + r.nextInt((int) ((bigness * 3 / 2) * scale));
             double yyy = (bigness * .5 * scale) + r.nextInt((int) ((bigness * 3 / 2) * scale));
-            G.fillArc((int) (xx + (xxx / 2)), (int) yy, (int) xxx, (int) yyy, 0, 360);
+            G.fillArc((int) (xx + (xxx / 2)), (int) yy, (int) xxx, (int) yyy, 0, Constants.FULL_ANGLE);
             G.setColor(Color.BLACK);
-            G.drawArc((int) (xx + (xxx / 2)), (int) yy, (int) xxx, (int) yyy, 0, 360);
+            G.drawArc((int) (xx + (xxx / 2)), (int) yy, (int) xxx, (int) yyy, 0, Constants.FULL_ANGLE);
         }
         G.setTransform(prevTrans);
     }

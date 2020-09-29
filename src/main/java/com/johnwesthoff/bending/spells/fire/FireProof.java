@@ -1,19 +1,18 @@
 
 package com.johnwesthoff.bending.spells.fire;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
-
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+
 public class FireProof extends Firebending {
-    int charge = 0;
 
     public FireProof() {
         ID = Server.FIREBENDING;

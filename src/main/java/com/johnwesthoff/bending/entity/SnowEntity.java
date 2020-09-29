@@ -4,23 +4,21 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class SnowEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;
 
     public SnowEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -35,7 +33,7 @@ public class SnowEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.white);
-            G.fillArc((int) X - viewX - 1, (int) Y - viewY - 1, 2, 2, 0, 360);
+            G.fillArc((int) X - viewX - 1, (int) Y - viewY - 1, 2, 2, 0, Constants.FULL_ANGLE);
         }
     }
 

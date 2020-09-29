@@ -4,15 +4,13 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class GroundinatorEntity extends Entity {
@@ -27,7 +25,7 @@ public class GroundinatorEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.GREEN);
-            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, 0, 360);
+            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, 0, Constants.FULL_ANGLE);
         }
     }
 

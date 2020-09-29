@@ -4,18 +4,15 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
 /**
- *
  * @author John
  */
 public class HouseEntity extends Entity {
@@ -108,7 +105,7 @@ public class HouseEntity extends Entity {
             out.putInt(wall.getRGB());
             out.putInt(door.getRGB());
             out.putInt(window.getRGB());
-            out.putInt(chimney == true ? 1 : 0);
+            out.putInt(chimney ? 1 : 0);
         } catch (Exception ex) {
             Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -118,7 +115,7 @@ public class HouseEntity extends Entity {
         try {
             HouseEntity toAdd = new HouseEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()).setLook(
                     new Color(in.getInt()), new Color(in.getInt()), new Color(in.getInt()), new Color(in.getInt()),
-                    in.getInt() == 1 ? true : false);
+                    in.getInt() == 1);
             world.entityList.add(toAdd);
             toAdd.setPoints();
         } catch (Exception ex) {

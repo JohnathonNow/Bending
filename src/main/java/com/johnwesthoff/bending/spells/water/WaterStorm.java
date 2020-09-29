@@ -1,15 +1,14 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import java.nio.ByteBuffer;
-
-import javax.swing.ImageIcon;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
+
+import javax.swing.*;
+import java.nio.ByteBuffer;
 
 public class WaterStorm extends Waterbending {
     public WaterStorm() {

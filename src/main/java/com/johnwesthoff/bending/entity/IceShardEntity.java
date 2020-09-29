@@ -4,25 +4,23 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class IceShardEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 0;
 
     public IceShardEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -88,10 +86,10 @@ public class IceShardEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
-            radius = 16;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, 54, World.ICE);
+            radius = Constants.RADIUS_REGULAR;
+            lol.earth.ground.FillCircleW((int) X, (int) Y, 54, Constants.ICE);
             lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(54).put(World.ICE));
+                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(54).put(Constants.ICE));
             alive = false;
         }
         if (time++ > 1) {

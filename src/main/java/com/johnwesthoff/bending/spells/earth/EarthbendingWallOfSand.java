@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -33,8 +34,8 @@ public class EarthbendingWallOfSand extends Earthbending {
         if (app.world.isSolid(app.world.x, app.world.y + 4)) {
             app.energico += 100;
         }
-        if (app.world.inBounds((int) app.world.x, (int) (app.world.y - World.head + 4))
-                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y + 4] == World.SAND) {
+        if (app.world.inBounds((int) app.world.x, (int) (app.world.y - Constants.HEAD + 4))
+                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y + 4] == Constants.SAND) {
             app.energico += 200;
         }
         maker = ID;
@@ -63,7 +64,7 @@ public class EarthbendingWallOfSand extends Earthbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.ground.FillRectW(px - 12, py - 12, 24, 24, World.SAND);
+        world.ground.FillRectW(px - 12, py - 12, 24, 24, Constants.SAND);
     }
 }
 

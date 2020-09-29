@@ -26,10 +26,8 @@ public class PlayerOnline extends Player implements Runnable {
     public Socket playerSocket;
     public InputStream in;
     public OrderedOutputStream out;
-    public boolean ready = false;
+    public boolean ready = false, alive = true, loggedIn = false, voted = false;
     public Server handle;
-    public boolean alive = true;
-    public boolean loggedIn = false, voted = false;
     public ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public PlayerOnline(int X, int Y, Socket s, int ide, Server h) {

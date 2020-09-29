@@ -5,13 +5,14 @@
 ///TODO: FIX NETWORKING
 package com.johnwesthoff.bending;
 
-import java.awt.Polygon;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.johnwesthoff.bending.entity.*;
+import com.johnwesthoff.bending.logic.Player;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+
+import java.awt.*;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -22,58 +23,32 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.entity.BallLightningEntity;
-import com.johnwesthoff.bending.entity.BuritoEntity;
-import com.johnwesthoff.bending.entity.EnemyEntity;
-import com.johnwesthoff.bending.entity.Entity;
-import com.johnwesthoff.bending.entity.FireBallEntity;
-import com.johnwesthoff.bending.entity.FireJumpEntity;
-import com.johnwesthoff.bending.entity.FirePuffEntity;
-import com.johnwesthoff.bending.entity.GuardianEntity;
-import com.johnwesthoff.bending.entity.GustEntity;
-import com.johnwesthoff.bending.entity.HillEntity;
-import com.johnwesthoff.bending.entity.IceShardEntity;
-import com.johnwesthoff.bending.entity.LavaBallEntity;
-import com.johnwesthoff.bending.entity.MissileEntity;
-import com.johnwesthoff.bending.entity.PumpkinEntity;
-import com.johnwesthoff.bending.entity.RockEntity;
-import com.johnwesthoff.bending.entity.SandEntity;
-import com.johnwesthoff.bending.entity.ShardEntity;
-import com.johnwesthoff.bending.entity.SnowEntity;
-import com.johnwesthoff.bending.entity.SoulDrainEntity;
-import com.johnwesthoff.bending.entity.SpoutEntity;
-import com.johnwesthoff.bending.entity.TornadoEntity;
-import com.johnwesthoff.bending.entity.WallofFireEntity;
-import com.johnwesthoff.bending.logic.Player;
-import com.johnwesthoff.bending.logic.PlayerOnline;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 /**
- *
  * @author John
  */
 public final class Server implements Runnable {
     public static final byte // MESSAGE IDs
-    LOGIN = 0, MOVE = 1, LEAVE = 2, MAP = 3, ENTITY = 4, AI = 5, MESSAGE = 6, WORLDEXPAND = 7, ENTIREWORLD = 8, DIG = 9,
+            LOGIN = 0, MOVE = 1, LEAVE = 2, MAP = 3, ENTITY = 4, AI = 5, MESSAGE = 6, WORLDEXPAND = 7, ENTIREWORLD = 8, DIG = 9,
             FILL = 10, ID = 11, CHUNK = 12, AIRBENDING = 13, EARTHBENDING = 14, WATERBENDING = 15, FIREBENDING = 16,
             FREEZE = 17, PUDDLE = 18, DEATH = 19, CHARGE = 20, LIGHTNING = 21, DESTROY = 22, STEAM = 23, HURT = 24,
             SANDINATE = 25, LOGOUT = 26, SCORE = 27, DARKNESS = 28, DRAIN = 29, SPELL = 30;
     public static final int TEAMDEATHMATCH = 1, FREEFORALL = -1, KINGOFTHEHILL = -2, THEHIDDEN = 2, SURVIVAL = 3,
             DEFENDER = 4;
     public static final byte // MESSAGE IDs
-    UDPMOVE = 0;
+            UDPMOVE = 0;
     public static int MYID = 0;
     public int nextVote = 0;
+    public static final int BUFFER_CAPACITY = 30;
 
     public static int getID() {
         return MYID++;
     }
 
-    public static final String MESSAGEIDs[] = new String[] { "Player Login", "Player Move", "Player Left",
+    public static final String MESSAGEIDs[] = new String[]{"Player Login", "Player Move", "Player Left",
             "Map Request", "Entity Request", "AI Request", "Chat Message", "World Expansion", "Entire World", "Dig",
             "Fill", "ID", "Chunk", "Airbending", "Earthbending", "Boats Float In The Ocean!", "Firebending", "Freeze",
             "BOATS_IN_THE_KINDOM", "Death", "Charge", "Lightning", "Entity Kill", "Entity Steam", "Hurt", "SANDINATE",
-            "QUITTER", "POINTS", "DARKNESS", "DRAIN", "SPELL" };
+            "QUITTER", "POINTS", "DARKNESS", "DRAIN", "SPELL"};
     int port = 25565;
     public ArrayList<Integer> team1 = new ArrayList<>(), team2 = new ArrayList<>();
     public ArrayList<PlayerOnline> playerList = new ArrayList<>();
@@ -288,7 +263,7 @@ public final class Server implements Runnable {
     }
 
     public void movePlayer(final int id, final int x, final int y, final int m, final int v, final int la, final int ra,
-            final short st, final short hp) {
+                           final short st, final short hp) {
         for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
                 p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp);
@@ -542,9 +517,9 @@ public final class Server implements Runnable {
                     earth.ground.FillCircle(750, 900, 300);
                     break;
                 case 1:
-                    earth.ground.FillRectW(0, 800, 100, 900, World.LAVA);
+                    earth.ground.FillRectW(0, 800, 100, 900, Constants.LAVA);
                     for (int x = 0; x <= 900; x += 100) {
-                        earth.ground.FillCircleW(x, 800, 100, World.STONE);
+                        earth.ground.FillCircleW(x, 800, 100, Constants.STONE);
                     }
                     break;
                 case 2:
@@ -559,8 +534,8 @@ public final class Server implements Runnable {
                     P.addPoint(700, 820);
                     P.addPoint(800, 860);
                     P.addPoint(900, 900);
-                    earth.ground.FillRectW(0, 700, 200, 900, World.WATER);
-                    earth.ground.FillPolygon(P, World.ICE);
+                    earth.ground.FillRectW(0, 700, 200, 900, Constants.WATER);
+                    earth.ground.FillPolygon(P, Constants.ICE);
                     break;
             }
         } else {
@@ -627,103 +602,103 @@ public final class Server implements Runnable {
                             e.setAlive(false);
                             AI.lastHit = e.maker;
                             AI.HP -= 70;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof TornadoEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 100;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof GustEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 40;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof RockEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 120;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof FireBallEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 200;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof FirePuffEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 20;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof BuritoEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 500;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof LavaBallEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 300;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof SoulDrainEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 100;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof FireJumpEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 200;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof ShardEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 160;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof SandEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 200;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof IceShardEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 100;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof SnowEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 30;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof SpoutEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 30;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof BallLightningEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 100;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                         if (e instanceof WallofFireEntity) {
                             AI.lastHit = e.maker;
                             e.setAlive(false);
                             AI.HP -= 222;
-                            sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(e.MYID));
+                            sendMessage(Server.DESTROY, ByteBuffer.allocate(BUFFER_CAPACITY).putInt(e.MYID));
                         }
                     }
                 }

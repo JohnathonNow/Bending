@@ -4,21 +4,18 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 
 
 /**
- *
  * @author John
  */
 public class GuardianEntity extends EnemyEntity {
@@ -28,7 +25,7 @@ public class GuardianEntity extends EnemyEntity {
         super(x, y, hspeed, vspeed, ma);
         HP = 5000;
         sprite = (ResourceLoader.loadImage("https://west-it.webs.com/Bending/guardian.png", "guardian.png"));// ,new
-                                                                                                             // Color(255,46,0),Color.BLUE);
+        // Color(255,46,0),Color.BLUE);
     }
 
     @Override
@@ -123,14 +120,14 @@ public class GuardianEntity extends EnemyEntity {
             }
 
         }
-        if (!handle.earth.isType((int) X, (int) Y, World.AIR)) {
+        if (!handle.earth.isType((int) X, (int) Y, Constants.AIR)) {
             if (air-- < 0) {
                 HP -= 2;
             }
         } else {
             air = 100;
         }
-        if (handle.earth.isType((int) X, (int) Y, World.LAVA)) {
+        if (handle.earth.isType((int) X, (int) Y, Constants.LAVA)) {
             HP -= 2;
         }
         if (timer++ > 90) {
