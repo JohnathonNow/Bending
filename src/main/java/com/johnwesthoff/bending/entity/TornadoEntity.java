@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -100,4 +101,17 @@ public class TornadoEntity extends Entity {
         }
     }
 
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && life < 80) {
+            client.hurt(1);
+            client.xspeed += 1 - client.random.nextInt(2);
+            client.xspeed *= -1;
+            client.world.x = (int) X + (int) client.xspeed;
+            client.world.move = 0;
+            client.lastHit = maker;
+            client.killMessage = "~ was sucked into `'s Tornado.";
+        }
+    }
 }

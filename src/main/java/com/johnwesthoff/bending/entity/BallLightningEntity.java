@@ -8,10 +8,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+
 
 /**
  *
@@ -76,6 +78,18 @@ public class BallLightningEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
 
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && (maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker)))) {
+            client.hurt(10);
+            client.lastHit = maker;
+            client.world.vspeed -= client.random.nextInt(22);
+            client.xspeed += 18 - client.random.nextInt(36);
+            client.killMessage = "~ was shockingly killed by `!";
+        }
     }
 
     @Override

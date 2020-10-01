@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -85,4 +86,17 @@ public class MissileEntity extends Entity {
         }
     }
 
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            alive = false;
+            client.hurt(10);
+            client.xspeed += 7 - client.random.nextInt(14);
+            client.world.vspeed -= 5;
+            client.lastHit = maker;
+            client.killMessage = "~ was blown away by `.";
+        }
+    }
 }

@@ -6,10 +6,12 @@ package com.johnwesthoff.bending.entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -87,6 +89,26 @@ public class SoulDrainEntity extends Entity {
             world.entityList.add(new SoulDrainEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
         } catch (Exception ex) {
             Logger.getLogger(SoulDrainEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.lastHit = maker;
+            client.killMessage = "~'s soul was stolen by `!";
+            alive = false;
+            final ByteBuffer bb = ByteBuffer.allocate(8);
+            bb.putInt(client.lastHit).putInt(client.hurt(21));
+            client.world.vspeed -= 5;
+            client.xspeed += 7 - client.random.nextInt(14);
+            try {
+                client.out.addMesssage(bb, Server.DRAIN);
+            } catch (final IOException ex) {
+                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

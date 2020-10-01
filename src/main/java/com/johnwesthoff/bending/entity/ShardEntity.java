@@ -93,6 +93,20 @@ public class ShardEntity extends Entity {
         }
     }
 
+    @Override
+    public void handleCollision(Client client) {
+
+        if (Client.pointDis(X, Y - World.head, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.vspeed -= 5;
+            client.xspeed += 7 - client.random.nextInt(14);
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was sniped by `.";
+        }
+    }
+
     private boolean collided(World w) {
         double direction = Client.pointDir(previousX, previousY, X, Y);
         int speed = (int) Client.pointDis(previousX, previousY, X, Y);

@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.World;
 
 /**

@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
@@ -122,5 +123,9 @@ public abstract class Entity extends Object {
         String whatIam = "~~~" + getClass().getName() + "~~~" + "\nX: " + X + " Y: " + Y + "\nI am "
                 + (alive ? "alive" : "dead");
         return whatIam;
+    }
+
+    public void handleCollision(Client client) {
+        // do nothing
     }
 }

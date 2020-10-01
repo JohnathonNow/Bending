@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -89,4 +90,18 @@ public class BuritoEntity extends Entity {
         }
     }
 
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(65);
+            client.world.status |= World.ST_FLAMING;
+            client.world.vspeed -= 39;
+            client.xspeed += 47 - client.random.nextInt(94);
+            client.lastHit = maker;
+            alive = false;
+            client.world.status |= World.ST_FLAMING;
+            client.killMessage = "~ shouldn't have stolen `'s burito...";
+        }
+    }
 }

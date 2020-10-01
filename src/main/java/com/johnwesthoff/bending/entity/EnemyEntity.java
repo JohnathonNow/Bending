@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -273,6 +274,19 @@ public class EnemyEntity extends Entity {
             handle.sendMessage(Server.AI, ByteBuffer.allocate(28).putInt((int) X).putInt((int) Y).putInt((int) move)
                     .putInt((int) yspeed).putInt((int) HP).putInt(MYID).putInt(target));
             timer = 0;
+        }
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && master != client.ID
+                && (client.gameMode <= 0 || !client.myTeam.contains(master))) {
+            client.hurt(7);
+            client.world.vspeed -= 4;
+            client.xspeed += 4 - client.random.nextInt(8);
+            client.lastHit = master;
+            client.killMessage = "~ was defeated by `'s dark minion.";
         }
     }
 

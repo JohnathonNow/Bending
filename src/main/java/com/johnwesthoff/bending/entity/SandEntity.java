@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -84,6 +85,21 @@ public class SandEntity extends Entity {
             lol.earth.ground.FillCircleW((int) X, (int) Y, radius, World.SAND);
             lol.sendMessage(Server.FILL,
                     ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(World.SAND));
+        }
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        final double d = Client.pointDis(X, Y, client.world.x, client.world.y);
+        if (d < radius * 3 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(2);
+            client.world.vspeed -= 1;
+            client.xspeed += (xspeed / 64);
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was shredded by `'s shotgun.";
         }
     }
 

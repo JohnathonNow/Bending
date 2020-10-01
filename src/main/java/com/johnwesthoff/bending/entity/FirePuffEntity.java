@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -79,6 +80,22 @@ public class FirePuffEntity extends Entity {
         {
             alive = false;
             lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(this.MYID));
+        }
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(2);
+            client.world.status |= World.ST_FLAMING;
+            client.world.vspeed -= 2;
+            client.xspeed += 2 - client.random.nextInt(4);
+            client.lastHit = maker;
+            alive = false;
+            client.world.status |= World.ST_FLAMING;
+            client.killMessage = "~ was set ablaze by `.";
         }
     }
 

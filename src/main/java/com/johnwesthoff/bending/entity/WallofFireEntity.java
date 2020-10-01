@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -82,6 +83,23 @@ public class WallofFireEntity extends Entity {
 
     @Override
     public void onServerUpdate(Server lol) {
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        client.checkCollision(X, Y);// Just to move the hitbox so when it is passed, it works
+        // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
+        if (checkCollision(client.playerHitbox) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(35);
+            alive = false;
+            client.lastHit = maker;
+            client.world.vspeed -= 8;
+            client.xspeed += 9 - client.random.nextInt(18);
+            client.world.status |= World.ST_FLAMING;
+            client.killMessage = "~ smelled `'s armpits, and then died.";
+        }
     }
 
     @Override

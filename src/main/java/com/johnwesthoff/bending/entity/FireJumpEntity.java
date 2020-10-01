@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -71,6 +72,21 @@ public class FireJumpEntity extends Entity {
 
     @Override
     public void onServerUpdate(Server lol) {
+    }
+
+    @Override
+    public void handleCollision(Client client) {
+
+        if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.status |= World.ST_FLAMING;
+            client.world.vspeed += yspeed * 2;
+            client.xspeed += xspeed;
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was flung into orbit by `'s falcon pawnch!";
+        }
     }
 
     @Override
