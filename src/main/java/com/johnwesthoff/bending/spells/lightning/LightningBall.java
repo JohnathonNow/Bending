@@ -22,7 +22,7 @@ public class LightningBall extends Lightning {
         unlockXP = 750;
         try {
             icon = new ImageIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningball.png", "lightningball.png"));
+                    ResourceLoader.loadImage("lightningball.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

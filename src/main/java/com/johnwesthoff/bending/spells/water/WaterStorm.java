@@ -16,7 +16,7 @@ public class WaterStorm extends Waterbending {
         ID = Server.WATERBENDING;
         subID = 6;
         icon = new ImageIcon(
-                ResourceLoader.loadImage("https://west-it.webs.com/spells/waterStorm.png", "waterStorm.png"));
+                ResourceLoader.loadImage("waterStorm.png"));
     }
 
     @Override

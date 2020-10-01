@@ -21,8 +21,7 @@ public class LightningStorm extends Lightning {
         locked = true;
         unlockXP = 500;
         try {
-            icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstorm.png",
-                    "lightningstorm.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("lightningstorm.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

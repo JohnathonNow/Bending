@@ -64,7 +64,6 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
     public MapMaker() {
         bufferedStrokes = new ArrayList<>();
 
-        // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         File yay = new File(dir + "maps" + File.separator);
         System.err.println(yay.mkdirs());
         try {
@@ -95,24 +94,16 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
             liquidStats[aList[SAND]][3] = 50;
             EditingPane.addMouseMotionListener(this);
             jScrollPane1.addMouseMotionListener(this);
-            Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.jpg");
-            Sky = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg", "SkyTexture.jpg");// ImageIO.read(new
-                                                                                                                // URL("https://west-it.webs.com/.jpg"));
-            Sand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg", "SandTexture.jpg");// ImageIO.read(new
-                                                                                                                   // URL("https://west-it.webs.com/.jpg"));
-            Stone = ResourceLoader.loadImage("https://west-it.webs.com/Bending/StoneTexture.jpg", "StoneTexture.jpg");// ImageIO.read(new
-                                                                                                                      // URL("https://west-it.webs.com/.jpg"));
-            Bark = ResourceLoader.loadImage("https://west-it.webs.com/Bending/BarkTexture.jpg", "BarkTexture.jpg");// ImageIO.read(new
-                                                                                                                   // URL("https://west-it.webs.com/.jpg"));
-            Ice = ResourceLoader.loadImage("https://west-it.webs.com/Bending/iceTexture.png", "iceTexture.png");// ImageIO.read(new
-                                                                                                                // URL("https://west-it.webs.com/.png"));
-            LavaLand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png",
-                    "lavalandTexture.png");// ImageIO.read(new URL("https://west-it.webs.com/.png"));
+            Grass = ResourceLoader.loadImage("GrassTexture.jpg");
+            Sky = ResourceLoader.loadImage("SkyTexture.jpg");
+            Sand = ResourceLoader.loadImage("SandTexture.jpg");
+            Stone = ResourceLoader.loadImage("StoneTexture.jpg");
+            Bark = ResourceLoader.loadImage("BarkTexture.jpg");
+            Ice = ResourceLoader.loadImage("iceTexture.png");
+            LavaLand = ResourceLoader.loadImage("lavalandTexture.png");
             skyPaint = new TexturePaint(Sky, new Rectangle(200, 200));
-            Crystal = ResourceLoader.loadImage("https://west-it.webs.com/Bending/crystalTexture.png",
-                    "crystalTexture.png");// ImageIO.read(new URL("https://west-it.webs.com/.png"));
-            Ether = ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png", "ether.png");// ImageIO.read(new
-                                                                                                        // URL("https://west-it.webs.com/.png"));
+            Crystal = ResourceLoader.loadImage("crystalTexture.png");
+            Ether = ResourceLoader.loadImage("ether.png");
             grassPaint = new TexturePaint(Grass, new Rectangle(256, 256));
             sandPaint = new TexturePaint(Sand, new Rectangle(256, 256));
             stonePaint = new TexturePaint(Stone, new Rectangle(256, 256));
