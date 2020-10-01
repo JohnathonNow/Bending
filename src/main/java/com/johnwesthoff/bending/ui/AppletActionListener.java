@@ -51,7 +51,7 @@ public class AppletActionListener implements ActionListener {
                 }
                 pointer.notDone = false;
                 // owner.setResizable(true);
-                pointer.username = Client.jtb.getText();
+                Client.username = Client.jtb.getText();
                 pointer.serverIP = (String) pointer.hosts[pointer.menu.getSelectedIndex()];
                 if ("enterip".equals(pointer.serverIP)) {
                     pointer.serverIP = JOptionPane.showInputDialog("Server IP?");
@@ -176,10 +176,10 @@ public class AppletActionListener implements ActionListener {
         if (command.equals(pointer.verify.getText())) {
             // exactly.setVisible(true);
             if (!currentlyLoggedIn) {
-                if (currentlyLoggedIn = pointer.CTD.logIn(Client.jtb.getText(), pointer.jtp.getText())) {
+                if (currentlyLoggedIn = Client.CTD.logIn(Client.jtb.getText(), "PASSWORD IGNORED")) {
                     if (pointer.JRB.isSelected()) {
                         pointer.userpassinfo.setProperty("username", Client.jtb.getText());
-                        pointer.userpassinfo.setProperty("password", pointer.jtp.getText());
+                        pointer.userpassinfo.setProperty("password", "IGNORE ME");
                         pointer.userpassinfo.setProperty("remember", "yes");
                     } else {
                         pointer.userpassinfo.setProperty("username", "");
@@ -197,13 +197,13 @@ public class AppletActionListener implements ActionListener {
                     pointer.jtp.setEditable(false);
                     pointer.verify.setText("Log Out");
                     pointer.verify.setForeground(Color.red);
-                    Client.XP = pointer.CTD.getXP(Client.jtb.getText(), pointer.jtp.getText());
+                    Client.XP = Client.CTD.getXP(Client.jtb.getText(), "PASS IGNORED");
                     pointer.cc.loadClothing();
                     pointer.spellselection.loadSpells();
                     pointer.chooseclothing.setEnabled(true);
                     pointer.ChooseSpells.setEnabled(true);
                     pointer.connect.setEnabled(true);
-                    INSTANCE.getUnlocks(Client.jtb.getText(), pointer.jtp.getText());
+                    INSTANCE.getUnlocks(Client.jtb.getText(), "I NOW DO NOTHING");
                 }
             } else {
                 pointer.verify.setText("Log In");

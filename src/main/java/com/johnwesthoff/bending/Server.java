@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-///TODO: FIX NETWORKING
 package com.johnwesthoff.bending;
 
 import java.awt.Polygon;
@@ -148,7 +143,6 @@ public final class Server implements Runnable {
                         try {
                             Thread.sleep(1);
                         } catch (final InterruptedException e2) {
-                            // TODO Auto-generated catch block
                             e2.printStackTrace();
                         }
                         final long l = System.nanoTime();
@@ -454,7 +448,7 @@ public final class Server implements Runnable {
             yes = getKiller(winner) + " won the round!";
             sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0xFF0000), yes));
         }
-        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, SURVIVAL, DEFENDER);
+        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, DEFENDER);
         Collections.shuffle(playerList);
         team1.clear();
         team2.clear();

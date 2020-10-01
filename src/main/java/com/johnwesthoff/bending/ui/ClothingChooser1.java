@@ -26,7 +26,7 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
  * @author Family
  */
 public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
-
+    private static final long serialVersionUID = 125466973567201631L;
     /** Creates new form ClothingChooser */
     Color[] colors = new Color[] { Color.white, Color.white, Color.white, Color.white, Color.white, Color.white };
     Color[] colors2 = new Color[] { Color.white, Color.white, Color.white, Color.white, Color.white, Color.white };
@@ -80,7 +80,6 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     int waffles = 4;
     int waffles2 = 5;
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
         buttonHead = new javax.swing.JButton();
@@ -359,7 +358,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }// </editor-fold>
 
     private void buttonHeadActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[1]++;
         if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
             cloths[1]++;
@@ -371,7 +370,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void COLOR(int i, java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors2[i] = JColorChooser.showDialog(this, "Choose Secondary Color", colors[i]);
         if (colors2[i] == null)
             colors2[i] = Color.BLACK;
@@ -379,7 +378,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonHeadcolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[1] = JColorChooser.showDialog(this, "Choose Head Color", colors[1]);
         if (colors[1] == null)
             colors[1] = Color.BLACK;
@@ -387,7 +386,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonBodycolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[0] = JColorChooser.showDialog(this, "Choose Body Color", colors[0]);
         if (colors[0] == null)
             colors[0] = Color.BLACK;
@@ -395,7 +394,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonScolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[2] = JColorChooser.showDialog(this, "Choose Shoulder Color", colors[2]);
         if (colors[2] == null)
             colors[2] = Color.BLACK;
@@ -403,7 +402,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonFcolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[3] = JColorChooser.showDialog(this, "Choose Arm Color", colors[3]);
         if (colors[3] == null)
             colors[3] = Color.BLACK;
@@ -411,7 +410,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonTcolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[4] = JColorChooser.showDialog(this, "Choose Leg Color", colors[4]);
         if (colors[4] == null)
             colors[4] = Color.BLACK;
@@ -419,7 +418,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonShincolorActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         colors[5] = JColorChooser.showDialog(this, "Choose Foot Color", colors[5]);
         if (colors[5] == null)
             colors[5] = Color.BLACK;
@@ -427,7 +426,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonBodyActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[0]++;
         if (cloths[0] > waffles) {
             cloths[0] = 1;
@@ -436,7 +435,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonShoulderActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[2]++;
         if (cloths[2] > waffles) {
             cloths[2] = 1;
@@ -445,7 +444,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void ForeArmActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[3]++;
         if (cloths[3] > waffles) {
             cloths[3] = 1;
@@ -454,7 +453,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void ThighButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[4]++;
         if (cloths[4] > waffles) {
             cloths[4] = 1;
@@ -463,7 +462,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     private void buttonShinActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         cloths[5]++;
         if (cloths[5] > waffles) {
             cloths[5] = 1;
@@ -487,19 +486,19 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                 post += i == colors2.length - 1 ? "" : ",";
             }
             // System.out.println(post);
-            owner.CTD.postOutfit(post, Client.jtb.getText());
-        } // TODO add your handling code here:
+            Client.CTD.postOutfit(post, Client.jtb.getText());
+        }
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         if (Client.currentlyLoggedIn) {
             loadClothing();
         }
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
         Client.Clothing = cloths;
         for (int i = 0; i < colors.length; i++) {
             Client.Colors[i] = colors[i].getRGB();
@@ -509,7 +508,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     public void loadClothing() {
-        owner.CTD.getOutfit(Client.jtb.getText(), owner.jtp.getText());
+        Client.CTD.getOutfit(Client.jtb.getText(), "IGNORE PASS");
         for (int i = 0; i < colors.length; i++) {
             colors[i] = new Color(Client.Colors[i]);
             colors2[i] = new Color(Client.Colors2[i]);
