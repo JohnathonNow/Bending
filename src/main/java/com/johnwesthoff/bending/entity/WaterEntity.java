@@ -4,11 +4,10 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
 
 /**
  *

@@ -4,19 +4,16 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

@@ -4,16 +4,15 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 
 
 
