@@ -60,27 +60,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.AbstractTableModel;
 
-import com.johnwesthoff.bending.entity.BallLightningEntity;
-import com.johnwesthoff.bending.entity.BuritoEntity;
 import com.johnwesthoff.bending.entity.EnemyEntity;
 import com.johnwesthoff.bending.entity.Entity;
-import com.johnwesthoff.bending.entity.FireBallEntity;
-import com.johnwesthoff.bending.entity.FireJumpEntity;
-import com.johnwesthoff.bending.entity.FirePuffEntity;
-import com.johnwesthoff.bending.entity.GustEntity;
-import com.johnwesthoff.bending.entity.IceShardEntity;
-import com.johnwesthoff.bending.entity.LavaBallEntity;
-import com.johnwesthoff.bending.entity.MissileEntity;
-import com.johnwesthoff.bending.entity.RockEntity;
-import com.johnwesthoff.bending.entity.SandEntity;
-import com.johnwesthoff.bending.entity.ShardEntity;
 import com.johnwesthoff.bending.entity.ShockEffectEntity;
-import com.johnwesthoff.bending.entity.SnowEntity;
-import com.johnwesthoff.bending.entity.SoulDrainEntity;
-import com.johnwesthoff.bending.entity.SpoutEntity;
 import com.johnwesthoff.bending.entity.SteamEntity;
-import com.johnwesthoff.bending.entity.TornadoEntity;
-import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
@@ -1170,10 +1153,7 @@ public class Client extends JPanel implements Runnable {
                     }
                 }
                 for (final Entity e : world.entityList) {
-                    e.handleCollision(this);
-                    if (e instanceof WallofFireEntity) {
-                        final WallofFireEntity me3 = (WallofFireEntity) e;
-                    }
+                    e.checkAndHandleCollision(this);
                 }
 
                 if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {

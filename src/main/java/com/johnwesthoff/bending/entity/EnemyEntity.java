@@ -278,7 +278,7 @@ public class EnemyEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (client.checkCollision(X, Y) && master != client.ID
                 && (client.gameMode <= 0 || !client.myTeam.contains(master))) {

@@ -125,7 +125,7 @@ public abstract class Entity extends Object {
         return whatIam;
     }
 
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
         // do nothing
     }
 }

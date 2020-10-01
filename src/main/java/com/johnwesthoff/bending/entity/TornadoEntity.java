@@ -102,7 +102,7 @@ public class TornadoEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (client.checkCollision(X, Y) && life < 80) {
             client.hurt(1);

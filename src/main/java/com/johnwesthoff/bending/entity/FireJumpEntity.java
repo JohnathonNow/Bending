@@ -75,7 +75,7 @@ public class FireJumpEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {

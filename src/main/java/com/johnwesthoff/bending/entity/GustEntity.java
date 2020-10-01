@@ -110,7 +110,7 @@ public class GustEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (client.checkCollision(X, Y)) {
             client.hurt(7);

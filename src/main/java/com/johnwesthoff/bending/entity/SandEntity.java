@@ -89,7 +89,7 @@ public class SandEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         final double d = Client.pointDis(X, Y, client.world.x, client.world.y);
         if (d < radius * 3 && maker != client.ID

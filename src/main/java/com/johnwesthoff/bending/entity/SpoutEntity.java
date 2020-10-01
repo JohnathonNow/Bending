@@ -87,7 +87,7 @@ public class SpoutEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (client.checkCollision(X, Y)) {
             if (maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {

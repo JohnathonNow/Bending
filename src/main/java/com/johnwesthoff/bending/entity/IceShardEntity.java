@@ -103,7 +103,7 @@ public class IceShardEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         if (client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {

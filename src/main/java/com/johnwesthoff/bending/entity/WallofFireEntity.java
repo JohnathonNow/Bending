@@ -86,7 +86,7 @@ public class WallofFireEntity extends Entity {
     }
 
     @Override
-    public void handleCollision(Client client) {
+    public void checkAndHandleCollision(Client client) {
 
         client.checkCollision(X, Y);// Just to move the hitbox so when it is passed, it works
         // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
