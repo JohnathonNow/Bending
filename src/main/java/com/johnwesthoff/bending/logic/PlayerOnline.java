@@ -192,8 +192,8 @@ public class PlayerOnline extends Player implements Runnable {
                 // out.write(Server.MAP);
                 ByteBuffer buf;
                 buf = Server.readByteBuffer(in);
-                int d = buf.getInt();
-                int viewX, viewY;
+                buf.getInt();
+                int viewX;
                 viewX = Math.min(Math.max(x - 50, 0), handle.earth.wIdTh - 100);
                 // viewY = Math.min(Math.max(p.y-150,0),earth.hEigHt-300);
                 toSend = ByteBuffer.allocate(300000);
@@ -365,7 +365,7 @@ public class PlayerOnline extends Player implements Runnable {
             toSend.putInt((int) handle.earth.x);
             toSend.putInt((int) handle.earth.y);
             toSend.putInt(handle.mapRotation);
-            toSend.putInt(handle.gameMode);
+            toSend.putInt(Server.gameMode);
             // System.out.println(handle.earth.ground.w+" x "+handle.earth.ground.h);
 
             for (int i = 0; i < handle.team1.size(); i++) {

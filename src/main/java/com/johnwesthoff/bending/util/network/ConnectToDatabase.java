@@ -78,9 +78,9 @@ public final class ConnectToDatabase {
             // return connectatize(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery)>0;
 
-            URL steve = new URL(base + "/yes.php?name=" + ver);
+            //URL steve = new URL(base + "/yes.php?name=" + ver);
             // steve.openConnection().getContent();
-            Scanner read = new Scanner(steve.openStream());
+            //Scanner read = new Scanner(steve.openStream());
             // System.out.println(read.next());
         } catch (Exception ex) {
             error(ex);
@@ -297,7 +297,6 @@ public final class ConnectToDatabase {
     }
 
     public void getOutfit(String user, String pass) {
-        int tor[];
         if (offline) {
             StringTokenizer st = new StringTokenizer(p.getProperty("outfit"), ",");
             int total = st.countTokens() / 3;

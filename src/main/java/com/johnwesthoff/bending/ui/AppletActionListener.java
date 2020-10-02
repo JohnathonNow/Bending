@@ -184,10 +184,10 @@ public class AppletActionListener implements ActionListener {
         if (command.equals(app.verify.getText())) {
             // exactly.setVisible(true);
             if (!currentlyLoggedIn) {
-                if (currentlyLoggedIn = gameService.login(Client.jtb.getText(), app.jtp.getText())) {
+                if (currentlyLoggedIn = gameService.login(Client.jtb.getText(), "PASSWORD IGNORED")) {
                     if (app.JRB.isSelected()) {
                         app.userpassinfo.setProperty("username", Client.jtb.getText());
-                        app.userpassinfo.setProperty("password", app.jtp.getText());
+                        app.userpassinfo.setProperty("password", "PASSWORD IGNORED");
                         app.userpassinfo.setProperty("remember", "yes");
                     } else {
                         app.userpassinfo.setProperty("username", "");
@@ -207,7 +207,7 @@ public class AppletActionListener implements ActionListener {
                     app.verify.setForeground(Color.red);
 
                     // @TODO : Open / close principle
-                    Client.XP = gameService.getPlayerExperience(Client.jtb.getText(), app.jtp.getText());
+                    Client.XP = gameService.getPlayerExperience(Client.jtb.getText(), "PASS IGNORED");
 
                     app.cc.loadClothing();
                     app.spellselection.loadSpells();
@@ -215,7 +215,7 @@ public class AppletActionListener implements ActionListener {
                     app.ChooseSpells.setEnabled(true);
                     app.connect.setEnabled(true);
 
-                    gameService.getUnlocks(Client.jtb.getText(), app.jtp.getText());
+                    gameService.getUnlocks(Client.jtb.getText(), "I NOW DO NOTHING");
                 }
             } else {
                 app.verify.setText("Log In");

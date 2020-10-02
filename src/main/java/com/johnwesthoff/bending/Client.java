@@ -38,11 +38,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -168,7 +165,7 @@ public class Client extends JPanel implements Runnable {
     public static boolean shortJump = false;
     public String killMessage = "~ was defeated by `.";
     public int timeToHeal = 0;
-    public JComboBox menu;
+    public JComboBox<Object> menu;
     public JButton connect, hosting, refresh, register, verify, ChooseSpells, chooseclothing, mapMaker;
     public JCheckBox JRB;
     public String[] hosts = new String[1];
@@ -233,6 +230,7 @@ public class Client extends JPanel implements Runnable {
         // JPanel e = new JPanel();
         // e.setSize(300,300);
         container = new JFrame() {
+            private static final long serialVersionUID = 1255782830759040881L;
 
             @Override
             public void paintComponents(final Graphics g) {
@@ -267,6 +265,8 @@ public class Client extends JPanel implements Runnable {
                 Spell.noSpell });
         // container.add(me);
         main.JRB = new JCheckBox() {
+            private static final long serialVersionUID = -3327024393489960573L;
+
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
@@ -301,6 +301,8 @@ public class Client extends JPanel implements Runnable {
         main.setBackground(Color.white);
         main.setLayout(null);
         main.menu = new JComboBox() {
+            private static final long serialVersionUID = -5781421606071388365L;
+
             @Override
             public Dimension getSize() {
                 final Dimension dim = super.getSize();
@@ -1021,7 +1023,6 @@ public class Client extends JPanel implements Runnable {
             try {
                 // Thread.yield();
             } catch (final Exception e2) {
-                // TODO Auto-generated catch block
                 e2.printStackTrace();
             }
             final long now = System.nanoTime();
@@ -1043,7 +1044,6 @@ public class Client extends JPanel implements Runnable {
                 try {
                     Thread.sleep(10);
                 } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
                 continue;
@@ -1052,7 +1052,6 @@ public class Client extends JPanel implements Runnable {
                 try {
                     Thread.sleep(10);
                 } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
@@ -1591,42 +1590,11 @@ public class Client extends JPanel implements Runnable {
         for (int i = 0; i < newRows.length; i++) {
             newRows[i] = new Row(names[i], "PINGING", counts[i]);
         }
-        menu.setModel(new JComboBox<>(newRows).getModel());
+        menu.setModel(new JComboBox<Object>(newRows).getModel());
         // menu.setModel(new JComboBox<>(names).getModel());
         if (pinger != null) {
             pinger.interrupt();
         }
-        Runnable waffles;
-        waffles = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < counts.length; i++) {
-                    String st = "DOWN";
-                    try {
-                        final Scanner n = new Scanner(
-                                Runtime.getRuntime().exec("ping " + hosts[i] + " -n 1").getInputStream());
-                        while (n.hasNext()) {
-                            st += n.nextLine();
-                        }
-                        // System.out.println(st);
-                        final Pattern p = Pattern.compile("Average = (.*?)ms");
-                        final Matcher m = p.matcher(st);
-                        if (m.find()) {
-                            st = "PING:   " + m.group(1);
-                        }
-                    } catch (final IOException ex) {
-                    }
-                    ((Row) menu.getModel().getElementAt(i)).val = st;
-                    try {
-                        Thread.sleep(10);
-                    } catch (final InterruptedException e) {
-                        return;
-                    }
-                }
-            }
-        };
-        pinger = new Thread(waffles);
-        pinger.start();
     }
 
     @Override
@@ -1972,8 +1940,8 @@ public class Client extends JPanel implements Runnable {
         }
         goodTeam = true;
         if (badTeam.contains(ID)) {
-            final ArrayList<Integer> TeamTemp = (ArrayList<Integer>) badTeam.clone();
-            badTeam = (ArrayList<Integer>) myTeam.clone();
+            final ArrayList<Integer> TeamTemp = badTeam;
+            badTeam = myTeam;
             myTeam = TeamTemp;
             goodTeam = false;
         }
@@ -2050,11 +2018,8 @@ public class Client extends JPanel implements Runnable {
                 if (!toRead.hasRemaining())
                     break;
                 final String className = Server.getString(toRead);
-                final Class[] args1 = new Class[2];
-                args1[0] = ByteBuffer.class;
-                args1[1] = World.class;
                 try {
-                    Class.forName(className).getMethod("reconstruct", args1).invoke(null, toRead, world);
+                    Class.forName(className).getMethod("reconstruct", ByteBuffer.class, World.class).invoke(null, toRead, world);
                     world.entityList.get(world.entityList.size() - 1).setID(toRead.getInt());
                 } catch (ClassNotFoundException | NoSuchMethodException | SecurityException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -2116,6 +2081,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     static class ImagePanel extends JPanel {
+        private static final long serialVersionUID = 7707876428305555174L;
         private final Image image;
 
         public ImagePanel(final Image image) {
@@ -2161,14 +2127,15 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    private static class RowCellRenderer extends JTable implements ListCellRenderer {
+    private static class RowCellRenderer extends JTable implements ListCellRenderer<Object> {
+        private static final long serialVersionUID = -4593849054661400146L;
 
         public RowCellRenderer() {
             setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         }
 
         @Override
-        public Component getListCellRendererComponent(final JList list, final Object value, final int index,
+        public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value, final int index,
                 final boolean isSelected, final boolean cellHasFocus) {
             setModel(new RowTableModel((Row) value));
             this.getColumnModel().getColumn(0).setWidth(100);
@@ -2180,7 +2147,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     private static class RowTableModel extends AbstractTableModel {
-
+        private static final long serialVersionUID = -1141890084123415074L;
         private final Row row;
 
         public RowTableModel(final Row row) {
