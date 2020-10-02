@@ -96,18 +96,22 @@ public final class Server implements Runnable {
             worldHandle.interrupt();
             expander.interrupt();
             SocialSecurity.close();
-            try {
-                if (!playerList.isEmpty()) {
-                    for (final PlayerOnline p : playerList)
-                        p.killMe();
-                }
-            } catch (final Exception e) {
-
-            }
+            killPlayer();
             gameRunning = false;
             playerList.clear();
         } catch (final IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void killPlayer() {
+        try {
+            if (!playerList.isEmpty()) {
+                for (final PlayerOnline p : playerList)
+                    p.killMe();
+            }
+        } catch (final Exception e) {
+
         }
     }
 
@@ -118,7 +122,7 @@ public final class Server implements Runnable {
     }
 
     public static float deltaTime() {
-        final float lol = ((System.nanoTime() - oldTime)) / (25f * 1000000f);
+        final float lol = (System.nanoTime() - oldTime) / (25f * 1000000f);
         System.out.println("Delta Time: " + lol);
         return lol;
     }
@@ -169,10 +173,10 @@ public final class Server implements Runnable {
                             if (nextVote * 3 > playerList.size() * 2) {
                                 expander.interrupt();// muwahahaa
                             }
-                            if (gameMode == THEHIDDEN) {
-                                if (playerList.size() > 1 && playerList.get(0).score >= (playerList.size() - 1)) {
+                            if (gameMode == THEHIDDEN &&
+                                    (playerList.size() > 1 && playerList.get(0).score >= (playerList.size() - 1))
+                            ) {
                                     expander.interrupt();
-                                }
                             }
                             if (gameMode == SURVIVAL) {
                                 final long tim = System.currentTimeMillis();
@@ -514,7 +518,10 @@ public final class Server implements Runnable {
             case DEFENDER:
                 gm = "Defender";
                 break;
+            default:
+                break;
         }
+
         yes = "The next game type will be " + gm + ".";
 
         sendMessage(MESSAGE, Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0x00FF3C), yes));
@@ -529,7 +536,7 @@ public final class Server implements Runnable {
             }
         }
         Arrays.fill(score, 0);
-        earth.ground.ClearCircleStrong(150, 150, 9000);
+        earth.ground.clearCircleStrong(150, 150, 9000);
         final File mapsFolder = new File(dir + "maps");
         System.out.println(mapsFolder.getPath());
         final File[] mapFiles = mapsFolder.listFiles();
@@ -537,14 +544,14 @@ public final class Server implements Runnable {
             switch (i) {
                 default:
                 case 0:
-                    earth.ground.FillCircle(150, 900, 300);
-                    earth.ground.FillCircle(450, 900, 300);
-                    earth.ground.FillCircle(750, 900, 300);
+                    earth.ground.fillCircle(150, 900, 300);
+                    earth.ground.fillCircle(450, 900, 300);
+                    earth.ground.fillCircle(750, 900, 300);
                     break;
                 case 1:
-                    earth.ground.FillRectW(0, 800, 100, 900, World.LAVA);
+                    earth.ground.fillRectW(0, 800, 100, 900, World.LAVA);
                     for (int x = 0; x <= 900; x += 100) {
-                        earth.ground.FillCircleW(x, 800, 100, World.STONE);
+                        earth.ground.fillCircleW(x, 800, 100, World.STONE);
                     }
                     break;
                 case 2:
@@ -559,8 +566,8 @@ public final class Server implements Runnable {
                     P.addPoint(700, 820);
                     P.addPoint(800, 860);
                     P.addPoint(900, 900);
-                    earth.ground.FillRectW(0, 700, 200, 900, World.WATER);
-                    earth.ground.FillPolygon(P, World.ICE);
+                    earth.ground.fillRectW(0, 700, 200, 900, World.WATER);
+                    earth.ground.fillPolygon(P, World.ICE);
                     break;
             }
         } else {

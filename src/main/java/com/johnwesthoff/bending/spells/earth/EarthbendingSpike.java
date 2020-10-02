@@ -72,6 +72,6 @@ public class EarthbendingSpike extends Earthbending {
         P.addPoint(px + 28, py);
         P.addPoint(px - 28, py);
         P.addPoint(mx, my);
-        world.ground.FillPolygon(P, World.STONE);
+        world.ground.fillPolygon(P, World.STONE);
     }
 }

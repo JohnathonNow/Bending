@@ -14,10 +14,13 @@ import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
@@ -33,11 +36,13 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
  * @author John
  */
 public class World implements Serializable {
-    public int incX, incY;
+    public int incX;
+    public int incY;
     public Random random = new Random();
     public CollisionChecker ground;
     public final CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
-    public float x = 450, y = 0;
+    public float x = 450;
+    public float y = 0;
     public int floatiness = 0;
     public short status = 0;
     /*
@@ -52,34 +57,72 @@ public class World implements Serializable {
     public static final int ST_DRAIN = 0b1000000000;
     public static final int AURA_RADIUS = 96;
     public int wIdTh = 900, hEigHt = 900;
-    public int viewX = 0, viewY = 0, viewxX = 0, viewyY = 0, viewdX = 0, viewdY = 0;
+    public int viewX = 0;
+    public int viewY = 0;
+    int viewxX = 0;
+    int viewyY = 0;
+    public int viewdX = 0;
+    public int viewdY = 0;
     public final ArrayList<Player> playerList = new ArrayList<>();
-    public boolean serverWorld = false, dead = false;
-    // public Image terrain;
-    public BufferedImage Grass, Sky, Sand, Stone, Ice, Night, Crystal, Ether, Bark;// at the moon
-    // public Graphics2D G2D;
+    public boolean serverWorld = false;
+    public boolean dead = false;
+    BufferedImage grass;
+    BufferedImage sky;
+    BufferedImage sand;
+    BufferedImage stone;
+    BufferedImage ice;
+    BufferedImage night;
+    BufferedImage crystal;
+    BufferedImage ether;
+    BufferedImage bark;
     public double vspeed = 0;
-    public int mouseX = 150, mouseY = 0, V, previousX = 0, previousY = 0, pressX, pressY;
+    public int mouseX = 150;
+    public int mouseY = 0;
+    int v;
+    int previousX = 0;
+    int previousY = 0;
+    public int pressX;
+    public int pressY;
     public double move = 0;
     public boolean keys[] = new boolean[3200];
-    public float jump = 0;
-    public boolean MB1, MB2, MB3;
+    float jump = 0;
+    boolean MB1;
+    boolean MB2;
+    boolean mb3;
     public int landTexSize = 256;
-    public int FPS = 0;
-    public static int head = 26;
-    public static int body = 13;
-    public int flowCount = 0, maxFlow = 5000;
-    public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint;
-    public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8,
-            CRYSTAL = 9, ETHER = 10;
-    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER };
+    public int fps = 0;
+    public static final int head = 26;
+    public static final int body = 13;
+    int flowCount = 0;
+    int maxFlow = 5000;
+    public TexturePaint skyPaint;
+    public TexturePaint grassPaint;
+    TexturePaint sandPaint;
+    TexturePaint stonePaint;
+    TexturePaint barkPaint;
+    TexturePaint icePaint;
+    TexturePaint nightPaint;
+    public static final byte AIR = 0;
+    public static final byte GROUND = 1;
+    public static final byte WATER = 2;
+    public static final byte OIL = 3;
+    public static final byte LAVA = 4;
+    public static final byte SAND = 5;
+    public static final byte STONE = 6;
+    public static final byte TREE = 7;
+    public static final byte ICE = 8;
+    public static final byte CRYSTAL = 9;
+    public static final byte ETHER = 10;
+    public final byte[] liquidList = { WATER, OIL, LAVA, SAND, ETHER };
     public final int liquidStats[][] = new int[liquidList.length][6];
-    public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
-    public final byte aList[] = new byte[127];
-    public int miGenH = 300, maGenH = 300;
-    public Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
-    public BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT+12, Constants.HEIGHT_INT+12, BufferedImage.TYPE_INT_ARGB);
-    public Graphics2D Gter = Iter.createGraphics();
+    public final byte[] solidList = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
+    public final byte[] aList = new byte[127];
+    public int miGenH = 300;
+    public int maGenH = 300;
+    public Color waterColor = new Color(0, 255, 255, 127);
+    public Color oilColor = new Color(12, 12, 12, 200);
+    BufferedImage iter = new BufferedImage(Constants.WIDTH_INT+12, Constants.HEIGHT_INT+12, BufferedImage.TYPE_INT_ARGB);
+    public Graphics2D gter = iter.createGraphics();
     public int idinator = 0;
     public double fr;
     public Server lol;
@@ -88,8 +131,6 @@ public class World implements Serializable {
         this(true, 900, 900, null, null, null, null, null, null, null, null, null, null);
         x = 150;
         maxFlow = 150000;
-        // entityList.add(new HouseEntity(150,600,20,20));
-        // entityList.add(new EnemyEntity(150, 10, 0, 0, 5).addStuff(0, idinator++));
     }
 
     public int ID = 0;
@@ -138,53 +179,39 @@ public class World implements Serializable {
 
         wIdTh = width;
         hEigHt = height;
-        // terrain = terrai;//createImage(wIdTh,hEigHt);
-        Sky = sky;
-        Grass = grass;
-        Sand = sand;
-        Stone = stone;
-        Bark = bark;
-        Ice = ice;
-        Night = lavaland;
-        Crystal = crystal;
-        Ether = ether;
+        this.sky = sky;
+        this.grass = grass;
+        this.sand = sand;
+        this.stone = stone;
+        this.bark = bark;
+        this.ice = ice;
+        night = lavaland;
+        this.crystal = crystal;
+        this.ether = ether;
         if (!serverWorld) {
-            skyPaint = new TexturePaint(Sky, new Rectangle(200, 200));
-            grassPaint = new TexturePaint(Grass, new Rectangle(256, 256));
-            sandPaint = new TexturePaint(Sand, new Rectangle(256, 256));
-            stonePaint = new TexturePaint(Stone, new Rectangle(256, 256));
-            barkPaint = new TexturePaint(Bark, new Rectangle(256, 256));
-            icePaint = new TexturePaint(Ice, new Rectangle(256, 256));
-            nightPaint = new TexturePaint(Night, new Rectangle(300, 300));
+            skyPaint = new TexturePaint(this.sky, new Rectangle(200, 200));
+            grassPaint = new TexturePaint(this.grass, new Rectangle(256, 256));
+            sandPaint = new TexturePaint(this.sand, new Rectangle(256, 256));
+            stonePaint = new TexturePaint(this.stone, new Rectangle(256, 256));
+            barkPaint = new TexturePaint(this.bark, new Rectangle(256, 256));
+            icePaint = new TexturePaint(this.ice, new Rectangle(256, 256));
+            nightPaint = new TexturePaint(night, new Rectangle(300, 300));
             landTexSize = grassPaint.getImage().getWidth();
         }
-        // G2D = (Graphics2D)terrain.getGraphics();
-        // G2D.setPaint(new TexturePaint(Grass,new Rectangle(256,256)));
-        // G2D.fill(new Rectangle(0,0,wIdTh,hEigHt));
         ground = new CollisionChecker(wIdTh, hEigHt);
-        // G2D.setPaint(null);
         if (!serverWorld) {
-            ground.ClearCircle(150, 1, 300);
-            ground.ClearCircle(450, 1, 300);
-            ground.ClearCircle(750, 1, 300);
-            ground.ClearCircle(750, 900, 450);
-            /*
-             * entityList.add(new HouseEntity(450,150,20,20)); entityList.add(new
-             * HouseEntity(500,140,20,20)); entityList.add(new
-             * HouseEntity(400,140,20,20).setLook(Color.red, Color.ORANGE, Color.gray,
-             * Color.cyan, true)); entityList.add(new HouseEntity(750,150,30,60));
-             */
-
-            // entityList.add(new HouseEntity(750,899,60,30).setLook(Color.red,
-            // Color.darkGray, Color.blue, Color.cyan, true));
+            ground.clearCircle(150, 1, 300);
+            ground.clearCircle(450, 1, 300);
+            ground.clearCircle(750, 1, 300);
+            ground.clearCircle(750, 900, 450);
         } else {
-            ground.ClearCircle(150, 0, 150);
+            ground.clearCircle(150, 0, 150);
         }
     }
 
-    public Image[] bodyParts;// Body, head, ua, la, ul, ll
-    public Thread loader;
-    public boolean done = false;
+    Image[] bodyParts;// Body, head, ua, la, ul, ll
+    Thread loader;
+    boolean done = false;
     public String username;
     public int idddd;
 
@@ -230,14 +257,15 @@ public class World implements Serializable {
 
     public final class CollisionChecker {
         public byte[][] cellData = new byte[wIdTh][hEigHt];
-        public int w = wIdTh, h = hEigHt;
+        public int w = wIdTh;
+        public int h = hEigHt;
         public Thread collisionProcess;
 
         CollisionChecker(int sizex, int sizey) {
             cellData = new byte[sizex][sizey];
             w = sizex;
             h = sizey;
-            this.FillRect(0, 0, w, h);
+            this.fillRect(0, 0, w, h);
         }
 
         public void destroyExpansion(float x, float y, float type, float replace) {
@@ -260,107 +288,90 @@ public class World implements Serializable {
             try {
                 flowCount = 0;
                 flipped *= -1;
-                int minx, maxx, miny, maxy;
-                minx = Math.max(viewX - 25, 0);
-                maxx = Math.min(viewX + 325, w);
-                miny = Math.max(viewY - 325, 0);
-                maxy = Math.min(viewY + 625, h - 2);
-                // minx = 0;
-                //if (serverWorld) {
-                    minx = 0;
+                int minx;
+                int maxx;
+                int miny;
+                int maxy;
+                minx = 0;
                     maxx = w - 1;
                     miny = 0;
                     maxy = h - 2;
-                //}
-                for (int x = minx; x < maxx; x++) {
-                    for (int y = maxy; y > miny; y--) {
-                        if (aList[cellData[x][y]] == -1) {
+                for (int x1 = minx; x1 < maxx; x1++) {
+                    for (int y1 = maxy; y1 > miny; y1--) {
+                        if (aList[cellData[x1][y1]] == -1) {
                             continue;
                         }
-                        if (cellData[x][y + 1] == AIR) {
+                        if (cellData[x1][y1 + 1] == AIR) {
                             int i = 1;
-                            while (cellData[x][y + i] == AIR) {
-                                if (y + i >= h - 2 || i > liquidStats[aList[cellData[x][y]]][0]) {
+                            while (cellData[x1][y1 + i] == AIR) {
+                                if (y1 + i >= h - 2 || i > liquidStats[aList[cellData[x1][y1]]][0]) {
                                     break;
                                 }
                                 i++;
                             }
                             i--;
-                            cellData[x][y + i] = cellData[x][y];
-                            cellData[x][y] = AIR;
+                            cellData[x1][y1 + i] = cellData[x1][y1];
+                            cellData[x1][y1] = AIR;
                             if (flowCount++ > maxFlow)
                                 return;
                         } else {
-                            for (int i = 0; i <= liquidStats[aList[cellData[x][y]]][1]; i++) {
-                                if (cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][y + 1] == AIR) {
-                                    cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][y + 1] = cellData[x][y];
-                                    cellData[x][y] = AIR;
+                            for (int i = 0; i <= liquidStats[aList[cellData[x1][y1]]][1]; i++) {
+                                if (cellData[Math.min(Math.max(x1 + (i * flipped), 0), w - 1)][y1 + 1] == AIR) {
+                                    cellData[Math.min(Math.max(x1 + (i * flipped), 0), w - 1)][y1 + 1] = cellData[x1][y1];
+                                    cellData[x1][y1] = AIR;
                                     if (flowCount++ > maxFlow)
                                         return;
                                     break;
                                 }
-                                if (cellData[Math.min(Math.max(x - (i * flipped), 0), w - 1)][y + 1] == AIR) {
-                                    cellData[Math.min(Math.max(x - (i * flipped), 0), w - 1)][y + 1] = cellData[x][y];
-                                    cellData[x][y] = AIR;
+                                if (cellData[Math.min(Math.max(x1 - (i * flipped), 0), w - 1)][y1 + 1] == AIR) {
+                                    cellData[Math.min(Math.max(x1 - (i * flipped), 0), w - 1)][y1 + 1] = cellData[x1][y1];
+                                    cellData[x1][y1] = AIR;
                                     if (flowCount++ > maxFlow)
                                         return;
                                     break;
                                 }
                             }
-                            if (cellData[x][y] == LAVA)
+                            if (cellData[x1][y1] == LAVA)
                                 for (int e = -1; e <= 1; e++) {
-                                    if (inBounds(x + e, y + 1) && cellData[x + e][y + 1] == WATER) {
-                                        cellData[x][y] = STONE;
-                                        cellData[x + e][y + 1] = STONE;
+                                    if (inBounds(x1 + e, y1 + 1) && cellData[x1 + e][y1 + 1] == WATER) {
+                                        cellData[x1][y1] = STONE;
+                                        cellData[x1 + e][y1 + 1] = STONE;
                                         break;
                                     }
-                                    if (inBounds(x + e, y - 1) && cellData[x + e][y - 1] == WATER) {
-                                        cellData[x][y] = STONE;
-                                        cellData[x + e][y - 1] = STONE;
+                                    if (inBounds(x1 + e, y1 - 1f) && cellData[x1 + e][y1 - 1] == WATER) {
+                                        cellData[x1][y1] = STONE;
+                                        cellData[x1 + e][y1 - 1] = STONE;
                                         break;
                                     }
-                                    // if (inBounds(x+e,y+1)&&cellData[x+e][y+1]==AIR)
-                                    // {
-                                    // cellData[x][y]=LAVA;
-                                    // cellData[x+e][y+1]=LAVA;
-                                    // break;
-                                    // }
-                                    // if (inBounds(x+e,y-1)&&cellData[x+e][y-1]==AIR)
-                                    // {
-                                    // cellData[x][y]=LAVA;
-                                    // cellData[x+e][y-1]=LAVA;
-                                    // break;
-                                    // }
                                 }
-                            // if (cellData[x][y]==OIL)
                             for (int e = -1; e <= 1; e++) {
-                                if (inBounds(x + e, y + 1) && cellData[x + e][y + 1] == OIL
-                                        && cellData[x][y] == WATER) {
-                                    cellData[x][y] += cellData[x + e][y + 1];
-                                    cellData[x + e][y + 1] = (byte) (cellData[x][y] - cellData[x + e][y + 1]);
-                                    cellData[x][y] = (byte) (cellData[x][y] - cellData[x + e][y + 1]);
+                                if (inBounds(x1 + e, y1 + 1f) && cellData[x1 + e][y1 + 1] == OIL
+                                        && cellData[x1][y1] == WATER) {
+                                    cellData[x1][y1] += cellData[x1 + e][y1 + 1];
+                                    cellData[x1 + e][y1 + 1] = (byte) (cellData[x1][y1] - cellData[x1 + e][y1 + 1]);
+                                    cellData[x1][y1] = (byte) (cellData[x1][y1] - cellData[x1 + e][y1 + 1]);
                                     e = 10;
                                 }
                             }
-                            if (cellData[x][y] == SAND)
-                                if (inBounds(x, y + 1) && cellData[x][y + 1] == WATER) {
-                                    cellData[x][y + 1] = SAND;
-                                    cellData[x][y] = WATER;
+                            if (cellData[x1][y1] == SAND && (inBounds(x1, y1 + 1f) && cellData[x1][y1 + 1] == WATER)) {
+                                cellData[x1][y1 + 1] = SAND;
+                                cellData[x1][y1] = WATER;
+                            }
 
-                                }
+
                         }
 
                     }
                 }
             } catch (Exception e) {
-
+                Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, e);
             }
         }
 
-        public void ShowData() {
+        public void showData() {
             for (int i1 = 0; i1 < w; i1++) {
                 for (int i2 = 0; i2 < h; i2++) {
-                    System.out.print(cellData[i1][i2]);
+                    Logger.getLogger(World.class.getName()).log(Level.INFO, "{0}",String.valueOf(cellData[i1][i2]));
                 }
                 System.out.println();
             }
@@ -369,23 +380,20 @@ public class World implements Serializable {
         /**
          * Clears a circle using the standard square method
          * 
-         * @param X - X coordinate of the circle's center
-         * @param Y - Y coordinate of the circle's center
-         * @param R - Radius of the circle
+         * @param x - X coordinate of the circle's center
+         * @param y - Y coordinate of the circle's center
+         * @param r - Radius of the circle
          */
-        public void ClearCircle(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2)) {
-                        if (cellData[i1][i2] == OIL) {
-                            if (random.nextInt(10) == 2) {
+        public void clearCircle(int x, int y, int r) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2)) {
+                        if (cellData[i1][i2] == OIL && random.nextInt(10) == 2) {
                                 cellData[i1][i2] = AIR;
-                                // oilExplode(i1, i2);
                                 entityList.add(new ExplosionEntity(i1, i2, 8, 1));
-                                ClearCircle(i1, i2, 10);
-                            }
-                        } // if (cellData[i1][i2]!=STONE)
+                                clearCircle(i1, i2, 10);
+
+                        }
                         if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER) {
                             cellData[i1][i2] = AIR;
                         }
@@ -394,136 +402,85 @@ public class World implements Serializable {
             }
         }
 
-        public void ClearCircleStrong(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2)) {
-                        if (cellData[i1][i2] == OIL) {
-                            if (random.nextInt(10) == 2) {
+        public void clearCircleStrong(int x, int y, int r) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2)) {
+                        if (cellData[i1][i2] == OIL && random.nextInt(10) == 2) {
                                 cellData[i1][i2] = AIR;
-                                // oilExplode(i1, i2);
                                 entityList.add(new ExplosionEntity(i1, i2, 8, 1));
-                                ClearCircle(i1, i2, 10);
-                            }
+                                clearCircle(i1, i2, 10);
+
                         }
                         cellData[i1][i2] = AIR;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(skyPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
 
         }
 
-        public void ClearPolygon(Polygon P) {
-            int x, y, minX = w, minY = h, maxX = 0, maxY = 0;
 
-            for (int i = 0; i < P.npoints; i++) {
-                x = P.xpoints[i];
-                y = P.ypoints[i];
-                if (x > maxX) {
-                    maxX = x > w ? w : x;
+        public void fillPolygon(Polygon polygon, byte type) {
+            int localX;
+            int localY;
+            int minX = w;
+            int minY = h;
+            int maxX = 0;
+            int maxY = 0;
+
+            for (int i = 0; i < polygon.npoints; i++) {
+                localX = polygon.xpoints[i];
+                localY = polygon.ypoints[i];
+                if (localX > maxX) {
+                    maxX = localX > w ? w : localX;
                 }
-                if (y > maxY) {
-                    maxY = y > h ? w : y;
+                if (localY > maxY) {
+                    maxY = localY > h ? w : localY;
                 }
-                if (x < minX) {
-                    minX = x < 0 ? 0 : x;
+                if (localX < minX) {
+                    minX = localX < 0 ? 0 : localX;
                 }
-                if (y < minY) {
-                    minY = y < 0 ? 0 : y;
+                if (localY < minY) {
+                    minY = localY < 0 ? 0 : localY;
                 }
             }
-            for (x = minX; x <= minX; x++) {
-                for (y = minY; y <= minY; y++) {
-                    if (P.contains(x, y)) {
-                        if (cellData[x][y] != CRYSTAL && cellData[x][y] != ETHER)
-                            cellData[x][y] = AIR;
+            for (localX = minX; localX <= maxX; localX++) {
+                for (localY = minY; localY <= maxY; localY++) {
+                    if (polygon.contains(localX, localY) && (cellData[localX][localY] != CRYSTAL && cellData[localX][localY] != ETHER)) {
+                            cellData[localX][localY] = type;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(skyPaint);
-            // G2D.fillPolygon(P);
-            // G2D.setPaint(null);
         }
 
-        public void FillPolygon(Polygon P, byte type) {
-            int x, y, minX = w, minY = h, maxX = 0, maxY = 0;
-
-            for (int i = 0; i < P.npoints; i++) {
-                x = P.xpoints[i];
-                y = P.ypoints[i];
-                if (x > maxX) {
-                    maxX = x > w ? w : x;
-                }
-                if (y > maxY) {
-                    maxY = y > h ? w : y;
-                }
-                if (x < minX) {
-                    minX = x < 0 ? 0 : x;
-                }
-                if (y < minY) {
-                    minY = y < 0 ? 0 : y;
-                }
-            }
-            for (x = minX; x <= maxX; x++) {
-                for (y = minY; y <= maxY; y++) {
-                    if (P.contains(x, y)) {
-                        if (cellData[x][y] != CRYSTAL && cellData[x][y] != ETHER)
-                            cellData[x][y] = type;
-                    }
-                }
-            }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillPolygon(P);
-            // G2D.setPaint(null);
-        }
-
-        public void FillCircle(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1) {
-                        if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
+        public void fillCircle(int x, int y, int r) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2f) + .1
+                        && (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
+                    ) {
                             cellData[i1][i2] = GROUND;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
         }
 
-        public void FillCircleW(int X, int Y, int R, byte T) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1) {
-                        if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
-                            cellData[i1][i2] = T;
+        public void fillCircleW(int x, int y, int r, byte t) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2f) + .1
+                    && (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER))
+                    {
+                            cellData[i1][i2] = t;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
         }
 
-        public void freeze(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
+        public void freeze(int x, int y, int r) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2f) + .1
                             && cellData[i1][i2] == WATER) {
                         cellData[i1][i2] = ICE;
                     }
@@ -531,12 +488,11 @@ public class World implements Serializable {
             }
         }
 
-        public int sandinate(int X, int Y, int R) {
+        public int sandinate(int x, int y, int r) {
             int toReturn = 0;
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2f) + .1
                             && cellData[i1][i2] == SAND) {
                         cellData[i1][i2] = AIR;
                         toReturn++;
@@ -546,11 +502,10 @@ public class World implements Serializable {
             return toReturn;
         }
 
-        public void puddle(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
+        public void puddle(int x, int y, int r) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) < (r / 2f) + .1
                             && cellData[i1][i2] == AIR) {
                         cellData[i1][i2] = WATER;
                     }
@@ -558,47 +513,41 @@ public class World implements Serializable {
             }
         }
 
-        public void FillRect(int X, int Y, int H, int W) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X, 0); i1 < Math.min(X + W, w); i1++) {
-                for (int i2 = Math.max(Y, 0); i2 < Math.min(Y + H, h); i2++) {
+        public void fillRect(int x, int y, int h, int w) {
+            for (int i1 = Math.max(x, 0); i1 < Math.min(x + w, this.w); i1++) {
+                for (int i2 = Math.max(y, 0); i2 < Math.min(y + h, this.h); i2++) {
                     cellData[i1][i2] = GROUND;
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillRect(X, Y, W, H);
-            // G2D.setPaint(null);
         }
 
-        public void FillRectW(int X, int Y, int H, int W, byte with) {
-            for (int i1 = Math.max(X, 0); i1 < Math.min(X + W, w); i1++) {
-                for (int i2 = Math.max(Y, 0); i2 < Math.min(Y + H, h); i2++) {
+        public void fillRectW(int x, int y, int h, int w, byte with) {
+            for (int i1 = Math.max(x, 0); i1 < Math.min(x + w, this.w); i1++) {
+                for (int i2 = Math.max(y, 0); i2 < Math.min(y + h, this.h); i2++) {
                     if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
                         cellData[i1][i2] = with;
                 }
             }
         }
 
-        public void ClearLine(int X1, int Y1, int X2, int Y2, int R, int F) {
-            double direction = (pointDir(X1, Y1, X2, Y2));
-            double distance = pointDis(X1, Y1, X2, Y2);
-            F = (int) Math.ceil(distance / R);
-            double x = X1, y = Y1;
-            for (double i = 0; i <= F; i++) {
-                ClearCircle((int) x, (int) y, R);
-                x += lengthdir_x(distance / F, direction);
-                y += lengthdir_y(distance / F, direction);
+        public void clearLine(int x1, int y1, int x2, int y2, int r) {
+            double direction = (pointDir(x1, y1, x2, y2));
+            double distance = pointDis(x1, y1, x2, y2);
+            int f = (int) Math.ceil(distance / r);
+            double localX = x1;
+            double localY = y1;
+            for (double i = 0; i <= f; i++) {
+                clearCircle((int) localX, (int) localY, r);
+                localX += lengthDirX(distance / f, direction);
+                localY += lengthDirY(distance / f, direction);
             }
         }
 
         public void generater(int x, int w, byte type) {
-            /*
-             * for (int i = 0; i <= 30; i++) {
-             * ClearCircle(x+random.nextInt(w),y+random.nextInt(h),random.nextInt(w/2)); }
-             * generateSandAndWater();
-             */
-            float vs = -random.nextInt(12), grav = random.nextFloat(), time = 12;
+
+            float vs = -random.nextInt(12);
+            float grav = random.nextFloat();
+            float time = 12;
             for (int e = x; e < x + w; e++) {
                 if (random.nextInt(1200) == 5) {
                     entityList.add(new HouseEntity(5 + e, maGenH, 12 + random.nextInt(24), 12 + random.nextInt(24)));
@@ -609,7 +558,7 @@ public class World implements Serializable {
                 maGenH += vs;
                 vs += grav;
                 if (e % time == 0) {
-                    time = random.nextInt(30) + 1;
+                    time = random.nextInt(30) + 1f;
                     grav = random.nextFloat();
                     vs = -random.nextInt(8);
                 }
@@ -617,7 +566,9 @@ public class World implements Serializable {
         }
 
         public void generatel(int x, int w, byte type) {
-            float vs = -random.nextInt(12), grav = random.nextFloat(), time = 12;
+            float vs = -random.nextInt(12);
+            float grav = random.nextFloat();
+            float time = 12;
             for (int e = x; e < x + w; e++) {
                 miGenH = (miGenH > 450) ? 450 : (miGenH < 10) ? 10 : miGenH;
                 for (int i = miGenH; i < h; i++)
@@ -625,7 +576,7 @@ public class World implements Serializable {
                 miGenH += vs;
                 vs += grav;
                 if (e % time == 0) {
-                    time = random.nextInt(30) + 1;
+                    time = random.nextInt(30) + 1f;
                     grav = random.nextFloat();
                     vs = -random.nextInt(8);
                 }
@@ -633,25 +584,20 @@ public class World implements Serializable {
 
         }
 
-        public void ClearRect(int X, int Y, int H, int W) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X, 0); i1 < Math.min(X + W, w); i1++) {
-                for (int i2 = Math.max(Y, 0); i2 < Math.min(Y + H, h); i2++) {
+        public void clearRect(int x, int y, int h, int w) {
+            for (int i1 = Math.max(x, 0); i1 < Math.min(x + w, this.w); i1++) {
+                for (int i2 = Math.max(y, 0); i2 < Math.min(y + h, this.h); i2++) {
                     if (cellData[i1][i2] == GROUND)
                         cellData[i1][i2] = AIR;
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(skyPaint);
-            // G2D.fillRect(X, Y, W, H);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
 
         }
 
     }
 
-    public int toKeepMove = 0, jumpHeight = 900;
+    public int toKeepMove = 0;
+    public int jumpHeight = 900;
     public int osc = 1;
     public boolean keepMoving = false;
 
@@ -696,7 +642,7 @@ public class World implements Serializable {
         }
     }
 
-    public double xVel = 0;
+    double xVel = 0;
 
     public void onUpdate() {
         if (serverWorld) {
@@ -710,22 +656,12 @@ public class World implements Serializable {
             for (int i = 0; i < entityList.size(); i++) {
                 Entity e = entityList.get(i);
                 e.onUpdate(this);
-                // e.onDraw(null,viewX,viewY);
                 if (!e.alive) {
                     entityList.remove(e);
                 }
             }
         }
         flowCount = 0;
-        /*
-         * if (MB1) { MB1 = false; double dis = pointDis(x,y,mouseX,mouseY)/10, dir =
-         * -pointDir(x,y,mouseX,mouseY); entityList.add(new
-         * MissileEntity(x,y,(int)lengthdir_x(dis,dir),(int)lengthdir_y(dis,dir))); } if
-         * (MB3) { MB3 = false; double dis = pointDis(x,y,mouseX,mouseY)/10, dir =
-         * -pointDir(x,y,mouseX,mouseY); entityList.add(new
-         * GroundinatorEntity(x,y,(int)lengthdir_x(dis,dir),(int)lengthdir_y(dis,dir)));
-         * }
-         */
         move -= Math.signum(move) * fr;
         if (Math.abs(move) < fr) {
             move = 0;
@@ -737,35 +673,29 @@ public class World implements Serializable {
         if (!isSolid(x, y - 4)) {
             y -= 4;
             if (inBounds(x + move, y + (int) vspeed)) {
-                double slope;
-                double toMove = move, XXX1 = x + 3, YYY1 = y - 4, XXX2 = x - 3, YYY2 = y - 4;
+                double toMove = move;
+                double xxx1 = x + 3;
+                double yyy1 = y - 4;
+                double xxx2 = x - 3;
+                double yyy2 = y - 4;
                 if (isLiquid(x, y)) {
                     toMove *= Client.swimmingSpeed;
                 } else {
                     toMove *= Client.runningSpeed;
                 }
                 while (true) {
-                    YYY1 += 1;
-                    if (!inBounds(XXX1, YYY1)) {
-                        break;
-                    }
-                    if (isSolid(XXX1, YYY1)) {
+                    yyy1 += 1;
+                    if (!inBounds(xxx1, yyy1) || isSolid(xxx1, yyy1) ) {
                         break;
                     }
                 }
                 while (true) {
-                    YYY2 += 1;
-                    if (!inBounds(XXX2, YYY2)) {
-                        break;
-                    }
-                    if (isSolid(XXX2, YYY2)) {
+                    yyy2 += 1;
+                    if (!inBounds(xxx2, yyy2) || isSolid(xxx2, yyy2)) {
                         break;
                     }
                 }
-                if (!keepMoving) {
-                    slope = (float) Math.round(((float) YYY1 - (float) YYY2) / ((float) XXX1 - (float) XXX2));
-                    // toMove*=slope==0?1:(Math.signum(slope)==Math.signum(move))?1.5:.75;
-                } else {
+                if (keepMoving) {
                     toMove = toKeepMove;
                 }
                 if (move > 4)
@@ -790,7 +720,7 @@ public class World implements Serializable {
             }
         }
         if (canifall) {
-            vspeed = Math.min(4 - floatiness, vspeed + 1);
+            vspeed = Math.min(4f - floatiness, vspeed + 1);
         } else {
             vspeed = Math.min(0, vspeed);
             keepMoving = false;
@@ -798,13 +728,7 @@ public class World implements Serializable {
             if (jump > 0) {
                 vspeed = (int) (-10 * jump);
                 move *= 2;
-                // toKeepMove = move*3;
-                // jumpHeight = (int)y;
-                // if (Client.shortJump)
-                // {
-                // toKeepMove = 0;
-                // }
-                // keepMoving = (toKeepMove!=0);
+
             }
         }
         int s = (int) Math.signum(vspeed);
@@ -832,17 +756,15 @@ public class World implements Serializable {
             }
         }
 
-        // if (keys[KeyEvent.VK_SPACE])
-        // {
-        // ground.destroyExpansion(x,y,ETHER);
-        // }
         if (burn++ > 2) {
             firePolygonred.reset();
-            int xx[] = new int[12], yy[] = new int[12];
+            int[] xx = new int[12];
+            int[] yy = new int[12];
             xx[0] = (0) * Constants.WIDTH_SCALE;
             yy[0] = (0);
             firePolygonred.addPoint(xx[0], yy[0]);
-            int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
+            int dir = 100 + random.nextInt(45);
+            int len = 48 + random.nextInt(48);
             xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
             yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
             firePolygonred.addPoint(xx[1], yy[1]);
@@ -923,17 +845,10 @@ public class World implements Serializable {
     }
 
     public void onDraw(Graphics g) {
-        // int incX, incY;
-        // incX = (int)Client.lengthdir_x(Client.pointDis(x, y, mouseX,
-        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        // incY = (int)Client.lengthdir_y(Client.pointDis(x, y, mouseX,
-        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT+1)/2) + incX, 0),Math.max(0,wIdTh - Constants.WIDTH_INT-1));
-        /*
-         * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
-         * { incX=(-(x-150)); }
-         */
-        viewY = (int) Math.min(Math.max((y - Constants.HEIGHT_INT/2) + incY, 0), Math.max(0,hEigHt - Constants.HEIGHT_INT));
+
+        viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT+1)/2f) + incX, 0),Math.max(0,wIdTh - Constants.WIDTH_INT-1));
+
+        viewY = (int) Math.min(Math.max((y - Constants.HEIGHT_INT/2f) + incY, 0), Math.max(0,hEigHt - Constants.HEIGHT_INT));
         if (dead) {
             viewX = viewdX;
             viewY = viewdY;
@@ -952,20 +867,20 @@ public class World implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ;
+
         try {
             drawTerrain((Graphics2D) g);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ;
-        // g.drawImage(terrain,-viewX,-viewY, null);
+
 
     }
 
-    public int left = 1;
-    public static int burn = 0;
-    public double leftArmAngle = 90, rightArmAngle = 90;
+    int left = 1;
+    int burn = 0;
+    public double leftArmAngle = 90;
+    public double rightArmAngle = 90;
 
     public void drawEntities(Graphics g) {
         for (int i = 0; i < entityList.size(); i++) {
@@ -975,19 +890,18 @@ public class World implements Serializable {
             e.onDraw(g, viewX, viewY);
             if (!e.alive) {
                 entityList.remove(e);
-                continue;
             }
         }
     }
 
-    public static Polygon firePolygonred = new Polygon(), firePolygonyellow = new Polygon(),
-            firePolygonorange = new Polygon();
+    public static final Polygon firePolygonred = new Polygon();
+    public static final Polygon firePolygonyellow = new Polygon();
+    public static final Polygon firePolygonorange = new Polygon();
 
     public void drawPlayers(Graphics g) {
         float offs = x % 8;
         if ((status & World.ST_INVISIBLE) == 0) {
             if (!done) {
-                // x+=move;
                 g.drawArc((int) ((x - 2) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 10) - viewY) * Constants.HEIGHT_SCALE, 4, 4, 0, 360);
                 g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE, (int) ((y - 6) - viewY) * Constants.HEIGHT_SCALE, (int) ((x) - viewX) * Constants.WIDTH_SCALE,
                         (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE);
@@ -1012,25 +926,24 @@ public class World implements Serializable {
                 g2.drawImage(bodyParts[0], (int) (x - viewX) * Constants.WIDTH_SCALE * left + (left < 0 ? -18 : 0),
                         (int) (y - yUp - 6 - viewY) * Constants.HEIGHT_SCALE, null);
                 g2.drawImage(bodyParts[1],
-                        (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.WIDTH_SCALE * left
+                        (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5f) - viewX) * Constants.WIDTH_SCALE * left
                                 + (left < 0 ? -(6 + (bodyParts[1].getWidth(null) - 23)) : 0),
-                        (int) ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * Constants.HEIGHT_SCALE, null);
+                        (int) ((y - yUp - 16 - (bodyParts[1].getHeight(null) - 31f) / 3) - viewY) * Constants.HEIGHT_SCALE, null);
                 double ffs = Math.toRadians(((4 - offs) * 6));
                 if (vspeed != 0)
                     ffs = Math.toRadians(((4 - 5) * 6));
                 AffineTransform previousAT = g2.getTransform();
                 int ddd = bodyParts[3].getWidth(null);
-                // System.out.println(ddd);
                 if (ddd == 48) {
                     g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
+                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4f * (left + 1), 2);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
                     g2.translate(
-                            (((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * (Constants.WIDTH_SCALE-0.05)
+                            ((x - 3 - viewX) + this.lengthDirX(6f * left, leftArmAngle * left)) * left * (Constants.WIDTH_SCALE-0.05)
                                     + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
+                            (((y - yUp - 6) - this.lengthDirY(6f * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(leftArmAngle - 90), (left == 1) ? 17 : 13, 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
@@ -1041,47 +954,35 @@ public class World implements Serializable {
                     g2.setTransform(previousAT);
 
                     g2.translate(
-                            (((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * (Constants.WIDTH_SCALE-0.05)) * left
+                            (((x + 9 - viewX) + this.lengthDirX(6f * left, rightArmAngle * left)) * (Constants.WIDTH_SCALE-0.05)) * left
                                     + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
+                            (((y - yUp - 6) - this.lengthDirY(6f * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
                     g2.rotate(Math.toRadians(rightArmAngle - 90), 12, 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
                 } else {
                     g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
+                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4f * (left + 1), 2);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * Constants.WIDTH_SCALE) * left,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
+                    g2.translate((((x + 9 - viewX) + this.lengthDirX(6f * left, rightArmAngle * left)) * Constants.WIDTH_SCALE) * left,
+                            (((y - yUp - 6) - this.lengthDirY(6f * left, rightArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
+                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8f - left * 4, 4);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
 
                     g2.translate((x + 9 - viewX) * Constants.WIDTH_SCALE * left, ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
+                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8f - left * 4, 4);
                     g2.drawImage(bodyParts[2], 0, 0, null);
                     g2.setTransform(previousAT);
 
-                    g2.translate((((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left * Constants.WIDTH_SCALE,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
+                    g2.translate(((x - 3 - viewX) + this.lengthDirX(6f * left, leftArmAngle * left)) * left * Constants.WIDTH_SCALE,
+                            (((y - yUp - 6) - this.lengthDirY(6f * left, leftArmAngle * left)) - viewY) * Constants.HEIGHT_SCALE);
+                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4f * (left + 1), 2);
                     g2.drawImage(bodyParts[3], 0, 0, null);
                     g2.setTransform(previousAT);
                 }
-                //
-                // g2.translate((x+9-viewX)*3*left, ((y-yUp-6)-viewY)*3);
-                // g2.rotate(Math.toRadians(rightArmAngle-90),0,2);
-                // g2.drawImage(bodyParts[2], 0, 0, null);
-                // g2.setTransform(previousAT);
-                //
-                // g2.translate((((x+9-viewX)+this.lengthdir_x(6*left,
-                // rightArmAngle*left))*3)*left,
-                // (((y-yUp-6)-this.lengthdir_y(6*left,rightArmAngle*left))-viewY)*3);
-                // g2.rotate(Math.toRadians(rightArmAngle-90),0,2);
-                // g2.drawImage(bodyParts[3], 0, 0, null);
-                // g2.setTransform(previousAT);
 
                 g2.drawImage(bodyParts[4], (int) (x + 1 - viewX) * Constants.WIDTH_SCALE * left, (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
                 g2.drawImage(bodyParts[4], (int) (x + 5 - viewX) * Constants.WIDTH_SCALE * left, (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
@@ -1096,12 +997,12 @@ public class World implements Serializable {
                 g2.drawImage(bodyParts[5], 0, 0, null);
                 g2.setTransform(previousAT);
                 g2.scale(left, 1);
-                if (((status & ST_FLAMING)) != 0) {
+                if ((status & ST_FLAMING) != 0) {
                     drawFire(g2, (int) (x + 4 - viewX) * Constants.WIDTH_SCALE, (int) (y - viewY) * Constants.HEIGHT_SCALE);
                 }
-                if (((status & ST_DRAIN)) != 0) {
+                if ((status & ST_DRAIN) != 0) {
                     g2.setColor(Color.BLACK);
-                    g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE, (int) (y - viewY - (AURA_RADIUS)) * Constants.HEIGHT_SCALE,
+                    g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2f)) * Constants.WIDTH_SCALE, (int) (y - viewY - (AURA_RADIUS)) * Constants.HEIGHT_SCALE,
                             AURA_RADIUS * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
                 g2.setTransform(swag);
@@ -1111,10 +1012,10 @@ public class World implements Serializable {
             movePlayers();
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
-                if (((r.status & ST_FLAMING)) != 0) {
+                if ((r.status & ST_FLAMING) != 0) {
                     drawFire(g, (r.x + 4 - viewX) * Constants.WIDTH_SCALE, (r.y - viewY) * Constants.HEIGHT_SCALE);
                 }
-                if (((r.status & ST_DRAIN)) != 0) {
+                if ((r.status & ST_DRAIN) != 0) {
                     g.setColor(Color.BLACK);
                     g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE, (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
                             AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
@@ -1144,76 +1045,64 @@ public class World implements Serializable {
         firePolygonyellow.translate(-xx, -yy);
     }
 
-    public synchronized void drawTerrain(Graphics2D G2) {
+    public synchronized void drawTerrain(Graphics2D g2) {
         try {
-            int xx = viewX, yy = viewY;
+            int xx = viewX;
+            int yy = viewY;
 
-            // G2.drawImage(Iter, -3, -3, null);
-            Gter.setPaint(map == 1 ? nightPaint : skyPaint);//
-            Gter.fillRect(0, 0, Constants.WIDTH_INT, Constants.HEIGHT_INT);
+            gter.setPaint(map == 1 ? nightPaint : skyPaint);//
+            gter.fillRect(0, 0, Constants.WIDTH_INT, Constants.HEIGHT_INT);
 
-            // for (int X = xx; X<xx+300; X++)
-            // {
-            // for (int Y = yy; Y<yy+300; Y++)
-            // {
-            // if (aList[ground.cellData[X][Y]]!=-1)
-            // {
-            // if (ground.cellData[X][Y]==liquidList[aList[ground.cellData[X][Y]]])
-            // {
-            // Iter.setRGB(X+4-xx, Y+4-yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-            // }
-            // }
-            // }
-            // }
 
             for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
                 for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
                     switch (ground.cellData[X][Y]) {
-                        default:
-                            break;
+
                         case GROUND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Grass.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Sand.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Stone.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Bark.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Ice.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Crystal.getRGB(X % landTexSize, Y % landTexSize));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
-                                    Ether.getRGB(X % 100, Y % 100));
+                            iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT), Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                                    ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
                             break;
                         case LAVA:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
                             break;
                         case OIL:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            break;
+                        default:
                             break;
                     }
                 }
             }
-            G2.drawImage(Iter, -3, -3, null);
+            g2.drawImage(iter, -3, -3, null);
         } catch (Exception e) {
-            System.err.println("X: " + viewX +"\tY:" + viewY);
+            Logger.getLogger(World.class.getName()).log(Level.SEVERE, MessageFormat.format("X: {0} \tY: {1}" ,viewX , viewY));
             e.printStackTrace();
         }
     }
@@ -1221,7 +1110,7 @@ public class World implements Serializable {
     public void loseFocus() {
         MB1 = false;
         MB2 = false;
-        MB3 = false;
+        mb3 = false;
         for (int i = 0; i < keys.length; i++) {
             keys[i] = false;
         }
@@ -1252,37 +1141,41 @@ public class World implements Serializable {
     }
 
     public void explode(int x, int y, int r, int n, int c) {
-        ground.ClearCircle(x, y, r);
+        ground.clearCircle(x, y, r);
         entityList.add(new ExplosionEntity(x, y, r / 2, 2));
-        int tobe, xx, yy;
+        int tobe;
+        int xx;
+        int yy;
         for (int i = 0; i <= n; i++) {
-            tobe = (int) (.5 + (r * random.nextFloat()));
+            tobe = (int) (.5 + (r * random.nextInt()));
             tobe += tobe % 2 == 0 ? 1 : 0;
             xx = x + c - random.nextInt(c * 2);
             yy = y + c - random.nextInt(c * 2);
             entityList.add(new ExplosionEntity(xx, yy, tobe / 2, 2));
-            ground.ClearCircle(x + c - random.nextInt(c * 2), y + c - random.nextInt(c * 2), tobe);
+            ground.clearCircle(x + c - random.nextInt(c * 2), y + c - random.nextInt(c * 2), tobe);
         }
     }
 
     public void unexplode(int x, int y, int r, int n, int c) {
-        ground.FillCircle(x, y, r);
-        int tobe, xx, yy;
+        ground.fillCircle(x, y, r);
+        int tobe;
+        int xx;
+        int yy;
         for (int i = 0; i <= n; i++) {
-            tobe = (int) (.5 + (r * random.nextFloat()));
+            tobe = (int) (.5 + (r * random.nextInt()));
             tobe += tobe % 2 == 0 ? 1 : 0;
             xx = x + c - random.nextInt(c * 2);
             yy = y + c - random.nextInt(c * 2);
-            ground.FillCircle(xx, yy, tobe);
+            ground.fillCircle(xx, yy, tobe);
         }
     }
 
-    public double lengthdir_x(double R, double T) {
-        return (R * Math.cos(T * Math.PI / 180));
+    public double lengthDirX(double r, double t) {
+        return (r * Math.cos(t * Math.PI / 180));
     }
 
-    public double lengthdir_y(double R, double T) {
-        return (-R * Math.sin(T * Math.PI / 180));
+    public double lengthDirY(double r, double t) {
+        return (-r * Math.sin(t * Math.PI / 180));
     }
 
     public double pointDir(double x1, double y1, double x2, double y2) {
@@ -1302,31 +1195,26 @@ public class World implements Serializable {
 
     public void movePlayers() {
         for (Player P : playerList) {
-            if (!isSolid(P.x, P.y - 4)) {
+            if (!isSolid(P.x, P.y - 4f)) {
                 P.y -= 4;
                 if (inBounds(P.x + P.move, P.y + P.vspeed)) {
-                    float slope;
-                    int toMove = P.move, XXX1 = P.x + 3, YYY1 = P.y - 4, XXX2 = P.x - 3, YYY2 = P.y - 4;
+                    int toMove = P.move;
+                    int xxx1 = P.x + 3;
+                    int yyy1 = P.y - 4;
+                    int xxx2 = P.x - 3;
+                    int yyy2 = P.y - 4;
                     while (true) {
-                        YYY1 += 1;
-                        if (!inBounds(XXX1, YYY1)) {
-                            break;
-                        }
-                        if (isSolid(XXX1, YYY1)) {
+                        yyy1 += 1;
+                        if (!inBounds(xxx1, yyy1) || isSolid(xxx1, yyy1)) {
                             break;
                         }
                     }
                     while (true) {
-                        YYY2 += 1;
-                        if (!inBounds(XXX2, YYY2)) {
-                            break;
-                        }
-                        if (isSolid(XXX2, YYY2)) {
+                        yyy2 += 1;
+                        if (!inBounds(xxx2, yyy2) || isSolid(xxx2, yyy2)) {
                             break;
                         }
                     }
-                    slope = (float) Math.round(((float) YYY1 - (float) YYY2) / ((float) XXX1 - (float) XXX2));
-                    // toMove*=slope==0?1:(Math.signum(slope)==Math.signum(P.move))?1.5:.75;
                     if (toMove > 4)
                         toMove = 4;
                     if (toMove < -4)
@@ -1340,7 +1228,7 @@ public class World implements Serializable {
                     P.y += 1;
                 }
             }
-            if (!isSolid(P.x, P.y + 4)) {
+            if (!isSolid(P.x, P.y + 4f)) {
                 P.vspeed = Math.min(4, P.vspeed + 1);
             } else {
                 P.vspeed = Math.min(0, P.vspeed);
@@ -1361,7 +1249,6 @@ public class World implements Serializable {
             e.onUpdate(this);
             if (!e.alive) {
                 entityList.remove(e);
-                continue;
             }
         }
     }
@@ -1373,61 +1260,48 @@ public class World implements Serializable {
     }
 
     public void generateTree(int ix, int iy, int mH, int mW) {
-        while (!isSolid(ix, iy + 1)) {
+        while (!isSolid(ix, iy + 1f)) {
             iy++;
             if (iy > hEigHt) {
                 break;
             }
         }
-        int W = (mW / 2) + random.nextInt(mW / 2);
-        int H = (mH / 2) + random.nextInt(mH / 2);
-        Polygon P = new Polygon();
-        P.addPoint(ix - W, iy);
-        int branch1Y, branch1W, branch1L, branch2Y, branch2W, branch2L;
-        branch1Y = iy - random.nextInt(H);
-        branch1W = random.nextInt(W * 2);
-        branch1L = random.nextInt(H / 2);
-        branch2Y = iy - random.nextInt(H);
-        branch2W = random.nextInt(W * 2);
-        branch2L = random.nextInt(H / 2);
-        P.addPoint(ix - W, iy);
-        P.addPoint(ix - W, branch1Y);
-        P.addPoint((ix - W) + (int) lengthdir_x(branch1L, 215), branch1Y + (int) lengthdir_y(branch1L, 215));
-        P.addPoint((ix - W) + (int) lengthdir_x(branch1L, 215), branch1Y + (int) lengthdir_y(branch1L, 215) - branch1W);
-        P.addPoint((ix - W), branch1Y - branch1W);
-        P.addPoint((ix - W), iy - H);
-        P.addPoint((ix + W), iy - H);
-        P.addPoint((ix + W), branch2Y - branch2W);
-        P.addPoint((ix + W) + (int) lengthdir_x(branch2L, 45), branch2Y + (int) lengthdir_y(branch1L, 215) - branch2W);
-        P.addPoint((ix + W) + (int) lengthdir_x(branch2L, 45), branch2Y + (int) lengthdir_y(branch1L, 215));
-        P.addPoint(ix + W, branch2Y);
-        P.addPoint(ix + W, iy);
-        ground.FillPolygon(P, TREE);
-        unexplode(ix, iy - H, 16, 8, 8);
+        int w = (mW / 2) + random.nextInt(mW / 2);
+        int h = (mH / 2) + random.nextInt(mH / 2);
+        Polygon polygon = new Polygon();
+        polygon.addPoint(ix - w, iy);
+        int branch1Y;
+        int branch1W;
+        int branch1L;
+        int branch2Y;
+        int branch2W;
+        int branch2L;
+        branch1Y = iy - random.nextInt(h);
+        branch1W = random.nextInt(w * 2);
+        branch1L = random.nextInt(h / 2);
+        branch2Y = iy - random.nextInt(h);
+        branch2W = random.nextInt(w * 2);
+        branch2L = random.nextInt(h / 2);
+        polygon.addPoint(ix - w, iy);
+        polygon.addPoint(ix - w, branch1Y);
+        polygon.addPoint((ix - w) + (int) lengthDirX(branch1L, 215), branch1Y + (int) lengthDirY(branch1L, 215));
+        polygon.addPoint((ix - w) + (int) lengthDirX(branch1L, 215), branch1Y + (int) lengthDirY(branch1L, 215) - branch1W);
+        polygon.addPoint((ix - w), branch1Y - branch1W);
+        polygon.addPoint((ix - w), iy - h);
+        polygon.addPoint((ix + w), iy - h);
+        polygon.addPoint((ix + w), branch2Y - branch2W);
+        polygon.addPoint((ix + w) + (int) lengthDirX(branch2L, 45), branch2Y + (int) lengthDirY(branch1L, 215) - branch2W);
+        polygon.addPoint((ix + w) + (int) lengthDirX(branch2L, 45), branch2Y + (int) lengthDirY(branch1L, 215));
+        polygon.addPoint(ix + w, branch2Y);
+        polygon.addPoint(ix + w, iy);
+        ground.fillPolygon(polygon, TREE);
+        unexplode(ix, iy - h, 16, 8, 8);
     }
 
     public static BufferedImage changeColor(BufferedImage image, Color mask, Color replacement) {
-        /*
-         * BufferedImage destImage = new BufferedImage(image.getWidth(),
-         * image.getHeight(), BufferedImage.TYPE_INT_ARGB); //image.getColorModel().
-         * Graphics2D g = destImage.createGraphics(); g.drawImage(image, null, 0, 0);
-         * g.dispose(); int[] colors = image.getRGB(0, 0, image.getWidth(),
-         * image.getHeight(), null, 0, 1); for (int i = 0; i < destImage.getWidth();
-         * i++) { for (int j = 0; j < destImage.getHeight(); j++) {
-         * 
-         * int destRGB = destImage.getRGB(i, j);
-         * 
-         * if (matches(mask.getRGB(), destRGB)) { int rgbnew =
-         * getNewPixelRGB(replacement.getRGB(), destRGB); destImage.setRGB(i, j,
-         * rgbnew); } } }
-         * 
-         * return destImage; int[] colors = image.getRGB(0, 0, image.getWidth(),
-         * image.getHeight(), null, 0, 1); int colorChange = mask.getRGB(); int colorTo
-         * = replacement.getRGB(); for (int i = 0; i < colors.length; i++) { if
-         * (colors[i] == colorChange) { colors[i] = colorTo; } } image.setRGB(0, 0,
-         * image.getWidth(), image.getHeight(), colors, 0, 1); return image;
-         */
-        int g = mask.getRGB(), r = replacement.getRGB();
+
+        int g = mask.getRGB();
+        int r = replacement.getRGB();
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 if (image.getRGB(x, y) == g) {
@@ -1438,34 +1312,9 @@ public class World implements Serializable {
         return image;
     }
 
-    private static int getNewPixelRGB(int replacement, int destRGB) {
-        float[] destHSB = getHSBArray(destRGB);
-        float[] replHSB = getHSBArray(replacement);
 
-        int rgbnew = Color.HSBtoRGB(replHSB[HUE], replHSB[SATURATION], destHSB[BRIGHTNESS]);
-        return rgbnew;
-    }
 
-    private static boolean matches(int maskRGB, int destRGB) {
-        float[] hsbMask = getHSBArray(maskRGB);
-        float[] hsbDest = getHSBArray(destRGB);
 
-        if (hsbMask[HUE] == hsbDest[HUE] && hsbMask[SATURATION] == hsbDest[SATURATION]
-                && getRGBArray(destRGB)[ALPHA] != TRANSPARENT) {
-
-            return true;
-        }
-        return false;
-    }
-
-    private static int[] getRGBArray(int rgb) {
-        return new int[] { (rgb >> 24) & 0xff, (rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff };
-    }
-
-    private static float[] getHSBArray(int rgb) {
-        int[] rgbArr = getRGBArray(rgb);
-        return Color.RGBtoHSB(rgbArr[RED], rgbArr[GREEN], rgbArr[BLUE], null);
-    }
 
     static long oldTime = 0;
 
@@ -1474,10 +1323,7 @@ public class World implements Serializable {
     }
 
     public static float deltaTime() {
-        float lol = ((System.nanoTime() - oldTime)) / (25f * 1000000f);
-        // System.out.println("Delta Time: "+lol);
-        lol = 1;
-        return lol;
+        return 1f;
     }
 
     public static final int ALPHA = 0;

@@ -73,7 +73,7 @@ public class LavaBallEntity extends Entity {
         for (Player p : lol.playerList) {
             if (p.ID != maker && p.checkCollision((int) X, (int) Y)) {
                 radius = 24;
-                lol.earth.ground.FillCircleW((int) X, (int) Y, radius, World.LAVA);
+                lol.earth.ground.fillCircleW((int) X, (int) Y, radius, World.LAVA);
                 lol.sendMessage(Server.FILL,
                         ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(World.LAVA));
                 alive = false;
@@ -82,7 +82,7 @@ public class LavaBallEntity extends Entity {
         }
         if (lol.earth.checkCollision(X, Y)) {
             radius = 24;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, World.LAVA);
+            lol.earth.ground.fillCircleW((int) X, (int) Y, radius, World.LAVA);
             lol.sendMessage(Server.FILL,
                     ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(World.LAVA));
             alive = false;

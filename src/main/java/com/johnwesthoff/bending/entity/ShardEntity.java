@@ -87,7 +87,7 @@ public class ShardEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if (collided(lol.earth)) {
             radius *= 3;
-            lol.earth.ground.ClearCircle((int) X, (int) Y, radius);
+            lol.earth.ground.clearCircle((int) X, (int) Y, radius);
             lol.sendMessage(Server.DIG, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius));
             alive = false;
         }

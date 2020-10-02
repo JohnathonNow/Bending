@@ -93,7 +93,7 @@ public class HouseEntity extends Entity {
 
     @Override
     public void onUpdate(World apples) {
-        apples.ground.FillPolygon(P, (byte) 1);
+        apples.ground.fillPolygon(P, (byte) 1);
     }
 
     @Override

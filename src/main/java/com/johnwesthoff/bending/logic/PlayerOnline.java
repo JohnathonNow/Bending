@@ -165,9 +165,8 @@ public class PlayerOnline extends Player implements Runnable {
                 ix = toRead.getInt();
                 iy = toRead.getInt();
                 ir = toRead.getInt();
-                handle.earth.ground.ClearCircle(ix, iy, ir);
+                handle.earth.ground.clearCircle(ix, iy, ir);
                 toRead.rewind();
-                // System.out.println("DIG!");
                 ByteBuffer toSend = ByteBuffer.allocate(12);
                 handle.sendMessage(Server.DIG, toSend.putInt(ix).putInt(iy).putInt(ir));
                 break;
@@ -177,7 +176,7 @@ public class PlayerOnline extends Player implements Runnable {
                 iy = toRead.getInt();
                 ir = toRead.getInt();
                 byte etg = toRead.get();
-                handle.earth.ground.FillCircleW(ix, iy, ir, etg);
+                handle.earth.ground.fillCircleW(ix, iy, ir, etg);
                 toRead.rewind();
                 // System.out.println("FILL!");
                 toSend = ByteBuffer.allocate(12);

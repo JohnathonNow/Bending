@@ -89,7 +89,7 @@ public class IceShardEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
             radius = 16;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, 54, World.ICE);
+            lol.earth.ground.fillCircleW((int) X, (int) Y, 54, World.ICE);
             lol.sendMessage(Server.FILL,
                     ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(54).put(World.ICE));
             alive = false;

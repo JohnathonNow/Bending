@@ -82,7 +82,6 @@ public class AppletActionListener implements ActionListener {
                 } catch (final AWTException ex) {
                     // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                pointer.serverOutput();
                 System.err.println("Server " + pointer.serverName + " started\nwith address " + pointer.hostIP
                         + "\nand port " + pointer.port);
                 pointer.getHosts();

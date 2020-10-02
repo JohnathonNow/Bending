@@ -70,7 +70,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 break;
             case MouseEvent.BUTTON3:
                 // ground.ShowData();
-                pointer.world.MB3 = true;
+                pointer.world.mb3 = true;
                 break;
             case MouseEvent.BUTTON2:
                 pointer.world.MB2 = true;
@@ -198,7 +198,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         }
                         break;
                     case MouseEvent.BUTTON3:
-                        pointer.world.MB3 = false;
+                        pointer.world.mb3 = false;
                         if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
                             setTo = -1;
                             pointer.rightClick = d - 1;

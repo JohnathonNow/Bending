@@ -94,7 +94,6 @@ import com.johnwesthoff.bending.ui.ClothingChooser1;
 import com.johnwesthoff.bending.ui.Register;
 import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
-import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.audio.RealClip;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
@@ -110,6 +109,7 @@ public class Client extends JPanel implements Runnable {
      *
      */
     private static final long serialVersionUID = 1L;
+    public static final String PROPERTIES_XYZ = "properties.xyz";
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
@@ -120,13 +120,13 @@ public class Client extends JPanel implements Runnable {
     public boolean chatActive = false;
     public String chatMessage = "";
     public int gameMode = 1;
-    public int fireTime = 0;
-    public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
-            deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
+    public Color purple = new Color(0xA024C2);
+    public Color backgroundChat = new Color(0, 0, 0, 200);
+    public Color deadbg = new Color(255, 255, 255, 127);
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
     public static ClientInputListener inputer;
-    public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
+    private ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
     public int port = 25565;
@@ -142,7 +142,7 @@ public class Client extends JPanel implements Runnable {
     public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
     public static BufferedImage bimage;
     public Graphics2D graphicsBuffer, biggraphicsBuffer;
-    public URL base;// = getDocumentBase();
+    public URL base;
     public String temp;
     public static String username;
     public World world;
@@ -172,10 +172,10 @@ public class Client extends JPanel implements Runnable {
     public String[] hosts = new String[1];
     public static JTextField jtb = new JTextField();
     public JPasswordField jtp = new JPasswordField();
-    public JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
+    public JLabel jUs = new JLabel("Username:");
+    public JLabel jPa = new JLabel("Password:");
     public static ConnectToDatabase CTD;
     public Register form = new Register();
-    public Verify exactly = new Verify();
     public SystemTray ST;
     public TrayIcon trayIcon;
     public Spell[][] spellList;
@@ -190,7 +190,6 @@ public class Client extends JPanel implements Runnable {
 
     public Client() {
         super();
-        // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         new File(ResourceLoader.dir).mkdirs();
         new File(ResourceLoader.dir + "images").mkdirs();
         new File(ResourceLoader.dir + "sounds").mkdirs();
@@ -198,17 +197,14 @@ public class Client extends JPanel implements Runnable {
             bimage = ResourceLoader.loadImage("https://west-it.webs.com/Bending/AgedPaper.png", "AgedPaper.png");
             Thread.sleep(100);
         } catch (final Exception ex) {
-            // ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
-    // RadialGradientPaint cantSee = new RadialGradientPaint(150f,150f,150f,new
-    // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
     Polygon lineOfSight = new Polygon();
 
     public static void main(final String args[]) {
-        System.out.println("Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
-
+        Logger.getLogger(Client.class.getName()).log(Level.INFO, "Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
         gameAlive = true;
         Spell.init();
         final Client me = new Client();
@@ -219,25 +215,22 @@ public class Client extends JPanel implements Runnable {
         me.CTD = new ConnectToDatabase();
         me.setSize(600, 600);
         me.setPreferredSize(me.getSize());
-        // JPanel e = new JPanel();
-        // e.setSize(300,300);
+
         container = new JFrame() {
 
             @Override
             public void paintComponents(final Graphics g) {
-                // super.paintComponent(g);
 
                 g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
                 super.paintComponents(g);
             }
         };
         me.owner = container;
-        // container.setUndecorated(true);
         me.form.setVisible(false);
         container.setSize(me.getSize());
         container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         me.cc.setVisible(false);
-        me.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
+        me.spellList = new Spell[10][5];
         me.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
                 Spell.spells.get(0), Spell.spells.get(0) });
         me.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
@@ -251,10 +244,8 @@ public class Client extends JPanel implements Runnable {
 
         me.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
                 Spell.spells.get(19), Spell.spells.get(7) });
-        // container.add(me);
         me.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
                 Spell.noSpell });
-        // container.add(me);
         me.JRB = new JCheckBox() {
             @Override
             public void paintComponent(final Graphics g) {
@@ -264,9 +255,9 @@ public class Client extends JPanel implements Runnable {
         };
 
         me.userpassinfo = new Properties();
-        if (new File(ResourceLoader.dir + "properties.xyz").exists()) {
-            try {
-                me.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
+        if (new File(ResourceLoader.dir + PROPERTIES_XYZ).exists()) {
+            try(FileInputStream fs = new FileInputStream(new File(ResourceLoader.dir + PROPERTIES_XYZ))) {
+                me.userpassinfo.load(fs);
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -275,8 +266,8 @@ public class Client extends JPanel implements Runnable {
             me.userpassinfo.setProperty("username", "");
             me.userpassinfo.setProperty("password", "");
             me.userpassinfo.setProperty("remember", "");
-            try {
-                me.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
+            try(FileOutputStream fs = new FileOutputStream(new File(ResourceLoader.dir + PROPERTIES_XYZ))) {
+                me.userpassinfo.store(fs, "");
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -354,7 +345,6 @@ public class Client extends JPanel implements Runnable {
         me.add(me.mapMaker);
         me.mapMaker.setLocation(16, 104 + 6 + 32 + 32 + 32 + 32);
         me.mapMaker.setSize(240, 16);
-        /// me.JRB.setText("Remember me?");
 
         me.JRB.setActionCommand("RM");
         me.spellselection = new SpellList1(me);
@@ -373,18 +363,15 @@ public class Client extends JPanel implements Runnable {
         cheese.setLocation(110, 48);
         cheese.setVisible(true);
         me.add(cheese);
-        // me.JRB.setBackground(Color.white);
         me.JRB.setVisible(true);
 
         Client.jtb.setSize(300 - 128, 16);
         Client.jtb.setPreferredSize(Client.jtb.getSize());
-        // me.jtb.setLocation(16, 16);dfsdfsdf
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
         me.jtp.setSize(300 - 128, 16);
         me.jtp.setPreferredSize(Client.jtb.getSize());
-        // me.jtp.setLocation(16, 16);
         me.jtp.setVisible(true);
         me.jtp.requestFocus();
         me.jtp.addKeyListener(inputer);
@@ -431,7 +418,6 @@ public class Client extends JPanel implements Runnable {
         me.connect.setEnabled(false);
         me.ST = SystemTray.getSystemTray();
         try {
-            // container.getContentPane().setB
 
             final PopupMenu pop = new PopupMenu();
             me.trayIcon = new TrayIcon(
@@ -460,17 +446,16 @@ public class Client extends JPanel implements Runnable {
 
                 @Override
                 public void mouseClicked(final MouseEvent e) {
-                    // throw new UnsupportedOperationException("Not supported yet.");
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void mousePressed(final MouseEvent e) {
-                    // throw new UnsupportedOperationException("Not supported yet.");
+                    throw new UnsupportedOperationException();
                 }
 
                 @Override
                 public void mouseReleased(final MouseEvent e) {
-                    // throw new UnsupportedOperationException("Not supported yet.");
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         frame.setVisible(true);
                         frame.add(pop);
@@ -481,21 +466,17 @@ public class Client extends JPanel implements Runnable {
 
                 @Override
                 public void mouseEntered(final MouseEvent e) {
-                    // throw new UnsupportedOperationException("Not supported yet.");
+                     throw new UnsupportedOperationException("Not supported yet.");
                 }
 
                 @Override
                 public void mouseExited(final MouseEvent e) {
-                    // throw new UnsupportedOperationException("Not supported yet.");
+                     throw new UnsupportedOperationException("Not supported yet.");
                 }
             });
-            {
 
-            }
             if (args.length > 0 && args[0].equals("Client")) {
                 container.setVisible(false);
-            } else {
-                // me.ST.add(me.trayIcon);
             }
             container.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         } catch (final Exception ex) {
@@ -508,7 +489,7 @@ public class Client extends JPanel implements Runnable {
     public void init() {
         try {
             loggedOn = true;
-            temp = "C:";// (System.getenv("TEMP"));
+            temp = "C:";
             Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.jpg");
             Sky = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg", "SkyTexture.jpg");
             Sand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg", "SandTexture.jpg");
@@ -520,11 +501,7 @@ public class Client extends JPanel implements Runnable {
             LavaLand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png",
                     "lavalandTexture.png");
             ether = ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png", "ether.png");
-            // me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
-            // container.requestFocus();
-            // me.transferFocus();
-            // me.requestFocus();
-            // me.validate();
+
         } catch (final Exception ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -551,14 +528,11 @@ public class Client extends JPanel implements Runnable {
                     createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), Grass, Sand, Sky, Stone, Bark, Ice,
                     LavaLand, Crystal, ether);
             world.load(Clothing, Colors, Colors2);
-            // entityList.add(new HouseEntity(750,300,200,300));
 
             connection.setKeepAlive(true);
             connection.setTcpNoDelay(true);
             out = new OrderedOutputStream(connection.getOutputStream());
             input = connection.getInputStream();
-            // out.write(Server.LOGIN);
-            // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
             final ByteBuffer tt = Server
                     .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
                     .put(Clothing);
@@ -579,8 +553,6 @@ public class Client extends JPanel implements Runnable {
                     try {
                         while (gameAlive) {
                             final int read = input.read();
-                            // System.out.println(read);
-                            // System.out.println("MR: "+Server.MESSAGEIDs[read]);
                             pc++;
                             switch (read) {
                                 case Server.ID:
@@ -597,7 +569,6 @@ public class Client extends JPanel implements Runnable {
                                     int iid;
                                     final ByteBuffer rasputin = Server.readByteBuffer(input);
                                     iid = rasputin.getInt();
-                                    // iid = input.read();
                                     final String feliceNavidad = Server.getString(rasputin);
                                     final Player yes = new Player(300, 300,
                                             new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
@@ -608,8 +579,6 @@ public class Client extends JPanel implements Runnable {
                                                     rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
                                     world.playerList.add(yes);
                                     final boolean sameTeam = rasputin.get() == 12;
-                                    // yes.username = Server.getString(rasputin);
-                                    // system.out.println("Player joined with ID:"+iid);
                                     if (sameTeam) {
                                         myTeam.add(iid);
                                     } else {
@@ -624,7 +593,6 @@ public class Client extends JPanel implements Runnable {
                                 case Server.MOVE:
                                     ByteBuffer reading = Server.readByteBuffer(input);
                                     final int idtomove = reading.getShort();
-                                    // system.out.println("ID: "+idtomove);
                                     if (idtomove == ID) {
                                         world.x = reading.getShort();
                                         world.y = reading.getShort();
@@ -636,7 +604,6 @@ public class Client extends JPanel implements Runnable {
                                     }
                                     for (final Player r : world.playerList) {
                                         if (r.ID == idtomove) {
-                                            // system.out.println("hi");
                                             r.x = reading.getShort();
                                             r.y = reading.getShort();
                                             r.move = reading.getShort();
@@ -652,17 +619,13 @@ public class Client extends JPanel implements Runnable {
                                     int x;
                                     reading = Server.readByteBuffer(input);
                                     x = reading.getInt();
-                                    // y = input.readInt();
-                                    // System.out.println("SDFSDF"+x);
                                     for (int i = x; i < x + 100; i++) {
                                         reading.get(world.ground.cellData[i]);
                                     }
-                                    // System.out.println("yay");
                                     sendRequest = true;
                                     break;
                                 case Server.AI:
                                     final ByteBuffer reader = Server.readByteBuffer(input);
-                                    // putInt(e.X).putInt(e.Y).putInt(e.HP).putInt(e.move).putInt(e.yspeed).putInt(e.target).putInt(e.id);
                                     final int redX = reader.getInt();
                                     final int redY = reader.getInt();
                                     final int redmove = reader.getInt();
@@ -686,9 +649,7 @@ public class Client extends JPanel implements Runnable {
                                     }
                                     break;
                                 case Server.ENTIREWORLD:
-                                    // system.out.println("WOAH");
                                     readWorld();
-                                    // system.out.println("SCORE!");
                                     busy = false;
                                     break;
                                 case Server.DIG:
@@ -697,8 +658,7 @@ public class Client extends JPanel implements Runnable {
                                     ix = toRead.getInt();
                                     iy = toRead.getInt();
                                     ir = toRead.getInt();
-                                    world.ground.ClearCircle(ix, iy, ir);
-                                    // system.out.println("DIG!");
+                                    world.ground.clearCircle(ix, iy, ir);
                                     break;
                                 case Server.FILL:
                                     toRead = Server.readByteBuffer(input);
@@ -706,8 +666,7 @@ public class Client extends JPanel implements Runnable {
                                     iy = toRead.getInt();
                                     ir = toRead.getInt();
                                     final byte etg = toRead.get();
-                                    world.ground.FillCircleW(ix, iy, ir, etg);
-                                    // system.out.println("FILL!");
+                                    world.ground.fillCircleW(ix, iy, ir, etg);
                                     break;
                                 case Server.CHARGE:
                                     toRead = Server.readByteBuffer(input);
@@ -732,15 +691,12 @@ public class Client extends JPanel implements Runnable {
                                         }
                                     }
                                     world.entityList.add(new ShockEffectEntity(ix, iy, ir));
-                                    // system.out.println("FILL!");
                                     break;
                                 case Server.HURT:
                                     toRead = Server.readByteBuffer(input);
                                     HP -= toRead.getInt();
-                                    // system.out.println("FILL!");
                                     break;
                                 case Server.WORLDEXPAND:
-                                    // system.out.println("IT's getting bigger!");
                                     busy = true;
                                     toRead = Server.readByteBuffer(input);
                                     final int newx = toRead.getInt();
@@ -780,7 +736,6 @@ public class Client extends JPanel implements Runnable {
                                     Spell.getSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid, buf);
                                     break;
                                 case Server.FREEZE:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     int fX = buf.getInt();
                                     int fY = buf.getInt();
@@ -788,7 +743,6 @@ public class Client extends JPanel implements Runnable {
                                     world.ground.freeze(fX, fY, fR);
                                     break;
                                 case Server.SANDINATE:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
                                     fY = buf.getInt();
@@ -796,7 +750,6 @@ public class Client extends JPanel implements Runnable {
                                     world.ground.sandinate(fX, fY, fR);
                                     break;
                                 case Server.PUDDLE:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
                                     fY = buf.getInt();
@@ -804,7 +757,6 @@ public class Client extends JPanel implements Runnable {
                                     world.ground.puddle(fX, fY, fR);
                                     break;
                                 case Server.DESTROY:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     int idtokill = buf.getInt();
                                     for (int i = 0; i < world.entityList.size(); i++) {
@@ -820,7 +772,6 @@ public class Client extends JPanel implements Runnable {
                                     HP += hpt;
                                     break;
                                 case Server.STEAM:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     final int xxxx = buf.getInt(), yyyy = buf.getInt();
                                     idtokill = buf.getInt();
@@ -833,7 +784,6 @@ public class Client extends JPanel implements Runnable {
                                     world.entityList.add(new SteamEntity(xxxx, yyyy));
                                     break;
                                 case Server.DEATH:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
                                     final int fX2 = buf.getInt();
@@ -856,7 +806,6 @@ public class Client extends JPanel implements Runnable {
                                     }
                                     break;
                                 case Server.SCORE:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     final int idd = buf.getInt();
                                     final int scored = buf.getInt();
@@ -877,7 +826,6 @@ public class Client extends JPanel implements Runnable {
                                     }
                                     break;
                                 case Server.LEAVE:
-                                    // ByteBuffer buf;
                                     buf = Server.readByteBuffer(input);
                                     fX = buf.getInt();
                                     for (final Player p : world.playerList) {
@@ -893,11 +841,12 @@ public class Client extends JPanel implements Runnable {
                                         }
                                     }
                                     break;
+                                default:
+                                    break;
                             }
-                            // Thread.sleep(25);
                         }
                     } catch (final Exception ex) {
-                        // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
@@ -914,7 +863,6 @@ public class Client extends JPanel implements Runnable {
             return false;
         }
         return true;
-        // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
 
     public Rectangle playerHitbox;
@@ -936,10 +884,9 @@ public class Client extends JPanel implements Runnable {
     public boolean busy = false;
     public int lastHit = -1;
     public byte sendcount = 0;
-    public ArrayList<int[]> stuff = new ArrayList<>();
     public boolean isAlive = true;
-    public Area hideFromMe = new Area(), box = new Area(new Rectangle(0, 0, 300, 300));
-    public Thread expander;
+    public Area hideFromMe = new Area();
+    public Area box = new Area(new Rectangle(0, 0, 300, 300));
 
     // @Override
     public void destroy() {
@@ -969,8 +916,8 @@ public class Client extends JPanel implements Runnable {
             yes = true;
             d = 0;
             dr = i * (360 / resolution);
-            dx = (int) world.lengthdir_x(8, dr);
-            dy = (int) world.lengthdir_y(8, dr);
+            dx = (int) world.lengthDirX(8, dr);
+            dy = (int) world.lengthDirY(8, dr);
             while (yes) {
                 d++;
                 Xx += dx;
@@ -987,9 +934,6 @@ public class Client extends JPanel implements Runnable {
         }
         hideFromMe.reset();
         if (!world.dead) {
-            // cantSee = new
-            // RadialGradientPaint(world.x-world.viewX,world.y-world.viewY,250f,new
-            // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
             final Area swag = new Area(lineOfSight);
             hideFromMe.add(box);
             hideFromMe.subtract(swag);
@@ -1007,49 +951,31 @@ public class Client extends JPanel implements Runnable {
         lastTime = System.nanoTime();
         double delta = 0;
         while (gameAlive) {
-            try {
-                // Thread.yield();
-            } catch (final Exception e2) {
-                // TODO Auto-generated catch block
-                e2.printStackTrace();
-            }
+
             final long now = System.nanoTime();
 
             delta += (now - lastTime) / (1000000000 / Constants.FPS);
             owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
             lastTime = now;
 
-            if (!owner.isVisible()) {
-                if (!SystemTray.isSupported()) {
+            if (!owner.isVisible() && (!SystemTray.isSupported())) {
                     if (!"".equals(hostIP)) {
                         CTD.removeServer(hostIP);
                     }
                     System.exit(0);
-                }
-
-                // System.out.println(started);
             }
+
             if (!started) {
                 delta = 0;
-                try {
-                    Thread.sleep(10);
-                } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
+                sleep(10);
                 continue;
             }
+
             if (matchOver > 0) {
-                try {
-                    Thread.sleep(10);
-                } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
+                sleep(10);
             }
             while (delta >= 1) {
                 delta -= 1;
-                // System.out.println(delta);
                 if (removeAura > 0) {
                     removeAura--;
                     world.status |= World.ST_DRAIN;
@@ -1150,7 +1076,6 @@ public class Client extends JPanel implements Runnable {
                     }
                 }
                 if (world.keys[KeyEvent.VK_S]) {
-                    // world.move = 0;
                     if ((dig += 2) >= 100) {
                         dig = 0;
                         Spell.getSpell(4).getAction(this);
@@ -1160,20 +1085,21 @@ public class Client extends JPanel implements Runnable {
                     dig = 0;
                 }
                 for (final Player p : world.playerList) {
-                    if ((p.status & World.ST_DRAIN) != 0) {
-                        if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
-                            if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
-                                lastHit = p.ID;
-                                killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
-                                HP--;// Lose health from aura
-                            }
-                        }
+                    if (
+                            (p.status & World.ST_DRAIN) != 0 &&
+                            (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) &&
+                                    (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2)
+                          )
+                    {
+                        lastHit = p.ID;
+                        killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
+                        HP--;
+
                     }
                 }
                 for (final Entity e : world.entityList) {
                     if (e instanceof MissileEntity) {
                         final MissileEntity me = (MissileEntity) e;
-                        // if (pointDis(me.X, me.Y, world.x, world.y)<me.radius*2&&me.maker!=ID)
                         if (checkCollision(me.X, me.Y) && me.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me.maker) : true)) {
                             me.alive = false;
@@ -1188,7 +1114,6 @@ public class Client extends JPanel implements Runnable {
                         final TornadoEntity me2 = (TornadoEntity) e;
                         if (checkCollision(me2.X, me2.Y) && me2.life < 80) {
                             hurt(1);
-                            // world.vspeed-=1;
                             xspeed += 1 - random.nextInt(2);
                             xspeed *= -1;
                             world.x = (int) me2.X + (int) xspeed;
@@ -1297,7 +1222,7 @@ public class Client extends JPanel implements Runnable {
                             try {
                                 out.addMesssage(bb, Server.DRAIN);
                             } catch (final IOException ex) {
-                                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }
@@ -1329,7 +1254,6 @@ public class Client extends JPanel implements Runnable {
                     if (e instanceof SandEntity) {
                         final SandEntity me3 = (SandEntity) e;
                         final double d = pointDis(me3.X, me3.Y, world.x, world.y);
-                        // System.out.println(d);
                         if (d < me3.radius * 3 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(2);
@@ -1377,14 +1301,14 @@ public class Client extends JPanel implements Runnable {
                     }
                     if (e instanceof BallLightningEntity) {
                         final BallLightningEntity me3 = (BallLightningEntity) e;
-                        if (checkCollision(e.X, e.Y)) {
-                            if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                                hurt(10);
-                                lastHit = me3.maker;
-                                world.vspeed -= random.nextInt(22);
-                                xspeed += 18 - random.nextInt(36);
-                                killMessage = "~ was shockingly killed by `!";
-                            }
+                        if (checkCollision(e.X, e.Y) &&
+                                (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true))
+                        ) {
+                            hurt(10);
+                            lastHit = me3.maker;
+                            world.vspeed -= random.nextInt(22);
+                            xspeed += 18 - random.nextInt(36);
+                            killMessage = "~ was shockingly killed by `!";
                         }
                     }
                     if (e instanceof WallofFireEntity) {
@@ -1414,7 +1338,6 @@ public class Client extends JPanel implements Runnable {
                     world.status = 0;
                     world.y = -50;
                     world.x = -50;
-                    // this.chatActive = false;
                     HP = MAXHP;
                     this.lungs = this.maxlungs;
                     world.move = 0;
@@ -1436,12 +1359,11 @@ public class Client extends JPanel implements Runnable {
                     }
                     killingSpree = 0;
                     world.dead = true;
-                    // this.chatActive = false;
                     final ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
                     try {
                         out.addMesssage(die, Server.DEATH);
                     } catch (final IOException ex) {
-                        // ex.printStackTrace();
+                        ex.printStackTrace();
                     }
                     if (lastHit == ID) {
                         XP -= 25;
@@ -1453,7 +1375,7 @@ public class Client extends JPanel implements Runnable {
                     try {
                         this.sendMovement();
                     } catch (final Exception ex) {
-                        // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 if (energico < maxeng) {
@@ -1484,18 +1406,16 @@ public class Client extends JPanel implements Runnable {
                         sendMovement();
                     }
                 }
-                // prevMove = world.move;
                 world.onUpdate();
 
-                if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                        || counting++ > 200))) {
+                if (((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move))
+                        || counting++ > 200)) {
                     counting = 0;
                     try {
                         sendMovement();
                         prevMove = world.move;
                         if (sendRequest && sendcount++ >= 30) {
                             sendcount = 0;
-                            // System.out.println("REQUEST START");
                             final ByteBuffer bb = ByteBuffer.allocate(24);
                             out.addMesssage(bb.putInt(1), Server.MAP);
                             sendRequest = false;
@@ -1503,16 +1423,12 @@ public class Client extends JPanel implements Runnable {
                     } catch (final Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
                 }
 
                 prevVspeed = world.vspeed;
-                // if (busy) continue;
                 Xp = (int) world.x;
                 Yp = (int) world.y;
 
-                if (world.keys[KeyEvent.VK_SPACE]) {
-                }
 
             }
             draw();
@@ -1521,6 +1437,15 @@ public class Client extends JPanel implements Runnable {
                 swagTime = now;
             }
             World.setTime();
+        }
+    }
+
+    private void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
         }
     }
 
@@ -1538,44 +1463,41 @@ public class Client extends JPanel implements Runnable {
     public String addHost() {
         try {
             final URL whatismyip = new URL("https://checkip.amazonaws.com/");
-            final BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+            try(final BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()))) {
+                String ip = in.readLine(); // you get the IP as a String
+                final int an = JOptionPane.showConfirmDialog(connect, "Host the server through the internet?",
+                        "Server Type?", JOptionPane.YES_NO_OPTION);
+                if (an != 0) {
+                    ip = InetAddress.getLocalHost().getHostAddress();
+                }
+                final String yes = JOptionPane.showInputDialog("Server Name?");
+                if (yes != null) {
+                    serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
 
-            String ip = in.readLine(); // you get the IP as a String
-            // System.out.println(ip);
-            final int an = JOptionPane.showConfirmDialog(connect, "Host the server through the internet?",
-                    "Server Type?", JOptionPane.YES_NO_OPTION);
-            if (an != 0) {
-                ip = InetAddress.getLocalHost().getHostAddress();
+                    CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                    return ip;
+                } else {
+                    serverName = "SERVER";
+                    CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                }
+                return "NO";
             }
-            final String yes = JOptionPane.showInputDialog("Server Name?");
-            if (yes != null) {
-                serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
 
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
-                return ip;
-            } else {
-                serverName = "SERVER";
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
-                // ip = InetAddress.getLocalHost().getHostAddress();
-            }
-            return "NO";
         } catch (IOException | HeadlessException ex) {
-            // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             return "localhost";
         }
     }
 
-    public String names[];// = new String[yay.size()/3];
-    public String counts[];// = new String[yay.size()/3];
+    public String[] names;
+    public String[] counts;
     public Thread pinger;
 
     public void getHosts() {
         ArrayList<String> yay = null;
         while (yay == null) {
-            // System.err.println("LOOKING");
             yay = CTD.getServers();
         }
-        // System.out.println(yay.size());
         hosts = new String[yay.size() / 3];
         names = new String[yay.size() / 3];
         counts = new String[yay.size() / 3];
@@ -1595,7 +1517,6 @@ public class Client extends JPanel implements Runnable {
             newRows[i] = new Row(names[i], "PINGING", counts[i]);
         }
         menu.setModel(new JComboBox<>(newRows).getModel());
-        // menu.setModel(new JComboBox<>(names).getModel());
         if (pinger != null) {
             pinger.interrupt();
         }
@@ -1611,18 +1532,19 @@ public class Client extends JPanel implements Runnable {
                         while (n.hasNext()) {
                             st += n.nextLine();
                         }
-                        // System.out.println(st);
                         final Pattern p = Pattern.compile("Average = (.*?)ms");
                         final Matcher m = p.matcher(st);
                         if (m.find()) {
                             st = "PING:   " + m.group(1);
                         }
                     } catch (final IOException ex) {
+                        ex.printStackTrace();
                     }
                     ((Row) menu.getModel().getElementAt(i)).val = st;
                     try {
                         Thread.sleep(10);
                     } catch (final InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         return;
                     }
                 }
@@ -1642,7 +1564,6 @@ public class Client extends JPanel implements Runnable {
         DoubleBufferGraphics.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
-        // paint(GameGraphics);
         GameGraphics.drawImage(doubleBuffer, 0, 0, getWidth(), getHeight(), this);
     }
 
@@ -1671,7 +1592,6 @@ public class Client extends JPanel implements Runnable {
         graphicsBuffer.setColor(Color.black);
         if (world != null) {
 
-            // world.drawPlayers(graphicsBuffer);
             if (matchOver > 0) {
                 if (!spellselection.isVisible()) {
                     matchOver--;
@@ -1711,12 +1631,7 @@ public class Client extends JPanel implements Runnable {
             } else {
                 world.onDraw(graphicsBuffer);
                 world.drawEntities(graphicsBuffer);
-                // if (timeToHeal % 10 == 0)
 
-                // calculateLoS();
-                // graphicsBuffer.setColor(dark);
-                // graphicsBuffer.fill(hideFromMe);
-                // graphicsBuffer.setPaint(null);
                 graphicsBuffer.setColor(Color.black);
                 graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 64, 32, 4);
                 if (world.keys[KeyEvent.VK_S]) {
@@ -1746,10 +1661,10 @@ public class Client extends JPanel implements Runnable {
                 }
                 graphicsBuffer.setColor(Color.orange);
                 graphicsBuffer.fillRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
+                        (int) ((double) Constants.HEIGHT_INT * (dpyeng / maxeng)));
                 graphicsBuffer.setColor(Color.red);
                 graphicsBuffer.drawRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
+                        (int) ((double) Constants.HEIGHT_INT * ( dpyeng / maxeng)));
                 for (int i = 0; i < 5; i++) {
                     graphicsBuffer.drawImage(spellList[spellBook][i].getImage().getImage(), 4 + i * 34, 0, 32, 16,
                             this);
@@ -1782,11 +1697,11 @@ public class Client extends JPanel implements Runnable {
                 }
                 graphicsBuffer.setColor(Color.BLUE);
                 graphicsBuffer.fillRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                        (int) ((double) Constants.HEIGHT_INT * ( energico /  maxeng)));
 
                 graphicsBuffer.setColor(purple);
                 graphicsBuffer.drawRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
+                        (int) ((double) Constants.HEIGHT_INT * ( energico / maxeng)));
                 if (world.keys[KeyEvent.VK_ALT]) {
                     graphicsBuffer.setColor(Color.red);
                     this.checkCollision(0, 0);
@@ -1796,7 +1711,6 @@ public class Client extends JPanel implements Runnable {
                     graphicsBuffer.setTransform(prevTrans);
 
                 }
-                // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
                 biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         this);
                 world.drawPlayers(biggraphicsBuffer);
@@ -1804,13 +1718,9 @@ public class Client extends JPanel implements Runnable {
                 for (final Entity e : world.entityList) {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                // The below lines are commented out until we get a faster way to do this
-                // Composite c = biggraphicsBuffer.getComposite();
-                // biggraphicsBuffer.setComposite(Additive.additive);
                 for (final Entity e : world.entityList) {
                     e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                // biggraphicsBuffer.setComposite(c);
                 if (chatActive) {
                     biggraphicsBuffer.setColor(Color.gray);
                     biggraphicsBuffer.fillRect(32, 810, biggraphicsBuffer.getFontMetrics().stringWidth(chatMessage),
@@ -1832,16 +1742,7 @@ public class Client extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("" + p.score, 512, 256 + 16 + (i * 16));
                     }
                 }
-                /*
-                 * if (world.keys[KeyEvent.VK_ALT]) { biggraphicsBuffer.setColor(Color.red);
-                 * this.checkCollision(0, 0); AffineTransform prevTrans =
-                 * biggraphicsBuffer.getTransform(); biggraphicsBuffer.scale(3, 3);
-                 * biggraphicsBuffer.translate(-world.viewX, -world.viewY);
-                 * biggraphicsBuffer.draw(playerHitbox);
-                 * biggraphicsBuffer.setTransform(prevTrans);
-                 * 
-                 * }
-                 */
+
                 if (world.dead) {
                     biggraphicsBuffer.setColor(deadbg);
                     biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
@@ -1890,8 +1791,9 @@ public class Client extends JPanel implements Runnable {
                         }
                         world.keys[KeyEvent.VK_S] = false;
                     }
-                    if ((!(gameMode == Server.THEHIDDEN && !goodTeam)) || lastHit == ID) {
-                        if (world.keys[KeyEvent.VK_SPACE] || forcedRespawn++ > 400) {
+                    if (((!(gameMode == Server.THEHIDDEN && !goodTeam)) || lastHit == ID)
+                            && (world.keys[KeyEvent.VK_SPACE] || forcedRespawn++ > 400)
+                    ) {
                             forcedRespawn = 0;
                             world.y = 0;
                             world.x = (goodTeam ? world.wIdTh / 2 : 0) + random.nextInt(world.wIdTh / 2);
@@ -1899,7 +1801,6 @@ public class Client extends JPanel implements Runnable {
                             passiveList[spellBook].onSpawn(this);
                             HP = MAXHP;
                             lastHit = ID;
-                        }
                     }
                 }
             }
@@ -1920,7 +1821,7 @@ public class Client extends JPanel implements Runnable {
         try {
             out.addMesssage(bb, Server.MESSAGE);
         } catch (final IOException ex) {
-            // ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -1944,8 +1845,7 @@ public class Client extends JPanel implements Runnable {
         ByteBuffer toRead;
         busy = true;
         world.status = 0;
-        toRead = Server.readByteBuffer(input);// ByteBuffer.wrap(buf);
-        // //system.out.println(toRead.remaining());
+        toRead = Server.readByteBuffer(input);
         world.ground.w = toRead.getInt();
         world.ground.h = toRead.getInt();
 
@@ -1992,30 +1892,20 @@ public class Client extends JPanel implements Runnable {
         world.y = 0;
         world.x = (goodTeam ? world.wIdTh / 2 : 0) + random.nextInt(world.wIdTh / 2);
         lastHit = ID;
-        // System.out.println(world.wIdTh+" x "+world.hEigHt);
         world.ground.cellData = new byte[world.ground.w][world.ground.h];
         world.username = username;
         world.idddd = ID;
-        // system.out.println(world.ground.w+" x "+world.ground.h);
-        // byte buffer[] = new byte[world.ground.h*world.ground.w];
-        // toRead.get(buffer);
-        // input.read(buffer);
         final ByteBuffer chunks[] = new ByteBuffer[world.wIdTh / 100];
         for (int t = 0; t < chunks.length; t += 1) {
             input.read();
-            // System.out.println("CHUNK");
             chunks[t] = Server.readByteBuffer(input);
             for (i = t * 100; i < (t * 100) + 100; i++) {
 
                 chunks[t].get(world.ground.cellData[i], 0, world.ground.h);
-                //// system.out.println(read);
-                // world.ground.cellData[i] = read;
+
             }
         }
-        // system.out.println(toRead.remaining());
         readEntityList(toRead);
-        // System.out.println("Done");
-        // system.out.println(toRead.remaining());
         busy = false;
     }
 
@@ -2026,7 +1916,6 @@ public class Client extends JPanel implements Runnable {
             return;
         }
         try {
-            // out.write(Server.MOVE);
             final ByteBuffer toSend = ByteBuffer.allocate(4 * 4);
             toSend.putShort((short) world.x);
             toSend.putShort((short) world.y);
@@ -2036,11 +1925,10 @@ public class Client extends JPanel implements Runnable {
             toSend.putShort((short) world.rightArmAngle);
             toSend.putShort(world.status);
             toSend.putShort(HP);
-            // Server.writeByteBuffer(toSend, out);
             out.addMesssage(toSend, Server.MOVE);
 
         } catch (final Exception e) {
-            // e.printStackTrace();
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -2064,22 +1952,22 @@ public class Client extends JPanel implements Runnable {
                 }
             }
         } catch (final Exception e) {
-
+            e.printStackTrace();
         }
     }
 
     public int shockdrain = 0;
 
     public int hurt(double pain) {
-        if (passiveList[spellBook].getName().equals("Lightning Shield")) {
-            if (random.nextInt(15 - (shockdrain * 2)) == 0) {
-                pain *= .25;
-                if (pain < 1) {
-                    pain = 1;
-                }
-                energico -= pain * 50;
-                world.entityList.add(new ShockEffectEntity((int) world.x, (int) world.y, 6 + (int) pain));
+        if (passiveList[spellBook].getName().equals("Lightning Shield") &&
+                (random.nextInt(15 - (shockdrain * 2)) == 0)
+        ) {
+            pain *= .25;
+            if (pain < 1) {
+                pain = 1;
             }
+            energico -= pain * 50;
+            world.entityList.add(new ShockEffectEntity((int) world.x, (int) world.y, 6 + (int) pain));
         }
         HP -= pain;
         return (int) pain;
@@ -2090,21 +1978,11 @@ public class Client extends JPanel implements Runnable {
             throw new IllegalArgumentException("Invalid start port: " + port);
         }
 
-        ServerSocket ss = null;
-        try {
-            ss = new ServerSocket(port);
+        try(ServerSocket ss = new ServerSocket(port)) {
             ss.setReuseAddress(true);
             return true;
-        } catch (final IOException e) {
-        } finally {
-
-            if (ss != null) {
-                try {
-                    ss.close();
-                } catch (final IOException e) {
-                    /* should not be thrown */
-                }
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return false;
@@ -2114,10 +1992,7 @@ public class Client extends JPanel implements Runnable {
     public String serverName = "";
     public ServerGUI sgui;
 
-    public void serverOutput() {
-        // sgui = new ServerGUI();
-        // sgui.setVisible(true);
-    }
+
 
     static class ImagePanel extends JPanel {
         private final Image image;
@@ -2129,7 +2004,6 @@ public class Client extends JPanel implements Runnable {
 
         @Override
         protected void paintComponent(final Graphics g) {
-            // super.paintComponent(g);
 
             g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         }
@@ -2137,14 +2011,15 @@ public class Client extends JPanel implements Runnable {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        // super.paintComponent(g);
 
         g.drawImage(bimage, 0, 0, getWidth(), getHeight(), null);
     }
 
     private static class Row {
 
-        private String id = "", val = "", extra = "";
+        private String id = "";
+        private String val = "";
+        private String extra = "";
 
         public Row(final String id, final String val, final String extra) {
             this.id = id;
@@ -2215,7 +2090,10 @@ public class Client extends JPanel implements Runnable {
                     return row.getVal();
                 case 2:
                     return row.getExtra();
+                default:
+                    break;
             }
+
             return null;
         }
     }
@@ -2244,7 +2122,6 @@ public class Client extends JPanel implements Runnable {
                 final long sI1I1I11I1I = PlayerOnline.class.getFields().length;
                 authCode = (((((sI1I1I11I1I * sI1I1I11I1I) - sI1I1I11I1I) / s1I1111II11) + s1111I11I11) * s11I1111I1I)
                         / s1I1111II11;
-                // authCode = 1;
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
