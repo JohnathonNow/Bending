@@ -21,7 +21,8 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
+import static com.johnwesthoff.bending.Constants.*;
+import static java.lang.Math.toRadians;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.ExplosionEntity;
@@ -85,7 +86,7 @@ public class World implements Serializable {
     public final byte aList[] = new byte[127];
     public int miGenH = 300, maGenH = 300;
     public Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
-    public BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT + 12, Constants.HEIGHT_INT + 12,
+    public BufferedImage Iter = new BufferedImage(WIDTH_INT + 12, HEIGHT_INT + 12,
             BufferedImage.TYPE_INT_ARGB);
     public Graphics2D Gter = Iter.createGraphics();
     public int idinator = 0;
@@ -916,7 +917,7 @@ public class World implements Serializable {
         if (burn++ > 2) {
             firePolygonred.reset();
             int xx[] = new int[12], yy[] = new int[12];
-            xx[0] = (0) * Constants.WIDTH_SCALE;
+            xx[0] = (0) * WIDTH_SCALE;
             yy[0] = (0);
             firePolygonred.addPoint(xx[0], yy[0]);
             int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
@@ -1005,14 +1006,14 @@ public class World implements Serializable {
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
         // incY = (int)Client.lengthdir_y(Client.pointDis(x, y, mouseX,
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
-                Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
+        viewX = (int) Math.min(Math.max((x - (WIDTH_INT + 1) / 2) + incX, 0),
+                Math.max(0, wIdTh - WIDTH_INT - 1));
         /*
          * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
          * { incX=(-(x-150)); }
          */
-        viewY = (int) Math.min(Math.max((y - Constants.HEIGHT_INT / 2) + incY, 0),
-                Math.max(0, hEigHt - Constants.HEIGHT_INT));
+        viewY = (int) Math.min(Math.max((y - HEIGHT_INT / 2) + incY, 0),
+                Math.max(0, hEigHt - HEIGHT_INT));
         if (dead) {
             viewX = viewdX;
             viewY = viewdY;
@@ -1061,175 +1062,140 @@ public class World implements Serializable {
     public static Polygon firePolygonred = new Polygon(), firePolygonyellow = new Polygon(),
             firePolygonorange = new Polygon();
 
-    public void drawPlayers(Graphics g) {
-        float offs = x % 8;
-        if ((status & World.ST_INVISIBLE) == 0) {
-            if (!done) {
-                // x+=move;
-                g.drawArc((int) ((x - 2) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 10) - viewY) * Constants.HEIGHT_SCALE, 4, 4, 0, 360);
-                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 6) - viewY) * Constants.HEIGHT_SCALE, (int) ((x) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE);
-                g.drawLine((int) ((x - 2) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 4) - viewY) * Constants.HEIGHT_SCALE,
-                        (int) ((x + 2) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 4) - viewY) * Constants.HEIGHT_SCALE);
+    public void drawPlayers(Graphics graphics) {
+    	Graphics2D g = (Graphics2D) graphics;
 
-                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE,
-                        (int) ((x + offs - 2) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y) - viewY) * Constants.HEIGHT_SCALE);
-                g.drawLine((int) ((x) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y - 3) - viewY) * Constants.HEIGHT_SCALE,
-                        (int) ((x + 2 - offs) - viewX) * Constants.WIDTH_SCALE,
-                        (int) ((y) - viewY) * Constants.HEIGHT_SCALE);
+    	boolean invisible = (status & World.ST_INVISIBLE) == 0;
+        if (invisible) {
+        	float offs = x % 8;
+
+            if (!done) {
+                g.drawArc(getWidth(-2), getHeight(-10), 4, 4, 0, 360);
+                g.drawLine(getWidth(0), getHeight(-6), getWidth(0), getHeight(-3));
+                g.drawLine(getWidth(-2), getHeight(-4), getWidth(2), getHeight(-4));
+
+                g.drawLine(getWidth(0), getHeight(-3), getWidth(offs - 2), getHeight(0));
+                g.drawLine(getWidth(0), getHeight(-3), getWidth(2 - offs), getHeight(0));
             } else {
                 int yUp = 20;
 
-                if (Math.signum(move) == -1) {
+                double signum = Math.signum(move);
+                if (signum == -1) {
                     left = -1;
-                }
-                if (Math.signum(move) == 1) {
+                } else if (signum == 1) {
                     left = 1;
                 }
-                Graphics2D g2 = (Graphics2D) g;
-                AffineTransform swag = g2.getTransform();
-                g2.scale(left, 1);
-                g2.drawImage(bodyParts[0], (int) (x - viewX) * Constants.WIDTH_SCALE * left + (left < 0 ? -18 : 0),
-                        (int) (y - yUp - 6 - viewY) * Constants.HEIGHT_SCALE, null);
-                g2.drawImage(bodyParts[1],
-                        (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.WIDTH_SCALE * left
-                                + (left < 0 ? -(6 + (bodyParts[1].getWidth(null) - 23)) : 0),
-                        (int) ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY)
-                                * Constants.HEIGHT_SCALE,
-                        null);
-                double ffs = Math.toRadians(((4 - offs) * 6));
-                if (vspeed != 0)
-                    ffs = Math.toRadians(((4 - 5) * 6));
-                AffineTransform previousAT = g2.getTransform();
-                int ddd = bodyParts[3].getWidth(null);
-                // System.out.println(ddd);
-                if (ddd == 48) {
-                    g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left,
-                            ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
-                    g2.drawImage(bodyParts[2], 0, 0, null);
-                    g2.setTransform(previousAT);
 
-                    g2.translate(
-                            (((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left
-                                    * (Constants.WIDTH_SCALE - 0.05) + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY)
-                                    * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), (left == 1) ? 17 : 13, 2);
-                    g2.drawImage(bodyParts[3], 0, 0, null);
-                    g2.setTransform(previousAT);
+                Image bodyPart0 = bodyParts[0], bodyPart1 = bodyParts[1], bodyPart2 = bodyParts[2],
+                		bodyPart3 = bodyParts[3], bodyPart4 = bodyParts[4], bodyPart5 = bodyParts[5];
 
-                    g2.translate((x + 9 - viewX) * Constants.WIDTH_SCALE * left,
-                            ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 0, 2);
-                    g2.drawImage(bodyParts[2], 0, 0, null);
-                    g2.setTransform(previousAT);
+                AffineTransform swag = g.getTransform();
+                g.scale(left, 1);
+                g.drawImage(bodyPart0, getWidth(0) * left + left < 0 ? -18 : 0, getHeight(-6 - yUp), null);
 
-                    g2.translate(
-                            (((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left))
-                                    * (Constants.WIDTH_SCALE - 0.05)) * left + ((left - 1) * 10),
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY)
-                                    * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 12, 2);
-                    g2.drawImage(bodyParts[3], 0, 0, null);
-                    g2.setTransform(previousAT);
+                int bodyPart1DrawWidth = 23 - bodyPart1.getWidth(null),
+                	bodyPart1DrawHeigth = 31 - bodyPart1.getHeight(null);
+
+                g.drawImage(bodyPart1, getWidth(2 + bodyPart1DrawWidth / 5) * left + (left < 0 ? bodyPart1DrawWidth - 6 : 0),
+                		getHeight(-16 - yUp + bodyPart1DrawHeigth / 3), null);
+
+                boolean movingHorizontally = vspeed != 0;
+                double ffs = toRadians((4 - (movingHorizontally ? 5 : offs)) * 6);
+
+                AffineTransform previousAT = g.getTransform();
+
+                double leftLengthdir_x = lengthdir_x(6 * left, leftArmAngle * left);
+                double rightLengthdir_x = lengthdir_x(6 * left, rightArmAngle * left);
+                double leftLengthdir_y = lengthdir_y(6 * left, leftArmAngle * left);
+                double rightLengthdir_y = lengthdir_y(6 * left, rightArmAngle * left);
+
+                g.translate(getWidth(-3) * left, getHeight(-6 - yUp));
+                rotateDrawTransform(g, leftArmAngle - 90, 4 * (left + 1), 2, bodyPart2, previousAT);
+
+                if (bodyPart3.getWidth(null) == 48) {
+					g.translate((x - 3 - viewX + leftLengthdir_x) * (WIDTH_SCALE - 0.05)
+							* left + (left - 1) * 10, getHeight(-6 - yUp - leftLengthdir_y));
+					rotateDrawTransform(g, leftArmAngle - 90, left == 1 ? 17 : 13, 2, bodyPart3, previousAT);
+
+                    g.translate(getWidth(9) * left, getHeight(-6 - yUp));
+                    rotateDrawTransform(g, rightArmAngle - 90, 0, 2, bodyPart2, previousAT);
+
+                    g.translate((x + 9 - viewX + rightLengthdir_x) * (WIDTH_SCALE - 0.05) * left + (left - 1) * 10,
+                                    getHeight(-6 -yUp - rightLengthdir_y));
+                    rotateDrawTransform(g, rightArmAngle - 90, 12, 2, bodyPart3, previousAT);
                 } else {
-                    g2.translate((x - 3 - viewX) * Constants.WIDTH_SCALE * left,
-                            ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
-                    g2.drawImage(bodyParts[2], 0, 0, null);
-                    g2.setTransform(previousAT);
+                    g.translate(getWidth(9 + rightLengthdir_x) * left, getHeight(-6 -yUp));
+                    rotateDrawTransform(g, rightArmAngle - 90, 8 - left * 4, 4, bodyPart3, previousAT);
 
-                    g2.translate(
-                            (((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left))
-                                    * Constants.WIDTH_SCALE) * left,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY)
-                                    * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
-                    g2.drawImage(bodyParts[3], 0, 0, null);
-                    g2.setTransform(previousAT);
+                    g.translate(getWidth(9) * left, getHeight(-6 - yUp));
+                    rotateDrawTransform(g, rightArmAngle - 90, 8 - left * 4, 4, bodyPart2, previousAT);
 
-                    g2.translate((x + 9 - viewX) * Constants.WIDTH_SCALE * left,
-                            ((y - yUp - 6) - viewY) * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
-                    g2.drawImage(bodyParts[2], 0, 0, null);
-                    g2.setTransform(previousAT);
-
-                    g2.translate(
-                            (((x - 3 - viewX) + this.lengthdir_x(6 * left, leftArmAngle * left))) * left
-                                    * Constants.WIDTH_SCALE,
-                            (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY)
-                                    * Constants.HEIGHT_SCALE);
-                    g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
-                    g2.drawImage(bodyParts[3], 0, 0, null);
-                    g2.setTransform(previousAT);
+                    g.translate(getWidth(leftLengthdir_x - 3) * left, getHeight(-6 - yUp - leftLengthdir_y));
+                    rotateDrawTransform(g, leftArmAngle - 90, 4 * (left + 1), 2, bodyPart3, previousAT);
                 }
-                //
-                // g2.translate((x+9-viewX)*3*left, ((y-yUp-6)-viewY)*3);
-                // g2.rotate(Math.toRadians(rightArmAngle-90),0,2);
-                // g2.drawImage(bodyParts[2], 0, 0, null);
-                // g2.setTransform(previousAT);
-                //
-                // g2.translate((((x+9-viewX)+this.lengthdir_x(6*left,
-                // rightArmAngle*left))*3)*left,
-                // (((y-yUp-6)-this.lengthdir_y(6*left,rightArmAngle*left))-viewY)*3);
-                // g2.rotate(Math.toRadians(rightArmAngle-90),0,2);
-                // g2.drawImage(bodyParts[3], 0, 0, null);
-                // g2.setTransform(previousAT);
 
-                g2.drawImage(bodyParts[4], (int) (x + 1 - viewX) * Constants.WIDTH_SCALE * left,
-                        (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
-                g2.drawImage(bodyParts[4], (int) (x + 5 - viewX) * Constants.WIDTH_SCALE * left,
-                        (int) ((y - yUp + 7) - viewY) * Constants.HEIGHT_SCALE, null);
+                g.drawImage(bodyPart4, getWidth(1) * left, getHeight(7 - yUp), null);
+                g.drawImage(bodyPart4, getWidth(5) * left, getHeight(7 - yUp), null);
 
-                g2.translate((x + 5 - viewX) * Constants.WIDTH_SCALE * left,
-                        ((y + 13) - viewY - yUp) * Constants.HEIGHT_SCALE);
-                g2.rotate(ffs);
-                g2.drawImage(bodyParts[5], 0, 0, null);
-                g2.setTransform(previousAT);
+                g.translate(getWidth(5) * left, getHeight(13 - yUp));
+                rotateDrawTransform(g, ffs, 0, 0, bodyPart5, previousAT);
 
-                g2.translate((x + 1 - viewX) * Constants.WIDTH_SCALE * left,
-                        ((y + 13) - viewY - yUp) * Constants.HEIGHT_SCALE);
-                g2.rotate(-ffs);
-                g2.drawImage(bodyParts[5], 0, 0, null);
-                g2.setTransform(previousAT);
-                g2.scale(left, 1);
-                if (((status & ST_FLAMING)) != 0) {
-                    drawFire(g2, (int) (x + 4 - viewX) * Constants.WIDTH_SCALE,
-                            (int) (y - viewY) * Constants.HEIGHT_SCALE);
+                g.translate(getWidth(1) * left, getHeight(13 - yUp));
+                rotateDrawTransform(g, -ffs, 0, 0, bodyPart5, previousAT);
+                g.scale(left, 1);
+
+                boolean flaming = (status & ST_FLAMING) != 0;
+                if (flaming) {
+                    drawFire(g, getWidth(4), getHeight(0));
                 }
-                if (((status & ST_DRAIN)) != 0) {
-                    g2.setColor(Color.BLACK);
-                    g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
-                            (int) (y - viewY - (AURA_RADIUS)) * Constants.HEIGHT_SCALE,
-                            AURA_RADIUS * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
+
+                boolean drain = (status & ST_DRAIN) != 0;
+                if (drain) {
+                    g.setColor(Color.BLACK);
+                    g.drawArc(getWidth(-AURA_RADIUS / 2),
+                    		getHeight(-AURA_RADIUS),
+                            AURA_RADIUS * WIDTH_SCALE, AURA_RADIUS * HEIGHT_SCALE,
                             random.nextInt(360), random.nextInt(90));
                 }
-                g2.setTransform(swag);
+
+                g.setTransform(swag);
             }
         }
+
         if (!playerList.isEmpty()) {
             movePlayers();
+
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
-                if (((r.status & ST_FLAMING)) != 0) {
-                    drawFire(g, (r.x + 4 - viewX) * Constants.WIDTH_SCALE, (r.y - viewY) * Constants.HEIGHT_SCALE);
+
+                boolean flaming = (r.status & ST_FLAMING) != 0;
+                if (flaming) {
+                    drawFire(g, (r.x + 4 - viewX) * WIDTH_SCALE, (r.y - viewY) * HEIGHT_SCALE);
                 }
-                if (((r.status & ST_DRAIN)) != 0) {
+
+                boolean drain = (r.status & ST_DRAIN) != 0;
+                if (drain) {
                     g.setColor(Color.BLACK);
-                    g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
-                            (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
-                            AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
+                    g.drawArc((r.x - viewX - AURA_RADIUS / 2) * WIDTH_SCALE,
+                            (r.y - viewY - AURA_RADIUS) * WIDTH_SCALE, AURA_RADIUS * HEIGHT_SCALE,
+                            AURA_RADIUS * HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
             }
         }
+    }
+
+    private int getWidth(double offset) {
+    	return (int) (x + offset - viewX) * WIDTH_SCALE;
+    }
+
+    private int getHeight(double offset) {
+    	return (int) (y + offset - viewY) * HEIGHT_SCALE;
+    }
+
+    private void rotateDrawTransform(Graphics2D g, double theta, double x, double y, Image image, AffineTransform Tx) {
+    	g.rotate(toRadians(theta), x, y);
+    	g.drawImage(image, 0, 0, null);
+    	g.setTransform(Tx);
     }
 
     public int map;
@@ -1259,7 +1225,7 @@ public class World implements Serializable {
 
             // G2.drawImage(Iter, -3, -3, null);
             Gter.setPaint(map == 1 ? nightPaint : skyPaint);//
-            Gter.fillRect(0, 0, Constants.WIDTH_INT, Constants.HEIGHT_INT);
+            Gter.fillRect(0, 0, WIDTH_INT, HEIGHT_INT);
 
             // for (int X = xx; X<xx+300; X++)
             // {
@@ -1275,47 +1241,47 @@ public class World implements Serializable {
             // }
             // }
 
-            for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
-                for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
+            for (int X = xx; X < Math.min(xx + WIDTH_INT, wIdTh); X++) {
+                for (int Y = yy; Y < Math.min(yy + HEIGHT_INT, hEigHt); Y++) {
                     switch (ground.cellData[X][Y]) {
                         default:
                             break;
                         case GROUND:
                         case UGROUND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
                         case USTONE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
                         case UICE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT),
                                     Crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
+                            Iter.setRGB(Math.min(X + 3 - xx, WIDTH_INT),
+                                    Math.min(Y + 3 - yy, HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
                             Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
