@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -24,13 +24,13 @@ public class BreathUnderWater extends Waterbending {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
     }
 
     int number = 0;
 
     @Override
-    public void onSpawn(Main me) {
+    public void onSpawn(Client me) {
         number = 0;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Waterbending) {
@@ -40,7 +40,7 @@ public class BreathUnderWater extends Waterbending {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
         if (app.world.inBounds(app.world.x, app.world.y) && app.energico > 0
                 && app.world.isType((int) app.world.x, (int) app.world.y, World.WATER)) {
             if (app.HP < app.MAXHP) {

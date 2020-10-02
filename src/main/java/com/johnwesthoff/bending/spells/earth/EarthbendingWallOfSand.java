@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -24,7 +24,7 @@ public class EarthbendingWallOfSand extends Earthbending {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.pressX + app.world.viewX;
         Y = app.world.pressY + app.world.viewY;
@@ -57,7 +57,7 @@ public class EarthbendingWallOfSand extends Earthbending {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

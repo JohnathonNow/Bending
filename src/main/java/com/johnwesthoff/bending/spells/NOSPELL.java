@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -22,7 +22,7 @@ public class NOSPELL extends Spell {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
 
     }
 
@@ -37,7 +37,7 @@ public class NOSPELL extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
     }
 
     @Override

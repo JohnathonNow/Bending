@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.StaticShotEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -29,16 +29,16 @@ public class LightningMine extends Lightning {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
         X = app.world.x;
         Y = app.world.y - World.head;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Main.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Main.lengthdir_x(8, direction)));
-        my = ((int) (Main.lengthdir_y(8, direction)));
+        mx = ((int) (Client.lengthdir_x(8, direction)));
+        my = ((int) (Client.lengthdir_y(8, direction)));
         maker = ID;
         getMessage(app.out);
         app.HP -= 5;
@@ -55,7 +55,7 @@ public class LightningMine extends Lightning {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
     }
 
     @Override

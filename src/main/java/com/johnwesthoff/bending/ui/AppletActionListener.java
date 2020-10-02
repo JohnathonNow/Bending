@@ -4,7 +4,7 @@
  */
 package com.johnwesthoff.bending.ui;
 
-import static com.johnwesthoff.bending.Main.currentlyLoggedIn;
+import static com.johnwesthoff.bending.Client.currentlyLoggedIn;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.app.game.GameService;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
@@ -36,9 +36,9 @@ public class AppletActionListener implements ActionListener {
 
     private final GameService gameService;
 
-    Main app;
+    Client app;
 
-    public AppletActionListener(final Main app) {
+    public AppletActionListener(final Client app) {
         this.app = app;
 
         // using factory to inject dependency
@@ -57,7 +57,7 @@ public class AppletActionListener implements ActionListener {
                 }
                 app.notDone = false;
                 // app.setResizable(true);
-                app.username = Main.jtb.getText();
+                app.username = Client.jtb.getText();
                 app.serverIP = (String) app.hosts[app.menu.getSelectedIndex()];
                 if ("enterip".equals(app.serverIP)) {
                     app.serverIP = JOptionPane.showInputDialog("Server IP?");
@@ -66,7 +66,7 @@ public class AppletActionListener implements ActionListener {
                 if (app.start()) {
                     app.spellselection.setVisible(false);
                     app.spellselection.choochootrain.setVisible(false);
-                    Main.immaKeepTabsOnYou.setSelectedIndex(0);
+                    Client.immaKeepTabsOnYou.setSelectedIndex(0);
                     if (!app.failed) {
                         app.removeAll();
                         app.owner.setBackground(Color.black);
@@ -79,14 +79,14 @@ public class AppletActionListener implements ActionListener {
             }
         }
         if (command.equals(app.hosting.getText())) {
-            if (Main.portAvailable(app.port)) {
+            if (Client.portAvailable(app.port)) {
                 app.hostingPlace = Server.main2(new String[] { "" + (app.hostIP = app.addHost()), "" });
                 app.hosting.setText("Started!");
-                Main.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                Client.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 try {
                     app.ST.add(app.trayIcon);
                 } catch (final AWTException ex) {
-                    // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 app.serverOutput();
                 System.err.printf(
@@ -104,15 +104,15 @@ public class AppletActionListener implements ActionListener {
             app.getHosts();
         }
         if (command.equals(app.ChooseSpells.getText())) {
-            app.spellselection.XP.setText("XP: " + Main.XP);
-            app.spellselection.USER.setText("USER: " + Main.jtb.getText());
-            Main.immaKeepTabsOnYou.setSelectedIndex(1);
+            app.spellselection.XP.setText("XP: " + Client.XP);
+            app.spellselection.USER.setText("USER: " + Client.jtb.getText());
+            Client.immaKeepTabsOnYou.setSelectedIndex(1);
             app.spellselection.setVisible(true);
         }
         if (command.equals(app.chooseclothing.getText())) {
             app.cc.setVisible(true);
             app.cc.loadClothing();
-            Main.immaKeepTabsOnYou.setSelectedIndex(4);
+            Client.immaKeepTabsOnYou.setSelectedIndex(4);
             // app.add(app.cc.getPanel());
         }
         if (command.equals("Exit")) {
@@ -140,11 +140,11 @@ public class AppletActionListener implements ActionListener {
                 app.out.addMesssage(die, Server.LOGOUT);
                 Thread.sleep(1000);
             } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 app.destroy();
-                Main.gameAlive = false;
+                Client.gameAlive = false;
                 if (app.connection != null) {
                     app.input.close();
                     app.out.close();
@@ -157,22 +157,22 @@ public class AppletActionListener implements ActionListener {
                     app.hostingPlace = null;
                 }
 
-                Main.container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                Main.container.dispose();
-                Main.container.removeAll();
+                Client.container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                Client.container.dispose();
+                Client.container.removeAll();
                 // this.expander.interrupt();
                 app.ST.remove(app.trayIcon);
                 app.removeAll();
 
-                final WindowEvent windowClosing = new WindowEvent(Main.container, WindowEvent.WINDOW_CLOSING);
-                Main.container.dispatchEvent(windowClosing);
-                Main.container = null;
+                final WindowEvent windowClosing = new WindowEvent(Client.container, WindowEvent.WINDOW_CLOSING);
+                Client.container.dispatchEvent(windowClosing);
+                Client.container = null;
                 Thread.sleep(100);
-                Main.main(new String[] {});
+                Client.main(new String[] {});
                 currentlyLoggedIn = false;
 
             } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (command.equals(app.register.getText())) {
@@ -184,9 +184,9 @@ public class AppletActionListener implements ActionListener {
         if (command.equals(app.verify.getText())) {
             // exactly.setVisible(true);
             if (!currentlyLoggedIn) {
-                if (currentlyLoggedIn = gameService.login(Main.jtb.getText(), app.jtp.getText())) {
+                if (currentlyLoggedIn = gameService.login(Client.jtb.getText(), app.jtp.getText())) {
                     if (app.JRB.isSelected()) {
-                        app.userpassinfo.setProperty("username", Main.jtb.getText());
+                        app.userpassinfo.setProperty("username", Client.jtb.getText());
                         app.userpassinfo.setProperty("password", app.jtp.getText());
                         app.userpassinfo.setProperty("remember", "yes");
                     } else {
@@ -198,16 +198,16 @@ public class AppletActionListener implements ActionListener {
                         app.userpassinfo
                                 .store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
                     } catch (final Exception ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     // verify.setEnabled(false);
-                    Main.jtb.setEditable(false);
+                    Client.jtb.setEditable(false);
                     app.jtp.setEditable(false);
                     app.verify.setText("Log Out");
                     app.verify.setForeground(Color.red);
 
                     // @TODO : Open / close principle
-                    Main.XP = gameService.getPlayerExperience(Main.jtb.getText(), app.jtp.getText());
+                    Client.XP = gameService.getPlayerExperience(Client.jtb.getText(), app.jtp.getText());
 
                     app.cc.loadClothing();
                     app.spellselection.loadSpells();
@@ -215,11 +215,11 @@ public class AppletActionListener implements ActionListener {
                     app.ChooseSpells.setEnabled(true);
                     app.connect.setEnabled(true);
 
-                    gameService.getUnlocks(Main.jtb.getText(), app.jtp.getText());
+                    gameService.getUnlocks(Client.jtb.getText(), app.jtp.getText());
                 }
             } else {
                 app.verify.setText("Log In");
-                Main.jtb.setEditable(true);
+                Client.jtb.setEditable(true);
                 app.jtp.setEditable(true);
                 app.chooseclothing.setEnabled(false);
                 app.ChooseSpells.setEnabled(false);

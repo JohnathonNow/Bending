@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.app.spell.SpellsService;
 import com.johnwesthoff.bending.app.spell.SpellsServiceFactory;
 import com.johnwesthoff.bending.spells.*;
@@ -24,7 +24,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     /**
      * Creates new form SpellList
      */
-    Main app;
+    Client app;
 
     public SpellChooser1 choochootrain;
     public PassiveChooser1 choochootrain2;
@@ -34,7 +34,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
      */
     private SpellsService spellsService;
 
-    public SpellList1(Main app) {
+    public SpellList1(Client app) {
         initComponents();
         this.app = app;
 
@@ -322,12 +322,12 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Main.immaKeepTabsOnYou.setSelectedIndex(0);
+        Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }// GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here: SAVE
-        if (Main.currentlyLoggedIn) {
+        if (Client.currentlyLoggedIn) {
             String post = "";
 
             for (int y = 0; y < 5; y++) {
@@ -341,13 +341,13 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
             }
 
             // System.out.println(post+","+app.jtb.getText());
-            spellsService.persistSpellsForUser(post, Main.jtb.getText());
+            spellsService.persistSpellsForUser(post, Client.jtb.getText());
         }
     }// GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here: LOAD
-        if (Main.currentlyLoggedIn) {
+        if (Client.currentlyLoggedIn) {
             loadSpells();
         }
     }// GEN-LAST:event_jButton3ActionPerformed
@@ -414,7 +414,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
     public void loadSpells() {
         int spells[][];
-        spells = spellsService.getSpellsFromUser(Main.jtb.getText(), app.jtp.getText());
+        spells = spellsService.getSpellsFromUser(Client.jtb.getText(), app.jtp.getText());
         for (int y = 0; y < 5; y++) {
             app.passiveList[y] = Spell.passives.get(spells[5][y]);
             jTable4.getModel().setValueAt(app.passiveList[y].getName(), y, 0);
@@ -478,14 +478,14 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
             row = (int) (Math.floor(e.getY() / 16));
             // System.out.println(row);
             choochootrain.getList().setSelectedIndex(Spell.spells.indexOf(app.spellList[app.spellBook][selection]));
-            Main.immaKeepTabsOnYou.setSelectedIndex(2);
+            Client.immaKeepTabsOnYou.setSelectedIndex(2);
             choochootrain.setVisible(true);
         }
         if (e.getComponent() == jTable4) {
             row2 = (int) (Math.floor(e.getY() / 16));
             // System.out.println(row2);
             choochootrain2.getList().setSelectedIndex(Spell.spells.indexOf(app.passiveList[app.spellBook]));
-            Main.immaKeepTabsOnYou.setSelectedIndex(3);
+            Client.immaKeepTabsOnYou.setSelectedIndex(3);
             choochootrain2.setVisible(true);
         }
     }
@@ -494,7 +494,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     protected void paintComponent(Graphics g) {
         // super.paintComponent(g);
 
-        g.drawImage(Main.bimage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
     }
 
     @Override
@@ -518,7 +518,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
                 app.spellList[row][selection] = Spell.spells.get(choochootrain.getList().getSelectedIndex());
                 choochootrain.setVisible(false);
                 jTable1.getModel().setValueAt(app.spellList[row][selection].getName(), row, selection);
-                Main.immaKeepTabsOnYou.setSelectedIndex(1);
+                Client.immaKeepTabsOnYou.setSelectedIndex(1);
                 // choochootrain.getList().setSelectedIndex(-1);
                 // choochootrain.getList().setSelectedIndices(new int[]{});
             }
@@ -528,7 +528,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
                 app.passiveList[row2] = Spell.passives.get(choochootrain2.getList().getSelectedIndex());
                 choochootrain2.setVisible(false);
                 jTable4.getModel().setValueAt(app.passiveList[row2].getName(), row2, 0);
-                Main.immaKeepTabsOnYou.setSelectedIndex(1);
+                Client.immaKeepTabsOnYou.setSelectedIndex(1);
                 // choochootrain.getList().setSelectedIndex(-1);
                 // choochootrain.getList().setSelectedIndices(new int[]{});
             }

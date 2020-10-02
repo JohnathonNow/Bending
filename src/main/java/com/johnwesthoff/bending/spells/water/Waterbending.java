@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.WaterBallEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -25,7 +25,7 @@ public class Waterbending extends Spell {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
@@ -34,11 +34,11 @@ public class Waterbending extends Spell {
         }
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Main.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Main.lengthdir_x(8, direction)));
-        my = ((int) (Main.lengthdir_y(8, direction)));
+        mx = ((int) (Client.lengthdir_x(8, direction)));
+        my = ((int) (Client.lengthdir_y(8, direction)));
         maker = ID;
         getMessage(app.out);
     }
@@ -59,7 +59,7 @@ public class Waterbending extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

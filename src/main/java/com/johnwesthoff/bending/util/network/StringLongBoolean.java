@@ -6,7 +6,7 @@ package com.johnwesthoff.bending.util.network;
 
 import java.util.StringTokenizer;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.app.game.GameService;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
 
@@ -56,7 +56,7 @@ public final class StringLongBoolean {
             } else {
                 mylong[drawer] &= ~(1l << index);
             }
-            gameService.postUnlocks(Main.jtb.getText());
+            gameService.postUnlocks(Client.jtb.getText());
         }
     }
 

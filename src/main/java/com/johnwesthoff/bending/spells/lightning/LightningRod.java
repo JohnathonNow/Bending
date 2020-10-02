@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RodEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -27,7 +27,7 @@ public class LightningRod extends Lightning {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
 
         X = app.world.x;
         Y = app.world.y - World.head;
@@ -48,7 +48,7 @@ public class LightningRod extends Lightning {
     }
 
     @Override
-    public void getPassiveAction(Main app) {
+    public void getPassiveAction(Client app) {
     }
 
     @Override

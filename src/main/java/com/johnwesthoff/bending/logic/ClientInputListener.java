@@ -4,7 +4,7 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.Main.shortJump;
+import static com.johnwesthoff.bending.Client.shortJump;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.spells.fire.Firebending;
 
@@ -26,9 +26,9 @@ import com.johnwesthoff.bending.spells.fire.Firebending;
  * @author John
  */
 public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
-    Main pointer;
+    Client pointer;
 
-    public ClientInputListener(Main pointer) {
+    public ClientInputListener(Client pointer) {
         this.pointer = pointer;
     }
 
@@ -120,10 +120,10 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 if (pointer.world.mouseX * 3 > 400 && pointer.world.mouseX * 3 < 500) {
                     // System.out.println("H2");
                     if (pointer.world.mouseY * 3 > 200 && pointer.world.mouseY * 3 < 250) {
-                        pointer.spellselection.XP.setText("XP: " + Main.XP);
-                        pointer.spellselection.USER.setText("USER: " + Main.jtb.getText());
+                        pointer.spellselection.XP.setText("XP: " + Client.XP);
+                        pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
                         pointer.spellselection.setVisible(true);
-                        Main.immaKeepTabsOnYou.setSelectedIndex(1);
+                        Client.immaKeepTabsOnYou.setSelectedIndex(1);
                     }
                 }
             }
@@ -140,7 +140,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         if (setTo == -1) {
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost();
-                                pointer.world.leftArmAngle = Main.pointDir(
+                                pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -170,14 +170,14 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         if (setTo == -1) {
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.midClick].getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.midClick].getCost();
-                                pointer.world.leftArmAngle = Main.pointDir(
+                                pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
                                         pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
-                                pointer.world.rightArmAngle = Main.pointDir(
+                                pointer.world.rightArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -208,7 +208,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.rightClick]
                                     .getCost()) {
                                 pointer.energico -= pointer.spellList[pointer.spellBook][pointer.rightClick].getCost();
-                                pointer.world.rightArmAngle = Main.pointDir(
+                                pointer.world.rightArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
                                         pointer.world.y - pointer.world.viewY,
@@ -298,7 +298,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     break;
                 case KeyEvent.VK_W:
                     if (!pointer.world.keys[KeyEvent.VK_S]) {
-                        pointer.world.jump = (float) Main.runningSpeed;
+                        pointer.world.jump = (float) Client.runningSpeed;
 
                     }
                     // sendMovement();
@@ -325,7 +325,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     break;
             }
         } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -333,7 +333,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (pointer.chatActive) {
-                pointer.chatMessage = Main.username + ": " + pointer.chatMessage;
+                pointer.chatMessage = Client.username + ": " + pointer.chatMessage;
                 pointer.sendMessage(pointer.chatMessage);
                 if (pointer.chatMessage.contains("/suicide")) {
                     pointer.HP = 0;
@@ -343,21 +343,21 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     pointer.world.status ^= World.ST_INVISIBLE;
                 }
                 if (pointer.chatMessage.contains("/embiggen")) {
-                    Main.container.dispose();// You can't change the state from
+                    Client.container.dispose();// You can't change the state from
                     // a listener, so kill it first
-                    if (!Main.container.isUndecorated()) {
-                        Main.container.setLocation(0, 0);
-                        Main.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        Main.container.setUndecorated(true);
+                    if (!Client.container.isUndecorated()) {
+                        Client.container.setLocation(0, 0);
+                        Client.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        Client.container.setUndecorated(true);
                     } else {
-                        Main.container.setExtendedState(JFrame.NORMAL);
-                        Main.container.setUndecorated(false);
+                        Client.container.setExtendedState(JFrame.NORMAL);
+                        Client.container.setUndecorated(false);
                     }
-                    Main.container.pack();
-                    Main.container.setVisible(true);
+                    Client.container.pack();
+                    Client.container.setVisible(true);
                 }
                 if (pointer.chatMessage.contains("/quit")) {
-                    Main.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
+                    Client.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
                 }
                 pointer.chatMessage = "";
                 pointer.chatActive = false;
@@ -384,7 +384,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 // if (pointer.world.move<0) {
                 // pointer.world.move=0;
@@ -395,7 +395,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 // if (pointer.world.move>0)
                 // pointer.world.move=0;
@@ -405,7 +405,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 try {
                     // sendMovement();
                 } catch (Exception ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 pointer.world.jump = (byte) 0;
                 break;

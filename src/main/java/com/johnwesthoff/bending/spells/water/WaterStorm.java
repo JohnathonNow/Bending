@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Main;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -20,7 +20,7 @@ public class WaterStorm extends Waterbending {
     }
 
     @Override
-    public void getAction(Main app) {
+    public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;
