@@ -14,6 +14,7 @@ import com.johnwesthoff.bending.logic.World;
  * @author John
  */
 public class WaterEntity extends Entity {
+
     public WaterEntity(int x, int y, World creator) {
         X = x;
         Y = y;

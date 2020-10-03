@@ -29,42 +29,82 @@ public abstract class Entity extends Object {
     public float X, Y, yspeed, xspeed, previousX, previousY;
     public boolean alive = true;
 
+    /**
+     * Method to get the current state of the Player
+     * @return true (if the Player is still alive) or false (else)
+     */
     public boolean getAlive() {
         return alive;
     }
 
+    /**
+     * Method to set the current state of the Player
+     * @param a Boolean to which the state should be changed
+     */
     public void setAlive(boolean a) {
         alive = a;
     }
 
+    /**
+     * Get the x-coordinate
+     * @return x-coordinate
+     */
     public int getX() {
         return (int) X;
     }
 
+    /**
+     * Get the y-coordinate
+     * @return y-coordinate
+     */
     public int getY() {
         return (int) Y;
     }
 
+    /**
+     * Get the speed on the x-axis
+     * @return speed on the x-axis
+     */
     public int getXspeed() {
         return (int) xspeed;
     }
 
+    /**
+     * Get the speed on the y-axis
+     * @return speed on the y-axis
+     */
     public int getYspeed() {
         return (int) yspeed;
     }
 
+    /**
+     * Set the x-coordinate
+     * @param x value to set the x coordinate (integer)
+     */
     public void setX(int x) {
         X = x;
     }
 
+    /**
+     * Set the y-coordinate
+     * @param y value to set the y coordinate (integer)
+     */
     public void setY(int y) {
         Y = y;
     }
 
+    /**
+     * Set the speed on the x-axis
+     * @param x value to set the speed (integer)
+     */
     public void setXspeed(int x) {
         xspeed = x;
     }
 
+    /**
+     * Set the speed on the y-axis
+     * @param y value to set the speed (integer)
+     */
     public void setYspeed(int y) {
         yspeed = y;
     }
@@ -79,6 +119,9 @@ public abstract class Entity extends Object {
 
     }
 
+    /**
+     * Move the Player with the current set speed
+     */
     public void move() {
         previousX = X;
         previousY = Y;
@@ -102,6 +145,11 @@ public abstract class Entity extends Object {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
+    /**
+     * Get the distance to an entity
+     * @param e the entity to which the distance should be returned
+     * @return distance
+     */
     public double distanceToEntity(Entity e) {
         return pointDis(X, Y, e.X, e.Y);
     }

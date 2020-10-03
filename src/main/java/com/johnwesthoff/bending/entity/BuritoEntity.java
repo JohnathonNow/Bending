@@ -81,6 +81,11 @@ public class BuritoEntity extends Entity {
         }
     }
 
+    /**
+     * Method to reconstruct the BuritoEntity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(final ByteBuffer in, final World world) {
         try {
             world.entityList.add(new BuritoEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

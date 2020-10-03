@@ -78,6 +78,12 @@ public class GustEntity extends Entity {
         }
     }
 
+
+    /**
+     * Reconstruct the gust entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new GustEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -95,6 +101,12 @@ public class GustEntity extends Entity {
         }
     }
 
+
+    /**
+     * Method to get whether the gust collided with water
+     * @param w World in which this should be tested
+     * @return true (if the gust collided with water) or false (else)
+     */
     private boolean collided(World w) {
         double direction = Client.pointDir(previousX, previousY, X, Y);
         int speed = (int) Client.pointDis(previousX, previousY, X, Y);

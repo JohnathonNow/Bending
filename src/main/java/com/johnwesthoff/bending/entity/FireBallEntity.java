@@ -97,6 +97,11 @@ public class FireBallEntity extends Entity {
         }
     }
 
+    /**
+     * Method to get whether the fire ball collided with water
+     * @param w World in which this should be tested
+     * @return true (if the fire ball collided with water) or false (else)
+     */
     private boolean collided(World w) {
         double xx = X;
         double yy = Y;
@@ -112,6 +117,11 @@ public class FireBallEntity extends Entity {
         return false;
     }
 
+    /**
+     * Reconstruct the fire ball entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new FireBallEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

@@ -71,6 +71,11 @@ public class HillEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the hill entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new HillEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()));

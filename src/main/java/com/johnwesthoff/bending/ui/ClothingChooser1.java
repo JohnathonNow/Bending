@@ -507,6 +507,9 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
+    /**
+     * Loads the clothing of the client
+     */
     public void loadClothing() {
         Client.CTD.getOutfit(Client.jtb.getText(), "IGNORE PASS");
         for (int i = 0; i < colors.length; i++) {
@@ -522,6 +525,9 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
      */
     Thread getTem;
 
+    /**
+     * Loads the images
+     */
     public void getImages() {
         Runnable getStuff = new Runnable() {
 

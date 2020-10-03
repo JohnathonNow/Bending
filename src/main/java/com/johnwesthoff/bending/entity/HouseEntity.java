@@ -25,6 +25,15 @@ public class HouseEntity extends Entity {
     Color wall = Color.DARK_GRAY, roof = Color.RED, door = Color.RED, window = Color.CYAN;
     boolean done = false;
 
+    /**
+     * Set the look of the house
+     * @param roof Color for the roof
+     * @param wall Color for the wall
+     * @param door Color for the door
+     * @param window Color for the window
+     * @param chimney Color for the chimney
+     * @return a house entity with the set look
+     */
     public HouseEntity setLook(Color roof, Color wall, Color door, Color window, boolean chimney) {
         this.roof = roof;
         this.wall = wall;
@@ -48,6 +57,9 @@ public class HouseEntity extends Entity {
 
     }
 
+    /**
+     * Set the points at which the house is located
+     */
     public final void setPoints() {
         P.reset();
         P.addPoint(houseX, houseY);
@@ -114,6 +126,12 @@ public class HouseEntity extends Entity {
         }
     }
 
+
+    /**
+     * Reconstruct the house entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             HouseEntity toAdd = new HouseEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()).setLook(

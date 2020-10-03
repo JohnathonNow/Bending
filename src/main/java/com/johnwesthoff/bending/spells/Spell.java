@@ -84,6 +84,9 @@ public abstract class Spell {
     public static Spell noSpell = new NOSPELL();
     protected ImageIcon icon;
 
+    /**
+     * Registers all available spells
+     */
     public static void registerSpells() {
         registerSpell(new Airbending());
         registerSpell(new AirbendingGust());
@@ -117,6 +120,9 @@ public abstract class Spell {
         registerSpell(new DarkTeleport());
     }
 
+    /**
+     * Registers all available (passive) spells
+     */
     private static void registerPassives() {
         registerPassive(new AirRun());
         registerPassive(new AirAffinity());
@@ -155,16 +161,29 @@ public abstract class Spell {
         }
     }
 
+    /**
+     * Registers a new spell
+     * @param spell spell to initialize
+     */
     private static void registerSpell(Spell spell) {
         spell.subID = spells.size();
         spells.add(spell);
     }
 
+    /**
+     * Registers a new (passive) spell
+     * @param spell spell to initialize
+     */
     private static void registerPassive(Spell spell) {
         spell.subID = passives.size();
         passives.add(spell);
     }
-    
+
+    /**
+     * Gets the spell
+     * @param i
+     * @return Current spell
+     */
     public static Spell getSpell(int i){
         return spells.get(i);
     }
@@ -186,6 +205,10 @@ public abstract class Spell {
         }
     }
 
+    /**
+     * Gets the class of the spell
+     * @return Class of the spell
+     */
     public int getID() {
         return ID;
     }
