@@ -112,7 +112,7 @@ public class Client extends JPanel implements Runnable {
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
-            Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
+        Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
     public int score = 0;
     public int mapRotation = 0;
@@ -121,7 +121,7 @@ public class Client extends JPanel implements Runnable {
     public int gameMode = 1;
     public int fireTime = 0;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
-            deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
+           deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
     public static ClientInputListener inputer;
@@ -247,21 +247,21 @@ public class Client extends JPanel implements Runnable {
         main.cc.setVisible(false);
         main.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
         main.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+            Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+            Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+            Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+            Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+            Spell.spells.get(0), Spell.spells.get(0) });
 
         main.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
-                Spell.spells.get(19), Spell.spells.get(7) });
+            Spell.spells.get(19), Spell.spells.get(7) });
         // container.add(me);
         main.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
-                Spell.noSpell });
+            Spell.noSpell });
         // container.add(me);
         main.JRB = new JCheckBox() {
             private static final long serialVersionUID = -3327024393489960573L;
@@ -446,9 +446,9 @@ public class Client extends JPanel implements Runnable {
             // container.getContentPane().setB
 
             final PopupMenu pop = new PopupMenu();
-            me.trayIcon = new TrayIcon(
+            main.trayIcon = new TrayIcon(
                     ResourceLoader.loadImage("GrassTexture.png"));
-            me.trayIcon.setToolTip("DestructibleTerrain");
+            main.trayIcon.setToolTip("DestructibleTerrain");
             final MenuItem exitItem = new MenuItem("Exit");
             final MenuItem hideItem = new MenuItem("Hide");
             final MenuItem showItem = new MenuItem("Show");
@@ -549,9 +549,9 @@ public class Client extends JPanel implements Runnable {
     public Thread communication;
     public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
     public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
     public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
         try {
@@ -570,8 +570,8 @@ public class Client extends JPanel implements Runnable {
             // out.write(Server.LOGIN);
             // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
             final ByteBuffer tt = Server
-                    .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
-                    .put(Clothing);
+                .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
+                .put(Clothing);
             for (int i = 0; i < Colors.length; i++) {
                 tt.putInt(Colors[i]);
             }
@@ -611,11 +611,11 @@ public class Client extends JPanel implements Runnable {
                                     final String feliceNavidad = Server.getString(rasputin);
                                     final Player yes = new Player(300, 300,
                                             new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
-                                                    rasputin.get(), rasputin.get() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
+                                                rasputin.get(), rasputin.get() },
+                                                new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
                                                     rasputin.getInt(), rasputin.getInt(), rasputin.getInt() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
+                                                    new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
+                                                        rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
                                     world.playerList.add(yes);
                                     final boolean sameTeam = rasputin.get() == 12;
                                     // yes.username = Server.getString(rasputin);
@@ -738,7 +738,7 @@ public class Client extends JPanel implements Runnable {
                                                     && world.ground.cellData[(int) world.x][(int) world.y] == World.WATER) {
                                                 hurt(12);
                                                 killMessage = "~ will never go in the water during a storm again, thanks to `!";
-                                            }
+                                                    }
                                         }
                                     }
                                     world.entityList.add(new ShockEffectEntity(ix, iy, ir));
@@ -918,11 +918,11 @@ public class Client extends JPanel implements Runnable {
             started = true;
         } catch (
 
-        final Exception ex) {
+                final Exception ex) {
 
             failed = true;
             return false;
-        }
+                }
         return true;
         // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
@@ -1093,7 +1093,7 @@ public class Client extends JPanel implements Runnable {
                         && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
                     world.floatiness = 0;
                     maxlungs = 100;
-                }
+                        }
                 if (!"Water Treader".equals(passiveList[spellBook].getName())) {
                     swimmingSpeed = 1;
                 }
@@ -1181,7 +1181,7 @@ public class Client extends JPanel implements Runnable {
                             world.vspeed -= 5;
                             lastHit = me.maker;
                             killMessage = "~ was blown away by `.";
-                        }
+                                }
                     }
                     if (e instanceof TornadoEntity) {
                         final TornadoEntity me2 = (TornadoEntity) e;
@@ -1218,7 +1218,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was built into a bridge by `.";
-                        }
+                                }
                     }
                     if (e instanceof FireBallEntity) {
                         final FireBallEntity me3 = (FireBallEntity) e;
@@ -1232,7 +1232,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ was burninated by `.";
-                        }
+                                }
                     }
                     if (e instanceof FirePuffEntity) {
                         final FirePuffEntity me3 = (FirePuffEntity) e;
@@ -1246,7 +1246,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ was set ablaze by `.";
-                        }
+                                }
                     }
                     if (e instanceof EnemyEntity) {
                         final EnemyEntity me3 = (EnemyEntity) e;
@@ -1257,7 +1257,7 @@ public class Client extends JPanel implements Runnable {
                             xspeed += 4 - random.nextInt(8);
                             lastHit = me3.master;
                             killMessage = "~ was defeated by `'s dark minion.";
-                        }
+                                }
                     }
                     if (e instanceof BuritoEntity) {
                         final BuritoEntity me3 = (BuritoEntity) e;
@@ -1271,7 +1271,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ shouldn't have stolen `'s burito...";
-                        }
+                                }
                     }
                     if (e instanceof LavaBallEntity) {
                         final LavaBallEntity me3 = (LavaBallEntity) e;
@@ -1280,7 +1280,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             killMessage = "How did ` beat ~?";
                             me3.alive = false;
-                        }
+                                }
                     }
                     if (e instanceof SoulDrainEntity) {
                         final SoulDrainEntity me3 = (SoulDrainEntity) e;
@@ -1298,7 +1298,7 @@ public class Client extends JPanel implements Runnable {
                             } catch (final IOException ex) {
                                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        }
+                                }
                     }
                     if (e instanceof FireJumpEntity) {
                         final FireJumpEntity me3 = (FireJumpEntity) e;
@@ -1311,7 +1311,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was flung into orbit by `'s falcon pawnch!";
-                        }
+                                }
                     }
                     if (e instanceof ShardEntity) {
                         final ShardEntity me3 = (ShardEntity) e;
@@ -1323,7 +1323,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was sniped by `.";
-                        }
+                                }
                     }
                     if (e instanceof SandEntity) {
                         final SandEntity me3 = (SandEntity) e;
@@ -1337,7 +1337,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was shredded by `'s shotgun.";
-                        }
+                                }
                     }
                     if (e instanceof IceShardEntity) {
                         final IceShardEntity me3 = (IceShardEntity) e;
@@ -1349,7 +1349,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was hit by `'s icey attack!";
-                        }
+                                }
                     }
                     if (e instanceof SnowEntity) {
                         final SnowEntity me3 = (SnowEntity) e;
@@ -1361,7 +1361,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ will need to be thawed out after fighting `!";
-                        }
+                                }
                     }
                     if (e instanceof SpoutEntity) {
                         final SpoutEntity me3 = (SpoutEntity) e;
@@ -1399,7 +1399,7 @@ public class Client extends JPanel implements Runnable {
                             xspeed += 9 - random.nextInt(18);
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ smelled `'s armpits, and then died.";
-                        }
+                                }
                     }
                 }
 
@@ -1432,9 +1432,9 @@ public class Client extends JPanel implements Runnable {
                     if (killingSpree >= 148.413d) {
                         // Anti-cheating - use logs
                         gameService.feedRss(
-                            String.format("%s had a streak going", username),
-                            String.format("%o kills in a row!", (int) Math.log(killingSpree))
-                        );
+                                String.format("%s had a streak going", username),
+                                String.format("%o kills in a row!", (int) Math.log(killingSpree))
+                                );
                     }
                     killingSpree = 0;
                     world.dead = true;
@@ -1483,7 +1483,7 @@ public class Client extends JPanel implements Runnable {
                 world.onUpdate();
 
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                        || counting++ > 200))) {
+                                || counting++ > 200))) {
                     counting = 0;
                     try {
                         sendMovement();
@@ -2203,7 +2203,7 @@ public class Client extends JPanel implements Runnable {
                 final long s11I1111I1I = World.class.getFields().length;
                 final long sI1I1I11I1I = PlayerOnline.class.getFields().length;
                 authCode = (((((sI1I1I11I1I * sI1I1I11I1I) - sI1I1I11I1I) / s1I1111II11) + s1111I11I11) * s11I1111I1I)
-                        / s1I1111II11;
+                    / s1I1111II11;
                 // authCode = 1;
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
