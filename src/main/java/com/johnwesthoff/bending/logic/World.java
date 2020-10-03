@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.ExplosionEntity;
 import com.johnwesthoff.bending.entity.HouseEntity;
 import com.johnwesthoff.bending.entity.WaterEntity;
+import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.Coordinate;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -243,6 +245,43 @@ public class World implements Serializable {
         };
         loader = new Thread(getStuff);
         loader.start();
+    }
+
+    /**
+     * Determine "Inc" value for key events
+     */
+    public void determineInc() {
+        if (this.keys[KeyEvent.VK_E]) {
+            this.incX += 10;
+        }
+        if (this.keys[KeyEvent.VK_Q]) {
+            this.incX -= 10;
+        }
+        if (this.keys[KeyEvent.VK_Z]) {
+            this.incX = 0;
+            this.incY = 0;
+        }
+    }
+
+    /**
+     * Increment or reset current dig and return it
+     *
+     * @TODO : be carefull of SRP && OCP
+     *
+     * @param dig
+     * @param spell
+     * @param main
+     * @return short
+     */
+    public short getIncrementedDig(short dig, Spell spell, Client main) {
+        if (this.keys[KeyEvent.VK_S]) {
+            // this.move = 0;
+            if ((dig += 2) >= 100) {
+                dig = 0;
+                spell.getAction(main);
+            }
+        }
+        return dig;
     }
 
     public final class CollisionChecker {

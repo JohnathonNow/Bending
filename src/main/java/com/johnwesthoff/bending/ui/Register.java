@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.johnwesthoff.bending.app.player.PlayerService;
+import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 /**
@@ -20,15 +22,19 @@ import com.johnwesthoff.bending.util.network.ConnectToDatabase;
  * @author John
  */
 public class Register extends javax.swing.JFrame implements KeyListener {
+
+    private final PlayerService playerService;
+
     private static final long serialVersionUID = 5792213259181280823L;
     /**
      * Creates new form Register
      */
-    ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public Register() {
         initComponents();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        playerService = PlayerServiceFactory.create();
 
         email.addKeyListener(this);
         username.addKeyListener(this);
@@ -140,18 +146,12 @@ public class Register extends javax.swing.JFrame implements KeyListener {
     }// GEN-LAST:event_emailActionPerformed
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_registerActionPerformed
+        String username = this.username.getText();
+        String password = this.password.getText();
+        String email = this.email.getText();
 
-        String verify;// = "";
-        /*
-         * Random r = new Random(); for (int i = 0; i <= 10; i++) {
-         * verify+=r.nextInt(10); }
-         */
-        verify = INSTANCE.uniqueID();
-        String user = username.getText(), pass = password.getText(), mail = email.getText();
-        user = user.replaceAll("'", "\'");
-        pass = pass.replaceAll("'", "\'");
-        mail = mail.replaceAll("'", "\'");
-        boolean success = INSTANCE.register(user, pass, mail, verify);
+        String verify = playerService.sanitizeAndRegister(username, password, email);
+
         /*
          * sendEmail(email.getText(),"Complete your registration!",
          * "<h1>Hello! To complete your registration<br>" +
@@ -161,15 +161,15 @@ public class Register extends javax.swing.JFrame implements KeyListener {
          * "<a href = \"https://johnbot.net78.net/yes.php?name="
          * +verify+"\"> Verify Account </a></h1>");
          */
-        PHPMail(mail, verify);
-        if (success) {
+        PHPMail(email, verify);
+        if (null != verify) {
             JOptionPane.showMessageDialog(rootPane, "Please check your email to verify your account!");
-            email.setText("");
-            password.setText("");
-            username.setText("");
+            this.email.setText("");
+            this.password.setText("");
+            this.username.setText("");
             setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Sorry, the name " + user + " was taken. Please try again!");
+            JOptionPane.showMessageDialog(rootPane, "Sorry, the name " + username + " was taken. Please try again!");
         }
     }// GEN-LAST:event_registerActionPerformed
 

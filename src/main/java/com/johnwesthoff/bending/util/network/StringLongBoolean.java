@@ -7,18 +7,22 @@ package com.johnwesthoff.bending.util.network;
 import java.util.StringTokenizer;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.app.game.GameService;
+import com.johnwesthoff.bending.app.game.GameServiceFactory;
 
 /**
  *
  * @author John
  */
 public final class StringLongBoolean {
+    private final GameService gameService;
+
     private long[] mylong;
     private StringTokenizer ST;
-    ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public StringLongBoolean(String yes) {
         construct(yes);
+        gameService = GameServiceFactory.create();
     }
 
     public void construct(String yes) {
@@ -52,7 +56,7 @@ public final class StringLongBoolean {
             } else {
                 mylong[drawer] &= ~(1l << index);
             }
-            INSTANCE.postUnlocks(Client.jtb.getText());
+            gameService.postUnlocks(Client.jtb.getText());
         }
     }
 

@@ -212,7 +212,7 @@ public final class ConnectToDatabase {
             // ArrayList<String> signin = log(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery);
             // return signin.size()>1?true:false;
-            URL steve = new URL(base + "/getSpells.php?username=" + user + "&password=" + pass);
+            URL steve = new URL(base + "/getSpellsFromUser.php?username=" + user + "&password=" + pass);
             String req = null;
             try (Scanner read = new Scanner(steve.openStream())) {
                 req = read.next();

@@ -17,6 +17,8 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.app.player.PlayerService;
+import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
 import com.johnwesthoff.bending.entity.BallLightningEntity;
 import com.johnwesthoff.bending.entity.BuritoEntity;
 import com.johnwesthoff.bending.entity.EnemyEntity;
@@ -58,12 +60,16 @@ public final class Server implements Runnable {
     public static final byte // MESSAGE IDs
     UDPMOVE = 0;
     public static int MYID = 0;
+
+    private final PlayerService playerService;
+
     public int nextVote = 0;
 
     public static int getID() {
         return MYID++;
     }
 
+    // @TODO : Enumerate messages
     public static final String MESSAGEIDs[] = new String[] { "Player Login", "Player Move", "Player Left",
             "Map Request", "Entity Request", "AI Request", "Chat Message", "World Expansion", "Entire World", "Dig",
             "Fill", "ID", "Chunk", "Airbending", "Earthbending", "Boats Float In The Ocean!", "Firebending", "Freeze",
@@ -123,6 +129,7 @@ public final class Server implements Runnable {
     Thread worldHandle, udplistener;
 
     public Server() {
+        playerService = PlayerServiceFactory.create();
         try {
             SocialSecurity = new ServerSocket(25565);
             playerAcceptor.start();
@@ -219,7 +226,6 @@ public final class Server implements Runnable {
     int runThrough = 0;
     public String IP = "";
     boolean gameRunning = true, accepting = true;
-    ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
     long swagTime = 0;
 
     @Override
@@ -231,7 +237,7 @@ public final class Server implements Runnable {
                 toAdd.setKeepAlive(false);
                 toAdd.setTcpNoDelay(true);
                 playerList.add(new PlayerOnline(spawnX, spawnY, toAdd, pID, this));
-                INSTANCE.updateCount(IP, playerList.size());
+                playerService.updatePlayerCount(IP, playerList.size());
                 if ((gameMode == THEHIDDEN)) {
                     if ((team1.isEmpty())) {
                         team1.add(pID);
