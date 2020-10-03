@@ -22,7 +22,7 @@ public class LightningMine extends Lightning {
         unlockXP = 1000;
         try {
             icon = new ImageIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningmine.png", "lightningmine.png"));
+                    ResourceLoader.loadImage("lightningmine.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

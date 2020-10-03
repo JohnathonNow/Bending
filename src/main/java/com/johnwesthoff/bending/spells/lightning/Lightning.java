@@ -21,8 +21,7 @@ public class Lightning extends Spell {
         locked = true;
         unlockXP = 250;
         try {
-            icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstrike.png",
-                    "lightningstrike.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("lightningstrike.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -29,6 +29,11 @@ import com.johnwesthoff.bending.util.audio.RealClip;
  * @author John
  */
 public class ResourceLoader {
+
+    private static final String DOWNLOAD_URL_BASE = "https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/";
+    private static final String IMAGE_URL_BASE = DOWNLOAD_URL_BASE + "images/";
+    private static final String SOUND_URL_BASE = DOWNLOAD_URL_BASE + "sounds/";
+
     public static void downloadResource(final String filename, final String urlString)
             throws FileNotFoundException, IOException {
         BufferedInputStream in = null;
@@ -60,7 +65,7 @@ public class ResourceLoader {
     public static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
     public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
 
-    public static BufferedImage loadImage(final String src, final String name) {
+    public static BufferedImage loadImage(final String name) {
 
         if (imageTable.containsKey(name)) {
             return imageTable.get(name);
@@ -71,8 +76,8 @@ public class ResourceLoader {
             final File f = new File(dir + "images" + File.separator + name);
             if (!f.exists()) {
                 try {
-                    // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
-                    downloadResource(dir + "images" + File.separator + name, src);
+                    // example: https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/images/AgedPaper.png
+                    downloadResource(dir + "images" + File.separator + name, IMAGE_URL_BASE + name);
                 } catch (final Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -144,12 +149,12 @@ public class ResourceLoader {
         }
     }
 
-    public static RealClip loadSound(final String src, final String name) {
+    public static RealClip loadSound(final String name) {
         RealClip clip = null;
         try {
             final File f = new File(dir + "sounds" + File.separator + name);
             if (!f.exists()) {
-                downloadResource(dir + "sounds" + File.separator + name, src);
+                downloadResource(dir + "sounds" + File.separator + name, SOUND_URL_BASE + name);
             }
             clip = new RealClip(f);
         } catch (final Exception ex) {

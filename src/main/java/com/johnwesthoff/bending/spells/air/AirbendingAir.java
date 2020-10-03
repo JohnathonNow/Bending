@@ -18,7 +18,7 @@ public class AirbendingAir extends Airbending {
         subID = 5;
         try {
             icon = new ImageIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/spells/airAir.png", "airAir.png"));
+                    ResourceLoader.loadImage("airAir.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

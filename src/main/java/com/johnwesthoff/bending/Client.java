@@ -187,12 +187,11 @@ public class Client extends JPanel implements Runnable {
 
     public Client() {
         super();
-        // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         new File(ResourceLoader.dir).mkdirs();
         new File(ResourceLoader.dir + "images").mkdirs();
         new File(ResourceLoader.dir + "sounds").mkdirs();
         try {
-            bimage = ResourceLoader.loadImage("https://west-it.webs.com/Bending/AgedPaper.png", "AgedPaper.png");
+            bimage = ResourceLoader.loadImage("AgedPaper.png");
             Thread.sleep(100);
         } catch (final Exception ex) {
             // ex.printStackTrace();
@@ -437,7 +436,7 @@ public class Client extends JPanel implements Runnable {
 
             final PopupMenu pop = new PopupMenu();
             me.trayIcon = new TrayIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.png"));
+                    ResourceLoader.loadImage("GrassTexture.png"));
             me.trayIcon.setToolTip("DestructibleTerrain");
             final MenuItem exitItem = new MenuItem("Exit");
             final MenuItem hideItem = new MenuItem("Hide");
@@ -511,17 +510,15 @@ public class Client extends JPanel implements Runnable {
         try {
             loggedOn = true;
             temp = "C:";// (System.getenv("TEMP"));
-            Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.jpg");
-            Sky = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg", "SkyTexture.jpg");
-            Sand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg", "SandTexture.jpg");
-            Stone = ResourceLoader.loadImage("https://west-it.webs.com/Bending/StoneTexture.jpg", "StoneTexture.jpg");
-            Bark = ResourceLoader.loadImage("https://west-it.webs.com/Bending/BarkTexture.jpg", "BarkTexture.jpg");
-            Ice = ResourceLoader.loadImage("https://west-it.webs.com/Bending/iceTexture.png", "iceTexture.png");
-            Crystal = ResourceLoader.loadImage("https://west-it.webs.com/Bending/crystalTexture.png",
-                    "crystalTexture.png");
-            LavaLand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png",
-                    "lavalandTexture.png");
-            ether = ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png", "ether.png");
+            Grass = ResourceLoader.loadImage("GrassTexture.jpg");
+            Sky = ResourceLoader.loadImage("SkyTexture.jpg");
+            Sand = ResourceLoader.loadImage("SandTexture.jpg");
+            Stone = ResourceLoader.loadImage("StoneTexture.jpg");
+            Bark = ResourceLoader.loadImage("BarkTexture.jpg");
+            Ice = ResourceLoader.loadImage("iceTexture.png");
+            Crystal = ResourceLoader.loadImage("crystalTexture.png");
+            LavaLand = ResourceLoader.loadImage("lavalandTexture.png");
+            ether = ResourceLoader.loadImage("ether.png");
             // me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
             // container.requestFocus();
             // me.transferFocus();
@@ -2187,8 +2184,8 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    public RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
-    public RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
+    public RealClip airCast = ResourceLoader.loadSound("aircast.wav");
+    public RealClip fireCast = ResourceLoader.loadSound("firecast.wav");
 
     public void drawChat() {
         for (int i = 0; i < chat.length; i++) {

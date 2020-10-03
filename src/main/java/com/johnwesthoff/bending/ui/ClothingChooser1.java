@@ -43,7 +43,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         owner = mine;
         // g = canvas.getGraphics();
         try {
-            background = ResourceLoader.loadImage("https://west-it.webs.com/Bending/Capture.PNG", "Capture.PNG");
+            background = ResourceLoader.loadImage("Capture.PNG");
         } catch (Exception ex) {
             // ex.printStackTrace();
         }
