@@ -203,7 +203,7 @@ public abstract class Spell {
     /**
      * Executes the command for the spell as a result of a player action
      * 
-     * @param app the client performing this action and having its state modified as
+     * @param app the game performing this action and having its state modified as
      *            a result
      *
      */

@@ -18,6 +18,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JColorChooser;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.app.avatar.AvatarService;
+import com.johnwesthoff.bending.app.avatar.AvatarServiceFactory;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -26,6 +28,9 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
  * @author Family
  */
 public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
+
+    private final AvatarService avatarService;
+
     private static final long serialVersionUID = 125466973567201631L;
     /** Creates new form ClothingChooser */
     Color[] colors = new Color[] { Color.white, Color.white, Color.white, Color.white, Color.white, Color.white };
@@ -33,14 +38,15 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     byte[] cloths = new byte[] { 1, 1, 1, 1, 1, 1 };
     Image[] stuff = new Image[6];
     boolean done = false;
-    Client owner;
+    Client app;
     Image background;
 
-    public ClothingChooser1(Client mine) {
+    public ClothingChooser1(Client app) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
-        owner = mine;
+        this.app = app;
+        avatarService = AvatarServiceFactory.create();
         // g = canvas.getGraphics();
         try {
             background = ResourceLoader.loadImage("Capture.PNG");
@@ -486,8 +492,9 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                 post += i == colors2.length - 1 ? "" : ",";
             }
             // System.out.println(post);
-            Client.CTD.postOutfit(post, Client.jtb.getText());
-        }
+
+            avatarService.changesAppearance(post, Client.jtb.getText());
+        } // TODO add your handling code here:
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -508,7 +515,8 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     }
 
     public void loadClothing() {
-        Client.CTD.getOutfit(Client.jtb.getText(), "IGNORE PASS");
+        avatarService.getAppearance(Client.jtb.getText(), app.jtp.getText());
+
         for (int i = 0; i < colors.length; i++) {
             colors[i] = new Color(Client.Colors[i]);
             colors2[i] = new Color(Client.Colors2[i]);

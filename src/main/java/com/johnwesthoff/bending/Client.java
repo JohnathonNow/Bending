@@ -60,6 +60,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.AbstractTableModel;
 
+import com.johnwesthoff.bending.app.game.GameService;
+import com.johnwesthoff.bending.app.game.GameServiceFactory;
 import com.johnwesthoff.bending.entity.BallLightningEntity;
 import com.johnwesthoff.bending.entity.BuritoEntity;
 import com.johnwesthoff.bending.entity.EnemyEntity;
@@ -93,7 +95,6 @@ import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.audio.RealClip;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
@@ -107,10 +108,11 @@ public class Client extends JPanel implements Runnable {
      *
      */
     private static final long serialVersionUID = 1L;
+
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
-            Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
+        Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
     public int score = 0;
     public int mapRotation = 0;
@@ -119,7 +121,7 @@ public class Client extends JPanel implements Runnable {
     public int gameMode = 1;
     public int fireTime = 0;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
-            deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
+           deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
     public static ClientInputListener inputer;
@@ -170,7 +172,6 @@ public class Client extends JPanel implements Runnable {
     public static JTextField jtb = new JTextField();
     public JPasswordField jtp = new JPasswordField();
     public JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
-    public static ConnectToDatabase CTD;
     public Register form = new Register();
     public Verify exactly = new Verify();
     public SystemTray ST;
@@ -184,6 +185,11 @@ public class Client extends JPanel implements Runnable {
     public static JTabbedPane immaKeepTabsOnYou;
     public double prevMove;
     public short turnVisible = -1, removeAura = -1;
+
+    /**
+     * GameService instance
+     */
+    private GameService gameService;
 
     public Client() {
         super();
@@ -207,14 +213,19 @@ public class Client extends JPanel implements Runnable {
 
         gameAlive = true;
         Spell.init();
-        final Client me = new Client();
+        final Client main = new Client();
         immaKeepTabsOnYou = new JTabbedPane();
-        actioner = new AppletActionListener(me);
-        inputer = new ClientInputListener(me);
-        thisone = me;
-        CTD = new ConnectToDatabase();
-        me.setSize(600, 600);
-        me.setPreferredSize(me.getSize());
+        actioner = new AppletActionListener(main);
+        inputer = new ClientInputListener(main);
+        thisone = main;
+
+        // using factory to inject dependency
+        main.gameService = GameServiceFactory.create();
+        // @TODO : define here player instance
+
+        main.setSize(600, 600);
+        main.setPreferredSize(main.getSize());
+
         // JPanel e = new JPanel();
         // e.setSize(300,300);
         container = new JFrame() {
@@ -228,31 +239,31 @@ public class Client extends JPanel implements Runnable {
                 super.paintComponents(g);
             }
         };
-        me.owner = container;
+        main.owner = container;
         // container.setUndecorated(true);
-        me.form.setVisible(false);
-        container.setSize(me.getSize());
+        main.form.setVisible(false);
+        container.setSize(main.getSize());
         container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        me.cc.setVisible(false);
-        me.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
-        me.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+        main.cc.setVisible(false);
+        main.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
+        main.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
+            Spell.spells.get(0), Spell.spells.get(0) });
+        main.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
+            Spell.spells.get(0), Spell.spells.get(0) });
+        main.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
+            Spell.spells.get(0), Spell.spells.get(0) });
+        main.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
+            Spell.spells.get(0), Spell.spells.get(0) });
+        main.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
+            Spell.spells.get(0), Spell.spells.get(0) });
 
-        me.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
-                Spell.spells.get(19), Spell.spells.get(7) });
+        main.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
+            Spell.spells.get(19), Spell.spells.get(7) });
         // container.add(me);
-        me.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
-                Spell.noSpell });
+        main.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
+            Spell.noSpell });
         // container.add(me);
-        me.JRB = new JCheckBox() {
+        main.JRB = new JCheckBox() {
             private static final long serialVersionUID = -3327024393489960573L;
 
             @Override
@@ -262,33 +273,33 @@ public class Client extends JPanel implements Runnable {
             }
         };
 
-        me.userpassinfo = new Properties();
+        main.userpassinfo = new Properties();
         if (new File(ResourceLoader.dir + "properties.xyz").exists()) {
             try {
-                me.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
+                main.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (me.userpassinfo.isEmpty()) {
-            me.userpassinfo.setProperty("username", "");
-            me.userpassinfo.setProperty("password", "");
-            me.userpassinfo.setProperty("remember", "");
+        if (main.userpassinfo.isEmpty()) {
+            main.userpassinfo.setProperty("username", "");
+            main.userpassinfo.setProperty("password", "");
+            main.userpassinfo.setProperty("remember", "");
             try {
-                me.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
+                main.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if (!me.userpassinfo.getProperty("remember", "").equals("")) {
-                Client.jtb.setText(me.userpassinfo.getProperty("username", ""));
-                me.jtp.setText(me.userpassinfo.getProperty("password", ""));
-                me.JRB.setSelected(true);
+            if (!main.userpassinfo.getProperty("remember", "").equals("")) {
+                Client.jtb.setText(main.userpassinfo.getProperty("username", ""));
+                main.jtp.setText(main.userpassinfo.getProperty("password", ""));
+                main.JRB.setSelected(true);
             }
         }
-        me.setBackground(Color.white);
-        me.setLayout(null);
-        me.menu = new JComboBox<Object>() {
+        main.setBackground(Color.white);
+        main.setLayout(null);
+        main.menu = new JComboBox() {
             private static final long serialVersionUID = -5781421606071388365L;
 
             @Override
@@ -298,84 +309,84 @@ public class Client extends JPanel implements Runnable {
                 return dim;
             }
         };
-        me.menu.setRenderer(new RowCellRenderer());
-        me.connect = new JButton("Connect");
-        me.hosting = new JButton("Host");
-        me.refresh = new JButton("Refresh");
-        me.register = new JButton("Register");
-        me.verify = new JButton("Log In");
-        me.ChooseSpells = new JButton("Loadouts");
-        me.chooseclothing = new JButton("Gear");
-        me.mapMaker = new JButton("Map Editor");
-        container.setMaximumSize(me.getSize());
-        me.addMouseListener(inputer);
-        me.addMouseMotionListener(inputer);
+        main.menu.setRenderer(new RowCellRenderer());
+        main.connect = new JButton("Connect");
+        main.hosting = new JButton("Host");
+        main.refresh = new JButton("Refresh");
+        main.register = new JButton("Register");
+        main.verify = new JButton("Log In");
+        main.ChooseSpells = new JButton("Loadouts");
+        main.chooseclothing = new JButton("Gear");
+        main.mapMaker = new JButton("Map Editor");
+        container.setMaximumSize(main.getSize());
+        main.addMouseListener(inputer);
+        main.addMouseMotionListener(inputer);
         container.addKeyListener(inputer);
         container.addMouseListener(inputer);
         container.setResizable(true);
         if (!(args.length > 0 && args[0].equals("Client"))) {
             container.setVisible(true);
         }
-        me.requestFocus();
-        me.add(me.jUs);
-        me.jUs.setLocation(16, 16);
-        me.jUs.setSize(64, 16);
-        me.add(Client.jtb);
+        main.requestFocus();
+        main.add(main.jUs);
+        main.jUs.setLocation(16, 16);
+        main.jUs.setSize(64, 16);
+        main.add(Client.jtb);
         Client.jtb.setLocation(96, 16);
-        me.add(me.jPa);
-        me.jPa.setLocation(16, 32);
-        me.jPa.setSize(80, 16);
-        me.add(me.jtp);
-        me.jtp.setLocation(96, 32);
-        me.add(me.register);
-        me.register.setLocation(32, 54 + 32);
-        me.register.setSize(96, 16);
-        me.add(me.verify);
-        me.verify.setLocation(160, 54 + 32);
-        me.verify.setSize(96, 16);
-        me.add(me.menu);
-        me.menu.setLocation(24, 64 + 8 + 6 + 32);
-        me.menu.setSize(120, 32);
-        me.add(me.connect);
-        me.connect.setLocation(160, 80 + 6 + 32);
-        me.connect.setSize(100, 16);
-        me.add(me.refresh);
-        me.refresh.setLocation(24, 104 + 6 + 32);
-        me.refresh.setSize(120, 16);
-        me.add(me.hosting);
-        me.hosting.setLocation(160, 104 + 6 + 32);
-        me.hosting.setSize(100, 16);
-        me.add(me.ChooseSpells);
-        me.ChooseSpells.setLocation(80, 104 + 6 + 32 + 32);
-        me.ChooseSpells.setSize(140, 16);
-        me.add(me.chooseclothing);
-        me.chooseclothing.setLocation(80, 104 + 6 + 32 + 32 + 32);
-        me.chooseclothing.setSize(140, 16);
+        main.add(main.jPa);
+        main.jPa.setLocation(16, 32);
+        main.jPa.setSize(80, 16);
+        main.add(main.jtp);
+        main.jtp.setLocation(96, 32);
+        main.add(main.register);
+        main.register.setLocation(32, 54 + 32);
+        main.register.setSize(96, 16);
+        main.add(main.verify);
+        main.verify.setLocation(160, 54 + 32);
+        main.verify.setSize(96, 16);
+        main.add(main.menu);
+        main.menu.setLocation(24, 64 + 8 + 6 + 32);
+        main.menu.setSize(120, 32);
+        main.add(main.connect);
+        main.connect.setLocation(160, 80 + 6 + 32);
+        main.connect.setSize(100, 16);
+        main.add(main.refresh);
+        main.refresh.setLocation(24, 104 + 6 + 32);
+        main.refresh.setSize(120, 16);
+        main.add(main.hosting);
+        main.hosting.setLocation(160, 104 + 6 + 32);
+        main.hosting.setSize(100, 16);
+        main.add(main.ChooseSpells);
+        main.ChooseSpells.setLocation(80, 104 + 6 + 32 + 32);
+        main.ChooseSpells.setSize(140, 16);
+        main.add(main.chooseclothing);
+        main.chooseclothing.setLocation(80, 104 + 6 + 32 + 32 + 32);
+        main.chooseclothing.setSize(140, 16);
 
-        me.add(me.mapMaker);
-        me.mapMaker.setLocation(16, 104 + 6 + 32 + 32 + 32 + 32);
-        me.mapMaker.setSize(240, 16);
+        main.add(main.mapMaker);
+        main.mapMaker.setLocation(16, 104 + 6 + 32 + 32 + 32 + 32);
+        main.mapMaker.setSize(240, 16);
         /// me.JRB.setText("Remember me?");
 
-        me.JRB.setActionCommand("RM");
-        me.spellselection = new SpellList1(me);
-        me.spellselection.setVisible(false);
-        me.ChooseSpells.addActionListener(actioner);
-        me.ChooseSpells.setActionCommand(me.ChooseSpells.getText());
-        me.chooseclothing.addActionListener(actioner);
-        me.chooseclothing.setActionCommand(me.chooseclothing.getText());
-        me.mapMaker.addActionListener(actioner);
-        me.mapMaker.setActionCommand(me.mapMaker.getText());
-        me.add(me.JRB);
-        me.JRB.setSize(18, 16);
-        me.JRB.setLocation(80, 54);
+        main.JRB.setActionCommand("RM");
+        main.spellselection = new SpellList1(main);
+        main.spellselection.setVisible(false);
+        main.ChooseSpells.addActionListener(actioner);
+        main.ChooseSpells.setActionCommand(main.ChooseSpells.getText());
+        main.chooseclothing.addActionListener(actioner);
+        main.chooseclothing.setActionCommand(main.chooseclothing.getText());
+        main.mapMaker.addActionListener(actioner);
+        main.mapMaker.setActionCommand(main.mapMaker.getText());
+        main.add(main.JRB);
+        main.JRB.setSize(18, 16);
+        main.JRB.setLocation(80, 54);
         final JLabel cheese = new JLabel("Remember me?");
         cheese.setSize(110, 30);
         cheese.setLocation(110, 48);
         cheese.setVisible(true);
-        me.add(cheese);
+        main.add(cheese);
         // me.JRB.setBackground(Color.white);
-        me.JRB.setVisible(true);
+        main.JRB.setVisible(true);
 
         Client.jtb.setSize(300 - 128, 16);
         Client.jtb.setPreferredSize(Client.jtb.getSize());
@@ -383,25 +394,25 @@ public class Client extends JPanel implements Runnable {
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
-        me.jtp.setSize(300 - 128, 16);
-        me.jtp.setPreferredSize(Client.jtb.getSize());
+        main.jtp.setSize(300 - 128, 16);
+        main.jtp.setPreferredSize(Client.jtb.getSize());
         // me.jtp.setLocation(16, 16);
-        me.jtp.setVisible(true);
-        me.jtp.requestFocus();
-        me.jtp.addKeyListener(inputer);
-        me.connect.setActionCommand(me.connect.getText());
-        me.connect.addActionListener(actioner);
-        me.hosting.setActionCommand(me.hosting.getText());
-        me.hosting.addActionListener(actioner);
-        me.refresh.setActionCommand(me.refresh.getText());
-        me.refresh.addActionListener(actioner);
-        me.register.setActionCommand(me.register.getText());
-        me.register.addActionListener(actioner);
-        me.verify.setActionCommand(me.verify.getText());
-        me.verify.addActionListener(actioner);
-        me.setFocusable(true);
-        me.addKeyListener(inputer);
-        me.setVisible(true);
+        main.jtp.setVisible(true);
+        main.jtp.requestFocus();
+        main.jtp.addKeyListener(inputer);
+        main.connect.setActionCommand(main.connect.getText());
+        main.connect.addActionListener(actioner);
+        main.hosting.setActionCommand(main.hosting.getText());
+        main.hosting.addActionListener(actioner);
+        main.refresh.setActionCommand(main.refresh.getText());
+        main.refresh.addActionListener(actioner);
+        main.register.setActionCommand(main.register.getText());
+        main.register.addActionListener(actioner);
+        main.verify.setActionCommand(main.verify.getText());
+        main.verify.addActionListener(actioner);
+        main.setFocusable(true);
+        main.addKeyListener(inputer);
+        main.setVisible(true);
         UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
         UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
         immaKeepTabsOnYou.setUI(new BasicTabbedPaneUI() {
@@ -414,30 +425,30 @@ public class Client extends JPanel implements Runnable {
         immaKeepTabsOnYou.addKeyListener(inputer);
         immaKeepTabsOnYou.addMouseListener(inputer);
         immaKeepTabsOnYou.addMouseMotionListener(inputer);
-        immaKeepTabsOnYou.addTab("THEGAME", me);
-        immaKeepTabsOnYou.addTab("SPELLSELECT", me.spellselection);
-        immaKeepTabsOnYou.addTab("SPELLLIST", me.spellselection.choochootrain);
-        immaKeepTabsOnYou.addTab("PASSIVELIST", me.spellselection.choochootrain2);
-        immaKeepTabsOnYou.addTab("ClothingChooser", me.cc);
+        immaKeepTabsOnYou.addTab("THEGAME", main);
+        immaKeepTabsOnYou.addTab("SPELLSELECT", main.spellselection);
+        immaKeepTabsOnYou.addTab("SPELLLIST", main.spellselection.choochootrain);
+        immaKeepTabsOnYou.addTab("PASSIVELIST", main.spellselection.choochootrain2);
+        immaKeepTabsOnYou.addTab("ClothingChooser", main.cc);
         immaKeepTabsOnYou.setLocation(-1, -1);
         immaKeepTabsOnYou.setBackground(Color.black);
         immaKeepTabsOnYou.setBorder(BorderFactory.createEmptyBorder());
         container.setContentPane(immaKeepTabsOnYou);
-        me.repaint();
-        me.mainProcess = new Thread(me);
-        me.mainProcess.start();
-        me.getHosts();
-        me.chooseclothing.setEnabled(false);
-        me.ChooseSpells.setEnabled(false);
-        me.connect.setEnabled(false);
-        me.ST = SystemTray.getSystemTray();
+        main.repaint();
+        main.mainProcess = new Thread(main);
+        main.mainProcess.start();
+        main.getHosts();
+        main.chooseclothing.setEnabled(false);
+        main.ChooseSpells.setEnabled(false);
+        main.connect.setEnabled(false);
+        main.ST = SystemTray.getSystemTray();
         try {
             // container.getContentPane().setB
 
             final PopupMenu pop = new PopupMenu();
-            me.trayIcon = new TrayIcon(
+            main.trayIcon = new TrayIcon(
                     ResourceLoader.loadImage("GrassTexture.png"));
-            me.trayIcon.setToolTip("DestructibleTerrain");
+            main.trayIcon.setToolTip("DestructibleTerrain");
             final MenuItem exitItem = new MenuItem("Exit");
             final MenuItem hideItem = new MenuItem("Hide");
             final MenuItem showItem = new MenuItem("Show");
@@ -450,14 +461,14 @@ public class Client extends JPanel implements Runnable {
             exitItem.addActionListener(actioner);
             showItem.addActionListener(actioner);
             restartItem.addActionListener(actioner);
-            me.trayIcon.setPopupMenu(pop);
-            me.trayIcon.setActionCommand("Tray");
-            me.trayIcon.addActionListener(actioner);
+            main.trayIcon.setPopupMenu(pop);
+            main.trayIcon.setActionCommand("Tray");
+            main.trayIcon.addActionListener(actioner);
             final Frame frame = new Frame("");
             frame.setUndecorated(true);
             frame.setResizable(false);
             frame.setVisible(false);
-            me.trayIcon.addMouseListener(new MouseListener() {
+            main.trayIcon.addMouseListener(new MouseListener() {
 
                 @Override
                 public void mouseClicked(final MouseEvent e) {
@@ -538,9 +549,9 @@ public class Client extends JPanel implements Runnable {
     public Thread communication;
     public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
     public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
     public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
         try {
@@ -559,8 +570,8 @@ public class Client extends JPanel implements Runnable {
             // out.write(Server.LOGIN);
             // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
             final ByteBuffer tt = Server
-                    .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
-                    .put(Clothing);
+                .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
+                .put(Clothing);
             for (int i = 0; i < Colors.length; i++) {
                 tt.putInt(Colors[i]);
             }
@@ -600,11 +611,11 @@ public class Client extends JPanel implements Runnable {
                                     final String feliceNavidad = Server.getString(rasputin);
                                     final Player yes = new Player(300, 300,
                                             new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
-                                                    rasputin.get(), rasputin.get() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
+                                                rasputin.get(), rasputin.get() },
+                                                new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
                                                     rasputin.getInt(), rasputin.getInt(), rasputin.getInt() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
+                                                    new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
+                                                        rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
                                     world.playerList.add(yes);
                                     final boolean sameTeam = rasputin.get() == 12;
                                     // yes.username = Server.getString(rasputin);
@@ -727,7 +738,7 @@ public class Client extends JPanel implements Runnable {
                                                     && world.ground.cellData[(int) world.x][(int) world.y] == World.WATER) {
                                                 hurt(12);
                                                 killMessage = "~ will never go in the water during a storm again, thanks to `!";
-                                            }
+                                                    }
                                         }
                                     }
                                     world.entityList.add(new ShockEffectEntity(ix, iy, ir));
@@ -839,7 +850,7 @@ public class Client extends JPanel implements Runnable {
                                     if (fX2 != fX) {
                                         if (fX == ID) {
                                             XP += 25;
-                                            CTD.postXP(XP, username);
+                                            gameService.earnExperience(XP, username);
                                             score++;
                                             if (killingSpree == 0) {
                                                 killingSpree = Math.E;
@@ -861,7 +872,7 @@ public class Client extends JPanel implements Runnable {
                                     final int scored = buf.getInt();
                                     if (idd == ID) {
                                         XP += 10;
-                                        CTD.postXP(XP, username);
+                                        gameService.earnExperience(XP, username);
                                         score = scored;
                                         if (killingSpree == 0) {
                                             killingSpree = Math.E;
@@ -907,11 +918,11 @@ public class Client extends JPanel implements Runnable {
             started = true;
         } catch (
 
-        final Exception ex) {
+                final Exception ex) {
 
             failed = true;
             return false;
-        }
+                }
         return true;
         // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
@@ -1019,9 +1030,7 @@ public class Client extends JPanel implements Runnable {
 
             if (!owner.isVisible()) {
                 if (!SystemTray.isSupported()) {
-                    if (!"".equals(hostIP)) {
-                        CTD.removeServer(hostIP);
-                    }
+                    gameService.tryToRemoveServer(hostIP);
                     System.exit(0);
                 }
 
@@ -1084,7 +1093,7 @@ public class Client extends JPanel implements Runnable {
                         && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
                     world.floatiness = 0;
                     maxlungs = 100;
-                }
+                        }
                 if (!"Water Treader".equals(passiveList[spellBook].getName())) {
                     swimmingSpeed = 1;
                 }
@@ -1145,16 +1154,10 @@ public class Client extends JPanel implements Runnable {
                         xspeed = -15;
                     }
                 }
-                if (world.keys[KeyEvent.VK_S]) {
-                    // world.move = 0;
-                    if ((dig += 2) >= 100) {
-                        dig = 0;
-                        Spell.getSpell(4).getAction(this);
 
-                    }
-                } else {
-                    dig = 0;
-                }
+                // @TODO : be carefull of SRP && OCP
+                dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
+
                 for (final Player p : world.playerList) {
                     if ((p.status & World.ST_DRAIN) != 0) {
                         if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
@@ -1178,7 +1181,7 @@ public class Client extends JPanel implements Runnable {
                             world.vspeed -= 5;
                             lastHit = me.maker;
                             killMessage = "~ was blown away by `.";
-                        }
+                                }
                     }
                     if (e instanceof TornadoEntity) {
                         final TornadoEntity me2 = (TornadoEntity) e;
@@ -1215,7 +1218,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was built into a bridge by `.";
-                        }
+                                }
                     }
                     if (e instanceof FireBallEntity) {
                         final FireBallEntity me3 = (FireBallEntity) e;
@@ -1229,7 +1232,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ was burninated by `.";
-                        }
+                                }
                     }
                     if (e instanceof FirePuffEntity) {
                         final FirePuffEntity me3 = (FirePuffEntity) e;
@@ -1243,7 +1246,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ was set ablaze by `.";
-                        }
+                                }
                     }
                     if (e instanceof EnemyEntity) {
                         final EnemyEntity me3 = (EnemyEntity) e;
@@ -1254,7 +1257,7 @@ public class Client extends JPanel implements Runnable {
                             xspeed += 4 - random.nextInt(8);
                             lastHit = me3.master;
                             killMessage = "~ was defeated by `'s dark minion.";
-                        }
+                                }
                     }
                     if (e instanceof BuritoEntity) {
                         final BuritoEntity me3 = (BuritoEntity) e;
@@ -1268,7 +1271,7 @@ public class Client extends JPanel implements Runnable {
                             me3.alive = false;
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ shouldn't have stolen `'s burito...";
-                        }
+                                }
                     }
                     if (e instanceof LavaBallEntity) {
                         final LavaBallEntity me3 = (LavaBallEntity) e;
@@ -1277,7 +1280,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             killMessage = "How did ` beat ~?";
                             me3.alive = false;
-                        }
+                                }
                     }
                     if (e instanceof SoulDrainEntity) {
                         final SoulDrainEntity me3 = (SoulDrainEntity) e;
@@ -1295,7 +1298,7 @@ public class Client extends JPanel implements Runnable {
                             } catch (final IOException ex) {
                                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        }
+                                }
                     }
                     if (e instanceof FireJumpEntity) {
                         final FireJumpEntity me3 = (FireJumpEntity) e;
@@ -1308,7 +1311,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was flung into orbit by `'s falcon pawnch!";
-                        }
+                                }
                     }
                     if (e instanceof ShardEntity) {
                         final ShardEntity me3 = (ShardEntity) e;
@@ -1320,7 +1323,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was sniped by `.";
-                        }
+                                }
                     }
                     if (e instanceof SandEntity) {
                         final SandEntity me3 = (SandEntity) e;
@@ -1334,7 +1337,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was shredded by `'s shotgun.";
-                        }
+                                }
                     }
                     if (e instanceof IceShardEntity) {
                         final IceShardEntity me3 = (IceShardEntity) e;
@@ -1346,7 +1349,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ was hit by `'s icey attack!";
-                        }
+                                }
                     }
                     if (e instanceof SnowEntity) {
                         final SnowEntity me3 = (SnowEntity) e;
@@ -1358,7 +1361,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             me3.alive = false;
                             killMessage = "~ will need to be thawed out after fighting `!";
-                        }
+                                }
                     }
                     if (e instanceof SpoutEntity) {
                         final SpoutEntity me3 = (SpoutEntity) e;
@@ -1396,7 +1399,7 @@ public class Client extends JPanel implements Runnable {
                             xspeed += 9 - random.nextInt(18);
                             world.status |= World.ST_FLAMING;
                             killMessage = "~ smelled `'s armpits, and then died.";
-                        }
+                                }
                     }
                 }
 
@@ -1427,8 +1430,11 @@ public class Client extends JPanel implements Runnable {
                     world.y = -50;
                     world.x = -50;
                     if (killingSpree >= 148.413d) {
-                        CTD.postRSSfeed(username + " had a streak going",
-                                ((int) Math.log(killingSpree)) + " kills in a row!");// Anti-cheating - use logs
+                        // Anti-cheating - use logs
+                        gameService.feedRss(
+                                String.format("%s had a streak going", username),
+                                String.format("%o kills in a row!", (int) Math.log(killingSpree))
+                                );
                     }
                     killingSpree = 0;
                     world.dead = true;
@@ -1457,16 +1463,9 @@ public class Client extends JPanel implements Runnable {
                 } else {
                     energico = maxeng;
                 }
-                if (world.keys[KeyEvent.VK_E]) {
-                    world.incX += 10;
-                }
-                if (world.keys[KeyEvent.VK_Q]) {
-                    world.incX -= 10;
-                }
-                if (world.keys[KeyEvent.VK_Z]) {
-                    world.incX = 0;
-                    world.incY = 0;
-                }
+
+                world.determineInc();
+
                 if (!world.isSolid(world.x + (int) xspeed, world.y)) {
                     world.x += xspeed;
                 }
@@ -1484,7 +1483,7 @@ public class Client extends JPanel implements Runnable {
                 world.onUpdate();
 
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                        || counting++ > 200))) {
+                                || counting++ > 200))) {
                     counting = 0;
                     try {
                         sendMovement();
@@ -1520,7 +1519,7 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    public String getKiller(final int i) {
+    private String getKiller(final int i) {
         for (final Player p : world.playerList) {
             if (p.ID == i) {
                 return p.username;
@@ -1545,13 +1544,11 @@ public class Client extends JPanel implements Runnable {
             }
             final String yes = JOptionPane.showInputDialog("Server Name?");
             if (yes != null) {
-                serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
-
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                String serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
+                gameService.tryToCreateServer(serverName, ip);
                 return ip;
             } else {
-                serverName = "SERVER";
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                gameService.tryToCreateServer(GameService.DEFAULT_SERVER_NAME, ip);
                 // ip = InetAddress.getLocalHost().getHostAddress();
             }
             return "NO";
@@ -1569,7 +1566,7 @@ public class Client extends JPanel implements Runnable {
         ArrayList<String> yay = null;
         while (yay == null) {
             // System.err.println("LOOKING");
-            yay = CTD.getServers();
+            yay = gameService.retrieveServers();
         }
         // System.out.println(yay.size());
         hosts = new String[yay.size() / 3];
@@ -2073,7 +2070,6 @@ public class Client extends JPanel implements Runnable {
     }
 
     public String hostIP = "";
-    public String serverName = "";
     public ServerGUI sgui;
 
     public void serverOutput() {
@@ -2207,7 +2203,7 @@ public class Client extends JPanel implements Runnable {
                 final long s11I1111I1I = World.class.getFields().length;
                 final long sI1I1I11I1I = PlayerOnline.class.getFields().length;
                 authCode = (((((sI1I1I11I1I * sI1I1I11I1I) - sI1I1I11I1I) / s1I1111II11) + s1111I11I11) * s11I1111I1I)
-                        / s1I1111II11;
+                    / s1I1111II11;
                 // authCode = 1;
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -2215,4 +2211,6 @@ public class Client extends JPanel implements Runnable {
         }
         return authCode;
     }
+
+
 }

@@ -11,11 +11,12 @@ import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.app.player.PlayerService;
+import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
 /**
@@ -23,6 +24,9 @@ import com.johnwesthoff.bending.util.network.OrderedOutputStream;
  * @author John
  */
 public class PlayerOnline extends Player implements Runnable {
+
+    private final PlayerService playerService;
+
     public Socket playerSocket;
     public InputStream in;
     public OrderedOutputStream out;
@@ -30,13 +34,12 @@ public class PlayerOnline extends Player implements Runnable {
     public Server handle;
     public boolean alive = true;
     public boolean loggedIn = false, voted = false;
-    public ConnectToDatabase INSTANCE = ConnectToDatabase.INSTANCE();
 
     public PlayerOnline(int X, int Y, Socket s, int ide, Server h) {
         super(X, Y, new byte[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 });
         ID = ide;
         playerSocket = s;
-
+        playerService = PlayerServiceFactory.create();
         Thread me = new Thread(this);
         handle = h;
         me.start();
@@ -58,7 +61,8 @@ public class PlayerOnline extends Player implements Runnable {
                 handle.team2.remove(handle.team2.indexOf(ID));
             }
             handle.playerList.remove(this);
-            INSTANCE.updateCount(handle.IP, handle.playerList.size());
+            // @TODO : it's the server responsability to emit decrement player event
+            playerService.updatePlayerCount(handle.IP, handle.playerList.size());
         }
     }
 
