@@ -108,9 +108,7 @@ public class PassiveChooser1 extends javax.swing.JPanel {
 
     }
 
-    /**
-     * @param args the command line arguments
-     */
+
     public javax.swing.JList<Object> getList() {
         return jList1;
     }

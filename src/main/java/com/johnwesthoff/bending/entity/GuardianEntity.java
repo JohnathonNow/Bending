@@ -140,6 +140,12 @@ public class GuardianEntity extends EnemyEntity {
         }
     }
 
+
+    /**
+     * Reconstruct the guardian entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         // System.out.println("IM BACK!");
         world.entityList.add(new GuardianEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt())

@@ -298,6 +298,11 @@ public class EnemyEntity extends Entity {
         return this;
     }
 
+    /**
+     * Method to reconstruct an enemy in a given world
+     * @param in
+     * @param world World in which the enemy should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         // System.out.println("IM BACK!");
         world.entityList.add(new EnemyEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt())

@@ -95,6 +95,11 @@ public class RodEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the rock entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new RodEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()));

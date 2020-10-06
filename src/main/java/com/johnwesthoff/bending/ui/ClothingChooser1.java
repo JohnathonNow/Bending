@@ -514,6 +514,9 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
+    /**
+     * Loads the clothing of the client
+     */
     public void loadClothing() {
         avatarService.getAppearance(Client.jtb.getText(), app.jtp.getText());
 
@@ -530,6 +533,9 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
      */
     Thread getTem;
 
+    /**
+     * Loads the images
+     */
     public void getImages() {
         Runnable getStuff = new Runnable() {
 

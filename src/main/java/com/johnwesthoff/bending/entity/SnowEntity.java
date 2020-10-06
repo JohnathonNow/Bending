@@ -83,6 +83,12 @@ public class SnowEntity extends Entity {
         }
     }
 
+
+    /**
+     * Reconstruct the snow entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new SnowEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

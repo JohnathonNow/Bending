@@ -648,6 +648,9 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
 
     byte toSet = 0;
 
+    /**
+     * Loads the picture
+     */
     public void loadPicture() {
         try {
 
@@ -733,14 +736,29 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         }
     }
 
+    /**
+     * Returns the red value of an ARGB
+     * @param argb ARGB value
+     * @return red value
+     */
     public static int getRed(int argb) {
         return 0xFF & (argb >> 16);
     }
 
+    /**
+     * Gets the blue value of an ARGB
+     * @param argb ARGB value
+     * @return blue value
+     */
     public static int getBlue(int argb) {
         return 0xFF & argb;
     }
 
+    /**
+     * Gets the green value of an ARGB
+     * @param argb ARGB value
+     * @return green value
+     */
     public static int getGreen(int argb) {
         return 0xFF & (argb >> 8);
     }
@@ -809,6 +827,13 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         // body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Fills a circle
+     * @param X X coordinate
+     * @param Y Y coordinate
+     * @param R Radius
+     * @param T Type for the filling
+     */
     public void FillCircle(int X, int Y, int R, byte T) {
         // long time = System.nanoTime();
         for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), www); i1++) {
@@ -820,6 +845,15 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         }
     }
 
+    /**
+     * Fills the line
+     * @param X1 Starting point (x coordinate)
+     * @param Y1 Starting point (y coordinate)
+     * @param X2 Ending point (x coordinate)
+     * @param Y2 Ending point (y coordinate)
+     * @param R Radius
+     * @param T
+     */
     public void FillLine(int X1, int Y1, int X2, int Y2, int R, byte T) {
         double dir = Math.atan2(X2 - X1, Y2 - Y1);
         double dis = Math.sqrt((X2 - X1) * (X2 - X1) + (Y2 - Y1) * (Y2 - Y1));
@@ -831,6 +865,9 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         }
     }
 
+    /**
+     * Starts and runs the thread
+     */
     public void run() {
         while (true) {
             try {
@@ -847,6 +884,10 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         }
     }
 
+    /**
+     * Draws the terrain
+     * @throws Exception
+     */
     public synchronized void drawTerrain() throws Exception {
         // G2.drawImage(Iter, -3, -3, null);
         bg.setPaint(skyPaint);//

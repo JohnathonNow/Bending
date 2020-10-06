@@ -90,6 +90,11 @@ public class WaterBallEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the water ball entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new WaterBallEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

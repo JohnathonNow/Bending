@@ -75,6 +75,11 @@ public class ShardEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the shard entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new ShardEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -93,6 +98,11 @@ public class ShardEntity extends Entity {
         }
     }
 
+    /**
+     * Method to get whether the shard collided with the client
+     * @param w World in which this should be tested
+     * @return true (if the shard collided with the client) or false (else)
+     */
     private boolean collided(World w) {
         double direction = Client.pointDir(previousX, previousY, X, Y);
         int speed = (int) Client.pointDis(previousX, previousY, X, Y);

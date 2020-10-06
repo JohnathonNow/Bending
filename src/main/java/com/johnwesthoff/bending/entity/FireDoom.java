@@ -84,6 +84,11 @@ public class FireDoom extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the fire doom
+     * @param in
+     * @param world World in which the fire doom should be reconstructed
+     */
     public static void reconstruct(final ByteBuffer in, final World world) {
         try {
             world.entityList.add(new FireDoom(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
