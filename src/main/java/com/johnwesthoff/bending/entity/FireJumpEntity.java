@@ -4,14 +4,18 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  * @author John
@@ -35,11 +39,13 @@ public class FireJumpEntity extends Entity {
             Graphics2D g = (Graphics2D) G;
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
-            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                    r.nextInt(Constants.FULL_COLOR_VALUE)));
             g.fillArc((int) (X - 8) - viewX, (int) (Y - 8) - viewY, 16, 16, 0, Constants.FULL_ANGLE);
             for (int i = 0; i < 6; i++) {
                 int e1 = 6 - r.nextInt(12), e2 = 6 - r.nextInt(12);
-                g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+                g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                        r.nextInt(Constants.FULL_COLOR_VALUE)));
                 g.fillArc((int) (X + e1) - viewX, (int) (Y + e2) - viewY, e1, e2, 0, Constants.FULL_ANGLE);
             }
             g.setComposite(c);
@@ -70,6 +76,21 @@ public class FireJumpEntity extends Entity {
     }
 
     @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.status |= World.ST_FLAMING;
+            client.world.vspeed += yspeed * 2;
+            client.xspeed += xspeed;
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was flung into orbit by `'s falcon pawnch!";
+        }
+    }
+
+    @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out, this.getClass().getName());
@@ -85,6 +106,7 @@ public class FireJumpEntity extends Entity {
 
     /**
      * Reconstruct the fire jump entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

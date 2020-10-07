@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-
 /**
  * @author John
  */
@@ -137,9 +136,9 @@ public class GuardianEntity extends EnemyEntity {
         }
     }
 
-
     /**
      * Reconstruct the guardian entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

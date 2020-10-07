@@ -96,6 +96,20 @@ public class ShardEntity extends Entity {
         }
     }
 
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (Client.pointDis(X, Y - World.head, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.vspeed -= 5;
+            client.xspeed += 7 - client.random.nextInt(14);
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was sniped by `.";
+        }
+    }
     /**
      * Method to get whether the shard collided with the client
      * @param w World in which this should be tested

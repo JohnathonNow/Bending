@@ -120,4 +120,18 @@ public class GustEntity extends Entity {
         }
         return false;
     }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y)) {
+            client.hurt(7);
+            client.world.vspeed += yspeed * 2;
+            client.xspeed += xspeed * 2;
+            alive = false;
+            client.lastHit = maker;
+            client.lungs = client.maxlungs;
+            client.killMessage = "~ met `'s gust of air!";
+        }
+    }
 }

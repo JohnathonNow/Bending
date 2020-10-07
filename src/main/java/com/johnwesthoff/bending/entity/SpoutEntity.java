@@ -4,17 +4,17 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -83,6 +83,19 @@ public class SpoutEntity extends Entity {
          * ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.STONE));
          * }
          */
+    }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y)) {
+            if (maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+                client.hurt(5);
+                client.lastHit = maker;
+            }
+            client.world.vspeed -= 5;
+            client.killMessage = "~ was kicked out of `'s swimming pool.";
+        }
     }
 
     @Override
