@@ -4,15 +4,13 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class ExplosionEntity extends Entity {
@@ -31,7 +29,7 @@ public class ExplosionEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(c);
-            G.fillArc(((int) X - radius) - viewX, ((int) Y - radius) - viewY, radius * 2, radius * 2, 0, 360);
+            G.fillArc(((int) X - radius) - viewX, ((int) Y - radius) - viewY, radius * 2, radius * 2, 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -61,7 +59,7 @@ public class ExplosionEntity extends Entity {
                 c = new Color(242, 0, 0);
                 break;
         }
-        c = new Color(c.getRed(), c.getGreen(), c.getBlue(), (radius / (maxradius > 0 ? maxradius : 1)) * 255);
+        c = new Color(c.getRed(), c.getGreen(), c.getBlue(), (radius / (maxradius > 0 ? maxradius : 1)) * Constants.FULL_COLOR_VALUE);
         radius += speed;
     }
 

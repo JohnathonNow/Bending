@@ -4,25 +4,18 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.Client.shortJump;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.JFrame;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.spells.fire.Firebending;
 
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.johnwesthoff.bending.Client.shortJump;
+
 /**
- *
  * @author John
  */
 public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
@@ -117,9 +110,9 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
             if ((pointer.matchOver > 0) && e.getButton() == MouseEvent.BUTTON1) {
 
-                if (pointer.world.mouseX * 3 > 400 && pointer.world.mouseX * 3 < 500) {
+                if (pointer.world.mouseX * Constants.MULTIPLIER > 400 && pointer.world.mouseX * Constants.MULTIPLIER < 500) {
                     // System.out.println("H2");
-                    if (pointer.world.mouseY * 3 > 200 && pointer.world.mouseY * 3 < 250) {
+                    if (pointer.world.mouseY * Constants.MULTIPLIER > 200 && pointer.world.mouseY * Constants.MULTIPLIER < 250) {
                         pointer.spellselection.XP.setText("XP: " + Client.XP);
                         pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
                         pointer.spellselection.setVisible(true);
@@ -132,7 +125,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 switch (e.getButton()) {
                     case MouseEvent.BUTTON1:
                         pointer.world.MB1 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.leftClick = d - 1;
                             break;
@@ -162,7 +156,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         break;
                     case MouseEvent.BUTTON2:
                         pointer.world.MB2 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.midClick = d - 1;
                             break;
@@ -199,7 +194,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         break;
                     case MouseEvent.BUTTON3:
                         pointer.world.MB3 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.rightClick = d - 1;
                             break;
@@ -337,10 +333,10 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 pointer.sendMessage(pointer.chatMessage);
                 if (pointer.chatMessage.contains("/suicide")) {
                     pointer.HP = 0;
-                    pointer.world.status |= World.ST_FLAMING;
+                    pointer.world.status |= Constants.ST_FLAMING;
                 }
                 if (pointer.chatMessage.contains("/vanish")) {
-                    pointer.world.status ^= World.ST_INVISIBLE;
+                    pointer.world.status ^= Constants.ST_INVISIBLE;
                 }
                 if (pointer.chatMessage.contains("/embiggen")) {
                     Client.container.dispose();// You can't change the state from

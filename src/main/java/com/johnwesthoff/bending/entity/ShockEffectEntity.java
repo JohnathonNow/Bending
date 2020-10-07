@@ -4,20 +4,18 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class ShockEffectEntity extends Entity {
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int life = 3;
 
     public ShockEffectEntity(int x, int y, int radius) {

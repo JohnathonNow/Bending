@@ -1,16 +1,17 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class BreathUnderWater extends Waterbending {
     public BreathUnderWater() {
@@ -42,7 +43,7 @@ public class BreathUnderWater extends Waterbending {
     @Override
     public void getPassiveAction(Client app) {
         if (app.world.inBounds(app.world.x, app.world.y) && app.energico > 0
-                && app.world.isType((int) app.world.x, (int) app.world.y, World.WATER)) {
+                && app.world.isType((int) app.world.x, (int) app.world.y, Constants.WATER)) {
             if (app.HP < app.MAXHP) {
                 app.energico -= 15 + (5 - number) * 5;
                 app.HP++;

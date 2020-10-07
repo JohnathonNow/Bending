@@ -4,15 +4,15 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.Random;
-
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.Random;
+
 /**
- *
  * @author John
  */
 public abstract class Entity extends Object {
@@ -130,11 +130,11 @@ public abstract class Entity extends Object {
     }
 
     public double lengthdir_x(double R, double T) {
-        return (R * Math.cos(T * Math.PI / 180));
+        return (R * Math.cos(T * Math.PI / Constants.HALF_FULL_ANGLE));
     }
 
     public double lengthdir_y(double R, double T) {
-        return (-R * Math.sin(T * Math.PI / 180));
+        return (-R * Math.sin(T * Math.PI / Constants.HALF_FULL_ANGLE));
     }
 
     public double pointDir(double x1, double y1, double x2, double y2) {

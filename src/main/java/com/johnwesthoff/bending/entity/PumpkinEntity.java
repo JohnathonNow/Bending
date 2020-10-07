@@ -4,30 +4,27 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
 /**
- *
  * @author John
  */
 public class PumpkinEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public static Color brown = new Color(0xCC6600);
 
     public PumpkinEntity(int x, int y) {
         X = x;
         Y = y;
-
     }
 
     boolean near = false;
@@ -36,19 +33,19 @@ public class PumpkinEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.ORANGE);
-            G.fillArc((int) (X - 16) - viewX, (int) (Y - 10) - viewY, 32, 20, 0, 360);
+            G.fillArc((int) (X - 16) - viewX, (int) (Y - 10) - viewY, 32, 20, 0, Constants.FULL_ANGLE);
             G.setColor(Color.BLACK);
-            G.drawArc((int) (X - 16) - viewX, (int) (Y - 10) - viewY, 32, 20, 0, 360);
-            G.drawArc((int) (X - 13) - viewX, (int) (Y - 10) - viewY, 26, 20, 0, 360);
-            G.drawArc((int) (X - 10) - viewX, (int) (Y - 10) - viewY, 20, 20, 0, 360);
-            G.drawArc((int) (X - 6) - viewX, (int) (Y - 10) - viewY, 12, 20, 0, 360);
-            G.drawArc((int) (X - 3) - viewX, (int) (Y - 12) - viewY, 6, 4, 0, 360);
+            G.drawArc((int) (X - 16) - viewX, (int) (Y - 10) - viewY, 32, 20, 0, Constants.FULL_ANGLE);
+            G.drawArc((int) (X - 13) - viewX, (int) (Y - 10) - viewY, 26, 20, 0, Constants.FULL_ANGLE);
+            G.drawArc((int) (X - 10) - viewX, (int) (Y - 10) - viewY, 20, 20, 0, Constants.FULL_ANGLE);
+            G.drawArc((int) (X - 6) - viewX, (int) (Y - 10) - viewY, 12, 20, 0, Constants.FULL_ANGLE);
+            G.drawArc((int) (X - 3) - viewX, (int) (Y - 12) - viewY, 6, 4, 0, Constants.FULL_ANGLE);
             G.drawRect((int) (X - 2) - viewX, (int) (Y - 14) - viewY, 4, 6);
-            G.drawArc(((int) X - 2) - viewX, (int) (Y - 16) - viewY, 4, 3, 0, 360);
+            G.drawArc(((int) X - 2) - viewX, (int) (Y - 16) - viewY, 4, 3, 0, Constants.FULL_ANGLE);
             G.setColor(brown);
-            G.fillArc((int) (X - 3) - viewX, (int) (Y - 11) - viewY, 7, 3, 0, 360);
+            G.fillArc((int) (X - 3) - viewX, (int) (Y - 11) - viewY, 7, 3, 0, Constants.FULL_ANGLE);
             G.fillRect((int) (X - 1) - viewX, (int) (Y - 13) - viewY, 3, 3);
-            G.fillArc((int) (X - 2) - viewX, (int) (Y - 16) - viewY, 4, 3, 0, 360);
+            G.fillArc((int) (X - 2) - viewX, (int) (Y - 16) - viewY, 4, 3, 0, Constants.FULL_ANGLE);
             // G.drawArc((X-3)-viewX, (Y-10)-viewY, 6, 20, 0, 360);
             if (near) {
                 G.setColor(Color.BLACK);

@@ -4,58 +4,23 @@
  */
 package com.johnwesthoff.bending.spells;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.air.*;
+import com.johnwesthoff.bending.spells.dark.*;
+import com.johnwesthoff.bending.spells.earth.*;
+import com.johnwesthoff.bending.spells.fire.*;
+import com.johnwesthoff.bending.spells.lightning.*;
+import com.johnwesthoff.bending.spells.water.*;
+import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.air.AirAffinity;
-import com.johnwesthoff.bending.spells.air.AirRun;
-import com.johnwesthoff.bending.spells.air.Airbending;
-import com.johnwesthoff.bending.spells.air.AirbendingAir;
-import com.johnwesthoff.bending.spells.air.AirbendingGust;
-import com.johnwesthoff.bending.spells.air.AirbendingJump;
-import com.johnwesthoff.bending.spells.air.AirbendingTornado;
-import com.johnwesthoff.bending.spells.dark.DarkAura;
-import com.johnwesthoff.bending.spells.dark.DarkSoulBall;
-import com.johnwesthoff.bending.spells.dark.DarkSummonBall;
-import com.johnwesthoff.bending.spells.dark.DarkTeleport;
-import com.johnwesthoff.bending.spells.dark.Darkness;
-import com.johnwesthoff.bending.spells.earth.Earthbending;
-import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
-import com.johnwesthoff.bending.spells.earth.EarthbendingShard;
-import com.johnwesthoff.bending.spells.earth.EarthbendingShield;
-import com.johnwesthoff.bending.spells.earth.EarthbendingSpike;
-import com.johnwesthoff.bending.spells.earth.EarthbendingStance;
-import com.johnwesthoff.bending.spells.earth.EarthbendingWallOfSand;
-import com.johnwesthoff.bending.spells.fire.FireProof;
-import com.johnwesthoff.bending.spells.fire.Firebending;
-import com.johnwesthoff.bending.spells.fire.FirebendingCharge;
-import com.johnwesthoff.bending.spells.fire.FirebendingJump;
-import com.johnwesthoff.bending.spells.fire.Firebending_Lava;
-import com.johnwesthoff.bending.spells.fire.Firebending_Thrower;
-import com.johnwesthoff.bending.spells.fire.Firebending_Wall;
-import com.johnwesthoff.bending.spells.lightning.Lightning;
-import com.johnwesthoff.bending.spells.lightning.LightningBall;
-import com.johnwesthoff.bending.spells.lightning.LightningMine;
-import com.johnwesthoff.bending.spells.lightning.LightningOvercharge;
-import com.johnwesthoff.bending.spells.lightning.LightningRod;
-import com.johnwesthoff.bending.spells.lightning.LightningShield;
-import com.johnwesthoff.bending.spells.lightning.LightningStorm;
-import com.johnwesthoff.bending.spells.water.BreathUnderWater;
-import com.johnwesthoff.bending.spells.water.WaterSpout;
-import com.johnwesthoff.bending.spells.water.WaterStorm;
-import com.johnwesthoff.bending.spells.water.WaterTreading;
-import com.johnwesthoff.bending.spells.water.Waterbending;
-import com.johnwesthoff.bending.spells.water.WaterbendingFreeze;
-import com.johnwesthoff.bending.spells.water.WaterbendingShard;
-import com.johnwesthoff.bending.util.network.OrderedOutputStream;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 /*
  * Energy cost table:
@@ -184,11 +149,11 @@ public abstract class Spell {
      * @param i
      * @return Current spell
      */
-    public static Spell getSpell(int i){
+    public static Spell getSpell(int i) {
         return spells.get(i);
     }
 
-    public static Spell getPassive(int i){
+    public static Spell getPassive(int i) {
         return passives.get(i);
     }
 
@@ -225,16 +190,15 @@ public abstract class Spell {
 
     /**
      * Executes the command for the spell as a result of a player action
-     * 
-     * @param app the game performing this action and having its state modified as
-     *            a result
      *
+     * @param app the client performing this action and having its state modified as
+     *            a result
      */
     public abstract void getAction(Client app);
 
     /**
      * Executes the command for the spell as a result of a network event
-     * 
+     *
      * @param world the game state object being modified as a result of this spell
      * @param px    the x coordinate of the casting player
      * @param py    the y coordinate of the casting player
@@ -242,10 +206,9 @@ public abstract class Spell {
      * @param my    the y coordinate of the mouse of the casting player
      * @param pid   the id of the casting player
      * @param eid   the id of the first entity created by casting this spell
-     *
      */
     public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
-            ByteBuffer buf);
+                                          ByteBuffer buf);
 
     public abstract int getCost();
 

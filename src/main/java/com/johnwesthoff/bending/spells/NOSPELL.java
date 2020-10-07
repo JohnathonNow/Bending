@@ -1,15 +1,14 @@
 
 package com.johnwesthoff.bending.spells;
 
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.ImageIcon;
-
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
+
+import javax.swing.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NOSPELL extends Spell {
     public NOSPELL() {

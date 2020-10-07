@@ -4,25 +4,22 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class SandEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;
-    int a1, a2, a3;
-    int s1, s2, s3;
+    int a1, a2, a3, s1, s2, s3;
     int life = 0;
 
     public SandEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -31,19 +28,19 @@ public class SandEntity extends Entity {
         xspeed = hspeed;
         yspeed = vspeed;
         maker = ma;
-        a1 = 60 + r.nextInt(120);
-        a2 = 60 + r.nextInt(120);
-        a3 = 60 + r.nextInt(120);
-        s1 = r.nextInt(360);
-        s2 = r.nextInt(360);
-        s3 = r.nextInt(360);
+        a1 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        a2 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        a3 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        s1 = r.nextInt(Constants.FULL_ANGLE);
+        s2 = r.nextInt(Constants.FULL_ANGLE);
+        s3 = r.nextInt(Constants.FULL_ANGLE);
     }
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.YELLOW);
-            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, 360);
+            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, Constants.FULL_ANGLE);
 
             G.setColor(Color.GRAY);
             G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, s1, a1);
@@ -81,9 +78,9 @@ public class SandEntity extends Entity {
         time = System.currentTimeMillis();
         if (!lol.earth.inBounds(X, Y) || lol.earth.checkCollision(X, Y)) {
             radius /= 2;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, World.SAND);
+            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.SAND);
             lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(World.SAND));
+                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(Constants.SAND));
         }
     }
 

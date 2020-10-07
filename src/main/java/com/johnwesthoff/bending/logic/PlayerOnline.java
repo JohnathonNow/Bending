@@ -30,10 +30,8 @@ public class PlayerOnline extends Player implements Runnable {
     public Socket playerSocket;
     public InputStream in;
     public OrderedOutputStream out;
-    public boolean ready = false;
+    public boolean ready = false, alive = true, loggedIn = false, voted = false;
     public Server handle;
-    public boolean alive = true;
-    public boolean loggedIn = false, voted = false;
 
     public PlayerOnline(int X, int Y, Socket s, int ide, Server h) {
         super(X, Y, new byte[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 });
