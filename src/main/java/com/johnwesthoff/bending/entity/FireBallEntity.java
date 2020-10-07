@@ -4,6 +4,10 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
+<<<<<<< HEAD
+=======
+import com.johnwesthoff.bending.Client;
+>>>>>>> 3cd39e5d65d1097a087bdc621ea89b579cb4a1aa
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -76,6 +80,22 @@ public class FireBallEntity extends Entity {
         {
             alive = false;
             lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(this.MYID));
+        }
+    }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.status |= World.ST_FLAMING;
+            client.world.vspeed -= 7;
+            client.xspeed += 9 - client.random.nextInt(18);
+            client.lastHit = maker;
+            alive = false;
+            client.world.status |= World.ST_FLAMING;
+            client.killMessage = "~ was burninated by `.";
         }
     }
 

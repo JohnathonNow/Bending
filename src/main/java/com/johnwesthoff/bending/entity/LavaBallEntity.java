@@ -4,15 +4,19 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author John
@@ -36,11 +40,13 @@ public class LavaBallEntity extends Entity {
             Graphics2D g = (Graphics2D) G;
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
-            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                    r.nextInt(Constants.FULL_COLOR_VALUE)));
             g.fillArc((int) (X - 6) - viewX, (int) (Y - 6) - viewY, 12, 12, 0, Constants.FULL_ANGLE);
             for (int i = 0; i < 4; i++) {
                 int e1 = 6 - r.nextInt(12), e2 = 6 - r.nextInt(12);
-                g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+                g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                        r.nextInt(Constants.FULL_COLOR_VALUE)));
                 g.fillArc((int) (X + e1) - viewX, (int) (Y + e2) - viewY, e1, e2, 0, Constants.FULL_ANGLE);
             }
             g.setComposite(c);
@@ -90,8 +96,19 @@ public class LavaBallEntity extends Entity {
         }
     }
 
+    @Override
+    public void checkAndHandleCollision(Client client) {
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.lastHit = maker;
+            client.killMessage = "How did ` beat ~?";
+            alive = false;
+        }
+    }
+
     /**
      * Method to get whether the lava ball collided with water
+     * 
      * @param w World in which this should be tested
      * @return true (if the lava ball collided with water) or false (else)
      */
@@ -124,9 +141,9 @@ public class LavaBallEntity extends Entity {
         }
     }
 
-
     /**
      * Reconstruct the lava ball entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

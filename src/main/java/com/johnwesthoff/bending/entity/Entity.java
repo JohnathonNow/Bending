@@ -5,6 +5,7 @@ package com.johnwesthoff.bending.entity;
  */
 
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
@@ -31,6 +32,7 @@ public abstract class Entity extends Object {
 
     /**
      * Method to get the current state of the Player
+     * 
      * @return true (if the Player is still alive) or false (else)
      */
     public boolean getAlive() {
@@ -39,6 +41,7 @@ public abstract class Entity extends Object {
 
     /**
      * Method to set the current state of the Player
+     * 
      * @param a Boolean to which the state should be changed
      */
     public void setAlive(boolean a) {
@@ -47,6 +50,7 @@ public abstract class Entity extends Object {
 
     /**
      * Get the x-coordinate
+     * 
      * @return x-coordinate
      */
     public int getX() {
@@ -55,6 +59,7 @@ public abstract class Entity extends Object {
 
     /**
      * Get the y-coordinate
+     * 
      * @return y-coordinate
      */
     public int getY() {
@@ -63,6 +68,7 @@ public abstract class Entity extends Object {
 
     /**
      * Get the speed on the x-axis
+     * 
      * @return speed on the x-axis
      */
     public int getXspeed() {
@@ -71,6 +77,7 @@ public abstract class Entity extends Object {
 
     /**
      * Get the speed on the y-axis
+     * 
      * @return speed on the y-axis
      */
     public int getYspeed() {
@@ -79,6 +86,7 @@ public abstract class Entity extends Object {
 
     /**
      * Set the x-coordinate
+     * 
      * @param x value to set the x coordinate (integer)
      */
     public void setX(int x) {
@@ -87,6 +95,7 @@ public abstract class Entity extends Object {
 
     /**
      * Set the y-coordinate
+     * 
      * @param y value to set the y coordinate (integer)
      */
     public void setY(int y) {
@@ -95,6 +104,7 @@ public abstract class Entity extends Object {
 
     /**
      * Set the speed on the x-axis
+     * 
      * @param x value to set the speed (integer)
      */
     public void setXspeed(int x) {
@@ -103,6 +113,7 @@ public abstract class Entity extends Object {
 
     /**
      * Set the speed on the y-axis
+     * 
      * @param y value to set the speed (integer)
      */
     public void setYspeed(int y) {
@@ -147,6 +158,7 @@ public abstract class Entity extends Object {
 
     /**
      * Get the distance to an entity
+     * 
      * @param e the entity to which the distance should be returned
      * @return distance
      */
@@ -170,5 +182,9 @@ public abstract class Entity extends Object {
         String whatIam = "~~~" + getClass().getName() + "~~~" + "\nX: " + X + " Y: " + Y + "\nI am "
                 + (alive ? "alive" : "dead");
         return whatIam;
+    }
+
+    public void checkAndHandleCollision(Client client) {
+        // do nothing
     }
 }

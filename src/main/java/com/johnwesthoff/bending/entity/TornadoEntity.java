@@ -4,15 +4,15 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -107,4 +107,17 @@ public class TornadoEntity extends Entity {
         }
     }
 
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && life < 80) {
+            client.hurt(1);
+            client.xspeed += 1 - client.random.nextInt(2);
+            client.xspeed *= -1;
+            client.world.x = (int) X + (int) client.xspeed;
+            client.world.move = 0;
+            client.lastHit = maker;
+            client.killMessage = "~ was sucked into `'s Tornado.";
+        }
+    }
 }

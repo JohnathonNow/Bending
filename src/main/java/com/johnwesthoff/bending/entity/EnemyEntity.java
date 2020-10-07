@@ -4,18 +4,20 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author John
@@ -48,7 +50,8 @@ public class EnemyEntity extends Entity {
             // G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
             G.drawImage(sprite, (int) ((drawX - viewX) * 3f) - 32, (int) ((drawY - viewY) * 3f) - 32, null);
             G.setColor(Color.DARK_GRAY);
-            G.drawString(name, (int) ((X - (name.length()) + 3) - viewX) * Constants.MULTIPLIER, (int) (Y - viewY - 24) * Constants.MULTIPLIER);
+            G.drawString(name, (int) ((X - (name.length()) + 3) - viewX) * Constants.MULTIPLIER,
+                    (int) (Y - viewY - 24) * Constants.MULTIPLIER);
         }
         // System.out.println("HI!");
     }
@@ -270,6 +273,19 @@ public class EnemyEntity extends Entity {
     }
 
     @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && master != client.ID
+                && (client.gameMode <= 0 || !client.myTeam.contains(master))) {
+            client.hurt(7);
+            client.world.vspeed -= 4;
+            client.xspeed += 4 - client.random.nextInt(8);
+            client.lastHit = master;
+            client.killMessage = "~ was defeated by `'s dark minion.";
+        }
+    }
+
+    @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out, this.getClass().getName());
@@ -293,6 +309,7 @@ public class EnemyEntity extends Entity {
 
     /**
      * Method to reconstruct an enemy in a given world
+     * 
      * @param in
      * @param world World in which the enemy should be reconstructed
      */
