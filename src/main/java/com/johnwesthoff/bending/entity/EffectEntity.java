@@ -4,14 +4,12 @@
  */
 package com.johnwesthoff.bending.entity;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class EffectEntity extends Entity {

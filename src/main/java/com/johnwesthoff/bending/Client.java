@@ -735,7 +735,7 @@ public class Client extends JPanel implements Runnable {
                                             hurt(12);
                                             killMessage = "~ was electrified by `.";
                                             if (world.inBounds(world.x, world.y)
-                                                    && world.ground.cellData[(int) world.x][(int) world.y] == World.WATER) {
+                                                    && world.ground.cellData[(int) world.x][(int) world.y] == Constants.WATER) {
                                                 hurt(12);
                                                 killMessage = "~ will never go in the water during a storm again, thanks to `!";
                                                     }
@@ -1057,23 +1057,23 @@ public class Client extends JPanel implements Runnable {
                 // System.out.println(delta);
                 if (removeAura > 0) {
                     removeAura--;
-                    world.status |= World.ST_DRAIN;
+                    world.status |= Constants.ST_DRAIN;
                     if (removeAura == 0) {
-                        world.status &= ~World.ST_DRAIN;
+                        world.status &= ~Constants.ST_DRAIN;
                         sendMovement();
                     }
                 }
                 if (turnVisible > 0) {
                     turnVisible--;
-                    world.status |= World.ST_INVISIBLE;
+                    world.status |= Constants.ST_INVISIBLE;
                     if (turnVisible == 0) {
-                        world.status &= ~World.ST_INVISIBLE;
+                        world.status &= ~Constants.ST_INVISIBLE;
                         sendMovement();
                     }
                 }
                 if (gameMode == Server.THEHIDDEN) {
                     if (goodTeam) {
-                        world.status |= World.ST_INVISIBLE;
+                        world.status |= Constants.ST_INVISIBLE;
                         spellBook = 5;// Force use of TheHidden book
                     } else {
                         if (!badTeam.isEmpty()) {
@@ -1125,23 +1125,23 @@ public class Client extends JPanel implements Runnable {
                 if (energico < 0) {
                     energico = 0;
                 }
-                if (world.isType((int) world.x, (int) world.y, World.LAVA)) {
-                    world.status |= World.ST_FLAMING;
+                if (world.isType((int) world.x, (int) world.y, Constants.LAVA)) {
+                    world.status |= Constants.ST_FLAMING;
                     killMessage = "~ burned to a crisp after fighting `!";
                 }
-                if ((world.status & World.ST_FLAMING) != 0) {
+                if ((world.status & Constants.ST_FLAMING) != 0) {
                     HP -= random.nextInt(2);
                     if ((passiveList[spellBook].getName().equals("Fireproof"))) {
                         energico += (inputer.doublecast * 3);
                     }
                     if (random.nextInt(10) == 0) {
-                        world.status &= ~World.ST_FLAMING;// Stop being on fire
+                        world.status &= ~Constants.ST_FLAMING;// Stop being on fire
                     }
                 }
-                if ((world.status & World.ST_SHOCKED) != 0) {
+                if ((world.status & Constants.ST_SHOCKED) != 0) {
                     energico -= 25;
                     if (random.nextInt(10) == 0) {
-                        world.status &= ~World.ST_SHOCKED;// Stop being on fire
+                        world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
                     }
                 }
                 if (world.isIce((int) world.x, (int) world.y + 6)) {
@@ -1159,9 +1159,9 @@ public class Client extends JPanel implements Runnable {
                 dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
 
                 for (final Player p : world.playerList) {
-                    if ((p.status & World.ST_DRAIN) != 0) {
-                        if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
-                            if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
+                    if ((p.status & Constants.ST_DRAIN) != 0) {
+                        if (Math.abs(p.x - world.x) < Constants.AURA_RADIUS / 2) {
+                            if (Math.abs(p.y - world.y) < Constants.AURA_RADIUS / 2) {
                                 lastHit = p.ID;
                                 killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
                                 HP--;// Lose health from aura
@@ -1225,12 +1225,12 @@ public class Client extends JPanel implements Runnable {
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             world.vspeed -= 7;
                             xspeed += 9 - random.nextInt(18);
                             lastHit = me3.maker;
                             me3.alive = false;
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             killMessage = "~ was burninated by `.";
                                 }
                     }
@@ -1239,12 +1239,12 @@ public class Client extends JPanel implements Runnable {
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(2);
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             world.vspeed -= 2;
                             xspeed += 2 - random.nextInt(4);
                             lastHit = me3.maker;
                             me3.alive = false;
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             killMessage = "~ was set ablaze by `.";
                                 }
                     }
@@ -1264,12 +1264,12 @@ public class Client extends JPanel implements Runnable {
                         if (checkCollision(me3.X, me3.Y) && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(65);
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             world.vspeed -= 39;
                             xspeed += 47 - random.nextInt(94);
                             lastHit = me3.maker;
                             me3.alive = false;
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             killMessage = "~ shouldn't have stolen `'s burito...";
                                 }
                     }
@@ -1305,7 +1305,7 @@ public class Client extends JPanel implements Runnable {
                         if (pointDis(me3.X, me3.Y, world.x, world.y) < me3.radius * 4 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             world.vspeed += me3.yspeed * 2;
                             xspeed += me3.xspeed;
                             lastHit = me3.maker;
@@ -1397,7 +1397,7 @@ public class Client extends JPanel implements Runnable {
                             lastHit = me3.maker;
                             world.vspeed -= 8;
                             xspeed += 9 - random.nextInt(18);
-                            world.status |= World.ST_FLAMING;
+                            world.status |= Constants.ST_FLAMING;
                             killMessage = "~ smelled `'s armpits, and then died.";
                                 }
                     }

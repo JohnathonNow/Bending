@@ -36,7 +36,7 @@ public class StaticShotEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(radius == 0 ? Color.blue : Color.red);
-            G.drawArc(((int) X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, 360);
+            G.drawArc(((int) X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, Constants.FULL_ANGLE);
             G.drawLine((int) (X - 2) - viewX, (int) Y - viewY, (int) (X + 2) - viewX, (int) Y - viewY);
         }
     }

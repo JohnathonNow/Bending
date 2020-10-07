@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RockEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -28,13 +29,13 @@ public class Earthbending extends Spell {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
         double direction = 360 - Client.pointDir(app.world.x - app.world.viewX, app.world.y - app.world.viewY,
                 app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        if (app.world.isSolid(app.world.x, app.world.y - World.head + 1)) {
+        if (app.world.isSolid(app.world.x, app.world.y - Constants.HEAD + 1)) {
             app.energico += 50;
         }
         mx = ((int) (Client.lengthdir_x(12, direction)));

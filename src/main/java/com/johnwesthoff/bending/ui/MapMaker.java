@@ -33,6 +33,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -685,47 +686,47 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
                     blue = getBlue(color);
                     green = getGreen(color);
                     if (red > 200 && blue > 200 && green > 200) {
-                        writeData[cx][cy] = World.AIR;
+                        writeData[cx][cy] = Constants.AIR;
                         continue;
                     }
                     if (red > 100 && blue > 200 && green < 20) {
-                        writeData[cx][cy] = World.CRYSTAL;
+                        writeData[cx][cy] = Constants.CRYSTAL;
                         continue;
                     }
                     if (red < 50 && blue > 100 && green > 40) {
-                        writeData[cx][cy] = World.ETHER;
+                        writeData[cx][cy] = Constants.ETHER;
                         continue;
                     }
                     if (red < 100 && blue < 100 && green > 200) {
-                        writeData[cx][cy] = World.GROUND;
+                        writeData[cx][cy] = Constants.GROUND;
                         continue;
                     }
                     if (red < 100 && blue > 200 && green > 200) {
-                        writeData[cx][cy] = World.ICE;
+                        writeData[cx][cy] = Constants.ICE;
                         continue;
                     }
                     if (red > 200 && blue < 20 && green < 20) {
-                        writeData[cx][cy] = World.LAVA;
+                        writeData[cx][cy] = Constants.LAVA;
                         continue;
                     }
                     if (red < 20 && blue < 20 && green < 20) {
-                        writeData[cx][cy] = World.OIL;
+                        writeData[cx][cy] = Constants.OIL;
                         continue;
                     }
                     if (red > 200 && blue < 20 && green > 200) {
-                        writeData[cx][cy] = World.SAND;
+                        writeData[cx][cy] = Constants.SAND;
                         continue;
                     }
                     if (red > 100 && blue > 100 && green > 100) {
-                        writeData[cx][cy] = World.STONE;
+                        writeData[cx][cy] =Constants.STONE;
                         continue;
                     }
                     if (red > 100 && blue < 20 && green < 256) {
-                        writeData[cx][cy] = World.TREE;
+                        writeData[cx][cy] = Constants.TREE;
                         continue;
                     }
                     if (red < 20 && blue > 200 && green < 20) {
-                        writeData[cx][cy] = World.WATER;
+                        writeData[cx][cy] = Constants.WATER;
                         continue;
                     }
                 }

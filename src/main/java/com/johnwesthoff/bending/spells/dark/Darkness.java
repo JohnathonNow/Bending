@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -28,7 +29,7 @@ public class Darkness extends Spell {
     @Override
     public void getAction(Client app) {
         app.turnVisible = 40 * 3;
-        app.world.status |= World.ST_INVISIBLE;
+        app.world.status |= Constants.ST_INVISIBLE;
         app.sendMovement();
     }
 

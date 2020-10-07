@@ -1,16 +1,17 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class WaterTreading extends Waterbending {
     public WaterTreading() {
@@ -43,7 +44,7 @@ public class WaterTreading extends Waterbending {
     public void getPassiveAction(Client app) {
         Client.swimmingSpeed = 1 + (0.23 * (double) (number));
         if (app.world.inBounds(app.world.x, app.world.y)
-                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y] == World.WATER) {
+                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y] == Constants.WATER) {
             app.lungs = app.maxlungs;
         }
     }

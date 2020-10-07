@@ -4,15 +4,14 @@
  */
 package com.johnwesthoff.bending.entity;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class RainEntity extends Entity {
@@ -33,7 +32,7 @@ public class RainEntity extends Entity {
         G.setColor(Color.GRAY);
         for (int i = 0; i < 14; i++) {
             G.fillArc((int) X + 20 - r.nextInt(80) - viewX, (int) Y + 10 - r.nextInt(20) - viewY - 10,
-                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, 360);
+                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, Constants.FULL_ANGLE);
         }
     }
 

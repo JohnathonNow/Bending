@@ -4,21 +4,19 @@
  */
 package com.johnwesthoff.bending.entity;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author John
  */
 public class CloudEntity extends Entity {
 
-    int life = 250;
-    int maker;
+    int life = 250, maker;
 
     public CloudEntity(int x, int y, int ID) {
         X = x;
@@ -33,7 +31,7 @@ public class CloudEntity extends Entity {
         G.setColor(Color.DARK_GRAY);
         for (int i = 0; i < 14; i++) {
             G.fillArc((int) X + 20 - r.nextInt(80) - viewX, (int) Y + 10 - r.nextInt(20) - viewY - 10,
-                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, 360);
+                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, Constants.FULL_ANGLE);
         }
     }
 
