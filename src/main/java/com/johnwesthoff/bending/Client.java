@@ -1,29 +1,34 @@
 package com.johnwesthoff.bending;
 
-import com.johnwesthoff.bending.entity.*;
-import com.johnwesthoff.bending.logic.ClientInputListener;
-import com.johnwesthoff.bending.logic.Player;
-import com.johnwesthoff.bending.logic.PlayerOnline;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
-import com.johnwesthoff.bending.ui.*;
-import com.johnwesthoff.bending.util.audio.RealClip;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
-import com.johnwesthoff.bending.util.network.OrderedOutputStream;
-import com.johnwesthoff.bending.util.network.ResourceLoader;
-import com.johnwesthoff.bending.util.network.StringLongBoolean;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
-import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.MenuItem;
+import java.awt.Polygon;
+import java.awt.PopupMenu;
+import java.awt.Rectangle;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -95,6 +100,7 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
 /**
+ *
  * @author Family
  */
 public class Client extends JPanel implements Runnable {
@@ -120,24 +126,39 @@ public class Client extends JPanel implements Runnable {
     public static AppletActionListener actioner;
     public static ClientInputListener inputer;
     public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
-    public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000, engrecharge = 4, killingSpree = 0, xspeed = 0, prevMove, prevVspeed = 0;
-    public static double runningSpeed = 1d, swimmingSpeed = 1d;
+    public static boolean currentlyLoggedIn = false;
+    public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
+    public int port = 25565;
     public Properties userpassinfo;
     public ClothingChooser1 cc = new ClothingChooser1(this);
+    public double engrecharge = 4;
     public Random random = new Random();
-    public Thread mainProcess, communication;
+    public String serverIP = "LocalHost";
+    public Thread mainProcess;
+    public boolean notDone = true;
+    public boolean ignored = true;
     public Image doubleBuffer;
     public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
     public static BufferedImage bimage;
     public Graphics2D graphicsBuffer, biggraphicsBuffer;
     public URL base;// = getDocumentBase();
+    public String temp;
     public static String username;
     public World world;
+    public double killingSpree = 0;
+    public boolean loggedOn = false;
     public Server hostingPlace;
+    public int spellBook = 0;
+    public LinkedList<World> worldList = new LinkedList<>();
+    public long lastTime = 0;
     public InputStream input;
     public OrderedOutputStream out;
     public Socket connection;
     public JFrame owner;
+    public short MAXHP, HP = MAXHP = 100;
+    public static boolean gameAlive = true;
+    public int maxlungs, lungs = maxlungs = 100;
+    public static double runningSpeed = 1d, swimmingSpeed = 1d;
     public static Client thisone;
     public static int XP = 0;
     public double prevVspeed = 0;
@@ -155,17 +176,15 @@ public class Client extends JPanel implements Runnable {
     public Verify exactly = new Verify();
     public SystemTray ST;
     public TrayIcon trayIcon;
-    public boolean gameAlive = true;
     public Spell[][] spellList;
     public Spell[] passiveList;
+    public int leftClick = 0, rightClick = 1, midClick = 2;
+    public double xspeed = 0;
     public SpellList1 spellselection;
     public static JFrame container;
     public static JTabbedPane immaKeepTabsOnYou;
-    public static byte[] Clothing = new byte[]{1, 1, 1, 1, 1, 1};
-    public static int[] Colors = new int[]{Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB()};
-    public static int[] Colors2 = new int[]{Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB()};
+    public double prevMove;
+    public short turnVisible = -1, removeAura = -1;
 
     /**
      * GameService instance
@@ -371,7 +390,7 @@ public class Client extends JPanel implements Runnable {
 
         Client.jtb.setSize(300 - 128, 16);
         Client.jtb.setPreferredSize(Client.jtb.getSize());
-        // me.jtb.setLocation(16, 16);
+        // me.jtb.setLocation(16, 16);dfsdfsdf
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
@@ -399,7 +418,7 @@ public class Client extends JPanel implements Runnable {
         immaKeepTabsOnYou.setUI(new BasicTabbedPaneUI() {
             @Override
             protected int calculateTabAreaHeight(final int tab_placement, final int run_count,
-                                                 final int max_tab_height) {
+                    final int max_tab_height) {
                 return 0;
             }
         });
@@ -527,6 +546,12 @@ public class Client extends JPanel implements Runnable {
     public short dig = 0;
     public boolean loggedIn = false;
     public boolean failed = false;
+    public Thread communication;
+    public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
+    public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+    public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
+        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
         try {
@@ -557,7 +582,7 @@ public class Client extends JPanel implements Runnable {
             out.addMesssage(tt, Server.LOGIN);
             ID = -1;
             world.ID = ID;
-            playerHitbox = new Rectangle(0, 0, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
+            playerHitbox = new Rectangle(0, 0, 20, 40);
             communication = new Thread() {
                 @Override
                 public void run() {
@@ -585,21 +610,12 @@ public class Client extends JPanel implements Runnable {
                                     // iid = input.read();
                                     final String feliceNavidad = Server.getString(rasputin);
                                     final Player yes = new Player(300, 300,
-<<<<<<< HEAD
                                             new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
                                                 rasputin.get(), rasputin.get() },
                                                 new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
                                                     rasputin.getInt(), rasputin.getInt(), rasputin.getInt() },
                                                     new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
                                                         rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
-=======
-                                            new byte[]{rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
-                                                    rasputin.get(), rasputin.get()},
-                                            new int[]{rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt()},
-                                            new int[]{rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt()});
->>>>>>> 30977f6e6c69ad522b6e0fcfdc33cae85ac01e49
                                     world.playerList.add(yes);
                                     final boolean sameTeam = rasputin.get() == 12;
                                     // yes.username = Server.getString(rasputin);
@@ -914,7 +930,7 @@ public class Client extends JPanel implements Runnable {
     public Rectangle playerHitbox;
 
     public boolean checkCollision(final float px, final float py) {
-        playerHitbox.setLocation((int) world.x - playerHitbox.width / 2, (int) world.y - (Constants.HEAD + 10));
+        playerHitbox.setLocation((int) world.x - playerHitbox.width / 2, (int) world.y - (World.head + 10));
         return (playerHitbox.contains(px, py));
     }
 
@@ -959,7 +975,7 @@ public class Client extends JPanel implements Runnable {
 
         for (int i = 0; i < resolution; i++) {
             Xx = (int) world.x - world.viewX;
-            Yy = (int) world.y - Constants.HEAD - world.viewY;
+            Yy = (int) world.y - World.head - world.viewY;
             yes = true;
             d = 0;
             dr = i * (360 / resolution);
@@ -1097,8 +1113,8 @@ public class Client extends JPanel implements Runnable {
                 if (world.x > world.wIdTh) {
                     world.x = world.wIdTh;
                 }
-                if (world.checkCollision(world.x, world.y - Constants.HEAD)
-                        || world.isLiquid(world.x, world.y - Constants.HEAD)) {
+                if (world.checkCollision(world.x, world.y - World.head)
+                        || world.isLiquid(world.x, world.y - World.head)) {
                     if (lungs-- < 0) {
                         HP--;
                         killMessage = "~ suffocated after fighting `...";
@@ -1299,7 +1315,7 @@ public class Client extends JPanel implements Runnable {
                     }
                     if (e instanceof ShardEntity) {
                         final ShardEntity me3 = (ShardEntity) e;
-                        if (pointDis(me3.X, me3.Y - Constants.HEAD, world.x, world.y) < me3.radius * 4 && me3.maker != ID
+                        if (pointDis(me3.X, me3.Y - World.head, world.x, world.y) < me3.radius * 4 && me3.maker != ID
                                 && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
                             hurt(15);
                             world.vspeed -= 5;
@@ -1730,7 +1746,7 @@ public class Client extends JPanel implements Runnable {
                 graphicsBuffer.fillRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
 
-                graphicsBuffer.setColor(Constants.PURPLE);
+                graphicsBuffer.setColor(purple);
                 graphicsBuffer.drawRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) energico / (double) maxeng)));
                 if (world.keys[KeyEvent.VK_ALT]) {
@@ -1785,11 +1801,11 @@ public class Client extends JPanel implements Runnable {
                  * biggraphicsBuffer.translate(-world.viewX, -world.viewY);
                  * biggraphicsBuffer.draw(playerHitbox);
                  * biggraphicsBuffer.setTransform(prevTrans);
-                 *
+                 * 
                  * }
                  */
                 if (world.dead) {
-                    biggraphicsBuffer.setColor(Constants.DEADBG);
+                    biggraphicsBuffer.setColor(deadbg);
                     biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
                     biggraphicsBuffer.setColor(Color.BLACK);
                     if (gameMode == Server.THEHIDDEN && !goodTeam) {
@@ -2116,13 +2132,8 @@ public class Client extends JPanel implements Runnable {
         }
 
         @Override
-<<<<<<< HEAD
         public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value, final int index,
                 final boolean isSelected, final boolean cellHasFocus) {
-=======
-        public Component getListCellRendererComponent(final JList list, final Object value, final int index,
-                                                      final boolean isSelected, final boolean cellHasFocus) {
->>>>>>> 30977f6e6c69ad522b6e0fcfdc33cae85ac01e49
             setModel(new RowTableModel((Row) value));
             this.getColumnModel().getColumn(0).setWidth(100);
             if (isSelected) {
@@ -2174,7 +2185,7 @@ public class Client extends JPanel implements Runnable {
 
     public void drawChat() {
         for (int i = 0; i < chat.length; i++) {
-            biggraphicsBuffer.setColor(Constants.BACKGROUND_CHAT);
+            biggraphicsBuffer.setColor(backgroundChat);
             biggraphicsBuffer.fillRect(32, 826 - (16 * ((chat.length - i) + 1)),
                     biggraphicsBuffer.getFontMetrics().stringWidth(chat[i]), 16);
             biggraphicsBuffer.setColor(chatcolor[i]);
