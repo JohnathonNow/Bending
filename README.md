@@ -13,8 +13,7 @@ and "working" online multiplayer<sup  id="a1">[1](#fn1)</sup>.
 There should be no expectation that the code here is "good". It was almost entirely
 written by a highschooler who was undeterred by two consecutive last-place finishes in
 [Java4k](https://en.wikipedia.org/wiki/Java_4K_Game_Programming_Contest).
-As such, most of the code is laid out very poorly, completely ignores all best practices,
-completely, and is absolutely riddled with linter warnings. That said, the game compiles
+As such, most of the code is laid out very poorly, completely ignores all best practices, and is absolutely riddled with linter warnings. That said, the game compiles
 fine, and it even runs, too. In fact, it's been tested to run on both Linux and Windows!<sup  id="a2">[2](#fn2)</sup>
 
 Building + Running
