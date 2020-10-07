@@ -90,12 +90,12 @@ public class FirePuffEntity extends Entity {
         if (client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.hurt(2);
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.world.vspeed -= 2;
             client.xspeed += 2 - client.random.nextInt(4);
             client.lastHit = maker;
             alive = false;
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.killMessage = "~ was set ablaze by `.";
         }
     }

@@ -15,7 +15,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.spells.*;
+import com.johnwesthoff.bending.spells.Spell;
 
 /**
  *
@@ -108,7 +108,6 @@ public class PassiveChooser1 extends javax.swing.JPanel {
 
     }
 
-
     public javax.swing.JList<Object> getList() {
         return jList1;
     }
@@ -133,8 +132,8 @@ public class PassiveChooser1 extends javax.swing.JPanel {
          * returns the label, set up to display the text and image.
          */
         @Override
-        public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected,
-                boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,
+                boolean isSelected, boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

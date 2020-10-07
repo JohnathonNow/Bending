@@ -60,7 +60,7 @@ public class RainEntity extends Entity {
             lol.sendMessage(Server.PUDDLE, ByteBuffer.allocate(40).putInt(x).putInt((int) Y).putInt(10));
         }
         if (life-- < 0) {
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
             lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(40).putInt(MYID));
         }

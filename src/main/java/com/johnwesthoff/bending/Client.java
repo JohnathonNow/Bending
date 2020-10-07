@@ -282,7 +282,7 @@ public class Client extends JPanel implements Runnable {
         }
         main.setBackground(Color.white);
         main.setLayout(null);
-        main.menu = new JComboBox() {
+        main.menu = new JComboBox<Object>() {
             private static final long serialVersionUID = -5781421606071388365L;
 
             @Override

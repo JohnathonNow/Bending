@@ -492,9 +492,8 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                 post += i == colors2.length - 1 ? "" : ",";
             }
             // System.out.println(post);
-
             avatarService.changesAppearance(post, Client.jtb.getText());
-        } // TODO add your handling code here:
+        }
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {

@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 import com.johnwesthoff.bending.app.player.PlayerService;
 import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 /**
  *
@@ -23,6 +22,7 @@ public class Verify extends javax.swing.JFrame {
      *
      */
     private static final long serialVersionUID = 8799324099740580274L;
+
     /**
      * Creates new form Register
      */
@@ -87,7 +87,6 @@ public class Verify extends javax.swing.JFrame {
     }// GEN-LAST:event_usernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-
 
         if (playerService.verify(username.getText())) {
             JOptionPane.showMessageDialog(rootPane, "Verification Complete!");

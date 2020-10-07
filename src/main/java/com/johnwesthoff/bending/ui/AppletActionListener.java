@@ -89,12 +89,8 @@ public class AppletActionListener implements ActionListener {
                     // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 app.serverOutput();
-                System.err.printf(
-                        "Server %s started\nwith address %s" + app.hostIP + "\nand port " + app.port,
-                        gameService.getServerName(),
-                        gameService.getHostIp(),
-                        gameService.getPort()
-                );
+                System.err.printf("Server %s started\nwith address %s" + app.hostIP + "\nand port " + app.port,
+                        gameService.getServerName(), gameService.getHostIp(), gameService.getPort());
                 app.getHosts();
             } else {
                 app.hosting.setText("Server Unstartable");
@@ -195,8 +191,8 @@ public class AppletActionListener implements ActionListener {
                         app.userpassinfo.setProperty("remember", "");
                     }
                     try {
-                        app.userpassinfo
-                                .store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
+                        app.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")),
+                                "");
                     } catch (final Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }

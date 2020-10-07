@@ -4,6 +4,32 @@
  */
 package com.johnwesthoff.bending.logic;
 
+import static com.johnwesthoff.bending.Constants.AIR;
+import static com.johnwesthoff.bending.Constants.AURA_RADIUS;
+import static com.johnwesthoff.bending.Constants.CRYSTAL;
+import static com.johnwesthoff.bending.Constants.ETHER;
+import static com.johnwesthoff.bending.Constants.GROUND;
+import static com.johnwesthoff.bending.Constants.HEAD;
+import static com.johnwesthoff.bending.Constants.HEIGHT_INT;
+import static com.johnwesthoff.bending.Constants.ICE;
+import static com.johnwesthoff.bending.Constants.LAND_TEX_SIZE;
+import static com.johnwesthoff.bending.Constants.LAVA;
+import static com.johnwesthoff.bending.Constants.LIQUID_LIST;
+import static com.johnwesthoff.bending.Constants.OIL;
+import static com.johnwesthoff.bending.Constants.OIL_COLOR;
+import static com.johnwesthoff.bending.Constants.SAND;
+import static com.johnwesthoff.bending.Constants.STONE;
+import static com.johnwesthoff.bending.Constants.ST_DRAIN;
+import static com.johnwesthoff.bending.Constants.ST_FLAMING;
+import static com.johnwesthoff.bending.Constants.ST_INVISIBLE;
+import static com.johnwesthoff.bending.Constants.TREE;
+import static com.johnwesthoff.bending.Constants.UGROUND;
+import static com.johnwesthoff.bending.Constants.UICE;
+import static com.johnwesthoff.bending.Constants.USTONE;
+import static com.johnwesthoff.bending.Constants.WATER;
+import static com.johnwesthoff.bending.Constants.WATER_COLOR;
+import static com.johnwesthoff.bending.Constants.WIDTH_INT;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,24 +58,12 @@ import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.Coordinate;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import static com.johnwesthoff.bending.Constants.*;
-
 /**
  * @author John
  */
 public class World implements Serializable {
     private static final long serialVersionUID = -5361438813968515971L;
-    public int incX, incY, floatiness = 0, viewX = 0, viewY = 0, viewdX = 0, viewdY = 0, flowCount = 0,
-            maxFlow = 5000;
+    public int incX, incY, floatiness = 0, viewX = 0, viewY = 0, viewdX = 0, viewdY = 0, flowCount = 0, maxFlow = 5000;
     public Random random = new Random();
     public CollisionChecker ground;
     public final CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
@@ -84,22 +98,21 @@ public class World implements Serializable {
     public final int[][] liquidStats = new int[Constants.LIQUID_LIST.length][6];
     public final byte[] aList = new byte[127];
     public int miGenH = 300, maGenH = 300, wIdTh = 900, hEigHt = 900;
-    public Graphics2D Gter = Iter.createGraphics();
-    public Server lol;
+    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE };
+    public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
 
+    public int ID = 0;
+    public Server lol = null;
+    public Graphics2D Gter = Iter.createGraphics();
     public World() {
         this(true, 900, 900, null, null, null, null, null, null, null, null, null, null);
         x = 150;
         maxFlow = 150000;
-        // entityList.add(new HouseEntity(150,600,20,20));
-        // entityList.add(new EnemyEntity(150, 10, 0, 0, 5).addStuff(0, idinator++));
     }
 
-    public int ID = 0;
-
     public World(boolean server, int width, int height, Image terrai, BufferedImage grass, BufferedImage sand,
-                 BufferedImage sky, BufferedImage stone, BufferedImage bark, BufferedImage ice, BufferedImage lavaland,
-                 BufferedImage crystal, BufferedImage ether) {
+            BufferedImage sky, BufferedImage stone, BufferedImage bark, BufferedImage ice, BufferedImage lavaland,
+            BufferedImage crystal, BufferedImage ether) {
         serverWorld = server;
         Arrays.sort(LIQUID_LIST);
         for (int i = 0; i < aList.length; i++) {
@@ -221,6 +234,7 @@ public class World implements Serializable {
 
     /**
      * Load the needed parts
+     * 
      * @param parts
      * @param colors
      * @param colors2
@@ -243,8 +257,8 @@ public class World implements Serializable {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            bodyParts[0] = World.changeColor((BufferedImage) bodyParts[0], Color.white, Color.red);
-            done = true;
+                bodyParts[0] = World.changeColor((BufferedImage) bodyParts[0], Color.white, Color.red);
+                done = true;
             }
         };
         loader = new Thread(getStuff);
@@ -1237,6 +1251,7 @@ public class World implements Serializable {
 
     /**
      * Draws the players
+     * 
      * @param g Graphics
      */
     public void drawPlayers(Graphics g) {
@@ -1387,9 +1402,8 @@ public class World implements Serializable {
                     g2.setColor(Color.BLACK);
                     g2.drawArc((int) (x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
                             (int) (y - viewY - (AURA_RADIUS)) * Constants.HEIGHT_SCALE,
-                            AURA_RADIUS * Constants.WIDTH_SCALE,
-                            AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360),
-                            random.nextInt(90));
+                            AURA_RADIUS * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
+                            random.nextInt(360), random.nextInt(90));
                 }
                 g2.setTransform(swag);
             }
@@ -1404,10 +1418,8 @@ public class World implements Serializable {
                 if (((r.status & ST_DRAIN)) != 0) {
                     g.setColor(Color.BLACK);
                     g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
-                            (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE,
-                            AURA_RADIUS * Constants.HEIGHT_SCALE,
-                            AURA_RADIUS * Constants.HEIGHT_SCALE,
-                            random.nextInt(360), random.nextInt(90));
+                            (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
+                            AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
             }
         }
@@ -1443,6 +1455,7 @@ public class World implements Serializable {
 
     /**
      * Draws terrain
+     * 
      * @param G2 Graphics (in 2D)
      */
     public synchronized void drawTerrain(Graphics2D G2) {

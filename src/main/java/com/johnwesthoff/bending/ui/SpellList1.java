@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.app.spell.SpellsService;
 import com.johnwesthoff.bending.app.spell.SpellsServiceFactory;
-import com.johnwesthoff.bending.spells.*;
+import com.johnwesthoff.bending.spells.Spell;
 
 /**
  *
@@ -146,8 +146,8 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
             		 *
             		 */
             private static final long serialVersionUID = -31184385169514111L;
-            Class<Object>[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class, java.lang.String.class };
+            Class<Object>[] types = new Class[] { java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class };
             boolean[] canEdit = new boolean[] { false, false, false, false, false };
 
             public Class<Object> getColumnClass(int columnIndex) {

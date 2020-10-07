@@ -92,7 +92,7 @@ public class WallofFireEntity extends Entity {
             client.lastHit = maker;
             client.world.vspeed -= 8;
             client.xspeed += 9 - client.random.nextInt(18);
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.killMessage = "~ smelled `'s armpits, and then died.";
         }
     }

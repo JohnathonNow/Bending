@@ -59,7 +59,7 @@ public class CloudEntity extends Entity {
                     ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
         }
         if (life-- < 0) {
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
             lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(40).putInt(MYID));
         }

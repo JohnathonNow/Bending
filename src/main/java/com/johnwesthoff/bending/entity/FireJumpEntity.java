@@ -81,7 +81,7 @@ public class FireJumpEntity extends Entity {
         if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.hurt(15);
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.world.vspeed += yspeed * 2;
             client.xspeed += xspeed;
             client.lastHit = maker;

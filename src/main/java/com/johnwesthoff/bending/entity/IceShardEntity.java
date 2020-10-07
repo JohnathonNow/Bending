@@ -44,7 +44,7 @@ public class IceShardEntity extends Entity {
     @Override
     public void onUpdate(World apples) {
         if (collided(apples)) {
-            // apples.ground.FillCircleW(X, Y, radius, World.STONE);
+            // apples.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
@@ -126,7 +126,6 @@ public class IceShardEntity extends Entity {
      * @param w World in which this should be tested
      * @return true (if the ice shard collided with the client) or false (else)
      */
-    @Override
     private boolean collided(World w) {
         double direction = Client.pointDir(previousX, previousY, X, Y);
         int speed = (int) Client.pointDis(previousX, previousY, X, Y);

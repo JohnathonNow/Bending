@@ -76,7 +76,7 @@ public class EnergyEntity extends Entity {
         if (!lol.earth.inBounds(X, Y) || lol.earth.checkCollision(X, Y)) {
             radius *= Constants.MULTIPLIER;
             alive = false;
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             lol.sendMessage(Server.CHARGE,
                     ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(maker));
         }

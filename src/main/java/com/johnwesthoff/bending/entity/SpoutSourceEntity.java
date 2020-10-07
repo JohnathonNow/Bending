@@ -44,9 +44,9 @@ public class SpoutSourceEntity extends Entity {
     public void onServerUpdate(Server lol) {
         /*
          * if (!lol.earth.inBounds(X, Y)||lol.earth.checkCollision(X, Y)) {
-         * lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+         * lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
          * lol.sendMessage(Server.FILL,
-         * ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.STONE));
+         * ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(Constants.STONE));
          * }
          */
     }

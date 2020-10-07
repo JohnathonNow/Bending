@@ -100,12 +100,12 @@ public class BuritoEntity extends Entity {
         if (client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.hurt(65);
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.world.vspeed -= 39;
             client.xspeed += 47 - client.random.nextInt(94);
             client.lastHit = maker;
             alive = false;
-            client.world.status |= World.ST_FLAMING;
+            client.world.status |= Constants.ST_FLAMING;
             client.killMessage = "~ shouldn't have stolen `'s burito...";
         }
     }
