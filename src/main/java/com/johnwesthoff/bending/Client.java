@@ -627,19 +627,7 @@ public class Client extends JPanel implements Runnable {
                                         world.rightArmAngle = reading.getShort();
                                         world.status = reading.getShort();
                                     }
-                                    for (final Player r : world.playerList) {
-                                        if (r.ID == idtomove) {
-                                            // system.out.println("hi");
-                                            r.x = reading.getShort();
-                                            r.y = reading.getShort();
-                                            r.move = reading.getShort();
-                                            r.vspeed = reading.getShort();
-                                            r.leftArmAngle = reading.getShort();
-                                            r.rightArmAngle = reading.getShort();
-                                            r.status = reading.getShort();
-                                            break;
-                                        }
-                                    }
+                                    
                                     break;
                                 case Server.MAP:
                                     int x;
