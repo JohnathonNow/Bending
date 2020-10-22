@@ -38,9 +38,7 @@ public final class OrderedOutputStream implements Runnable {
             try {
                 while (!stack.isEmpty()) {
                     Message toSend = stack.poll();
-                    output.write(toSend.getID());
-                    // output.flush();
-                    Server.writeByteBuffer(toSend.getBytes(), output);
+                    toSend.getBytes().send(output);
                 }
                 Thread.sleep(STACK_CHECK_SLEEP);
             } catch (IOException | InterruptedException ex) {
@@ -53,13 +51,11 @@ public final class OrderedOutputStream implements Runnable {
     /**
      * Add a message to the stack. This method is thread-safe.
      * @param BB    The bytebuffer containing the data to be sent
-     * @param ID    The ID of the message to be sent - see Server
-     *              for a list of ID constants 
      * @throws IOException If this {@link OrderedOutputStream} is no longer active
      */
-    public void addMesssage(ByteBuffer BB, byte ID) throws IOException {
+    public void addMesssage(NetworkMessage BB) throws IOException {
         synchronized (stack) {
-            stack.add(new Message(BB, ID));
+            stack.add(new Message(BB));
         }
         if (!active) {
             throw new IOException();
@@ -77,24 +73,17 @@ public final class OrderedOutputStream implements Runnable {
     }
 
     public final class Message implements Comparable<Object> {
-        private final ByteBuffer BB;
-        private final byte ID;
+        private final NetworkMessage BB;
         private final long constructionTime;
 
-        public Message(final ByteBuffer BB, final byte ID) {
+        public Message(final NetworkMessage BB) {
             this.BB = BB;
-            this.ID = ID;
             constructionTime = mesID++;
         }
 
-        public ByteBuffer getBytes() {
+        public NetworkMessage getBytes() {
             return BB;
         }
-
-        public byte getID() {
-            return ID;
-        }
-
         public long constructTime() {
             return constructionTime;
         }
@@ -103,9 +92,7 @@ public final class OrderedOutputStream implements Runnable {
         public int compareTo(Object o) {
             if (o instanceof Message) {
                 Message oos = (Message) o;
-                if (oos.getID() == Server.ID) {
-                    return 1;
-                }
+
                 if (oos.constructTime() == this.constructionTime) {
                     return 0;
                 }
