@@ -116,172 +116,80 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         // jPanel1.setForeground(new java.awt.Color(51, 255, 255));
 
         buttonHead.setText("Head");
-        buttonHead.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonHeadActionPerformed(evt);
-            }
-        });
+        buttonHead.addActionListener(event -> buttonHeadActionPerformed(event));        
 
         buttonHeadcolor.setText("Head Color");
-        buttonHeadcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonHeadcolorActionPerformed(evt);
-            }
-        });
+        buttonHeadcolor.addActionListener(event ->
+                            buttonHeadcolorActionPerformed(event));
 
         buttonBodycolor.setText("Body Color");
-        buttonBodycolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonBodycolorActionPerformed(evt);
-            }
-        });
+        buttonBodycolor.addActionListener(event ->
+                            buttonBodycolorActionPerformed(event));
 
         buttonScolor.setText("Shoulder Color");
-        buttonScolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonScolorActionPerformed(evt);
-            }
-        });
+        buttonScolor.addActionListener(event ->
+                            buttonScolorActionPerformed(event));
 
         buttonFcolor.setText("Fore Arm Color");
-        buttonFcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonFcolorActionPerformed(evt);
-            }
-        });
+        buttonFcolor.addActionListener(event ->
+                            buttonFcolorActionPerformed(event));
 
         buttonTcolor.setText("Thigh Color");
-        buttonTcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonTcolorActionPerformed(evt);
-            }
-        });
+        buttonTcolor.addActionListener(event ->
+                            buttonTcolorActionPerformed(event));
 
         buttonShincolor.setText("Shin Color");
-        buttonShincolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShincolorActionPerformed(evt);
-            }
-        });
+        buttonShincolor.addActionListener(event ->
+                            buttonShincolorActionPerformed(event));
 
         buttonHeadcolor2.setText("Head Color 2");
-        buttonHeadcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(1, evt);
-            }
-        });
+        buttonHeadcolor2.addActionListener(event -> COLOR(1, event));
 
         buttonBodycolor2.setText("Body Color 2");
-        buttonBodycolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(0, evt);
-            }
-        });
+        buttonBodycolor2.addActionListener(event -> COLOR(0, event));
 
         buttonScolor2.setText("Shoulder Color 2");
-        buttonScolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(2, evt);
-            }
-        });
+        buttonScolor2.addActionListener(event -> COLOR(2, event));
 
         buttonFcolor2.setText("Fore Arm Color 2");
-        buttonFcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(3, evt);
-            }
-        });
+        buttonFcolor2.addActionListener(event -> COLOR(3, event));
 
         buttonTcolor2.setText("Thigh Color 2");
-        buttonTcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(4, evt);
-            }
-        });
+        buttonTcolor2.addActionListener(event -> COLOR(4, event));
 
         buttonShincolor2.setText("Shin Color 2");
-        buttonShincolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(5, evt);
-            }
-        });
+        buttonShincolor2.addActionListener(event -> COLOR(5, event));
 
         buttonBody.setText("Body");
-        buttonBody.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonBodyActionPerformed(evt);
-            }
-        });
+        buttonBody.addActionListener(event ->
+                            buttonBodyActionPerformed(event));
 
         buttonShoulder.setText("Shoulder");
-        buttonShoulder.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShoulderActionPerformed(evt);
-            }
-        });
+        buttonShoulder.addActionListener(event -> 
+                            buttonShoulderActionPerformed(event));
 
         ForeArm.setText("ForeArm");
-        ForeArm.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ForeArmActionPerformed(evt);
-            }
-        });
+        ForeArm.addActionListener(event -> ForeArmActionPerformed(event));
 
         ThighButton.setText("Thigh");
-        ThighButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ThighButtonActionPerformed(evt);
-            }
-        });
+        ThighButton.addActionListener(event ->
+                            ThighButtonActionPerformed(event));
 
         buttonShin.setText("Shin");
-        buttonShin.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShinActionPerformed(evt);
-            }
-        });
+        buttonShin.addActionListener(event ->
+                            buttonShinActionPerformed(event));
 
         jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(event ->
+                            jButton1ActionPerformed(event));
 
         jButton2.setText("Load");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(event ->
+                            jButton2ActionPerformed(event));
 
         jButton3.setText("Finish");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(event ->
+                            jButton3ActionPerformed(event));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(this);
         setLayout(jPanel1Layout);
