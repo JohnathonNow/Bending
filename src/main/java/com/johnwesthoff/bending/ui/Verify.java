@@ -47,10 +47,17 @@ public class Verify extends javax.swing.JFrame {
 
         jLabel1.setText("Code:");
 
-        username.addActionListener(event -> usernameActionPerformed(event));
+        username.addActionListener(event -> {
+                // Do nothing (potentially run username validation)
+        });
 
         jButton1.setText("Verify");
-        jButton1.addActionListener(event -> jButton1ActionPerformed(event));
+        jButton1.addActionListener(event -> {
+                if (playerService.verify(username.getText())) {
+                        JOptionPane.showMessageDialog(rootPane, "Verification Complete!");
+                }
+                setVisible(false);
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -73,18 +80,6 @@ public class Verify extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void usernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_usernameActionPerformed
-
-    }// GEN-LAST:event_usernameActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-
-        if (playerService.verify(username.getText())) {
-            JOptionPane.showMessageDialog(rootPane, "Verification Complete!");
-        }
-        setVisible(false);
-    }// GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

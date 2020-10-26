@@ -78,7 +78,9 @@ public class PassiveChooser1 extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Choose");
-        jButton1.addActionListener(event -> jButton1ActionPerformed(event));
+        jButton1.addActionListener(event -> {
+            //TODO: no behavior defined
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         setLayout(layout);
@@ -99,10 +101,6 @@ public class PassiveChooser1 extends javax.swing.JPanel {
 
         // pack();
     }// </editor-fold>
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
 
     public javax.swing.JList<Object> getList() {
         return jList1;

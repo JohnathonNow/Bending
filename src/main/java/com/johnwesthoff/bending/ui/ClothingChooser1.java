@@ -116,31 +116,64 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         // jPanel1.setForeground(new java.awt.Color(51, 255, 255));
 
         buttonHead.setText("Head");
-        buttonHead.addActionListener(event -> buttonHeadActionPerformed(event));        
+        buttonHead.addActionListener(event -> {
+            cloths[1]++;
+            if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
+                cloths[1]++;
+            }
+            if (cloths[1] > waffles2) {
+                cloths[1] = 1;
+            }
+            getImages();
+        });        
 
         buttonHeadcolor.setText("Head Color");
-        buttonHeadcolor.addActionListener(event ->
-                            buttonHeadcolorActionPerformed(event));
+        buttonHeadcolor.addActionListener(event -> {
+            colors[1] = JColorChooser.showDialog(this, "Choose Head Color", colors[1]);
+            if (colors[1] == null)
+                colors[1] = Color.BLACK;
+            getImages();
+        });
 
         buttonBodycolor.setText("Body Color");
-        buttonBodycolor.addActionListener(event ->
-                            buttonBodycolorActionPerformed(event));
+        buttonBodycolor.addActionListener(event -> {
+            colors[0] = JColorChooser.showDialog(this, "Choose Body Color", colors[0]);
+            if (colors[0] == null)
+                colors[0] = Color.BLACK;
+            getImages();
+        });
 
         buttonScolor.setText("Shoulder Color");
-        buttonScolor.addActionListener(event ->
-                            buttonScolorActionPerformed(event));
+        buttonScolor.addActionListener(event -> {
+            colors[2] = JColorChooser.showDialog(this, "Choose Shoulder Color", colors[2]);
+            if (colors[2] == null)
+                colors[2] = Color.BLACK;
+            getImages();
+        });
 
         buttonFcolor.setText("Fore Arm Color");
-        buttonFcolor.addActionListener(event ->
-                            buttonFcolorActionPerformed(event));
+        buttonFcolor.addActionListener(event -> {
+            colors[3] = JColorChooser.showDialog(this, "Choose Arm Color", colors[3]);
+            if (colors[3] == null)
+                colors[3] = Color.BLACK;
+            getImages();
+        });
 
         buttonTcolor.setText("Thigh Color");
-        buttonTcolor.addActionListener(event ->
-                            buttonTcolorActionPerformed(event));
+        buttonTcolor.addActionListener(event -> {
+            colors[4] = JColorChooser.showDialog(this, "Choose Leg Color", colors[4]);
+            if (colors[4] == null)
+                colors[4] = Color.BLACK;
+            getImages();
+        });
 
         buttonShincolor.setText("Shin Color");
-        buttonShincolor.addActionListener(event ->
-                            buttonShincolorActionPerformed(event));
+        buttonShincolor.addActionListener(event -> {
+            colors[5] = JColorChooser.showDialog(this, "Choose Foot Color", colors[5]);
+            if (colors[5] == null)
+                colors[5] = Color.BLACK;
+            getImages();
+        });
 
         buttonHeadcolor2.setText("Head Color 2");
         buttonHeadcolor2.addActionListener(event -> COLOR(1, event));
@@ -161,35 +194,87 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         buttonShincolor2.addActionListener(event -> COLOR(5, event));
 
         buttonBody.setText("Body");
-        buttonBody.addActionListener(event ->
-                            buttonBodyActionPerformed(event));
+        buttonBody.addActionListener(event -> {
+            cloths[0]++;
+            if (cloths[0] > waffles) {
+                cloths[0] = 1;
+            }
+            getImages();
+        });
 
         buttonShoulder.setText("Shoulder");
-        buttonShoulder.addActionListener(event -> 
-                            buttonShoulderActionPerformed(event));
+        buttonShoulder.addActionListener(event -> {
+            cloths[2]++;
+            if (cloths[2] > waffles) {
+                cloths[2] = 1;
+            }
+            getImages();
+        });
 
         ForeArm.setText("ForeArm");
-        ForeArm.addActionListener(event -> ForeArmActionPerformed(event));
+        ForeArm.addActionListener(event -> {
+            cloths[3]++;
+            if (cloths[3] > waffles) {
+                cloths[3] = 1;
+            }
+            getImages();
+        });
 
         ThighButton.setText("Thigh");
-        ThighButton.addActionListener(event ->
-                            ThighButtonActionPerformed(event));
+        ThighButton.addActionListener(event -> {
+            cloths[4]++;
+            if (cloths[4] > waffles) {
+                cloths[4] = 1;
+            }
+            getImages();
+        });
 
         buttonShin.setText("Shin");
-        buttonShin.addActionListener(event ->
-                            buttonShinActionPerformed(event));
+        buttonShin.addActionListener(event -> {
+            cloths[5]++;
+            if (cloths[5] > waffles) {
+                cloths[5] = 1;
+            }
+            getImages();
+        });
 
         jButton1.setText("Save");
-        jButton1.addActionListener(event ->
-                            jButton1ActionPerformed(event));
+        jButton1.addActionListener(event -> {
+            if (Client.currentlyLoggedIn) {
+                String post = "";
+                for (int i = 0; i < cloths.length; i++) {
+                    post += cloths[i];
+                    post += ",";
+                }
+                for (int i = 0; i < colors.length; i++) {
+                    post += colors[i].getRGB();
+                    post += ",";
+                }
+                for (int i = 0; i < colors2.length; i++) {
+                    post += colors2[i].getRGB();
+                    post += i == colors2.length - 1 ? "" : ",";
+                }
+                // System.out.println(post);
+                avatarService.changesAppearance(post, Client.jtb.getText());
+            }
+        });
 
         jButton2.setText("Load");
-        jButton2.addActionListener(event ->
-                            jButton2ActionPerformed(event));
+        jButton2.addActionListener(event -> {
+            if (Client.currentlyLoggedIn) {
+                loadClothing();
+            }
+        });
 
         jButton3.setText("Finish");
-        jButton3.addActionListener(event ->
-                            jButton3ActionPerformed(event));
+        jButton3.addActionListener(event -> {
+            Client.Clothing = cloths;
+            for (int i = 0; i < colors.length; i++) {
+                Client.Colors[i] = colors[i].getRGB();
+                Client.Colors2[i] = colors2[i].getRGB();
+            }
+            Client.immaKeepTabsOnYou.setSelectedIndex(0);
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(this);
         setLayout(jPanel1Layout);
@@ -271,154 +356,12 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
     }// </editor-fold>
 
-    private void buttonHeadActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[1]++;
-        if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
-            cloths[1]++;
-        }
-        if (cloths[1] > waffles2) {
-            cloths[1] = 1;
-        }
-        getImages();
-    }
-
     private void COLOR(int i, java.awt.event.ActionEvent evt) {
 
         colors2[i] = JColorChooser.showDialog(this, "Choose Secondary Color", colors[i]);
         if (colors2[i] == null)
             colors2[i] = Color.BLACK;
         getImages();
-    }
-
-    private void buttonHeadcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[1] = JColorChooser.showDialog(this, "Choose Head Color", colors[1]);
-        if (colors[1] == null)
-            colors[1] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonBodycolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[0] = JColorChooser.showDialog(this, "Choose Body Color", colors[0]);
-        if (colors[0] == null)
-            colors[0] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonScolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[2] = JColorChooser.showDialog(this, "Choose Shoulder Color", colors[2]);
-        if (colors[2] == null)
-            colors[2] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonFcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[3] = JColorChooser.showDialog(this, "Choose Arm Color", colors[3]);
-        if (colors[3] == null)
-            colors[3] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonTcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[4] = JColorChooser.showDialog(this, "Choose Leg Color", colors[4]);
-        if (colors[4] == null)
-            colors[4] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonShincolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[5] = JColorChooser.showDialog(this, "Choose Foot Color", colors[5]);
-        if (colors[5] == null)
-            colors[5] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonBodyActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[0]++;
-        if (cloths[0] > waffles) {
-            cloths[0] = 1;
-        }
-        getImages();
-    }
-
-    private void buttonShoulderActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[2]++;
-        if (cloths[2] > waffles) {
-            cloths[2] = 1;
-        }
-        getImages();
-    }
-
-    private void ForeArmActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[3]++;
-        if (cloths[3] > waffles) {
-            cloths[3] = 1;
-        }
-        getImages();
-    }
-
-    private void ThighButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[4]++;
-        if (cloths[4] > waffles) {
-            cloths[4] = 1;
-        }
-        getImages();
-    }
-
-    private void buttonShinActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[5]++;
-        if (cloths[5] > waffles) {
-            cloths[5] = 1;
-        }
-        getImages();
-    }
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (Client.currentlyLoggedIn) {
-            String post = "";
-            for (int i = 0; i < cloths.length; i++) {
-                post += cloths[i];
-                post += ",";
-            }
-            for (int i = 0; i < colors.length; i++) {
-                post += colors[i].getRGB();
-                post += ",";
-            }
-            for (int i = 0; i < colors2.length; i++) {
-                post += colors2[i].getRGB();
-                post += i == colors2.length - 1 ? "" : ",";
-            }
-            // System.out.println(post);
-            avatarService.changesAppearance(post, Client.jtb.getText());
-        }
-    }
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-
-        if (Client.currentlyLoggedIn) {
-            loadClothing();
-        }
-    }
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-
-        Client.Clothing = cloths;
-        for (int i = 0; i < colors.length; i++) {
-            Client.Colors[i] = colors[i].getRGB();
-            Client.Colors2[i] = colors2[i].getRGB();
-        }
-        Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
     /**

@@ -165,19 +165,19 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setText("Grass");
-        jButton1.addActionListener(event -> jButton1ActionPerformed(event));
+        jButton1.addActionListener(event -> {kind = GROUND;});
 
         jButton2.setText("Stone");
-        jButton2.addActionListener(event -> jButton2ActionPerformed(event));
+        jButton2.addActionListener(event -> {kind = STONE;});
 
         jButton3.setText("Ice");
-        jButton3.addActionListener(event -> jButton3ActionPerformed(event));
+        jButton3.addActionListener(event -> {kind = ICE;});
 
         jButton4.setText("Water");
-        jButton4.addActionListener(event -> jButton4ActionPerformed(event));
+        jButton4.addActionListener(event -> {kind = WATER;});
 
         jButton5.setText("Lava");
-        jButton5.addActionListener(event -> jButton5ActionPerformed(event));
+        jButton5.addActionListener(event -> {kind = LAVA;});
 
         thickness.setMajorTickSpacing(25);
         thickness.setMaximum(300);
@@ -188,26 +188,26 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         thickness.setInverted(true);
 
         jButton6.setText("Sand");
-        jButton6.addActionListener(event -> jButton6ActionPerformed(event));
+        jButton6.addActionListener(event -> {kind = SAND;});
 
         jButton7.setText("Bark");
-        jButton7.addActionListener(event -> jButton7ActionPerformed(event));
+        jButton7.addActionListener(event -> {kind = TREE;});
 
         jButton8.setText("Sky");
-        jButton8.addActionListener(event -> jButton8ActionPerformed(event));
+        jButton8.addActionListener(event -> {kind = AIR;});
 
         jButton9.setText("Save Map");
-        jButton9.addActionListener(event -> jButton9ActionPerformed(event));
+        jButton9.addActionListener(event -> save());
 
         jButton10.setText("Load Map");
-        jButton10.addActionListener(event -> jButton10ActionPerformed(event));
+        jButton10.addActionListener(event -> load());
 
         buffering.setBackground(new java.awt.Color(0, 51, 255));
         buffering.setForeground(new java.awt.Color(255, 255, 0));
         buffering.setValue(50);
 
         jButton11.setText("Crystal");
-        jButton11.addActionListener(event -> jButton11ActionPerformed(event));
+        jButton11.addActionListener(event -> {kind = CRYSTAL;});
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<Object>(
                 new String[] { "900x900", "400x400", "1200x1200", "2000x900", "900x2000", "2000x2000" }));
@@ -234,10 +234,10 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         jScrollPane2.setViewportView(jScrollPane1);
 
         jButton12.setText("Load Image");
-        jButton12.addActionListener(event -> jButton12ActionPerformed(event));
+        jButton12.addActionListener(event -> loadPicture());
 
         jButton13.setText("Ether");
-        jButton13.addActionListener(event -> jButton13ActionPerformed(event));
+        jButton13.addActionListener(event -> {kind = ETHER;});
 
         jMenuBar1.setBackground(new java.awt.Color(250, 250, 250));
         jMenuBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -248,13 +248,13 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
                 javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setText("Save");
         jMenuItem1.setBorderPainted(true);
-        jMenuItem1.addActionListener(event -> jMenuItem1ActionPerformed(evt));
+        jMenuItem1.addActionListener(event -> save());
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setAccelerator(
                 javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem2.setText("Load");
-        jMenuItem2.addActionListener(event -> jMenuItem2ActionPerformed(event));
+        jMenuItem2.addActionListener(event -> load());
         jMenu1.add(jMenuItem2);
         jMenu1.add(jSeparator1);
 
@@ -263,7 +263,12 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
         jMenu2.setText("Edit");
 
         jMenuItem3.setText("Clear");
-        jMenuItem3.addActionListener(event -> jMenuItem3ActionPerformed(event));
+        jMenuItem3.addActionListener(event -> {
+            writeData = new byte[900][900];
+            bg.setPaint(skyPaint);
+            bg.fillRect(0, 0, 900, 900);
+            EditingPane.repaint();
+        });
         jMenu2.add(jMenuItem3);
 
         jMenuBar1.add(jMenu2);
@@ -389,75 +394,6 @@ public class MapMaker extends javax.swing.JFrame implements Runnable, MouseMotio
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-        kind = GROUND;
-    }// GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        kind = STONE;
-    }// GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        kind = ICE;
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        kind = WATER;
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        kind = LAVA;
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        kind = SAND;
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
-        kind = TREE;
-    }// GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton8ActionPerformed
-        kind = AIR;
-    }// GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-        save();
-    }// GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton10ActionPerformed
-        load();
-    }// GEN-LAST:event_jButton10ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem1ActionPerformed
-        save();
-    }// GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem2ActionPerformed
-        load();
-    }// GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem3ActionPerformed
-
-        writeData = new byte[900][900];
-        bg.setPaint(skyPaint);
-        bg.fillRect(0, 0, 900, 900);
-        EditingPane.repaint();
-    }// GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton11ActionPerformed
-        kind = CRYSTAL;
-    }// GEN-LAST:event_jButton11ActionPerformed
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton12ActionPerformed
-
-        loadPicture();
-    }// GEN-LAST:event_jButton12ActionPerformed
-
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton13ActionPerformed
-        kind = ETHER;
-    }// GEN-LAST:event_jButton13ActionPerformed
 
     /**
      * @param args the command line arguments
