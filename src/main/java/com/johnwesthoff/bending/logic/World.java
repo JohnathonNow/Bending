@@ -240,9 +240,10 @@ public class World implements Serializable {
      * @param colors2
      */
     public void load(final byte parts[], final int colors[], final int colors2[]) {
-        Runnable getStuff = new Runnable() {
-            @Override
-            public void run() {
+        Runnable getStuff =
+            /* Per sonic-lint, declaring a new instance of a single-method class was a bad smell, and for readability
+               it is more appropriate to replace with a lambda method */
+            () -> {
                 bodyParts = new Image[parts.length];
                 try {
                     for (int i = 0; i < parts.length; i++) {
@@ -259,8 +260,7 @@ public class World implements Serializable {
                 }
                 bodyParts[0] = World.changeColor((BufferedImage) bodyParts[0], Color.white, Color.red);
                 done = true;
-            }
-        };
+            };
         loader = new Thread(getStuff);
         loader.start();
     }
