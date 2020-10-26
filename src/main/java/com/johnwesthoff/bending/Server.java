@@ -327,9 +327,8 @@ public final class Server implements Runnable {
     public Thread expander;
 
     public void startExpander() {
-        expander = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        expander = new Thread(
+            () -> {
                 while (gameRunning) {
                     loadMap(mapRotation);
                     try {
@@ -339,7 +338,7 @@ public final class Server implements Runnable {
                     }
                 }
             }
-        });
+        );
         expander.start();
     }
 
