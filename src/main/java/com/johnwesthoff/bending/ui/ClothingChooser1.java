@@ -444,10 +444,10 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
      * Loads the images
      */
     public void getImages() {
-        Runnable getStuff = new Runnable() {
-
-            @Override
-            public void run() {
+        Runnable getStuff =
+            /* Originally declared as a new Runnable instance with a single method; To resolve sonic-lint warning java:S1604
+               converted into a single lambda function without any change to the method body. */
+            (() -> {
                 try {
                     done = false;
                     for (int i = 0; i < cloths.length; i++) {
@@ -466,8 +466,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
                     ex.printStackTrace();
                 }
-            }
-        };
+            });
         if (getTem != null) {
             getTem.interrupt();
         }
