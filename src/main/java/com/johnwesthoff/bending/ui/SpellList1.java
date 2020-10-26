@@ -167,26 +167,13 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         jTable1.getColumnModel().getColumn(4).setResizable(false);
 
         jButton1.setText("Finish");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(event -> jButton1ActionPerformed(event));
 
         jButton2.setText("Save");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(event -> jButton2ActionPerformed(event));
 
         jButton3.setText("Load");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(event -> jButton3ActionPerformed(event));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Presets");
@@ -194,47 +181,27 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 0, 0));
         jButton4.setText("Ignis");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(event -> jButton4ActionPerformed(event));
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton6.setForeground(new java.awt.Color(153, 153, 0));
         jButton6.setText("Electro");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        jButton6.addActionListener(event -> jButton6ActionPerformed(event));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton7.setForeground(new java.awt.Color(51, 153, 0));
         jButton7.setText("Terrae");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
+        jButton7.addActionListener(event -> jButton7ActionPerformed(event));
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 255));
         jButton8.setText("Aqua");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
+        jButton8.addActionListener(event -> jButton8ActionPerformed(event));
 
         jButton9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton9.setForeground(new java.awt.Color(153, 153, 153));
         jButton9.setText("A'ris");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
+        jButton9.addActionListener(event -> jButton9ActionPerformed(event));
 
         XP.setText("XP: ");
 
