@@ -116,171 +116,164 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         // jPanel1.setForeground(new java.awt.Color(51, 255, 255));
 
         buttonHead.setText("Head");
-        buttonHead.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonHeadActionPerformed(evt);
+        buttonHead.addActionListener(event -> {
+            cloths[1]++;
+            if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
+                cloths[1]++;
             }
-        });
+            if (cloths[1] > waffles2) {
+                cloths[1] = 1;
+            }
+            getImages();
+        });        
 
         buttonHeadcolor.setText("Head Color");
-        buttonHeadcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonHeadcolorActionPerformed(evt);
-            }
+        buttonHeadcolor.addActionListener(event -> {
+            colors[1] = JColorChooser.showDialog(this, "Choose Head Color", colors[1]);
+            if (colors[1] == null)
+                colors[1] = Color.BLACK;
+            getImages();
         });
 
         buttonBodycolor.setText("Body Color");
-        buttonBodycolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonBodycolorActionPerformed(evt);
-            }
+        buttonBodycolor.addActionListener(event -> {
+            colors[0] = JColorChooser.showDialog(this, "Choose Body Color", colors[0]);
+            if (colors[0] == null)
+                colors[0] = Color.BLACK;
+            getImages();
         });
 
         buttonScolor.setText("Shoulder Color");
-        buttonScolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonScolorActionPerformed(evt);
-            }
+        buttonScolor.addActionListener(event -> {
+            colors[2] = JColorChooser.showDialog(this, "Choose Shoulder Color", colors[2]);
+            if (colors[2] == null)
+                colors[2] = Color.BLACK;
+            getImages();
         });
 
         buttonFcolor.setText("Fore Arm Color");
-        buttonFcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonFcolorActionPerformed(evt);
-            }
+        buttonFcolor.addActionListener(event -> {
+            colors[3] = JColorChooser.showDialog(this, "Choose Arm Color", colors[3]);
+            if (colors[3] == null)
+                colors[3] = Color.BLACK;
+            getImages();
         });
 
         buttonTcolor.setText("Thigh Color");
-        buttonTcolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonTcolorActionPerformed(evt);
-            }
+        buttonTcolor.addActionListener(event -> {
+            colors[4] = JColorChooser.showDialog(this, "Choose Leg Color", colors[4]);
+            if (colors[4] == null)
+                colors[4] = Color.BLACK;
+            getImages();
         });
 
         buttonShincolor.setText("Shin Color");
-        buttonShincolor.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShincolorActionPerformed(evt);
-            }
+        buttonShincolor.addActionListener(event -> {
+            colors[5] = JColorChooser.showDialog(this, "Choose Foot Color", colors[5]);
+            if (colors[5] == null)
+                colors[5] = Color.BLACK;
+            getImages();
         });
 
         buttonHeadcolor2.setText("Head Color 2");
-        buttonHeadcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(1, evt);
-            }
-        });
+        buttonHeadcolor2.addActionListener(event -> COLOR(1, event));
 
         buttonBodycolor2.setText("Body Color 2");
-        buttonBodycolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(0, evt);
-            }
-        });
+        buttonBodycolor2.addActionListener(event -> COLOR(0, event));
 
         buttonScolor2.setText("Shoulder Color 2");
-        buttonScolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(2, evt);
-            }
-        });
+        buttonScolor2.addActionListener(event -> COLOR(2, event));
 
         buttonFcolor2.setText("Fore Arm Color 2");
-        buttonFcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(3, evt);
-            }
-        });
+        buttonFcolor2.addActionListener(event -> COLOR(3, event));
 
         buttonTcolor2.setText("Thigh Color 2");
-        buttonTcolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(4, evt);
-            }
-        });
+        buttonTcolor2.addActionListener(event -> COLOR(4, event));
 
         buttonShincolor2.setText("Shin Color 2");
-        buttonShincolor2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COLOR(5, evt);
-            }
-        });
+        buttonShincolor2.addActionListener(event -> COLOR(5, event));
 
         buttonBody.setText("Body");
-        buttonBody.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonBodyActionPerformed(evt);
+        buttonBody.addActionListener(event -> {
+            cloths[0]++;
+            if (cloths[0] > waffles) {
+                cloths[0] = 1;
             }
+            getImages();
         });
 
         buttonShoulder.setText("Shoulder");
-        buttonShoulder.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShoulderActionPerformed(evt);
+        buttonShoulder.addActionListener(event -> {
+            cloths[2]++;
+            if (cloths[2] > waffles) {
+                cloths[2] = 1;
             }
+            getImages();
         });
 
         ForeArm.setText("ForeArm");
-        ForeArm.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ForeArmActionPerformed(evt);
+        ForeArm.addActionListener(event -> {
+            cloths[3]++;
+            if (cloths[3] > waffles) {
+                cloths[3] = 1;
             }
+            getImages();
         });
 
         ThighButton.setText("Thigh");
-        ThighButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ThighButtonActionPerformed(evt);
+        ThighButton.addActionListener(event -> {
+            cloths[4]++;
+            if (cloths[4] > waffles) {
+                cloths[4] = 1;
             }
+            getImages();
         });
 
         buttonShin.setText("Shin");
-        buttonShin.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShinActionPerformed(evt);
+        buttonShin.addActionListener(event -> {
+            cloths[5]++;
+            if (cloths[5] > waffles) {
+                cloths[5] = 1;
             }
+            getImages();
         });
 
         jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jButton1.addActionListener(event -> {
+            if (Client.currentlyLoggedIn) {
+                String post = "";
+                for (int i = 0; i < cloths.length; i++) {
+                    post += cloths[i];
+                    post += ",";
+                }
+                for (int i = 0; i < colors.length; i++) {
+                    post += colors[i].getRGB();
+                    post += ",";
+                }
+                for (int i = 0; i < colors2.length; i++) {
+                    post += colors2[i].getRGB();
+                    post += i == colors2.length - 1 ? "" : ",";
+                }
+                // System.out.println(post);
+                avatarService.changesAppearance(post, Client.jtb.getText());
             }
         });
 
         jButton2.setText("Load");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jButton2.addActionListener(event -> {
+            if (Client.currentlyLoggedIn) {
+                loadClothing();
             }
         });
 
         jButton3.setText("Finish");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        jButton3.addActionListener(event -> {
+            Client.Clothing = cloths;
+            for (int i = 0; i < colors.length; i++) {
+                Client.Colors[i] = colors[i].getRGB();
+                Client.Colors2[i] = colors2[i].getRGB();
             }
+            Client.immaKeepTabsOnYou.setSelectedIndex(0);
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(this);
@@ -363,154 +356,12 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
     }// </editor-fold>
 
-    private void buttonHeadActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[1]++;
-        if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
-            cloths[1]++;
-        }
-        if (cloths[1] > waffles2) {
-            cloths[1] = 1;
-        }
-        getImages();
-    }
-
     private void COLOR(int i, java.awt.event.ActionEvent evt) {
 
         colors2[i] = JColorChooser.showDialog(this, "Choose Secondary Color", colors[i]);
         if (colors2[i] == null)
             colors2[i] = Color.BLACK;
         getImages();
-    }
-
-    private void buttonHeadcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[1] = JColorChooser.showDialog(this, "Choose Head Color", colors[1]);
-        if (colors[1] == null)
-            colors[1] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonBodycolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[0] = JColorChooser.showDialog(this, "Choose Body Color", colors[0]);
-        if (colors[0] == null)
-            colors[0] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonScolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[2] = JColorChooser.showDialog(this, "Choose Shoulder Color", colors[2]);
-        if (colors[2] == null)
-            colors[2] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonFcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[3] = JColorChooser.showDialog(this, "Choose Arm Color", colors[3]);
-        if (colors[3] == null)
-            colors[3] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonTcolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[4] = JColorChooser.showDialog(this, "Choose Leg Color", colors[4]);
-        if (colors[4] == null)
-            colors[4] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonShincolorActionPerformed(java.awt.event.ActionEvent evt) {
-
-        colors[5] = JColorChooser.showDialog(this, "Choose Foot Color", colors[5]);
-        if (colors[5] == null)
-            colors[5] = Color.BLACK;
-        getImages();
-    }
-
-    private void buttonBodyActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[0]++;
-        if (cloths[0] > waffles) {
-            cloths[0] = 1;
-        }
-        getImages();
-    }
-
-    private void buttonShoulderActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[2]++;
-        if (cloths[2] > waffles) {
-            cloths[2] = 1;
-        }
-        getImages();
-    }
-
-    private void ForeArmActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[3]++;
-        if (cloths[3] > waffles) {
-            cloths[3] = 1;
-        }
-        getImages();
-    }
-
-    private void ThighButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[4]++;
-        if (cloths[4] > waffles) {
-            cloths[4] = 1;
-        }
-        getImages();
-    }
-
-    private void buttonShinActionPerformed(java.awt.event.ActionEvent evt) {
-
-        cloths[5]++;
-        if (cloths[5] > waffles) {
-            cloths[5] = 1;
-        }
-        getImages();
-    }
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (Client.currentlyLoggedIn) {
-            String post = "";
-            for (int i = 0; i < cloths.length; i++) {
-                post += cloths[i];
-                post += ",";
-            }
-            for (int i = 0; i < colors.length; i++) {
-                post += colors[i].getRGB();
-                post += ",";
-            }
-            for (int i = 0; i < colors2.length; i++) {
-                post += colors2[i].getRGB();
-                post += i == colors2.length - 1 ? "" : ",";
-            }
-            // System.out.println(post);
-            avatarService.changesAppearance(post, Client.jtb.getText());
-        }
-    }
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-
-        if (Client.currentlyLoggedIn) {
-            loadClothing();
-        }
-    }
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-
-        Client.Clothing = cloths;
-        for (int i = 0; i < colors.length; i++) {
-            Client.Colors[i] = colors[i].getRGB();
-            Client.Colors2[i] = colors2[i].getRGB();
-        }
-        Client.immaKeepTabsOnYou.setSelectedIndex(0);
     }
 
     /**
@@ -536,10 +387,10 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
      * Loads the images
      */
     public void getImages() {
-        Runnable getStuff = new Runnable() {
-
-            @Override
-            public void run() {
+        Runnable getStuff =
+            /* Originally declared as a new Runnable instance with a single method; To resolve sonic-lint warning java:S1604
+               converted into a single lambda function without any change to the method body. */
+            (() -> {
                 try {
                     done = false;
                     for (int i = 0; i < cloths.length; i++) {
@@ -558,8 +409,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
                     ex.printStackTrace();
                 }
-            }
-        };
+            });
         if (getTem != null) {
             getTem.interrupt();
         }

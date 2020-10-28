@@ -65,30 +65,20 @@ public class Register extends javax.swing.JFrame implements KeyListener {
 
         jLabel3.setText("Email:");
 
-        password.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordActionPerformed(evt);
-            }
+        password.addActionListener(event -> {
+            // Do nothing (potentially run password validation)
         });
 
-        username.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameActionPerformed(evt);
-            }
+        username.addActionListener(event -> {
+            // Do nothing (potentially run user validation)
         });
 
-        email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailActionPerformed(evt);
-            }
+        email.addActionListener(event -> {
+            // Do nothing (potentially run email validation)
         });
 
         register.setText("Register");
-        register.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerActionPerformed(evt);
-            }
-        });
+        register.addActionListener(event -> registerActionPerformed());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,19 +123,7 @@ public class Register extends javax.swing.JFrame implements KeyListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_passwordActionPerformed
-
-    }// GEN-LAST:event_passwordActionPerformed
-
-    private void usernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_usernameActionPerformed
-
-    }// GEN-LAST:event_usernameActionPerformed
-
-    private void emailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_emailActionPerformed
-
-    }// GEN-LAST:event_emailActionPerformed
-
-    private void registerActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_registerActionPerformed
+    private void registerActionPerformed() {// GEN-FIRST:event_registerActionPerformed
         String username = this.username.getText();
         String password = this.password.getText();
         String email = this.email.getText();

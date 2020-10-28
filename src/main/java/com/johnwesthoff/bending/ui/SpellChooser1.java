@@ -85,10 +85,8 @@ public class SpellChooser1 extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Choose");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
+        jButton1.addActionListener(event -> {
+            //TODO: no behavior defined
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -108,10 +106,6 @@ public class SpellChooser1 extends javax.swing.JPanel {
                         .addGap(18, 18, 18).addComponent(jButton1)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
     }// </editor-fold>
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
 
     /**
      * @param args the command line arguments
