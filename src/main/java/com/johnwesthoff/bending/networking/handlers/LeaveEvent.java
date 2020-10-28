@@ -10,6 +10,7 @@ import com.johnwesthoff.bending.networking.NetworkEvent;
 import java.awt.Color;
 
 public class LeaveEvent implements NetworkEvent {
+    public static final byte ID = 13;
 
     @Override
     public void clientReceived(Client c, ByteBuffer buf) {

@@ -7,6 +7,7 @@ import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class DrainEvent implements NetworkEvent {
+    public static final byte ID = 6;
 
     @Override
     public void clientReceived(Client p, ByteBuffer buf) {

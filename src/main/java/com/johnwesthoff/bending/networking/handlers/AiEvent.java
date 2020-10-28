@@ -9,6 +9,7 @@ import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class AiEvent implements NetworkEvent {
+    public static final byte ID = 1;
 
     @Override
     public void clientReceived(Client c, ByteBuffer reader) {

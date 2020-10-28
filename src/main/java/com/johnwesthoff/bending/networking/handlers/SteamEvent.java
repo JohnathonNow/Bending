@@ -6,8 +6,10 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.entity.SteamEntity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class SteamEvent implements NetworkEvent {
+    public static final byte ID = 22;
 
     @Override
     public void clientReceived(Client p, ByteBuffer buf) {
@@ -27,6 +29,13 @@ public class SteamEvent implements NetworkEvent {
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
         // TODO Auto-generated method stub
 
+    }
+
+
+    public static NetworkMessage getPacket(int x, int y, int entity) {
+        ByteBuffer bb = ByteBuffer.allocate(12);
+        bb.putInt(x).putInt(y).putInt(entity);
+        return new NetworkMessage(bb, ID);
     }
 
 }

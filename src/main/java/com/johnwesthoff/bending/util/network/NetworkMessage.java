@@ -16,7 +16,7 @@ public class NetworkMessage {
         return content;
     }
 
-    public NetworkMessage(byte id, ByteBuffer content) {
+    public NetworkMessage(ByteBuffer content, byte id) {
         this.id = id;
         this.content = content;
     }

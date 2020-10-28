@@ -7,6 +7,7 @@ import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class DigEvent implements NetworkEvent {
+    public static final byte ID = 5;
 
     @Override
     public void clientReceived(Client p, ByteBuffer toRead) {
