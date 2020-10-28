@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class LightningMine extends Lightning {
     public LightningMine() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 3;
         locked = true;
         unlockXP = 1000;

@@ -7,6 +7,7 @@ package com.johnwesthoff.bending.entity;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -54,7 +55,7 @@ public class FreezeEntity extends Entity {
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed - 1, (int) yspeed - 1, maker));
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed, (int) yspeed + 1, maker));
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed + 1, (int) yspeed, maker));
-            // lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(24).putInt(5).putInt(X).putInt(Y).putInt(xspeed).putInt(yspeed).putInt(maker));
+            // lol.sendMessage(Constants.WATERBENDING,ByteBuffer.allocate(24).putInt(5).putInt(X).putInt(Y).putInt(xspeed).putInt(yspeed).putInt(maker));
         }
         /*
          * if (yspeed<12) { yspeed++; }
@@ -65,7 +66,7 @@ public class FreezeEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if ((!lol.earth.inBounds(X, Y)) || lol.earth.checkCollision(X, Y)) {
             lol.earth.ground.freeze((int) X, (int) Y, radius * 4);
-            lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius * 4));
+            lol.sendMessage(FreezeEvent.getPacket(X, Y, radius * 4));
             alive = false;
         }
     }

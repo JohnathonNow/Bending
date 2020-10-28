@@ -17,6 +17,8 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FillEvent;
+import com.johnwesthoff.bending.networking.handlers.SteamEvent;
 
 /**
  * @author John
@@ -76,8 +78,7 @@ public class LavaBallEntity extends Entity {
             if (p.ID != maker && p.checkCollision((int) X, (int) Y)) {
                 radius = 24;
                 lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.LAVA);
-                lol.sendMessage(Server.FILL,
-                        ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(Constants.LAVA));
+                lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.LAVA));
                 alive = false;
                 return;
             }
@@ -85,14 +86,13 @@ public class LavaBallEntity extends Entity {
         if (lol.earth.checkCollision(X, Y)) {
             radius = 24;
             lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.LAVA);
-            lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(Constants.LAVA));
+            lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.LAVA));
             alive = false;
         }
         if (lol.earth.inBounds(X, Y) && collided(lol.earth))// lol.earth.ground.cellData[X][Y]==World.WATER
         {
             alive = false;
-            lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(this.MYID));
+            lol.sendMessage(SteamEvent.getPacket((int) X, (int) Y, this.MYID));
         }
     }
 

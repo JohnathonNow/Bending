@@ -8,13 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class DarkTeleport extends Spell {
     public DarkTeleport() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 5;
         locked = true;
         unlockXP = 5000;
@@ -63,4 +63,3 @@ public class DarkTeleport extends Spell {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
-

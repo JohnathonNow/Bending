@@ -16,7 +16,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class EarthbendingSand extends Earthbending {
     public EarthbendingSand() {
-        ID = Server.EARTHBENDING;
+        ID = Constants.EARTHBENDING;
         subID = 4;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/earthSand.png"));

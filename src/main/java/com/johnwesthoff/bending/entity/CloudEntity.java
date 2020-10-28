@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 /**
  * @author John
@@ -55,13 +56,12 @@ public class CloudEntity extends Entity {
             int x = (int) X + 40 - r.nextInt(80), y = (int) Y - 15;
             int Iw = Server.getID();
             lol.earth.entityList.add((new EnergyEntity(x, y, 0, 5, maker).setID(Iw)));
-            lol.sendMessage(Server.LIGHTNING,
-                    ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
+            //TODO: CAST LIGHTNING
         }
         if (life-- < 0) {
             // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
-            lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(40).putInt(MYID));
+            lol.sendMessage(DestroyEvent.getPacket(this));
         }
     }
 }

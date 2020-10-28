@@ -4,15 +4,17 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 /**
  * @author John
@@ -109,7 +111,7 @@ public class PumpkinEntity extends Entity {
     public void onServerUpdate(Server apples) {
         if (life < 0) {
             alive = false;
-            apples.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
+            apples.sendMessage(DestroyEvent.getPacket(this));
         }
     }
 
@@ -126,6 +128,7 @@ public class PumpkinEntity extends Entity {
 
     /**
      * Reconstruct the pumpkin entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

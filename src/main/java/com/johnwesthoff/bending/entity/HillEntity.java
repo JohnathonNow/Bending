@@ -8,6 +8,7 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -38,7 +39,7 @@ public class HillEntity extends Entity {
             for (PlayerOnline P : apples.playerList) {
                 if (P.x > X - 48 && P.x < X + 48 && P.y > Y - 48 && P.y < Y + 48) {
                     P.score += 10;
-                    apples.sendMessage(Server.SCORE, ByteBuffer.allocate(24).putInt(P.ID).putInt(P.score));
+                    apples.sendMessage(ScoreEvent.getPacket(P));
                 }
             }
         }

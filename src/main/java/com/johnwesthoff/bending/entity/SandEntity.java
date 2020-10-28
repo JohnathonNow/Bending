@@ -13,6 +13,7 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
 /**
  * @author John
@@ -81,8 +82,7 @@ public class SandEntity extends Entity {
         if (!lol.earth.inBounds(X, Y) || lol.earth.checkCollision(X, Y)) {
             radius /= 2;
             lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.SAND);
-            lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(Constants.SAND));
+            lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.SAND));
         }
     }
 
@@ -90,8 +90,7 @@ public class SandEntity extends Entity {
     public void checkAndHandleCollision(Client client) {
 
         final double d = Client.pointDis(X, Y, client.world.x, client.world.y);
-        if (d < radius * 3 && maker != client.ID
-                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+        if (d < radius * 3 && maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.hurt(2);
             client.world.vspeed -= 1;
             client.xspeed += (xspeed / 64);

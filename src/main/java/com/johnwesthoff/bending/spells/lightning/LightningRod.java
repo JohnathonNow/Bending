@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class LightningRod extends Lightning {
     public LightningRod() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 5;
         locked = true;
         unlockXP = 1250;

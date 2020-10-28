@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class Lightning extends Spell {
     public Lightning() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 0;
         locked = true;
         unlockXP = 250;
@@ -30,7 +30,7 @@ public class Lightning extends Spell {
     @Override
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 0;
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;

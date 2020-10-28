@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class WaterbendingFreeze extends Waterbending {
     public WaterbendingFreeze() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 1;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/freezeSpell.png"));

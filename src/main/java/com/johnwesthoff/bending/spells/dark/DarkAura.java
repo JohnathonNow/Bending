@@ -15,7 +15,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class DarkAura extends Spell {
     public DarkAura() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 2;
         locked = true;
         unlockXP = 3000;

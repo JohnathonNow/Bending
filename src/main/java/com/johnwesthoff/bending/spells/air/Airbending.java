@@ -8,14 +8,13 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.MissileEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class Airbending extends Spell {
     public Airbending() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/airSpell.png"));
         } catch (Exception ex) {

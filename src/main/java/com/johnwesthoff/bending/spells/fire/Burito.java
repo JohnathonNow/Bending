@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class Burito extends Spell {
     public Burito() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 9;
         locked = true;
         try {

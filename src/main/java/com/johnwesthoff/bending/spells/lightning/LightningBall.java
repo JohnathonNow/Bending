@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class LightningBall extends Lightning {
     public LightningBall() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 2;
         locked = true;
         unlockXP = 750;

@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class Firebending_Thrower extends Firebending {
     public Firebending_Thrower() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 5;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/flamer.png"));

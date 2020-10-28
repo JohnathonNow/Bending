@@ -16,7 +16,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class EarthbendingSpike extends Earthbending {
     public EarthbendingSpike() {
-        ID = Server.EARTHBENDING;
+        ID = Constants.EARTHBENDING;
         subID = 1;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/earth.png"));

@@ -14,6 +14,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 
 /**
  * @author John
@@ -62,7 +63,7 @@ public class SnowEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if ((!lol.earth.inBounds(X, Y)) || lol.earth.checkCollision(X, Y)) {
             lol.earth.ground.freeze((int) X, (int) Y, radius * 2);
-            lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius * 4));
+            lol.sendMessage(FreezeEvent.getPacket(X, Y, radius * 4));
             alive = false;
         }
 
@@ -97,9 +98,9 @@ public class SnowEntity extends Entity {
         }
     }
 
-
     /**
      * Reconstruct the snow entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

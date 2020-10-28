@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
@@ -15,7 +15,7 @@ public class AirRun extends Airbending {
     boolean recharge = false;
 
     public AirRun() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 3;
 
         try {
@@ -66,4 +66,3 @@ public class AirRun extends Airbending {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
-

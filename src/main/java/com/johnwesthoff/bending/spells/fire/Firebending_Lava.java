@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class Firebending_Lava extends Firebending {
     public Firebending_Lava() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 1;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/lava.png"));

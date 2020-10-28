@@ -65,8 +65,7 @@ public class SummonBallEntity extends Entity {
             alive = false;
             int yay = Server.getID();
             lol.earth.entityList.add(new EnemyEntity((int) X, (int) Y, 0, 0, maker).setID(yay));
-            lol.sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(10).putInt((int) X).putInt((int) Y)
-                    .putInt(0).putInt(0).putInt(maker).putInt(yay));
+            // TODO: do this
             // apples.explode(X, Y, 32, 8, 16);
         }
     }

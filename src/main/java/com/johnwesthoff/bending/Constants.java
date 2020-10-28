@@ -63,4 +63,11 @@ public class Constants {
     public static int ONE_THIRD_FULL_ANGLE = 120;
     public static int HALF_FULL_ANGLE = 180;
     public static int FULL_ANGLE = 360;
+
+    public static final int AIRBENDING = 1;
+    public static final int WATERBENDING = 2;
+    public static final int EARTHBENDING = 3;
+    public static final int FIREBENDING = 4;
+    public static final int LIGHTNING = 5;
+    public static final int DARKNESS = 6;
 }

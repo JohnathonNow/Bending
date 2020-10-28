@@ -7,18 +7,17 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class AirbendingAir extends Airbending {
     public AirbendingAir() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 5;
         try {
-            icon = new ImageIcon(
-                    ResourceLoader.loadImage("airAir.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("airAir.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,4 +59,3 @@ public class AirbendingAir extends Airbending {
         world.ground.ClearCircle(px, py, 48);
     }
 }
-

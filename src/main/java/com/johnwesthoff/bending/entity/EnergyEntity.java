@@ -9,6 +9,8 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -77,15 +79,14 @@ public class EnergyEntity extends Entity {
             radius *= Constants.MULTIPLIER;
             alive = false;
             // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
-            lol.sendMessage(Server.CHARGE,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(maker));
+            lol.sendMessage(ChargeEvent.getPacket(this));
+                    
         }
         for (Player p : lol.playerList) {
             if (Client.pointDis(X, Y - Constants.HEAD, p.x, p.y) < 40 && maker != p.ID) {
                 alive = false;
-                lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius)
-                        .putInt(200).putInt(maker));
+                lol.sendMessage(DestroyEvent.getPacket(this));
+                lol.sendMessage(ChargeEvent.getPacket(this));
             }
         }
     }
