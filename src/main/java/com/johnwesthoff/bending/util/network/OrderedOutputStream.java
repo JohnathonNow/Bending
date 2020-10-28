@@ -11,8 +11,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Server;
-
 public final class OrderedOutputStream implements Runnable {
     private final OutputStream output;
     private final Thread me = new Thread(this);
@@ -35,22 +33,25 @@ public final class OrderedOutputStream implements Runnable {
     @Override
     public void run() {
         while (active) {
+            Message toSend = null;
             try {
                 while (!stack.isEmpty()) {
-                    Message toSend = stack.poll();
+                    toSend = stack.poll();
                     toSend.getBytes().send(output);
                 }
                 Thread.sleep(STACK_CHECK_SLEEP);
             } catch (IOException | InterruptedException ex) {
                 active = false;
                 Logger.getLogger(OrderedOutputStream.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OrderedOutputStream.class.getName()).log(Level.SEVERE, null, 
+                "Died sending " + toSend.getBytes().getId());
             }
         }
     }
 
     /**
      * Add a message to the stack. This method is thread-safe.
-     * @param BB    The bytebuffer containing the data to be sent
+     * @param BB    The NetworkMessage containing the data to be sent
      * @throws IOException If this {@link OrderedOutputStream} is no longer active
      */
     public void addMessage(NetworkMessage BB) throws IOException {
@@ -68,8 +69,9 @@ public final class OrderedOutputStream implements Runnable {
         active = false;
     }
 
+    @Deprecated
     public void addMessage(ByteBuffer bb, int ID) throws IOException {
-        this.addMessage(bb, (byte) ID);
+        this.addMessage(new NetworkMessage(bb, (byte) ID));
     }
 
     public final class Message implements Comparable<Object> {
