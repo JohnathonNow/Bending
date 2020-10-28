@@ -150,16 +150,6 @@ public class PlayerOnline extends Player implements Runnable {
             case Server.MOVE:
                 ByteBuffer toRead = Server.readByteBuffer(in);
 
-                x = toRead.getShort();
-                y = toRead.getShort();
-                move = toRead.getShort();
-                vspeed = toRead.getShort();
-                leftArmAngle = toRead.getShort();
-                rightArmAngle = toRead.getShort();
-                status = toRead.getShort();
-                HP = toRead.getShort();
-                // System.out.print(ID+":");
-                handle.movePlayer(ID, x, y, move, vspeed, (int) leftArmAngle, (int) rightArmAngle, status, HP);
                 break;
             case Server.DIG:
                 toRead = Server.readByteBuffer(in);
