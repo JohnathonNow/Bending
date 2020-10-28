@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class DarkSoulBall extends Spell {
     public DarkSoulBall() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 1;
         locked = true;
         unlockXP = 2500;

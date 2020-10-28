@@ -3,8 +3,10 @@ package com.johnwesthoff.bending.networking.handlers;
 import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class DestroyEvent implements NetworkEvent {
     public static final byte ID = 4;
@@ -29,6 +31,12 @@ public class DestroyEvent implements NetworkEvent {
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static NetworkMessage getPacket(Entity e) {
+        ByteBuffer bb = ByteBuffer.allocate(8);
+        bb.putInt(e.MYID);
+        return new NetworkMessage(bb, ID);
     }
 
 }

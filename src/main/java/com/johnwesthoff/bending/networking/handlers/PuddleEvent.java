@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class PuddleEvent implements NetworkEvent {
     public static final byte ID = 18;
@@ -29,4 +30,8 @@ public class PuddleEvent implements NetworkEvent {
 
     }
 
+    public static NetworkMessage getPacket(int x, int y, int r) {
+        ByteBuffer b = ByteBuffer.allocate(40).putInt(x).putInt(x).putInt(r);
+        return new NetworkMessage(b, ID);
+    }
 }

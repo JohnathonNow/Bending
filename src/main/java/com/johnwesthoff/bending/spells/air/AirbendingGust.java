@@ -7,14 +7,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.GustEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AirbendingGust extends Airbending {
     public AirbendingGust() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/airGust.png"));
         } catch (Exception ex) {
@@ -24,7 +24,7 @@ public class AirbendingGust extends Airbending {
 
     @Override
     public void getAction(Client app) {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         // throw new UnsupportedOperationException("Not supported yet.");
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;

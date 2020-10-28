@@ -16,6 +16,7 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DrainEvent;
 
 
 /**
@@ -104,12 +105,10 @@ public class SoulDrainEntity extends Entity {
             client.lastHit = maker;
             client.killMessage = "~'s soul was stolen by `!";
             alive = false;
-            final ByteBuffer bb = ByteBuffer.allocate(8);
-            bb.putInt(client.lastHit).putInt(client.hurt(21));
             client.world.vspeed -= 5;
             client.xspeed += 7 - client.random.nextInt(14);
             try {
-                client.out.addMessage(bb, Server.DRAIN);
+                client.out.addMessage(DrainEvent.getPacket(client.lastHit, client.hurt(21)));
             } catch (final IOException ex) {
                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }

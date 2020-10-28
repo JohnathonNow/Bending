@@ -6,6 +6,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class MoveEvent implements NetworkEvent {
     public static final byte ID = 17;
@@ -43,6 +44,7 @@ public class MoveEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer toRead) {
+        toRead.getShort();
         p.x = toRead.getShort();
         p.y = toRead.getShort();
         p.move = toRead.getShort();
@@ -53,5 +55,19 @@ public class MoveEvent implements NetworkEvent {
         p.HP = toRead.getShort();
         p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
                 p.HP);
+    }
+
+    public static NetworkMessage getPacket(float x, float y, double move, double vspeed, double laa, double raa, int status, int hp, int id) {
+        ByteBuffer toSend = ByteBuffer.allocate(6 * 4);
+        toSend.putShort((short) id);
+        toSend.putShort((short) x);
+        toSend.putShort((short) y);
+        toSend.putShort((short) move);
+        toSend.putShort((short) vspeed);
+        toSend.putShort((short) laa);
+        toSend.putShort((short) raa);
+        toSend.putShort((short) status);
+        toSend.putShort((short) hp);
+        return new NetworkMessage(toSend, ID);
     }
 }

@@ -15,7 +15,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class EarthbendingWallOfSand extends Earthbending {
     public EarthbendingWallOfSand() {
-        ID = Server.EARTHBENDING;
+        ID = Constants.EARTHBENDING;
         subID = 5;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/earthwos.png"));

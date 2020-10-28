@@ -9,15 +9,14 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.app.player.PlayerService;
 import com.johnwesthoff.bending.app.player.PlayerServiceFactory;
 import com.johnwesthoff.bending.entity.Entity;
-import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.networking.NetworkManager;
-import com.johnwesthoff.bending.spells.Spell;
-import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
+import com.johnwesthoff.bending.networking.handlers.EntireWorldEvent;
+import com.johnwesthoff.bending.networking.handlers.LeaveEvent;
+import com.johnwesthoff.bending.networking.handlers.MoveEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
@@ -46,7 +45,7 @@ public class PlayerOnline extends Player implements Runnable {
     }
 
     public void killMe() {
-        handle.sendMessage(Server.LEAVE, ByteBuffer.allocate(6).putInt(ID));
+        handle.sendMessage(LeaveEvent.getPacket(this));
         try {
             out.close();
             in.close();
@@ -77,39 +76,14 @@ public class PlayerOnline extends Player implements Runnable {
 
     public void writeMovePlayer(int id, int X, int Y, int M, int V, int LA, int RA, short st, short hp) {
         try {
-            ByteBuffer toSend = ByteBuffer.allocate(6 * 4);
-            // out.write(Server.MOVE);
-            toSend.putShort((short) id);
-            toSend.putShort((short) X);
-            toSend.putShort((short) Y);
-            toSend.putShort((short) M);
-            toSend.putShort((short) V);
-            toSend.putShort((short) LA);
-            toSend.putShort((short) RA);
-            toSend.putShort((short) st);
-            toSend.putShort((short) hp);
-            out.addMessage(toSend, Server.MOVE);
-            // Server.writeByteBuffer(toSend, out);
-            // System.out.println("("+x+","+y+")");
+            out.addMessage(MoveEvent.getPacket(X, Y, M, V, LA, RA, st, hp, id));
         } catch (Exception ex) {
             ex.printStackTrace();
             killMe();
         }
     }
 
-    public void writeNewPlayer(int id, String user) {
-        try {
-            // out.write(Server.LOGIN);
-            // out.write(id);
-            // out.flush();
-            out.addMessage(Server.putString(ByteBuffer.allocate(4 + user.length() * 4).putInt(id), user),
-                    Server.LOGIN);
-        } catch (Exception ex) {
-            // ex.printStackTrace();
-            System.err.println("I LEFT BECAUSE I AM A FATTY! ~ " + ID);
-            killMe();
-        }
-    }
+
 
     public void writeWorld() {
         voted = false;
@@ -150,11 +124,11 @@ public class PlayerOnline extends Player implements Runnable {
             }
             toSend.put(Byte.MIN_VALUE);
             toSend.put(Byte.MIN_VALUE);
-            out.addMessage(toSend, Server.ENTIREWORLD);
+            out.addMessage(EntireWorldEvent.getPacket(toSend));
             // Server.writeByteBuffer(toSend,out);
             for (int t = 0; t < chunks.length; t += 1) {
                 // Server.writeByteBuffer(chunks[t],out);
-                out.addMessage(chunks[t], Server.CHUNK);
+                out.addMessage(new NetworkMessage(chunks[t], (byte)0));
             }
             // System.out.println("World sent");
         } catch (Exception ex) {
@@ -175,13 +149,13 @@ public class PlayerOnline extends Player implements Runnable {
                     ready = true;
                     getInput();
                 } catch (Exception ex) {
-                    // ex.printStackTrace();
+                    ex.printStackTrace();
                     killMe();
                 }
             }
 
         } catch (Exception ex) {
-            // ex.printStackTrace();
+            ex.printStackTrace();
             killMe();
         }
     }

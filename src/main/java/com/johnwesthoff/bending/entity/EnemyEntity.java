@@ -17,6 +17,9 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.AiEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
@@ -199,13 +202,13 @@ public class EnemyEntity extends Entity {
     public void onServerUpdate(Server handle) {
         jump = false;
         if (HP <= 0) {
-            handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
+            handle.sendMessage(DestroyEvent.getPacket(this));
             this.setAlive(false);
             if (Server.gameMode == Server.SURVIVAL) {
                 PlayerOnline P = handle.getPlayer(lastHit);
                 if (P != null) {
                     P.score++;
-                    handle.sendMessage(Server.SCORE, ByteBuffer.allocate(24).putInt(P.ID).putInt(P.score));
+                    handle.sendMessage(ScoreEvent.getPacket(P));
                 }
             }
         }
@@ -266,8 +269,7 @@ public class EnemyEntity extends Entity {
         }
         if (timer++ > 90) {
             // System.out.println(X);
-            handle.sendMessage(Server.AI, ByteBuffer.allocate(28).putInt((int) X).putInt((int) Y).putInt((int) move)
-                    .putInt((int) yspeed).putInt((int) HP).putInt(MYID).putInt(target));
+            handle.sendMessage(AiEvent.getPacket(this));
             timer = 0;
         }
     }

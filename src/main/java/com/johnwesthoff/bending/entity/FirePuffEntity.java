@@ -14,6 +14,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.SteamEvent;
 
 /**
  * @author John
@@ -80,7 +81,7 @@ public class FirePuffEntity extends Entity {
         if (lol.earth.inBounds(X, Y) && collided(lol.earth))// lol.earth.ground.cellData[X][Y]==World.WATER
         {
             alive = false;
-            lol.sendMessage(Server.STEAM, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(this.MYID));
+            lol.sendMessage(SteamEvent.getPacket((int) X, (int) Y, this.MYID));
         }
     }
 

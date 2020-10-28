@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class EntireWorldEvent implements NetworkEvent {
     public static final byte ID = 7;
@@ -26,8 +27,12 @@ public class EntireWorldEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
-        // TODO Auto-generated method stub
+        // This is never sent to the server, only to the client
+        throw new UnsupportedOperationException("Server should never receive entire world packet");
+    }
 
+    public static NetworkMessage getPacket(ByteBuffer bb) {
+        return new NetworkMessage(bb, ID);
     }
 
 }

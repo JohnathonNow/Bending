@@ -1482,8 +1482,8 @@ public class World implements Serializable {
 
             for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
                 for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
-                    final int minX = Math.min(X + 3 - xx, WIDTH_INT);
-                    final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
+                    //final int minX = Math.min(X + 3 - xx, WIDTH_INT);
+                    //final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
                     switch (ground.cellData[X][Y]) {
                         default:
                             break;

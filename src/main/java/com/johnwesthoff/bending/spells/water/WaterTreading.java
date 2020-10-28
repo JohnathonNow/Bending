@@ -15,7 +15,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class WaterTreading extends Waterbending {
     public WaterTreading() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 23;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/waterswim.png"));

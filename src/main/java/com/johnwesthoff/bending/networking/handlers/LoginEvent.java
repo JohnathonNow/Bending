@@ -49,10 +49,7 @@ public class LoginEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline po, ByteBuffer bb) {
-        long auth = bb.getLong();
-        if (auth != Client.getAuth()) {
-            po.killMe();
-        }
+        bb.getInt();
         po.username = Server.getString(bb);
         try {
             po.out.addMessage(IdEvent.getPacket(po.ID));
@@ -63,8 +60,8 @@ public class LoginEvent implements NetworkEvent {
             int[] colors2 = new int[] { bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt() };
             po.colorss = colors;
             po.colorss2 = colors2;
-            po.UDPPORT = bb.getInt();
-            System.err.println(po.username + " joined with ID " + po.ID + ", on UDPPORT " + po.UDPPORT + ".");
+            po.UDPPORT = 0;
+            System.err.println(po.username + " joined with ID " + po.ID + ".");
             String gm = "";
             switch (Server.gameMode) {
                 default:

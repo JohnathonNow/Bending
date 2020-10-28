@@ -4,16 +4,19 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 /**
  *
@@ -72,6 +75,7 @@ public class StaticShotEntity extends Entity {
 
     /**
      * Reconstruct the static shot entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */
@@ -88,9 +92,8 @@ public class StaticShotEntity extends Entity {
         for (Player p : lol.playerList) {
             if (Client.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
                 alive = false;
-                lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE,
-                        ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(0));// maker
+                lol.sendMessage(DestroyEvent.getPacket(this));
+                lol.sendMessage(ChargeEvent.getPacket(this));
                 return;
             }
         }

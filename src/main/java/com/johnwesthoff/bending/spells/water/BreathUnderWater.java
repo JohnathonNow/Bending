@@ -15,7 +15,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class BreathUnderWater extends Waterbending {
     public BreathUnderWater() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 3;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/BreathUnderWater.png"));

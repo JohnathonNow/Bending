@@ -42,7 +42,9 @@ public class LeaveEvent implements NetworkEvent {
 
     public static NetworkMessage getPacket(Player p) {
         ByteBuffer bb = ByteBuffer.allocate(4);
-        bb.putInt(p.ID);
+        if (p != null) {
+            bb.putInt(p.ID);
+        }
         return new NetworkMessage(bb, ID);
     }
 

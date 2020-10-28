@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class WaterSpout extends Waterbending {
     public WaterSpout() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 2;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/waterspout.png"));

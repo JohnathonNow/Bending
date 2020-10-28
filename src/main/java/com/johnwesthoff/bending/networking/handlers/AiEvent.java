@@ -7,9 +7,11 @@ import com.johnwesthoff.bending.entity.EnemyEntity;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class AiEvent implements NetworkEvent {
     public static final byte ID = 1;
+
     @Override
     public byte getId() {
         return ID;
@@ -45,6 +47,13 @@ public class AiEvent implements NetworkEvent {
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static NetworkMessage getPacket(EnemyEntity e) {
+        final ByteBuffer bb = ByteBuffer.allocate(1000);
+        bb.putInt((int) e.X).putInt((int) e.Y).putInt(e.HP).putInt((int) e.move).putInt((int) e.yspeed).putInt(e.target)
+                .putInt(e.id);
+        return new NetworkMessage(bb, ID);
     }
 
 }

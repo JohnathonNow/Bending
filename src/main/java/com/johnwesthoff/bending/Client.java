@@ -69,6 +69,11 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.NetworkManager;
+import com.johnwesthoff.bending.networking.handlers.DeathEvent;
+import com.johnwesthoff.bending.networking.handlers.LoginEvent;
+import com.johnwesthoff.bending.networking.handlers.MapEvent;
+import com.johnwesthoff.bending.networking.handlers.MessageEvent;
+import com.johnwesthoff.bending.networking.handlers.MoveEvent;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.ui.AppletActionListener;
 import com.johnwesthoff.bending.ui.ClothingChooser1;
@@ -95,7 +100,7 @@ public class Client extends JPanel implements Runnable {
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
-        Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
+            Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
     public int score = 0;
     public int mapRotation = 0;
@@ -104,7 +109,7 @@ public class Client extends JPanel implements Runnable {
     public int gameMode = 1;
     public int fireTime = 0;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
-           deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
+            deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
     public static ClientInputListener inputer;
@@ -230,21 +235,21 @@ public class Client extends JPanel implements Runnable {
         main.cc.setVisible(false);
         main.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
         main.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-            Spell.spells.get(0), Spell.spells.get(0) });
+                Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-            Spell.spells.get(0), Spell.spells.get(0) });
+                Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-            Spell.spells.get(0), Spell.spells.get(0) });
+                Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-            Spell.spells.get(0), Spell.spells.get(0) });
+                Spell.spells.get(0), Spell.spells.get(0) });
         main.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-            Spell.spells.get(0), Spell.spells.get(0) });
+                Spell.spells.get(0), Spell.spells.get(0) });
 
         main.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
-            Spell.spells.get(19), Spell.spells.get(7) });
+                Spell.spells.get(19), Spell.spells.get(7) });
         // container.add(me);
         main.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
-            Spell.noSpell });
+                Spell.noSpell });
         // container.add(me);
         main.JRB = new JCheckBox() {
             private static final long serialVersionUID = -3327024393489960573L;
@@ -429,8 +434,7 @@ public class Client extends JPanel implements Runnable {
             // container.getContentPane().setB
 
             final PopupMenu pop = new PopupMenu();
-            main.trayIcon = new TrayIcon(
-                    ResourceLoader.loadImage("GrassTexture.png"));
+            main.trayIcon = new TrayIcon(ResourceLoader.loadImage("GrassTexture.png"));
             main.trayIcon.setToolTip("DestructibleTerrain");
             final MenuItem exitItem = new MenuItem("Exit");
             final MenuItem hideItem = new MenuItem("Hide");
@@ -532,9 +536,9 @@ public class Client extends JPanel implements Runnable {
     public Thread communication;
     public static byte[] Clothing = new byte[] { 1, 1, 1, 1, 1, 1 };
     public static int[] Colors = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
     public static int[] Colors2 = new int[] { Color.red.getRGB(), Color.orange.getRGB(), Color.red.getRGB(),
-        Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
+            Color.orange.getRGB(), Color.black.getRGB(), Color.orange.getRGB() };
 
     public boolean start() {
         try {
@@ -550,19 +554,8 @@ public class Client extends JPanel implements Runnable {
             connection.setTcpNoDelay(true);
             out = new OrderedOutputStream(connection.getOutputStream());
             input = connection.getInputStream();
-            // out.write(Server.LOGIN);
-            // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
-            final ByteBuffer tt = Server
-                .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
-                .put(Clothing);
-            for (int i = 0; i < Colors.length; i++) {
-                tt.putInt(Colors[i]);
-            }
-            for (int i = 0; i < Colors2.length; i++) {
-                tt.putInt(Colors2[i]);
-            }
-            tt.putInt(7);
-            out.addMessage(tt, Server.LOGIN);
+            Player p = new Player(0, 0, Clothing, Colors, Colors2);
+            out.addMessage(LoginEvent.getPacket(p));
             ID = -1;
             world.ID = ID;
             playerHitbox = new Rectangle(0, 0, 20, 40);
@@ -588,11 +581,11 @@ public class Client extends JPanel implements Runnable {
             started = true;
         } catch (
 
-                final Exception ex) {
+        final Exception ex) {
 
             failed = true;
             return false;
-                }
+        }
         return true;
         // terrain.getGraphics().drawImage(Grass, 0,0,null);
     }
@@ -763,7 +756,7 @@ public class Client extends JPanel implements Runnable {
                         && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
                     world.floatiness = 0;
                     maxlungs = 100;
-                        }
+                }
                 if (!"Water Treader".equals(passiveList[spellBook].getName())) {
                     swimmingSpeed = 1;
                 }
@@ -871,17 +864,14 @@ public class Client extends JPanel implements Runnable {
                     world.x = -50;
                     if (killingSpree >= 148.413d) {
                         // Anti-cheating - use logs
-                        gameService.feedRss(
-                                String.format("%s had a streak going", username),
-                                String.format("%o kills in a row!", (int) Math.log(killingSpree))
-                                );
+                        gameService.feedRss(String.format("%s had a streak going", username),
+                                String.format("%o kills in a row!", (int) Math.log(killingSpree)));
                     }
                     killingSpree = 0;
                     world.dead = true;
                     // this.chatActive = false;
-                    final ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
                     try {
-                        out.addMessage(die, Server.DEATH);
+                        out.addMessage(DeathEvent.getPacket(lastHit, ID));
                     } catch (final IOException ex) {
                         // ex.printStackTrace();
                     }
@@ -923,16 +913,14 @@ public class Client extends JPanel implements Runnable {
                 world.onUpdate();
 
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                                || counting++ > 200))) {
+                        || counting++ > 200))) {
                     counting = 0;
                     try {
                         sendMovement();
                         prevMove = world.move;
                         if (sendRequest && sendcount++ >= 30) {
                             sendcount = 0;
-                            // System.out.println("REQUEST START");
-                            final ByteBuffer bb = ByteBuffer.allocate(24);
-                            out.addMessage(bb.putInt(1), Server.MAP);
+                            out.addMessage(MapEvent.getPacketClient());
                             sendRequest = false;
                         }
                     } catch (final Exception ex) {
@@ -1316,11 +1304,8 @@ public class Client extends JPanel implements Runnable {
     }
 
     public void sendMessage(final String s, final int color) {
-        final ByteBuffer bb = ByteBuffer.allocate(s.length() * 4 + 4);
-        bb.putInt(color);
-        Server.putString(bb, s);
         try {
-            out.addMessage(bb, Server.MESSAGE);
+            out.addMessage(MessageEvent.getPacket(color, s));
         } catch (final IOException ex) {
             // ex.printStackTrace();
         }
@@ -1426,18 +1411,8 @@ public class Client extends JPanel implements Runnable {
             return;
         }
         try {
-            // out.write(Server.MOVE);
-            final ByteBuffer toSend = ByteBuffer.allocate(4 * 4);
-            toSend.putShort((short) world.x);
-            toSend.putShort((short) world.y);
-            toSend.putShort((short) world.move);
-            toSend.putShort((short) world.vspeed);
-            toSend.putShort((short) world.leftArmAngle);
-            toSend.putShort((short) world.rightArmAngle);
-            toSend.putShort(world.status);
-            toSend.putShort(HP);
-            // Server.writeByteBuffer(toSend, out);
-            out.addMessage(toSend, Server.MOVE);
+            out.addMessage(MoveEvent.getPacket(world.x, world.y, world.move, world.vspeed, world.leftArmAngle,
+                    world.rightArmAngle, world.status, HP, world.ID));
 
         } catch (final Exception e) {
             // e.printStackTrace();
@@ -1454,7 +1429,8 @@ public class Client extends JPanel implements Runnable {
                     break;
                 final String className = Server.getString(toRead);
                 try {
-                    Class.forName(className).getMethod("reconstruct", ByteBuffer.class, World.class).invoke(null, toRead, world);
+                    Class.forName(className).getMethod("reconstruct", ByteBuffer.class, World.class).invoke(null,
+                            toRead, world);
                     world.entityList.get(world.entityList.size() - 1).setID(toRead.getInt());
                 } catch (ClassNotFoundException | NoSuchMethodException | SecurityException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -1570,8 +1546,8 @@ public class Client extends JPanel implements Runnable {
         }
 
         @Override
-        public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value, final int index,
-                final boolean isSelected, final boolean cellHasFocus) {
+        public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value,
+                final int index, final boolean isSelected, final boolean cellHasFocus) {
             setModel(new RowTableModel((Row) value));
             this.getColumnModel().getColumn(0).setWidth(100);
             if (isSelected) {
@@ -1641,7 +1617,7 @@ public class Client extends JPanel implements Runnable {
                 final long s11I1111I1I = World.class.getFields().length;
                 final long sI1I1I11I1I = PlayerOnline.class.getFields().length;
                 authCode = (((((sI1I1I11I1I * sI1I1I11I1I) - sI1I1I11I1I) / s1I1111II11) + s1111I11I11) * s11I1111I1I)
-                    / s1I1111II11;
+                        / s1I1111II11;
                 // authCode = 1;
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -1649,6 +1625,5 @@ public class Client extends JPanel implements Runnable {
         }
         return authCode;
     }
-
 
 }

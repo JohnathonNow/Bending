@@ -29,7 +29,6 @@ public class MapEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer buf) {
-        buf.getInt();
         int viewX = Math.min(Math.max(p.x - 50, 0), p.handle.earth.wIdTh - 100);
         p.handle.sendMessage(getPacket(p.handle.earth, viewX));
     }
@@ -40,6 +39,11 @@ public class MapEvent implements NetworkEvent {
         for (int i = viewX; i < viewX + 100; i++) {
             toSend.put(w.ground.cellData[i]);
         }
+        return new NetworkMessage(toSend, ID);
+    }
+
+    public static NetworkMessage getPacketClient() {
+        ByteBuffer toSend = ByteBuffer.allocate(1);
         return new NetworkMessage(toSend, ID);
     }
 

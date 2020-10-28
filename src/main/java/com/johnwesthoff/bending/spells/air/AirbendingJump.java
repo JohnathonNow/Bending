@@ -8,14 +8,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.EffectEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AirbendingJump extends Spell {
     public AirbendingJump() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 1;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/airJump.png"));

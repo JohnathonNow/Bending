@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class Firebending extends Spell {
     public Firebending() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 0;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/fireball.png"));

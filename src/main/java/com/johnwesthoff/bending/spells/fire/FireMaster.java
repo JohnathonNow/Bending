@@ -16,7 +16,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class FireMaster extends Spell {
     public FireMaster() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 10;
         locked = true;
         try {

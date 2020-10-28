@@ -4,12 +4,16 @@ import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.entity.ShockEffectEntity;
+import com.johnwesthoff.bending.entity.StaticShotEntity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class ChargeEvent implements NetworkEvent {
     public static final byte ID = 2;
+
     @Override
     public byte getId() {
         return ID;
@@ -45,6 +49,18 @@ public class ChargeEvent implements NetworkEvent {
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static NetworkMessage getPacket(EnergyEntity e) {
+        ByteBuffer bb = ByteBuffer.allocate(40);
+        bb.putInt((int) e.X).putInt((int) e.Y).putInt(e.radius).putInt(200).putInt(e.maker);
+        return new NetworkMessage(bb, ID);
+    }
+
+    public static NetworkMessage getPacket(StaticShotEntity e) {
+        ByteBuffer bb = ByteBuffer.allocate(40);
+        bb.putInt((int) e.X).putInt((int) e.Y).putInt(e.radius).putInt(200).putInt(e.maker);
+        return new NetworkMessage(bb, ID);
     }
 
 }

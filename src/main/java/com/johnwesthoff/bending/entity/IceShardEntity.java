@@ -15,6 +15,8 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FillEvent;
+import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 
 /**
  * @author John
@@ -95,15 +97,13 @@ public class IceShardEntity extends Entity {
         if (lol.earth.checkCollision(X, Y)) {
             radius = Constants.RADIUS_REGULAR;
             lol.earth.ground.FillCircleW((int) X, (int) Y, 54, Constants.ICE);
-            lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(54).put(Constants.ICE));
+            lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, 54, Constants.ICE));
             alive = false;
         }
         if (time++ > 1) {
             time = 0;
             lol.earth.ground.freeze((int) (previousX - (xspeed * 4)), (int) (previousY - (yspeed * 4)), 54);
-            lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int) (previousX - (xspeed * 4)))
-                    .putInt((int) (previousY - (yspeed * 4))).putInt(54));
+            lol.sendMessage(FreezeEvent.getPacket((previousX - (xspeed * 4)), (previousY - (yspeed * 4)), 54 * 4));
         }
     }
 

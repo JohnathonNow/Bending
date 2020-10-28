@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class FreezeEvent implements NetworkEvent {
     public static final byte ID = 10;
@@ -29,4 +30,8 @@ public class FreezeEvent implements NetworkEvent {
 
     }
 
+    public static NetworkMessage getPacket(double X, double Y, int radius) {
+        ByteBuffer bb = ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius);
+        return new NetworkMessage(bb, ID);
+    }
 }

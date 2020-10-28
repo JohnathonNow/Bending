@@ -1,21 +1,21 @@
 package com.johnwesthoff.bending.spells.air;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 public class AirAffinity extends Airbending {
     boolean recharge = false;
 
     public AirAffinity() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 7;
 
         try {

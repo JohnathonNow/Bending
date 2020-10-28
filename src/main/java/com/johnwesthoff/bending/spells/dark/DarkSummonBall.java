@@ -16,7 +16,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class DarkSummonBall extends Spell {
     public DarkSummonBall() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 2;
         locked = true;
         unlockXP = 3500;

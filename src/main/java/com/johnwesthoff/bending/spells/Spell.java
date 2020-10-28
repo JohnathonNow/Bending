@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.SpellEvent;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
 import com.johnwesthoff.bending.spells.air.AirRun;
 import com.johnwesthoff.bending.spells.air.Airbending;
@@ -214,12 +214,11 @@ public abstract class Spell {
     }
 
     public void getMessage(OrderedOutputStream out) {
-        ByteBuffer bb = ByteBuffer.allocate(24);
-        bb.putInt((int) subID).putInt((int) X).putInt((int) Y).putInt((int) mx).putInt((int) my);
         try {
-            out.addMessage(bb, Server.SPELL);
-        } catch (IOException ex) {
-            // ex.printStackTrace();
+            out.addMessage(SpellEvent.getPacket(subID, (int) X, (int) Y, (int) mx, (int) my));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

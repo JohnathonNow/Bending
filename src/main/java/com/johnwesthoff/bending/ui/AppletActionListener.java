@@ -15,7 +15,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +25,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.app.game.GameService;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
+import com.johnwesthoff.bending.networking.handlers.LeaveEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
@@ -132,8 +132,7 @@ public class AppletActionListener implements ActionListener {
         if (command.equals("Restart")) {
 
             try {
-                final ByteBuffer die = ByteBuffer.allocate(5);
-                app.out.addMessage(die, Server.LOGOUT);
+                app.out.addMessage(LeaveEvent.getPacket(null));
                 Thread.sleep(1000);
             } catch (IOException | InterruptedException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

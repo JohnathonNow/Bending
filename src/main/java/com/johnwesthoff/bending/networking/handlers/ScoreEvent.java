@@ -6,6 +6,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class ScoreEvent implements NetworkEvent {
     public static final byte ID = 20;
@@ -43,4 +44,7 @@ public class ScoreEvent implements NetworkEvent {
 
     }
 
+    public static NetworkMessage getPacket(PlayerOnline p) {
+        return new NetworkMessage(ByteBuffer.allocate(24).putInt(p.ID).putInt(p.score), ID);
+    }
 }

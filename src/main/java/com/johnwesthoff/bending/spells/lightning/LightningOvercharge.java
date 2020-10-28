@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
@@ -16,7 +16,7 @@ public class LightningOvercharge extends Lightning {
     int charge = 0;
 
     public LightningOvercharge() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 4;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/lightningovercharge.png"));

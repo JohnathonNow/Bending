@@ -4,14 +4,16 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.PuddleEvent;
 
 /**
  * @author John
@@ -41,7 +43,8 @@ public class WaterBallEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.blue);
-            G.fillArc((int) (X - radius / 2) - viewX, (int) (Y - radius / 2) - viewY, radius, radius, 0, Constants.FULL_ANGLE);
+            G.fillArc((int) (X - radius / 2) - viewX, (int) (Y - radius / 2) - viewY, radius, radius, 0,
+                    Constants.FULL_ANGLE);
 
             G.setColor(Color.cyan);
             G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, s1, a1);
@@ -69,7 +72,7 @@ public class WaterBallEntity extends Entity {
         if (lol.earth.checkCollision((int) X, (int) Y) || lol.earth.isLiquid((int) X, (int) Y)) {
             radius *= 2.85;
             lol.earth.ground.puddle((int) X, (int) Y, radius);
-            lol.sendMessage(Server.PUDDLE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius));
+            lol.sendMessage(PuddleEvent.getPacket((int) X, (int) Y, radius));
             alive = false;
         }
     }
@@ -90,6 +93,7 @@ public class WaterBallEntity extends Entity {
 
     /**
      * Reconstruct the water ball entity
+     * 
      * @param in
      * @param world World in which the entity should be reconstructed
      */

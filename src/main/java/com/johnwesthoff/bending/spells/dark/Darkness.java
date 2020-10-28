@@ -15,7 +15,7 @@ import com.johnwesthoff.bending.spells.Spell;
 
 public class Darkness extends Spell {
     public Darkness() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 0;
         locked = true;
         unlockXP = 2000;
