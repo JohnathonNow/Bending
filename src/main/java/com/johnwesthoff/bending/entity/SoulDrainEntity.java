@@ -109,7 +109,7 @@ public class SoulDrainEntity extends Entity {
             client.world.vspeed -= 5;
             client.xspeed += 7 - client.random.nextInt(14);
             try {
-                client.out.addMesssage(bb, Server.DRAIN);
+                client.out.addMessage(bb, Server.DRAIN);
             } catch (final IOException ex) {
                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }

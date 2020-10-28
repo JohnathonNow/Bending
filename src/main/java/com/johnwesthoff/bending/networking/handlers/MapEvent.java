@@ -4,10 +4,17 @@ import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class MapEvent implements NetworkEvent {
     public static final byte ID = 15;
+
+    @Override
+    public byte getId() {
+        return ID;
+    }
 
     @Override
     public void clientReceived(Client p, ByteBuffer reading) {
@@ -21,9 +28,19 @@ public class MapEvent implements NetworkEvent {
     }
 
     @Override
-    public void serverReceived(PlayerOnline p, ByteBuffer message) {
-        // TODO Auto-generated method stub
-
+    public void serverReceived(PlayerOnline p, ByteBuffer buf) {
+        buf.getInt();
+        int viewX = Math.min(Math.max(p.x - 50, 0), p.handle.earth.wIdTh - 100);
+        p.handle.sendMessage(getPacket(p.handle.earth, viewX));
     }
-    
+
+    public static NetworkMessage getPacket(World w, int viewX) {
+        ByteBuffer toSend = ByteBuffer.allocate(300000);
+        toSend.putInt(viewX);
+        for (int i = viewX; i < viewX + 100; i++) {
+            toSend.put(w.ground.cellData[i]);
+        }
+        return new NetworkMessage(toSend, ID);
+    }
+
 }

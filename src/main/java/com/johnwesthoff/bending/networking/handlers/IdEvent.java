@@ -11,6 +11,11 @@ public class IdEvent implements NetworkEvent {
     public static final byte ID = 12;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer message) {
         p.ID = message.getInt();
         p.world.ID = p.ID;
@@ -28,5 +33,5 @@ public class IdEvent implements NetworkEvent {
         bb.putInt(id);
         return new NetworkMessage(bb, ID);
     }
-    
+
 }

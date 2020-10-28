@@ -8,7 +8,12 @@ import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class SandEvent implements NetworkEvent {
     public static final byte ID = 19;
-    
+
+    @Override
+    public byte getId() {
+        return ID;
+    }
+
     @Override
     public void clientReceived(Client p, ByteBuffer buf) {
         final int fX = buf.getInt();
@@ -25,4 +30,3 @@ public class SandEvent implements NetworkEvent {
     }
 
 }
-

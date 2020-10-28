@@ -10,6 +10,10 @@ import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class ChargeEvent implements NetworkEvent {
     public static final byte ID = 2;
+    @Override
+    public byte getId() {
+        return ID;
+    }
 
     @Override
     public void clientReceived(Client p, ByteBuffer toRead) {

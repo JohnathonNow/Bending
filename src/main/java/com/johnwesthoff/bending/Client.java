@@ -62,14 +62,13 @@ import javax.swing.table.AbstractTableModel;
 
 import com.johnwesthoff.bending.app.game.GameService;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
-import com.johnwesthoff.bending.entity.EnemyEntity;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.ShockEffectEntity;
-import com.johnwesthoff.bending.entity.SteamEntity;
 import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.NetworkManager;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.ui.AppletActionListener;
 import com.johnwesthoff.bending.ui.ClothingChooser1;
@@ -78,6 +77,7 @@ import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.audio.RealClip;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
@@ -562,16 +562,18 @@ public class Client extends JPanel implements Runnable {
                 tt.putInt(Colors2[i]);
             }
             tt.putInt(7);
-            out.addMesssage(tt, Server.LOGIN);
+            out.addMessage(tt, Server.LOGIN);
             ID = -1;
             world.ID = ID;
             playerHitbox = new Rectangle(0, 0, 20, 40);
+            Client c = this; // this is big sad
             communication = new Thread() {
                 @Override
                 public void run() {
                     try {
                         while (gameAlive) {
-                            final int read = input.read();
+                            NetworkMessage m = NetworkMessage.read(input);
+                            NetworkManager.getInstance().getHandler(m).clientReceived(c, m.getContent());
                             pc++;
                         }
                     } catch (final Exception ex) {
@@ -879,7 +881,7 @@ public class Client extends JPanel implements Runnable {
                     // this.chatActive = false;
                     final ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
                     try {
-                        out.addMesssage(die, Server.DEATH);
+                        out.addMessage(die, Server.DEATH);
                     } catch (final IOException ex) {
                         // ex.printStackTrace();
                     }
@@ -930,7 +932,7 @@ public class Client extends JPanel implements Runnable {
                             sendcount = 0;
                             // System.out.println("REQUEST START");
                             final ByteBuffer bb = ByteBuffer.allocate(24);
-                            out.addMesssage(bb.putInt(1), Server.MAP);
+                            out.addMessage(bb.putInt(1), Server.MAP);
                             sendRequest = false;
                         }
                     } catch (final Exception ex) {
@@ -1318,7 +1320,7 @@ public class Client extends JPanel implements Runnable {
         bb.putInt(color);
         Server.putString(bb, s);
         try {
-            out.addMesssage(bb, Server.MESSAGE);
+            out.addMessage(bb, Server.MESSAGE);
         } catch (final IOException ex) {
             // ex.printStackTrace();
         }
@@ -1435,7 +1437,7 @@ public class Client extends JPanel implements Runnable {
             toSend.putShort(world.status);
             toSend.putShort(HP);
             // Server.writeByteBuffer(toSend, out);
-            out.addMesssage(toSend, Server.MOVE);
+            out.addMessage(toSend, Server.MOVE);
 
         } catch (final Exception e) {
             // e.printStackTrace();

@@ -5,6 +5,7 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 import java.awt.*;
 import java.io.*;
@@ -276,12 +277,22 @@ public final class Server implements Runnable {
 
     }
 
+    public void sendMessage(final NetworkMessage mes) {
+        for (final PlayerOnline p : playerList) {
+            try {
+                p.out.addMessage(mes);
+            } catch (final Exception ex) {
+                // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public void sendMessage(final byte id, final ByteBuffer mes) {
         for (final PlayerOnline p : playerList) {
             try {
                 // p.out.write(id);
                 // Server.writeByteBuffer(mes, p.out);
-                p.out.addMesssage(mes, id);
+                p.out.addMessage(mes, id);
             } catch (final Exception ex) {
                 // Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -523,7 +534,7 @@ public final class Server implements Runnable {
             for (final PlayerOnline P : playerList) {
                 gm = "You will be a" + (team1.contains(P.ID) ? " defender." : "n attacker.");
                 try {
-                    P.out.addMesssage(Server.putString(ByteBuffer.allocate(gm.length() * 4 + 4).putInt(0x00FF3C), gm),
+                    P.out.addMessage(Server.putString(ByteBuffer.allocate(gm.length() * 4 + 4).putInt(0x00FF3C), gm),
                             Server.MESSAGE);
                 } catch (final IOException ex) {
                 }

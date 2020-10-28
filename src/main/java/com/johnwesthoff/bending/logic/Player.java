@@ -23,8 +23,9 @@ public class Player {
     public short status = 0, HP = 0;
     public Image[] bodyParts;// Body, head, ua, la, ul, ll
     public Thread loader;
-    public final byte[] partss;
-    public final int[] colorss, colorss2;
+    public boolean sameTeam;
+    public byte[] partss;
+    public int[] colorss, colorss2;
 
     public Player(int X, int Y, final byte[] parts, final int[] colors, final int[] colors2) {
         x = X;

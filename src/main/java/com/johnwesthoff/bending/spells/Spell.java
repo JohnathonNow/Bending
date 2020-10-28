@@ -217,7 +217,7 @@ public abstract class Spell {
         ByteBuffer bb = ByteBuffer.allocate(24);
         bb.putInt((int) subID).putInt((int) X).putInt((int) Y).putInt((int) mx).putInt((int) my);
         try {
-            out.addMesssage(bb, Server.SPELL);
+            out.addMessage(bb, Server.SPELL);
         } catch (IOException ex) {
             // ex.printStackTrace();
         }

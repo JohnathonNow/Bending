@@ -6,9 +6,15 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class DeathEvent implements NetworkEvent {
     public static final byte ID = 3;
+
+    @Override
+    public byte getId() {
+        return ID;
+    }
 
     @Override
     public void clientReceived(Client p, ByteBuffer buf) {
@@ -17,7 +23,7 @@ public class DeathEvent implements NetworkEvent {
         if (fX2 != fX) {
             if (fX == p.ID) {
                 p.XP += 25;
-                p.gameService.earnExperience(p.XP,p.username);
+                p.gameService.earnExperience(p.XP, p.username);
                 p.score++;
                 if (p.killingSpree == 0) {
                     p.killingSpree = Math.E;
@@ -35,10 +41,21 @@ public class DeathEvent implements NetworkEvent {
     }
 
     @Override
-    public void serverReceived(PlayerOnline p, ByteBuffer message) {
-        // TODO Auto-generated method stub
-
+    public void serverReceived(PlayerOnline po, ByteBuffer buf) {
+        int subID = buf.getInt();
+        if (subID != po.ID) {
+            for (PlayerOnline p : po.handle.playerList) {
+                if (p.ID == subID) {
+                    p.score++;
+                }
+            }
+        }
+        po.handle.sendMessage(getPacket(subID, po.ID));
     }
 
+    public static NetworkMessage getPacket(int killer, int victim) {
+        ByteBuffer bb = ByteBuffer.allocate(9);
+        bb.putInt(killer).putInt(victim);
+        return new NetworkMessage(bb, ID);
+    }
 }
-

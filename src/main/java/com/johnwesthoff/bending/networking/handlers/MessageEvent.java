@@ -13,6 +13,11 @@ public class MessageEvent implements NetworkEvent {
     public static final byte ID = 16;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer gotten) {
         final int color = gotten.getInt();
         final String message = Server.getString(gotten);
@@ -21,9 +26,17 @@ public class MessageEvent implements NetworkEvent {
     }
 
     @Override
-    public void serverReceived(PlayerOnline p, ByteBuffer message) {
-        // TODO Auto-generated method stub
+    public void serverReceived(PlayerOnline p, ByteBuffer buf) {
+        int color = buf.getInt();
+        String yes = Server.getString(buf);
+        if (yes.contains("/nextmap") && !p.voted) {
+            p.handle.nextVote++;
+            yes = (p.handle.nextVote
+                    + ((p.handle.nextVote > 1 ? " players are " : " player is ") + "voting for ending the match."));
+            p.voted = true;
 
+        }
+        p.handle.sendMessage(getPacket(color, yes));
     }
 
     public static NetworkMessage getPacket(int color, String message) {

@@ -11,6 +11,11 @@ public class ScoreEvent implements NetworkEvent {
     public static final byte ID = 20;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer buf) {
         final int idd = buf.getInt();
         final int scored = buf.getInt();
@@ -39,4 +44,3 @@ public class ScoreEvent implements NetworkEvent {
     }
 
 }
-

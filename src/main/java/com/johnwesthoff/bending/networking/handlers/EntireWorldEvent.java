@@ -8,6 +8,10 @@ import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class EntireWorldEvent implements NetworkEvent {
     public static final byte ID = 7;
+    @Override
+    public byte getId() {
+        return ID;
+    }
     
     @Override
     public void clientReceived(Client p, ByteBuffer reading) {

@@ -10,6 +10,11 @@ public class FreezeEvent implements NetworkEvent {
     public static final byte ID = 10;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer buf) {
         int fX = buf.getInt();
         int fY = buf.getInt();
@@ -25,4 +30,3 @@ public class FreezeEvent implements NetworkEvent {
     }
 
 }
-

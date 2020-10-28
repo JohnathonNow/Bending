@@ -8,4 +8,5 @@ import com.johnwesthoff.bending.logic.PlayerOnline;
 public interface NetworkEvent {
     public void clientReceived(Client p, ByteBuffer message);
     public void serverReceived(PlayerOnline p, ByteBuffer message);
+    public byte getId();
 }

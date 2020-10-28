@@ -10,6 +10,10 @@ import com.johnwesthoff.bending.networking.NetworkEvent;
 
 public class AiEvent implements NetworkEvent {
     public static final byte ID = 1;
+    @Override
+    public byte getId() {
+        return ID;
+    }
 
     @Override
     public void clientReceived(Client c, ByteBuffer reader) {

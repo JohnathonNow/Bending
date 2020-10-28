@@ -11,6 +11,11 @@ public class MoveEvent implements NetworkEvent {
     public static final byte ID = 17;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer reading) {
         final int idtomove = reading.getShort();
         if (idtomove == p.ID) {
@@ -46,6 +51,7 @@ public class MoveEvent implements NetworkEvent {
         p.rightArmAngle = toRead.getShort();
         p.status = toRead.getShort();
         p.HP = toRead.getShort();
-        p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status, p.HP);
+        p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
+                p.HP);
     }
 }

@@ -12,6 +12,11 @@ public class SteamEvent implements NetworkEvent {
     public static final byte ID = 22;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer buf) {
         final int xxxx = buf.getInt(), yyyy = buf.getInt();
         final int idtokill = buf.getInt();
@@ -31,7 +36,6 @@ public class SteamEvent implements NetworkEvent {
 
     }
 
-
     public static NetworkMessage getPacket(int x, int y, int entity) {
         ByteBuffer bb = ByteBuffer.allocate(12);
         bb.putInt(x).putInt(y).putInt(entity);
@@ -39,4 +43,3 @@ public class SteamEvent implements NetworkEvent {
     }
 
 }
-

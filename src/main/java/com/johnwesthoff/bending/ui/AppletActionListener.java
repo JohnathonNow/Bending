@@ -133,7 +133,7 @@ public class AppletActionListener implements ActionListener {
 
             try {
                 final ByteBuffer die = ByteBuffer.allocate(5);
-                app.out.addMesssage(die, Server.LOGOUT);
+                app.out.addMessage(die, Server.LOGOUT);
                 Thread.sleep(1000);
             } catch (IOException | InterruptedException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

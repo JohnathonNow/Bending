@@ -53,7 +53,7 @@ public final class OrderedOutputStream implements Runnable {
      * @param BB    The bytebuffer containing the data to be sent
      * @throws IOException If this {@link OrderedOutputStream} is no longer active
      */
-    public void addMesssage(NetworkMessage BB) throws IOException {
+    public void addMessage(NetworkMessage BB) throws IOException {
         synchronized (stack) {
             stack.add(new Message(BB));
         }
@@ -68,8 +68,8 @@ public final class OrderedOutputStream implements Runnable {
         active = false;
     }
 
-    public void addMesssage(ByteBuffer bb, int ID) throws IOException {
-        this.addMesssage(bb, (byte) ID);
+    public void addMessage(ByteBuffer bb, int ID) throws IOException {
+        this.addMessage(bb, (byte) ID);
     }
 
     public final class Message implements Comparable<Object> {

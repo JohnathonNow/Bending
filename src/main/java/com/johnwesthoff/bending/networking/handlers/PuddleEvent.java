@@ -10,10 +10,15 @@ public class PuddleEvent implements NetworkEvent {
     public static final byte ID = 18;
 
     @Override
+    public byte getId() {
+        return ID;
+    }
+
+    @Override
     public void clientReceived(Client p, ByteBuffer buf) {
         final int fX = buf.getInt();
         final int fY = buf.getInt();
-        final int  fR = buf.getInt();
+        final int fR = buf.getInt();
         p.world.ground.puddle(fX, fY, fR);
 
     }
@@ -25,4 +30,3 @@ public class PuddleEvent implements NetworkEvent {
     }
 
 }
-

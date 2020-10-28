@@ -1,16 +1,21 @@
 package com.johnwesthoff.bending.networking.handlers;
 
+import java.awt.Color;
 import java.nio.ByteBuffer;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
-
-import java.awt.Color;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class LeaveEvent implements NetworkEvent {
     public static final byte ID = 13;
+
+    @Override
+    public byte getId() {
+        return ID;
+    }
 
     @Override
     public void clientReceived(Client c, ByteBuffer buf) {
@@ -32,9 +37,13 @@ public class LeaveEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer message) {
-        // TODO Auto-generated method stub
+        p.killMe();
+    }
 
+    public static NetworkMessage getPacket(Player p) {
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(p.ID);
+        return new NetworkMessage(bb, ID);
     }
 
 }
-
