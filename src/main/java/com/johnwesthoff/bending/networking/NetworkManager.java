@@ -11,6 +11,7 @@ import com.johnwesthoff.bending.networking.handlers.DrainEvent;
 import com.johnwesthoff.bending.networking.handlers.EntireWorldEvent;
 import com.johnwesthoff.bending.networking.handlers.ExpandWorldEvent;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
+import com.johnwesthoff.bending.networking.handlers.FirePuffEvent;
 import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 import com.johnwesthoff.bending.networking.handlers.HurtEvent;
 import com.johnwesthoff.bending.networking.handlers.IdEvent;
@@ -54,6 +55,7 @@ public class NetworkManager {
         this.register(new ScoreEvent());
         this.register(new SpellEvent());
         this.register(new SteamEvent());
+        this.register(new FirePuffEvent());
     }
 
     public NetworkEvent getHandler(NetworkMessage m) {
