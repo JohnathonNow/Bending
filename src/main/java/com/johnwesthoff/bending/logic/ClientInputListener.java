@@ -132,8 +132,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost();
+                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick).getCost()) {
+                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick).getCost();
                                 pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
@@ -142,12 +142,12 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick) instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.leftClick].getAction(pointer);
+                                        pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick).getAction(pointer);
                                     }
                                 }
-                                pointer.spellList[pointer.spellBook][pointer.leftClick].getAction(pointer);
+                                pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick).getAction(pointer);
                             }
                         } else {
                             pointer.leftClick = setTo;
@@ -163,8 +163,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.midClick].getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.midClick].getCost();
+                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.midClick].getEffectiveSpell(pointer.midClick).getCost()) {
+                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.midClick].getEffectiveSpell(pointer.midClick).getCost();
                                 pointer.world.leftArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
@@ -180,12 +180,12 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick].getEffectiveSpell(pointer.leftClick) instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.midClick].getAction(pointer);
+                                        pointer.spellList[pointer.spellBook][pointer.midClick].getEffectiveSpell(pointer.midClick).getAction(pointer);
                                     }
                                 }
-                                pointer.spellList[pointer.spellBook][pointer.midClick].getAction(pointer);
+                                pointer.spellList[pointer.spellBook][pointer.midClick].getEffectiveSpell(pointer.midClick).getAction(pointer);
                             }
                         } else {
                             pointer.midClick = setTo;
@@ -201,9 +201,9 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.rightClick]
+                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.rightClick].getEffectiveSpell(pointer.rightClick)
                                     .getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.rightClick].getCost();
+                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.rightClick].getEffectiveSpell(pointer.rightClick).getCost();
                                 pointer.world.rightArmAngle = Client.pointDir(
                                         pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
                                                 : pointer.world.mouseX,
@@ -212,12 +212,12 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                                                 : pointer.world.mouseX,
                                         pointer.world.mouseY);
                                 if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.rightClick] instanceof Firebending)) {
+                                        && (pointer.spellList[pointer.spellBook][pointer.rightClick].getEffectiveSpell(pointer.rightClick) instanceof Firebending)) {
                                     if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.rightClick].getAction(pointer);
+                                        pointer.spellList[pointer.spellBook][pointer.rightClick].getEffectiveSpell(pointer.rightClick).getAction(pointer);
                                     }
                                 }
-                                pointer.spellList[pointer.spellBook][pointer.rightClick].getAction(pointer);
+                                pointer.spellList[pointer.spellBook][pointer.rightClick].getEffectiveSpell(pointer.rightClick).getAction(pointer);
                             }
                         } else {
                             pointer.rightClick = setTo;

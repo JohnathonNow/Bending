@@ -862,6 +862,7 @@ public class Client extends JPanel implements Runnable {
                     this.lungs = this.maxlungs;
                     world.y = -50;
                     world.x = -50;
+                    Spell.randomSpell.setSpells();
                     if (killingSpree >= 148.413d) {
                         // Anti-cheating - use logs
                         gameService.feedRss(String.format("%s had a streak going", username),
@@ -1074,6 +1075,7 @@ public class Client extends JPanel implements Runnable {
                     world.dead = false;
                     passiveList[spellBook].onSpawn(this);
                     spellselection.setVisible(false);
+                    Spell.randomSpellMatch.setSpells();
                 }
                 biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         null);
@@ -1141,7 +1143,7 @@ public class Client extends JPanel implements Runnable {
                 graphicsBuffer.drawRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 for (int i = 0; i < 5; i++) {
-                    graphicsBuffer.drawImage(spellList[spellBook][i].getImage().getImage(), 4 + i * 34, 0, 32, 16,
+                    graphicsBuffer.drawImage(spellList[spellBook][i].getEffectiveSpell(i).getImage().getImage(), 4 + i * 34, 0, 32, 16,
                             this);
                     if (this.leftClick == i) {
                         graphicsBuffer.setColor(Color.orange);
@@ -1264,7 +1266,7 @@ public class Client extends JPanel implements Runnable {
                             biggraphicsBuffer.setColor(Color.BLACK);
                         }
                         for (int xxx = 0; xxx < spellList[yyy].length; xxx++) {
-                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getName(), 128 + (xxx * 128),
+                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getEffectiveSpell(xxx).getName(), 128 + (xxx * 128),
                                     300 + (yyy * 64));
                         }
                     }

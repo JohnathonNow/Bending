@@ -48,6 +48,8 @@ import com.johnwesthoff.bending.spells.lightning.LightningOvercharge;
 import com.johnwesthoff.bending.spells.lightning.LightningRod;
 import com.johnwesthoff.bending.spells.lightning.LightningShield;
 import com.johnwesthoff.bending.spells.lightning.LightningStorm;
+import com.johnwesthoff.bending.spells.misc.SpellRandom;
+import com.johnwesthoff.bending.spells.misc.SpellRandomMatch;
 import com.johnwesthoff.bending.spells.water.BreathUnderWater;
 import com.johnwesthoff.bending.spells.water.WaterSpout;
 import com.johnwesthoff.bending.spells.water.WaterStorm;
@@ -82,6 +84,8 @@ public abstract class Spell {
     public static ArrayList<ImageIcon> spellimages = new ArrayList<>(), passiveimages = new ArrayList<>();
     public static ImageIcon lockedImage;
     public static Spell noSpell = new NOSPELL();
+    public static SpellRandom randomSpell = new SpellRandom();
+    public static SpellRandomMatch randomSpellMatch = new SpellRandomMatch();
     protected ImageIcon icon;
 
     /**
@@ -118,6 +122,8 @@ public abstract class Spell {
         registerSpell(new DarkSoulBall());
         registerSpell(new DarkSummonBall());
         registerSpell(new DarkTeleport());
+        registerSpell(randomSpell);
+        registerSpell(randomSpellMatch);
     }
 
     /**
@@ -159,6 +165,8 @@ public abstract class Spell {
             passiveimages.add(passives.get(i).getImage());
             passivetips.add(passives.get(i).getTip());
         }
+        randomSpell.setSpells();
+        randomSpellMatch.setSpells();
     }
 
     /**
@@ -220,6 +228,18 @@ public abstract class Spell {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Gets the spell that results from this spell being cast from a given slot
+     * This is useful for SpellRandom, which calls a different spell than itself
+     * 
+     * @param slot the slot this spell is being called from
+     * @return the spell to be used when the spell is in a given slot
+     */
+    public Spell getEffectiveSpell(int slot) {
+        return this;
     }
 
     /**
