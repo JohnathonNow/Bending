@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.SpellEvent;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
@@ -78,6 +79,7 @@ public abstract class Spell {
     public int maker = 0;
     public boolean locked = false;
     public int unlockXP = 0;
+    private int timer = 0;
     public static ArrayList<Spell> spells = new ArrayList<>(), passives = new ArrayList<>();
     public static ArrayList<String> spellnames = new ArrayList<>(), passivenames = new ArrayList<>();
     public static ArrayList<String> spelltips = new ArrayList<>(), passivetips = new ArrayList<>();
@@ -171,6 +173,7 @@ public abstract class Spell {
 
     /**
      * Registers a new spell
+     * 
      * @param spell spell to initialize
      */
     private static void registerSpell(Spell spell) {
@@ -180,6 +183,7 @@ public abstract class Spell {
 
     /**
      * Registers a new (passive) spell
+     * 
      * @param spell spell to initialize
      */
     private static void registerPassive(Spell spell) {
@@ -189,6 +193,7 @@ public abstract class Spell {
 
     /**
      * Gets the spell
+     * 
      * @param i
      * @return Current spell
      */
@@ -215,6 +220,7 @@ public abstract class Spell {
 
     /**
      * Gets the class of the spell
+     * 
      * @return Class of the spell
      */
     public int getID() {
@@ -230,10 +236,9 @@ public abstract class Spell {
         }
     }
 
-
     /**
-     * Gets the spell that results from this spell being cast from a given slot
-     * This is useful for SpellRandom, which calls a different spell than itself
+     * Gets the spell that results from this spell being cast from a given slot This
+     * is useful for SpellRandom, which calls a different spell than itself
      * 
      * @param slot the slot this spell is being called from
      * @return the spell to be used when the spell is in a given slot
@@ -262,13 +267,44 @@ public abstract class Spell {
      * @param eid   the id of the first entity created by casting this spell
      */
     public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
-                                          ByteBuffer buf);
+            ByteBuffer buf);
 
     public abstract int getCost();
 
     public abstract String getName();
 
     public abstract void getPassiveAction(Client app);
+
+    public int getCoolDown() {
+        return (int) (getCost() * Constants.FPS / 600);
+    }
+
+    public boolean isCooledDown(Client app) {
+        return app.ticks >= this.timer;
+    }
+
+    public boolean isEnergyEfficient(Client app, int index) {
+        // lol that's a malopropism
+        return app.energico >= this.getEffectiveSpell(index).getCost();
+    }
+
+    public void startCoolDown(Client app, int index) {
+        this.timer = app.ticks + getCoolDown();
+    }
+
+    public void cast(Client app, int index) {
+        if ( this.isCooledDown(app) && this.isEnergyEfficient(app, index)) {
+            app.energico -= this.getEffectiveSpell(index).getCost();
+            if ((app.passiveList[app.spellBook].getName().equals("Fire Charge"))
+                    && (this.getEffectiveSpell(index) instanceof Firebending)) {
+                if (app.random.nextInt(5 - app.inputer.doublecast) == 0) {
+                    this.getAction(app);
+                }
+            }
+            this.getAction(app);
+            this.startCoolDown(app, index);
+        }
+    }
 
     public String getTip() {
         return "<html>A basic air spell<br>Low Energy Cost<br>Travels in a straight line<br>Deals low damage</html>";

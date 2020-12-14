@@ -108,6 +108,7 @@ public class Client extends JPanel implements Runnable {
     public String chatMessage = "";
     public int gameMode = 1;
     public int fireTime = 0;
+    public int ticks = 0;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
@@ -716,6 +717,7 @@ public class Client extends JPanel implements Runnable {
                 }
             }
             while (delta >= 1) {
+                ticks++;
                 delta -= 1;
                 // System.out.println(delta);
                 if (removeAura > 0) {
