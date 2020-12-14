@@ -30,8 +30,6 @@ public class Lightning extends Spell {
     @Override
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        ID = Constants.LIGHTNING;
-        subID = 0;
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;

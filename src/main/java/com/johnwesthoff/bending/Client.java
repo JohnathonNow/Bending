@@ -108,6 +108,7 @@ public class Client extends JPanel implements Runnable {
     public String chatMessage = "";
     public int gameMode = 1;
     public int fireTime = 0;
+    public int ticks = 0;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
@@ -716,6 +717,7 @@ public class Client extends JPanel implements Runnable {
                 }
             }
             while (delta >= 1) {
+                ticks++;
                 delta -= 1;
                 // System.out.println(delta);
                 if (removeAura > 0) {
@@ -862,6 +864,7 @@ public class Client extends JPanel implements Runnable {
                     this.lungs = this.maxlungs;
                     world.y = -50;
                     world.x = -50;
+                    Spell.randomSpell.setSpells();
                     if (killingSpree >= 148.413d) {
                         // Anti-cheating - use logs
                         gameService.feedRss(String.format("%s had a streak going", username),
@@ -1074,6 +1077,7 @@ public class Client extends JPanel implements Runnable {
                     world.dead = false;
                     passiveList[spellBook].onSpawn(this);
                     spellselection.setVisible(false);
+                    Spell.randomSpellMatch.setSpells();
                 }
                 biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         null);
@@ -1141,33 +1145,34 @@ public class Client extends JPanel implements Runnable {
                 graphicsBuffer.drawRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 for (int i = 0; i < 5; i++) {
-                    graphicsBuffer.drawImage(spellList[spellBook][i].getImage().getImage(), 4 + i * 34, 0, 32, 16,
+                    graphicsBuffer.drawImage(spellList[spellBook][i].getEffectiveSpell(i).getImage().getImage(), 4 + i * 34, 0, 32, 16,
                             this);
                     if (this.leftClick == i) {
                         graphicsBuffer.setColor(Color.orange);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                         graphicsBuffer.drawString("L", 4 + i * 34, 10);
+                    } else if (this.rightClick == i) {
+                        graphicsBuffer.setColor(Color.red);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("R", 4 + i * 34, 10);
+                    } else if (this.midClick == i) {
+                        graphicsBuffer.setColor(Color.YELLOW);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("M", 4 + i * 34, 10);
+                    } else if (inputer.setTo == i) {
+                        graphicsBuffer.setColor(Color.GREEN);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                     } else {
-                        if (this.rightClick == i) {
-                            graphicsBuffer.setColor(Color.red);
-                            graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                            graphicsBuffer.drawString("R", 4 + i * 34, 10);
-                        } else {
-                            if (this.midClick == i) {
-                                graphicsBuffer.setColor(Color.YELLOW);
-                                graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                graphicsBuffer.drawString("M", 4 + i * 34, 10);
-                            } else {
-                                if (inputer.setTo == i) {
-                                    graphicsBuffer.setColor(Color.GREEN);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                } else {
-                                    graphicsBuffer.setColor(Color.white);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-
-                                }
-                            }
-                        }
+                        graphicsBuffer.setColor(Color.white);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                    }
+                    if (!spellList[spellBook][i].isEnergyEfficient(this, i)) {
+                        graphicsBuffer.setColor(Color.MAGENTA);
+                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 14);
+                    }
+                    if (!spellList[spellBook][i].isCooledDown(this, i)) {
+                        graphicsBuffer.setColor(Color.CYAN);
+                        graphicsBuffer.drawRect(6 + i * 34, 2, 28, 12);
                     }
                 }
                 graphicsBuffer.setColor(Color.BLUE);
@@ -1264,7 +1269,7 @@ public class Client extends JPanel implements Runnable {
                             biggraphicsBuffer.setColor(Color.BLACK);
                         }
                         for (int xxx = 0; xxx < spellList[yyy].length; xxx++) {
-                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getName(), 128 + (xxx * 128),
+                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getEffectiveSpell(xxx).getName(), 128 + (xxx * 128),
                                     300 + (yyy * 64));
                         }
                     }
