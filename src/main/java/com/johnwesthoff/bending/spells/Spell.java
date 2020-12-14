@@ -279,8 +279,8 @@ public abstract class Spell {
         return (int) (getCost() * Constants.FPS / 600);
     }
 
-    public boolean isCooledDown(Client app) {
-        return app.ticks >= this.timer;
+    public boolean isCooledDown(Client app, int index) {
+        return app.ticks >= this.getEffectiveSpell(index).timer;
     }
 
     public boolean isEnergyEfficient(Client app, int index) {
@@ -289,11 +289,11 @@ public abstract class Spell {
     }
 
     public void startCoolDown(Client app, int index) {
-        this.timer = app.ticks + getCoolDown();
+        this.timer = app.ticks + this.getEffectiveSpell(index).getCoolDown();
     }
 
     public void cast(Client app, int index) {
-        if ( this.isCooledDown(app) && this.isEnergyEfficient(app, index)) {
+        if (this.isCooledDown(app, index) && this.isEnergyEfficient(app, index)) {
             app.energico -= this.getEffectiveSpell(index).getCost();
             if ((app.passiveList[app.spellBook].getName().equals("Fire Charge"))
                     && (this.getEffectiveSpell(index) instanceof Firebending)) {

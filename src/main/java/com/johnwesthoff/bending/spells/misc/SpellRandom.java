@@ -55,6 +55,7 @@ public class SpellRandom extends Spell {
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
         throw new UnsupportedOperationException("This should never be called!");
     }
+    
 
     public void setSpells() {
         Random r = new Random();

@@ -1151,27 +1151,28 @@ public class Client extends JPanel implements Runnable {
                         graphicsBuffer.setColor(Color.orange);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                         graphicsBuffer.drawString("L", 4 + i * 34, 10);
+                    } else if (this.rightClick == i) {
+                        graphicsBuffer.setColor(Color.red);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("R", 4 + i * 34, 10);
+                    } else if (this.midClick == i) {
+                        graphicsBuffer.setColor(Color.YELLOW);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("M", 4 + i * 34, 10);
+                    } else if (inputer.setTo == i) {
+                        graphicsBuffer.setColor(Color.GREEN);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                     } else {
-                        if (this.rightClick == i) {
-                            graphicsBuffer.setColor(Color.red);
-                            graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                            graphicsBuffer.drawString("R", 4 + i * 34, 10);
-                        } else {
-                            if (this.midClick == i) {
-                                graphicsBuffer.setColor(Color.YELLOW);
-                                graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                graphicsBuffer.drawString("M", 4 + i * 34, 10);
-                            } else {
-                                if (inputer.setTo == i) {
-                                    graphicsBuffer.setColor(Color.GREEN);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                } else {
-                                    graphicsBuffer.setColor(Color.white);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-
-                                }
-                            }
-                        }
+                        graphicsBuffer.setColor(Color.white);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                    }
+                    if (!spellList[spellBook][i].isEnergyEfficient(this, i)) {
+                        graphicsBuffer.setColor(Color.MAGENTA);
+                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 14);
+                    }
+                    if (!spellList[spellBook][i].isCooledDown(this, i)) {
+                        graphicsBuffer.setColor(Color.CYAN);
+                        graphicsBuffer.drawRect(6 + i * 34, 2, 28, 12);
                     }
                 }
                 graphicsBuffer.setColor(Color.BLUE);
