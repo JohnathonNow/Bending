@@ -293,7 +293,7 @@ public abstract class Spell {
     }
 
     public void cast(Client app, int index) {
-        if (this.isCooledDown(app, index) && this.isEnergyEfficient(app, index)) {
+        if (this.isCooledDown(app, index) && this.isEnergyEfficient(app, index) && app.isMyTurn) {
             app.energico -= this.getEffectiveSpell(index).getCost();
             if ((app.passiveList[app.spellBook].getName().equals("Fire Charge"))
                     && (this.getEffectiveSpell(index) instanceof Firebending)) {

@@ -109,6 +109,7 @@ public class Client extends JPanel implements Runnable {
     public int gameMode = 1;
     public int fireTime = 0;
     public int ticks = 0;
+    public int whoseTurn = -1;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
@@ -556,6 +557,7 @@ public class Client extends JPanel implements Runnable {
             out = new OrderedOutputStream(connection.getOutputStream());
             input = connection.getInputStream();
             Player p = new Player(0, 0, Clothing, Colors, Colors2);
+            p.username = username;
             out.addMessage(LoginEvent.getPacket(p));
             ID = -1;
             world.ID = ID;
@@ -608,6 +610,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     public boolean busy = false;
+    public boolean isMyTurn = true;
     public int lastHit = -1;
     public byte sendcount = 0;
     public ArrayList<int[]> stuff = new ArrayList<>();
@@ -719,109 +722,135 @@ public class Client extends JPanel implements Runnable {
             while (delta >= 1) {
                 ticks++;
                 delta -= 1;
-                // System.out.println(delta);
-                if (removeAura > 0) {
-                    removeAura--;
-                    world.status |= Constants.ST_DRAIN;
-                    if (removeAura == 0) {
-                        world.status &= ~Constants.ST_DRAIN;
-                        sendMovement();
-                    }
-                }
-                if (turnVisible > 0) {
-                    turnVisible--;
-                    world.status |= Constants.ST_INVISIBLE;
-                    if (turnVisible == 0) {
-                        world.status &= ~Constants.ST_INVISIBLE;
-                        sendMovement();
-                    }
-                }
-                if (gameMode == Server.THEHIDDEN) {
-                    if (goodTeam) {
-                        world.status |= Constants.ST_INVISIBLE;
-                        spellBook = 5;// Force use of TheHidden book
-                    } else {
-                        if (!badTeam.isEmpty()) {
-                            lastHit = badTeam.get(0);
+                isMyTurn = (gameMode != Server.TURNBASED) || (whoseTurn == ID);
+                if (isMyTurn) {
+                    if (removeAura > 0) {
+                        removeAura--;
+                        world.status |= Constants.ST_DRAIN;
+                        if (removeAura == 0) {
+                            world.status &= ~Constants.ST_DRAIN;
+                            sendMovement();
                         }
                     }
+                    if (turnVisible > 0) {
+                        turnVisible--;
+                        world.status |= Constants.ST_INVISIBLE;
+                        if (turnVisible == 0) {
+                            world.status &= ~Constants.ST_INVISIBLE;
+                            sendMovement();
+                        }
+                    }
+                    if (gameMode == Server.THEHIDDEN) {
+                        if (goodTeam) {
+                            world.status |= Constants.ST_INVISIBLE;
+                            spellBook = 5;// Force use of TheHidden book
+                        } else {
+                            if (!badTeam.isEmpty()) {
+                                lastHit = badTeam.get(0);
+                            }
+                        }
+                    }
+
+                    if (timeToHeal++ > 30 && HP < MAXHP) {
+                        timeToHeal = 0;
+                        HP++;
+                    }
+                    if (!"Air Run".equals(passiveList[spellBook].getName())) {
+                        runningSpeed = 1;
+                    }
+                    if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
+                            && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
+                        world.floatiness = 0;
+                        maxlungs = 100;
+                    }
+                    if (!"Water Treader".equals(passiveList[spellBook].getName())) {
+                        swimmingSpeed = 1;
+                    }
+                    if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
+                        MAXHP = 100;
+                    }
+                    if (!"Overcharged".equals(passiveList[spellBook].getName())) {
+                        maxeng = 1000;
+                    }
+                    if (HP > MAXHP) {
+                        HP = MAXHP;
+                    }
+                    if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
+                        knockbackDecay = 1;
+                    }
+                    passiveList[spellBook].getPassiveAction(this);
+                    if (world.x > world.wIdTh) {
+                        world.x = world.wIdTh;
+                    }
+                    if (world.checkCollision(world.x, world.y - World.head)
+                            || world.isLiquid(world.x, world.y - World.head)) {
+                        if (lungs-- < 0) {
+                            HP--;
+                            killMessage = "~ suffocated after fighting `...";
+                        }
+                    } else {
+                        lungs = maxlungs;
+                    }
+                    if (energico < 0) {
+                        energico = 0;
+                    }
+                    if (world.isType((int) world.x, (int) world.y, Constants.LAVA)) {
+                        world.status |= Constants.ST_FLAMING;
+                        killMessage = "~ burned to a crisp after fighting `!";
+                    }
+                    if ((world.status & Constants.ST_FLAMING) != 0) {
+                        HP -= random.nextInt(2);
+                        if ((passiveList[spellBook].getName().equals("Fireproof"))) {
+                            energico += (inputer.doublecast * 3);
+                        }
+                        if (random.nextInt(10) == 0) {
+                            world.status &= ~Constants.ST_FLAMING;// Stop being on fire
+                        }
+                    }
+                    if ((world.status & Constants.ST_SHOCKED) != 0) {
+                        energico -= 25;
+                        if (random.nextInt(10) == 0) {
+                            world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
+                        }
+                    }
+                    if (world.isIce((int) world.x, (int) world.y + 6)) {
+                        xspeed += world.move;
+                        xspeed *= 1.4;
+                        if (xspeed > 15) {
+                            xspeed = 15;
+                        }
+                        if (xspeed < -15) {
+                            xspeed = -15;
+                        }
+                    }
+
+                    // @TODO : be carefull of SRP && OCP
+                    dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
+                    
+                    if (energico < maxeng) {
+                        energico += engrecharge;
+                    } else {
+                        energico = maxeng;
+                    }
+                    
+
+                    if (!world.isSolid(world.x + (int) xspeed, world.y)) {
+                        world.x += xspeed;
+                    }
+
+                    if (world.vspeed >= 0) {
+                        if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
+                            world.vspeed *= knockbackDecay;
+                        }
+                        xspeed *= .75 * knockbackDecay;
+                        
+                    }
                 }
 
-                if (timeToHeal++ > 30 && HP < MAXHP) {
-                    timeToHeal = 0;
-                    HP++;
+                if (Math.abs(xspeed) < .001 && xspeed != 0) {
+                    xspeed = 0;
+                    sendMovement();
                 }
-                if (!"Air Run".equals(passiveList[spellBook].getName())) {
-                    runningSpeed = 1;
-                }
-                if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
-                        && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
-                    world.floatiness = 0;
-                    maxlungs = 100;
-                }
-                if (!"Water Treader".equals(passiveList[spellBook].getName())) {
-                    swimmingSpeed = 1;
-                }
-                if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
-                    MAXHP = 100;
-                }
-                if (!"Overcharged".equals(passiveList[spellBook].getName())) {
-                    maxeng = 1000;
-                }
-                if (HP > MAXHP) {
-                    HP = MAXHP;
-                }
-                if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
-                    knockbackDecay = 1;
-                }
-                passiveList[spellBook].getPassiveAction(this);
-                if (world.x > world.wIdTh) {
-                    world.x = world.wIdTh;
-                }
-                if (world.checkCollision(world.x, world.y - World.head)
-                        || world.isLiquid(world.x, world.y - World.head)) {
-                    if (lungs-- < 0) {
-                        HP--;
-                        killMessage = "~ suffocated after fighting `...";
-                    }
-                } else {
-                    lungs = maxlungs;
-                }
-                if (energico < 0) {
-                    energico = 0;
-                }
-                if (world.isType((int) world.x, (int) world.y, Constants.LAVA)) {
-                    world.status |= Constants.ST_FLAMING;
-                    killMessage = "~ burned to a crisp after fighting `!";
-                }
-                if ((world.status & Constants.ST_FLAMING) != 0) {
-                    HP -= random.nextInt(2);
-                    if ((passiveList[spellBook].getName().equals("Fireproof"))) {
-                        energico += (inputer.doublecast * 3);
-                    }
-                    if (random.nextInt(10) == 0) {
-                        world.status &= ~Constants.ST_FLAMING;// Stop being on fire
-                    }
-                }
-                if ((world.status & Constants.ST_SHOCKED) != 0) {
-                    energico -= 25;
-                    if (random.nextInt(10) == 0) {
-                        world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
-                    }
-                }
-                if (world.isIce((int) world.x, (int) world.y + 6)) {
-                    xspeed += world.move;
-                    xspeed *= 1.4;
-                    if (xspeed > 15) {
-                        xspeed = 15;
-                    }
-                    if (xspeed < -15) {
-                        xspeed = -15;
-                    }
-                }
-
-                // @TODO : be carefull of SRP && OCP
-                dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
 
                 for (final Player p : world.playerList) {
                     if ((p.status & Constants.ST_DRAIN) != 0) {
@@ -837,12 +866,13 @@ public class Client extends JPanel implements Runnable {
                 for (final Entity e : world.entityList) {
                     e.checkAndHandleCollision(this);
                 }
-
+                world.determineInc();
                 if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {
                     final double direction = Client.pointDir(150, 150, world.mouseX, world.mouseY);
                     final double distance = Client.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
                     world.incX += Client.lengthdir_x(distance, direction);
                     world.incY -= Client.lengthdir_y(distance, direction);
+                    world.cameraMoved = true;
                 }
                 if (world.dead) {
                     world.status = 0;
@@ -891,27 +921,9 @@ public class Client extends JPanel implements Runnable {
                         // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                if (energico < maxeng) {
-                    energico += engrecharge;
-                } else {
-                    energico = maxeng;
-                }
+                
 
-                world.determineInc();
-
-                if (!world.isSolid(world.x + (int) xspeed, world.y)) {
-                    world.x += xspeed;
-                }
-                if (world.vspeed >= 0) {
-                    if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
-                        world.vspeed *= knockbackDecay;
-                    }
-                    xspeed *= .75 * knockbackDecay;
-                    if (Math.abs(xspeed) < .001 && xspeed != 0) {
-                        xspeed = 0;
-                        sendMovement();
-                    }
-                }
+                
                 // prevMove = world.move;
                 world.onUpdate();
 
@@ -1251,7 +1263,7 @@ public class Client extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("You were defeated, press space to get back in on the action!",
                                 128, 128);
                         biggraphicsBuffer.drawString("In the meantime, use S and W to switch loadouts.", 128, 144);
-                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40)) + "...",
+                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40)) + (!isMyTurn?" seconds after your turn starts":" seconds..."),
                                 128, 160);
                     }
                     if (chatActive) {
@@ -1285,8 +1297,11 @@ public class Client extends JPanel implements Runnable {
                         }
                         world.keys[KeyEvent.VK_S] = false;
                     }
+                    if (isMyTurn) {
+                        forcedRespawn++;
+                    }
                     if ((!(gameMode == Server.THEHIDDEN && !goodTeam)) || lastHit == ID) {
-                        if (world.keys[KeyEvent.VK_SPACE] || forcedRespawn++ > 400) {
+                        if (world.keys[KeyEvent.VK_SPACE] || forcedRespawn > 400) {
                             forcedRespawn = 0;
                             world.y = 0;
                             world.x = (goodTeam ? world.wIdTh / 2 : 0) + random.nextInt(world.wIdTh / 2);
@@ -1334,6 +1349,7 @@ public class Client extends JPanel implements Runnable {
 
     public void readWorld(ByteBuffer toRead) throws Exception {
         busy = true;
+        world.following = null;
         world.status = 0;
         // //system.out.println(toRead.remaining());
         world.ground.w = toRead.getInt();

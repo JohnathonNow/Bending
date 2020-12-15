@@ -98,7 +98,9 @@ public class World implements Serializable {
     public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
 
     public int ID = 0;
+    public boolean cameraMoved = false;
     public Server lol = null;
+    public Player following = null;
     public Graphics2D Gter = Iter.createGraphics();
     public World() {
         this(true, 900, 900, null, null, null, null, null, null, null, null, null, null);
@@ -210,6 +212,16 @@ public class World implements Serializable {
     public String username;
     public int idddd;
 
+
+    public Player getPlayer(int id) {
+        for (Player p : playerList) {
+            if (p.ID == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     /**
      * Get the player's name
      * 
@@ -267,13 +279,16 @@ public class World implements Serializable {
     public void determineInc() {
         if (this.keys[KeyEvent.VK_E]) {
             this.incX += 10;
+            cameraMoved = true;
         }
         if (this.keys[KeyEvent.VK_Q]) {
             this.incX -= 10;
+            cameraMoved = true;
         }
         if (this.keys[KeyEvent.VK_Z]) {
             this.incX = 0;
             this.incY = 0;
+            cameraMoved = false;
         }
     }
 
@@ -1184,13 +1199,22 @@ public class World implements Serializable {
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
         // incY = (int)Client.lengthdir_y(Client.pointDis(x, y, mouseX,
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        viewX = (int) Math.min(Math.max((x - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
+        float followx = x;
+        float followy = y;
+        if (following != null) {
+            incX = 0;
+            incY = 0;
+            cameraMoved = false;
+            followx = following.x;
+            followy = following.y;
+        }
+        viewX = (int) Math.min(Math.max((followx - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
                 Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
         /*
          * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
          * { incX=(-(x-150)); }
          */
-        viewY = (int) Math.min(Math.max((y - Constants.HEIGHT_INT / 2) + incY, 0),
+        viewY = (int) Math.min(Math.max((followy - Constants.HEIGHT_INT / 2) + incY, 0),
                 Math.max(0, hEigHt - Constants.HEIGHT_INT));
         if (dead) {
             viewX = viewdX;

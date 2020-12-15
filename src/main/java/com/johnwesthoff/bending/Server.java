@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +48,7 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.AiEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.MessageEvent;
+import com.johnwesthoff.bending.networking.handlers.TurnEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 /**
@@ -54,7 +56,7 @@ import com.johnwesthoff.bending.util.network.NetworkMessage;
  */
 public final class Server implements Runnable {
     public static final int TEAMDEATHMATCH = 1, FREEFORALL = -1, KINGOFTHEHILL = -2, THEHIDDEN = 2, SURVIVAL = 3,
-            DEFENDER = 4;
+            DEFENDER = 4, TURNBASED = -3;
     public static final byte // MESSAGE IDs
     UDPMOVE = 0;
     public static int MYID = 0;
@@ -180,6 +182,27 @@ public final class Server implements Runnable {
                                     }
                                 }
                             }
+                            if (gameMode == TURNBASED) {
+                                final long tim = System.currentTimeMillis();
+                                if (tim >= oldTim) {
+                                    if (whoseTurn == -1 && !playerList.isEmpty()) {
+                                        lastTurn += 1;
+                                        if (lastTurn >= playerList.size()) {
+                                            lastTurn = 0;
+                                        }
+                                        whoseTurn = lastTurn;
+                                        oldTim = tim + 15000;
+                                        Player turn = playerList.get(whoseTurn);
+                                        sendMessage(TurnEvent.getPacket(turn.ID));
+                                        sendMessage(MessageEvent.getPacket(0x00FF3C, "It is " + turn.username + "'s turn."));
+                                    } else {
+                                        whoseTurn = -1;
+                                        oldTim = tim + 3000;
+                                        sendMessage(TurnEvent.getPacket(-1));
+                                        sendMessage(MessageEvent.getPacket(0x00CC0C, "Turn over for 3 seconds..."));
+                                    }
+                                }
+                            }
                             // fixStuff();
                             // System.out.println(lastTime);
                             try {
@@ -216,6 +239,8 @@ public final class Server implements Runnable {
     }
 
     int runThrough = 0;
+    int whoseTurn = -1;
+    int lastTurn = -1;
     public String IP = "";
     boolean gameRunning = true, accepting = true;
     long swagTime = 0;
@@ -431,7 +456,7 @@ public final class Server implements Runnable {
             yes = getKiller(winner) + " won the round!";
             sendMessage(MessageEvent.getPacket(0xFF0000, yes));
         }
-        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, DEFENDER);
+        gameMode = choose(FREEFORALL, TEAMDEATHMATCH, KINGOFTHEHILL, THEHIDDEN, DEFENDER, TURNBASED);
         Collections.shuffle(playerList);
         team1.clear();
         team2.clear();
@@ -490,6 +515,9 @@ public final class Server implements Runnable {
                 break;
             case DEFENDER:
                 gm = "Defender";
+                break;
+            case TURNBASED:
+                gm = "Turnbased Free for All";
                 break;
         }
         yes = "The next game type will be " + gm + ".";
