@@ -40,6 +40,7 @@ public class SpellEvent implements NetworkEvent {
         int mX = buf.getInt();
         int mY = buf.getInt();
         int Iw = Server.getID();
+        int from = p.ID;
         NetworkMessage nm = getPacket(subID, Xx, Yy, mX, mY);
         nm.getContent().putInt(p.ID).putInt(Iw);
         if (Spell.getSpell(subID) instanceof EarthbendingSand) {
@@ -93,7 +94,7 @@ public class SpellEvent implements NetworkEvent {
 
             Server.MYID += 2;
         } else {
-            Spell.getSpell(subID).getActionNetwork(p.handle.earth, Xx, Yy, mX, mY, ID, Iw, buf);
+            Spell.getSpell(subID).getActionNetwork(p.handle.earth, Xx, Yy, mX, mY, from, Iw, buf);
         }
         p.handle.sendMessage(nm);
     }
