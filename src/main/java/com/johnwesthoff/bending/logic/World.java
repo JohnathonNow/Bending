@@ -68,12 +68,8 @@ public class World implements Serializable {
     public CollisionChecker ground;
     public final CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
     public float x = 450, y = 0;
-    public short status = 0;
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~Status values~~~~~~~~~~~~~~~~~~~~~ Index: Effect: 0
-     * Flaming 1 Shocked 8 Invisible 9 Dark Cloud
-     *
-     */
+    public short status = 0; //See Constants
+
 
     public final ArrayList<Player> playerList = new ArrayList<>();
     public boolean serverWorld = false, dead = false;

@@ -27,8 +27,19 @@ public class Constants {
 
     public static final int ST_FLAMING = 0b1;
     public static final int ST_SHOCKED = 0b10;
+    public static final int ST_BLOCKED = 0b100;
     public static final int ST_INVISIBLE = 0b100000000;
     public static final int ST_DRAIN = 0b1000000000;
+        /*
+     * ~~~~~~~~~~~~~~~~~~~~~Status values~~~~~~~~~~~~~~~~~~~~~ 
+     * Index: Effect: 
+     * 0      Flaming 
+     * 1      Shocked 
+     * 2      Blocked
+     * 8      Invisible 
+     * 9      Dark Cloud
+     *
+     */
     public static final int AURA_RADIUS = 96;
 
     public static final int LAND_TEX_SIZE = 256;
