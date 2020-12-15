@@ -83,6 +83,9 @@ public class LoginEvent implements NetworkEvent {
                 case Server.DEFENDER:
                     gm = "Defender";
                     break;
+                case Server.TURNBASED:
+                    gm = "Turn-based Free for All";
+                    break;
             }
             gm = "The next game type will be " + gm + ".";
             po.out.addMessage(MessageEvent.getPacket(0x00FF3C, gm));

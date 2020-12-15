@@ -229,7 +229,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             // throw new UnsupportedOperationException("Not supported yet.");
             int E = e.getKeyCode();
 
-            if (pointer.world == null) {
+            if (pointer.world == null || !pointer.isMyTurn) {
                 return;
             }
             pointer.world.keys[E] = true;

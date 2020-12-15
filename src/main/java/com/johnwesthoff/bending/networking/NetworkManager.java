@@ -25,6 +25,7 @@ import com.johnwesthoff.bending.networking.handlers.SandEvent;
 import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
 import com.johnwesthoff.bending.networking.handlers.SpellEvent;
 import com.johnwesthoff.bending.networking.handlers.SteamEvent;
+import com.johnwesthoff.bending.networking.handlers.TurnEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class NetworkManager {
@@ -56,6 +57,7 @@ public class NetworkManager {
         this.register(new SpellEvent());
         this.register(new SteamEvent());
         this.register(new FirePuffEvent());
+        this.register(new TurnEvent());
     }
 
     public NetworkEvent getHandler(NetworkMessage m) {
