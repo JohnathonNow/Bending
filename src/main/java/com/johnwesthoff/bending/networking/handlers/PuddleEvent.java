@@ -20,6 +20,7 @@ public class PuddleEvent implements NetworkEvent {
         final int fX = buf.getInt();
         final int fY = buf.getInt();
         final int fR = buf.getInt();
+        System.out.format("!%d %d\n", fX, fY);
         p.world.ground.puddle(fX, fY, fR);
 
     }
@@ -31,7 +32,8 @@ public class PuddleEvent implements NetworkEvent {
     }
 
     public static NetworkMessage getPacket(int x, int y, int r) {
-        ByteBuffer b = ByteBuffer.allocate(40).putInt(x).putInt(x).putInt(r);
+        System.out.format("!%d %d\n", x, y);
+        ByteBuffer b = ByteBuffer.allocate(40).putInt(x).putInt(y).putInt(r);
         return new NetworkMessage(b, ID);
     }
 }
