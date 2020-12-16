@@ -29,7 +29,7 @@ public class MapEvent implements NetworkEvent {
 
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer buf) {
-        int viewX = Math.min(Math.max(p.x - 50, 0), p.handle.earth.wIdTh - 100);
+        int viewX = Math.min(Math.max((int)p.x - 50, 0), p.handle.earth.wIdTh - 100);
         p.handle.sendMessage(getPacket(p.handle.earth, viewX));
     }
 

@@ -304,7 +304,7 @@ public final class Server implements Runnable {
 
     public void moveRelative(final int x, final int y) {
         for (final PlayerOnline p : playerList) {
-            p.writeMovePlayer(p.ID, p.x + x, p.y + y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
+            p.writeMovePlayer(p.ID, (int)p.x + x, (int)p.y + y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
                     p.status, p.HP);
         }
     }

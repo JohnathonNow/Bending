@@ -10,6 +10,7 @@ public class Constants {
     public static final int WIDTH_SCALE = WIDTH_EXT / WIDTH_INT;
     public static final int HEIGHT_SCALE = HEIGHT_EXT / HEIGHT_INT;
     public static final double FPS = 60.0d;
+    public static final double GRAVITY = 0.5d;
 
     public static final int POINTER_WORLD_MOUSE_X_LIMIT = 172;
     public static final int POINTER_WORLD_MOUSE_Y_LIMIT = 17;

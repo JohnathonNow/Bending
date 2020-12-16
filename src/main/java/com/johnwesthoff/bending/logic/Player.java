@@ -15,7 +15,8 @@ import java.awt.image.BufferedImage;
  * @author John
  */
 public class Player {
-    public int x, y, ID, move, vspeed;
+    public int ID;
+    public double x, y, move, vspeed;
     public boolean myTeam = false, done = false;
     public Rectangle playerHitbox;
     public String username = "Player";
@@ -30,7 +31,7 @@ public class Player {
     public Player(int X, int Y, final byte[] parts, final int[] colors, final int[] colors2) {
         x = X;
         y = Y;
-        playerHitbox = new Rectangle(x, y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
+        playerHitbox = new Rectangle((int)x, (int)y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         this.partss = parts;
         this.colorss = colors;
         this.colorss2 = colors2;
@@ -65,35 +66,35 @@ public class Player {
         if ((status & Constants.ST_INVISIBLE) != 0) {
             return;
         }
-        int offs = x % Constants.WALK_CYCLE;
+        int offs = (int)x % Constants.WALK_CYCLE;
         if (!done) {
             // x+=move;
-            g.drawArc(((x - 2) - viewX) * Constants.MULTIPLIER, ((y - 10) - viewY) * Constants.MULTIPLIER, 4, 4, 0, 360);
-            g.drawLine(((x) - viewX) * Constants.MULTIPLIER, ((y - 6) - viewY) * Constants.MULTIPLIER,
-                    ((x) - viewX) * Constants.MULTIPLIER, ((y - 3) - viewY) * Constants.MULTIPLIER);
-            g.drawLine(((x - 2) - viewX) * Constants.MULTIPLIER, ((y - 4) - viewY) * Constants.MULTIPLIER,
-                    ((x + 2) - viewX) * Constants.MULTIPLIER, ((y - 4) - viewY) * Constants.MULTIPLIER);
-            g.drawLine(((x) - viewX) * Constants.MULTIPLIER, ((y - 3) - viewY) * Constants.MULTIPLIER,
-                    ((x + offs - 2) - viewX) * Constants.MULTIPLIER, ((y) - viewY) * Constants.MULTIPLIER);
-            g.drawLine(((x) - viewX) * Constants.MULTIPLIER, ((y - 3) - viewY) * Constants.MULTIPLIER,
-                    ((x + 2 - offs) - viewX) * Constants.MULTIPLIER, ((y) - viewY) * Constants.MULTIPLIER);
+            g.drawArc((((int)x - 2) - viewX) * Constants.MULTIPLIER, (((int)y - 10) - viewY) * Constants.MULTIPLIER, 4, 4, 0, 360);
+            g.drawLine((((int)x) - viewX) * Constants.MULTIPLIER, (((int)y - 6) - viewY) * Constants.MULTIPLIER,
+                    (((int)x) - viewX) * Constants.MULTIPLIER, (((int)y - 3) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)x - 2) - viewX) * Constants.MULTIPLIER, ((int)(y - 4) - viewY) * Constants.MULTIPLIER,
+                    (((int)x + 2) - viewX) * Constants.MULTIPLIER, (((int)y - 4) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)x) - viewX) * Constants.MULTIPLIER, (((int)y - 3) - viewY) * Constants.MULTIPLIER,
+                    (((int)x + offs - 2) - viewX) * Constants.MULTIPLIER, (((int)y) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)x) - viewX) * Constants.MULTIPLIER, (((int)y - 3) - viewY) * Constants.MULTIPLIER,
+                    (((int)x + 2 - offs) - viewX) * Constants.MULTIPLIER, (((int)y) - viewY) * Constants.MULTIPLIER);
         } else {
             int yUp = 20;
 
-            if (Integer.signum(move) == -1) {
+            if (Integer.signum((int)move) == -1) {
                 left = -1;
             }
-            if (Integer.signum(move) == 1) {
+            if (Integer.signum((int)move) == 1) {
                 left = 1;
             }
             Graphics2D g2 = (Graphics2D) g;
             g2.scale(left, 1);
-            g2.drawImage(bodyParts[0], (x - viewX) * Constants.MULTIPLIER * left + (left < 0 ? -18 : 0),
-                    (y - yUp - 6 - viewY) * Constants.MULTIPLIER, null);
+            g2.drawImage(bodyParts[0], ((int)x - viewX) * Constants.MULTIPLIER * left + (left < 0 ? -18 : 0),
+                    ((int)y - yUp - 6 - viewY) * Constants.MULTIPLIER, null);
             g2.drawImage(bodyParts[1],
-                    (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.MULTIPLIER * left
+                    (int) ((int)x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.MULTIPLIER * left
                             + (left < 0 ? -(6 + (bodyParts[1].getWidth(null) - 23)) : 0),
-                    ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * Constants.MULTIPLIER, null);
+                    (((int)y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * Constants.MULTIPLIER, null);
 
             double ffs = Math.toRadians(((4 - offs) * 6));
             AffineTransform previousAT = g2.getTransform();
@@ -119,10 +120,10 @@ public class Player {
             g2.drawImage(bodyParts[3], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.drawImage(bodyParts[4], (x + 1 - viewX) * Constants.MULTIPLIER * left,
-                    ((y - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
-            g2.drawImage(bodyParts[4], (x + 5 - viewX) * Constants.MULTIPLIER * left,
-                    ((y - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
+            g2.drawImage(bodyParts[4], ((int)x + 1 - viewX) * Constants.MULTIPLIER * left,
+                    (((int)y - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
+            g2.drawImage(bodyParts[4], ((int)x + 5 - viewX) * Constants.MULTIPLIER * left,
+                    (((int)y - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
 
             g2.translate((x + 5 - viewX) * Constants.MULTIPLIER * left, ((y + 13) - viewY - yUp) * Constants.MULTIPLIER);
             g2.rotate(ffs);
@@ -136,7 +137,7 @@ public class Player {
             g2.scale(left, 1);
         }
         g.setColor(myTeam ? Color.GREEN : Color.MAGENTA);
-        g.drawString(username, ((x - (username.length())) - viewX) * Constants.MULTIPLIER, (y - 40 - viewY) * Constants.MULTIPLIER);
+        g.drawString(username, (((int)x - (username.length())) - viewX) * Constants.MULTIPLIER, ((int)y - 40 - viewY) * Constants.MULTIPLIER);
     }
 
     public double lengthdir_x(double R, double T) {
@@ -156,7 +157,7 @@ public class Player {
     }
 
     public boolean checkCollision(int px, int py) {
-        playerHitbox.setLocation(x - playerHitbox.width / 2, y - (Constants.HEAD + 10));
+        playerHitbox.setLocation((int)x - playerHitbox.width / 2, (int)y - (Constants.HEAD + 10));
         return (playerHitbox.contains(px, py));
     }
 }

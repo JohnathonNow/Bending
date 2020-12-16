@@ -10,7 +10,6 @@ import static com.johnwesthoff.bending.Constants.CRYSTAL;
 import static com.johnwesthoff.bending.Constants.ETHER;
 import static com.johnwesthoff.bending.Constants.GROUND;
 import static com.johnwesthoff.bending.Constants.HEAD;
-import static com.johnwesthoff.bending.Constants.HEIGHT_INT;
 import static com.johnwesthoff.bending.Constants.ICE;
 import static com.johnwesthoff.bending.Constants.LAND_TEX_SIZE;
 import static com.johnwesthoff.bending.Constants.LAVA;
@@ -28,7 +27,6 @@ import static com.johnwesthoff.bending.Constants.UICE;
 import static com.johnwesthoff.bending.Constants.USTONE;
 import static com.johnwesthoff.bending.Constants.WATER;
 import static com.johnwesthoff.bending.Constants.WATER_COLOR;
-import static com.johnwesthoff.bending.Constants.WIDTH_INT;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -1000,8 +998,8 @@ public class World implements Serializable {
          * GroundinatorEntity(x,y,(int)lengthdir_x(dis,dir),(int)lengthdir_y(dis,dir)));
          * }
          */
-        move -= Math.signum(move) * fr;
-        if (Math.abs(move) < fr) {
+        // move -= Math.signum(move) * fr;
+        if (fr != 0) {
             move = 0;
         }
         if ((y > jumpHeight || x == previousX) && keepMoving) {
@@ -1060,7 +1058,7 @@ public class World implements Serializable {
             }
         }
         if (canifall) {
-            vspeed = Math.min(4 - floatiness, vspeed + 1);
+            vspeed = Math.min(4 - floatiness, vspeed + Constants.GRAVITY);
         } else {
             vspeed = Math.min(0, vspeed);
             keepMoving = false;
@@ -1205,8 +1203,8 @@ public class World implements Serializable {
             incX = 0;
             incY = 0;
             cameraMoved = false;
-            followx = following.x;
-            followy = following.y;
+            followx = (int)following.x;
+            followy = (int)following.y;
         }
         viewX = (int) Math.min(Math.max((followx - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
                 Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
@@ -1433,12 +1431,12 @@ public class World implements Serializable {
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
                 if (((r.status & ST_FLAMING)) != 0) {
-                    drawFire(g, (r.x + 4 - viewX) * Constants.WIDTH_SCALE, (r.y - viewY) * Constants.HEIGHT_SCALE);
+                    drawFire(g, ((int)r.x + 4 - viewX) * Constants.WIDTH_SCALE, ((int)r.y - viewY) * Constants.HEIGHT_SCALE);
                 }
                 if (((r.status & ST_DRAIN)) != 0) {
                     g.setColor(Color.BLACK);
-                    g.drawArc((r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
-                            (r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
+                    g.drawArc(((int)r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
+                            ((int)r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
                             AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
                 }
             }
@@ -1677,7 +1675,7 @@ public class World implements Serializable {
             if (!isSolid(P.x, P.y - 4)) {
                 P.y -= 4;
                 if (inBounds(P.x + P.move, P.y + P.vspeed)) {
-                    int toMove = P.move, XXX1 = P.x + 3, YYY1 = P.y - 4, XXX2 = P.x - 3, YYY2 = P.y - 4;
+                    int toMove = (int)P.move, XXX1 = (int)P.x + 3, YYY1 = (int)P.y - 4, XXX2 = (int)P.x - 3, YYY2 = (int)P.y - 4;
                     while (true) {
                         YYY1 += 1;
                         if (!inBounds(XXX1, YYY1)) {
@@ -1711,7 +1709,7 @@ public class World implements Serializable {
                 }
             }
             if (!isSolid(P.x, P.y + 4)) {
-                P.vspeed = Math.min(4, P.vspeed + 1);
+                P.vspeed = Math.min(4, P.vspeed + Constants.GRAVITY);
             } else {
                 P.vspeed = Math.min(0, P.vspeed);
             }

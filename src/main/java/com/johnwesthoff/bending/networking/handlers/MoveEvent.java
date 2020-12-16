@@ -53,7 +53,7 @@ public class MoveEvent implements NetworkEvent {
         p.rightArmAngle = toRead.getShort();
         p.status = toRead.getShort();
         p.HP = toRead.getShort();
-        p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
+        p.handle.movePlayer(p.ID, (int)p.x, (int)p.y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
                 p.HP);
     }
 
