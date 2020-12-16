@@ -928,20 +928,23 @@ public class Client extends JPanel implements Runnable {
                 world.onUpdate();
 
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                        || counting++ > 200))) {
+                        || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE))) {
                     counting = 0;
                     try {
                         sendMovement();
                         prevMove = world.move;
-                        if (sendRequest && sendcount++ >= 30) {
-                            sendcount = 0;
-                            out.addMessage(MapEvent.getPacketClient());
-                            sendRequest = false;
-                        }
                     } catch (final Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
+                }
+                if (sendRequest && sendcount++ >= Constants.NETWORK_UPDATE_MAP_RATE) {
+                    sendcount = 0;
+                    try {
+                        out.addMessage(MapEvent.getPacketClient());
+                    } catch (final Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    sendRequest = false;
                 }
 
                 prevVspeed = world.vspeed;

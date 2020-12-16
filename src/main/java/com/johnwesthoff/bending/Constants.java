@@ -11,6 +11,9 @@ public class Constants {
     public static final int HEIGHT_SCALE = HEIGHT_EXT / HEIGHT_INT;
     public static final double FPS = 60.0d;
     public static final double GRAVITY = 0.5d;
+    public static final double JUMP_COEFFICIENT = 0.7d;
+    public static final int NETWORK_UPDATE_POSITION_RATE = 6;
+    public static final int NETWORK_UPDATE_MAP_RATE = 1200;
 
     public static final int POINTER_WORLD_MOUSE_X_LIMIT = 172;
     public static final int POINTER_WORLD_MOUSE_Y_LIMIT = 17;

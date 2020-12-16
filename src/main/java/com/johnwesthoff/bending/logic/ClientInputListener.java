@@ -249,7 +249,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     break;
                 case KeyEvent.VK_W:
                     if (!pointer.world.keys[KeyEvent.VK_S]) {
-                        pointer.world.jump = (float) Client.runningSpeed * 4 / 5;
+                        pointer.world.jump = (float) (Client.runningSpeed * Constants.JUMP_COEFFICIENT);
 
                     }
                     // sendMovement();
