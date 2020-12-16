@@ -94,13 +94,11 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
     private void cast(int index) {
         pointer.world.leftArmAngle = Client.pointDir(
-                pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
-                        : pointer.world.mouseX,
+                pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.y - pointer.world.viewY,
-                pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
-                        : pointer.world.mouseX,
+                pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.mouseY);
-        pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);   
+        pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
     }
 
     @Override
@@ -121,9 +119,11 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
             if ((pointer.matchOver > 0) && e.getButton() == MouseEvent.BUTTON1) {
 
-                if (pointer.world.mouseX * Constants.MULTIPLIER > 400 && pointer.world.mouseX * Constants.MULTIPLIER < 500) {
+                if (pointer.world.mouseX * Constants.MULTIPLIER > 400
+                        && pointer.world.mouseX * Constants.MULTIPLIER < 500) {
                     // System.out.println("H2");
-                    if (pointer.world.mouseY * Constants.MULTIPLIER > 200 && pointer.world.mouseY * Constants.MULTIPLIER < 250) {
+                    if (pointer.world.mouseY * Constants.MULTIPLIER > 200
+                            && pointer.world.mouseY * Constants.MULTIPLIER < 250) {
                         pointer.spellselection.XP.setText("XP: " + Client.XP);
                         pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
                         pointer.spellselection.setVisible(true);
@@ -314,7 +314,6 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 pointer.chatActive = false;
             } else {
                 pointer.chatActive = true;
-                // chatMessage = "";
             }
             return;
         }
@@ -323,7 +322,6 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             pointer.chatMessage = "/";
             return;
         }
-        // hrow new UnsupportedOperationException("Not supported yet.");
         int E = e.getKeyCode();
         if (pointer.world == null) {
             return;
@@ -332,25 +330,14 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
         pointer.world.keys[E] = false;
         switch (E) {
             case KeyEvent.VK_A:
-                try {
-                    // sendMovement();
-                } catch (Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                if (pointer.world.move < 0) {
+                    pointer.world.fr = 0.1;
                 }
-                // if (pointer.world.move<0) {
-                // pointer.world.move=0;
-                // }
-                pointer.world.fr = .1;
                 break;
             case KeyEvent.VK_D:
-                try {
-                    // sendMovement();
-                } catch (Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                if (pointer.world.move > 0) {
+                    pointer.world.fr = 0.1;
                 }
-                // if (pointer.world.move>0)
-                // pointer.world.move=0;
-                pointer.world.fr = .1;
                 break;
             case KeyEvent.VK_W:
                 try {

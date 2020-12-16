@@ -323,26 +323,13 @@ public class Client extends JPanel implements Runnable {
         main.jUs.setSize(64, 16);
         main.add(Client.jtb);
         Client.jtb.setLocation(96, 16);
-        main.add(main.jPa);
-        main.jPa.setLocation(16, 32);
-        main.jPa.setSize(80, 16);
-        main.add(main.jtp);
-        main.jtp.setLocation(96, 32);
-        main.add(main.register);
-        main.register.setLocation(32, 54 + 32);
-        main.register.setSize(96, 16);
-        main.add(main.verify);
-        main.verify.setLocation(160, 54 + 32);
-        main.verify.setSize(96, 16);
         main.add(main.menu);
-        main.menu.setLocation(24, 64 + 8 + 6 + 32);
-        main.menu.setSize(120, 32);
+        main.menu.setLocation(-24, -64);
+        main.menu.setSize(0, 0);
+        main.menu.setVisible(false);
         main.add(main.connect);
         main.connect.setLocation(160, 80 + 6 + 32);
         main.connect.setSize(100, 16);
-        main.add(main.refresh);
-        main.refresh.setLocation(24, 104 + 6 + 32);
-        main.refresh.setSize(120, 16);
         main.add(main.hosting);
         main.hosting.setLocation(160, 104 + 6 + 32);
         main.hosting.setSize(100, 16);
@@ -367,17 +354,6 @@ public class Client extends JPanel implements Runnable {
         main.chooseclothing.setActionCommand(main.chooseclothing.getText());
         main.mapMaker.addActionListener(actioner);
         main.mapMaker.setActionCommand(main.mapMaker.getText());
-        main.add(main.JRB);
-        main.JRB.setSize(18, 16);
-        main.JRB.setLocation(80, 54);
-        final JLabel cheese = new JLabel("Remember me?");
-        cheese.setSize(110, 30);
-        cheese.setLocation(110, 48);
-        cheese.setVisible(true);
-        main.add(cheese);
-        // me.JRB.setBackground(Color.white);
-        main.JRB.setVisible(true);
-
         Client.jtb.setSize(300 - 128, 16);
         Client.jtb.setPreferredSize(Client.jtb.getSize());
         // me.jtb.setLocation(16, 16);dfsdfsdf
@@ -502,6 +478,16 @@ public class Client extends JPanel implements Runnable {
         } catch (final Exception ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        Client.XP = main.gameService.getPlayerExperience(Client.jtb.getText(), "PASS IGNORED");
+
+        main.cc.loadClothing();
+        main.spellselection.loadSpells();
+        main.chooseclothing.setEnabled(true);
+        main.ChooseSpells.setEnabled(true);
+        main.connect.setEnabled(true);
+
+        main.gameService.getUnlocks(Client.jtb.getText(), "I NOW DO NOTHING");
 
     }
 

@@ -49,32 +49,18 @@ public class AppletActionListener implements ActionListener {
     public void actionPerformed(final ActionEvent e) {
         final String command = e.getActionCommand();
         if (command.equals(app.connect.getText())) {
-            if ((!app.loggedOn) && app.menu.getItemCount() > 0) {
-                if (!currentlyLoggedIn) {
-                    app.loggedOn = false;
-                    // app.repaint();
-                    return;
-                }
-                app.notDone = false;
-                // app.setResizable(true);
-                app.username = Client.jtb.getText();
-                app.serverIP = (String) app.hosts[app.menu.getSelectedIndex()];
-                if ("enterip".equals(app.serverIP)) {
-                    app.serverIP = JOptionPane.showInputDialog("Server IP?");
-                }
-                app.init();
-                if (app.start()) {
-                    app.spellselection.setVisible(false);
-                    app.spellselection.choochootrain.setVisible(false);
-                    Client.immaKeepTabsOnYou.setSelectedIndex(0);
-                    if (!app.failed) {
-                        app.removeAll();
-                        app.owner.setBackground(Color.black);
-                    }
-                } else {
-                    app.loggedOn = false;
-                    app.notDone = true;
-                    app.repaint();
+            app.notDone = false;
+            // app.setResizable(true);
+            app.username = Client.jtb.getText();
+            app.serverIP = JOptionPane.showInputDialog("Server IP?");
+            app.init();
+            if (app.start()) {
+                app.spellselection.setVisible(false);
+                app.spellselection.choochootrain.setVisible(false);
+                Client.immaKeepTabsOnYou.setSelectedIndex(0);
+                if (!app.failed) {
+                    app.removeAll();
+                    app.owner.setBackground(Color.black);
                 }
             }
         }
