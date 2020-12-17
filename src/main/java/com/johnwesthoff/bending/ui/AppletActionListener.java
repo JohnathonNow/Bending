@@ -100,7 +100,7 @@ public class AppletActionListener implements ActionListener {
             // app.add(app.cc.getPanel());
         }
         if (command.equals("Exit")) {
-            gameService.tryToRemoveServer(gameService.getHostIp());
+            //gameService.tryToRemoveServer(gameService.getHostIp());
             app.ST.remove(app.trayIcon);
             System.exit(0);
         }
