@@ -213,7 +213,7 @@ public class Client extends JPanel implements Runnable {
         main.gameService = GameServiceFactory.create();
         // @TODO : define here player instance
 
-        main.setSize(600, 600);
+        main.setSize(960, 540);
         main.setPreferredSize(main.getSize());
 
         // JPanel e = new JPanel();
@@ -305,8 +305,8 @@ public class Client extends JPanel implements Runnable {
         main.refresh = new JButton("Refresh");
         main.register = new JButton("Register");
         main.verify = new JButton("Log In");
-        main.ChooseSpells = new JButton("Loadouts");
-        main.chooseclothing = new JButton("Gear");
+        main.ChooseSpells = new JButton("Spellbooks");
+        main.chooseclothing = new JButton("Appearance");
         main.mapMaker = new JButton("Map Editor");
         container.setMaximumSize(main.getSize());
         main.addMouseListener(inputer);
@@ -328,21 +328,21 @@ public class Client extends JPanel implements Runnable {
         main.menu.setSize(0, 0);
         main.menu.setVisible(false);
         main.add(main.connect);
-        main.connect.setLocation(160, 80 + 6 + 32);
-        main.connect.setSize(100, 16);
+        main.connect.setLocation(80, 80 + 6);
+        main.connect.setSize(140, 16);
         main.add(main.hosting);
-        main.hosting.setLocation(160, 104 + 6 + 32);
-        main.hosting.setSize(100, 16);
+        main.hosting.setLocation(80, 80 + 6 + 32);
+        main.hosting.setSize(140, 16);
         main.add(main.ChooseSpells);
-        main.ChooseSpells.setLocation(80, 104 + 6 + 32 + 32);
+        main.ChooseSpells.setLocation(80, 80 + 6 + 32 + 32);
         main.ChooseSpells.setSize(140, 16);
         main.add(main.chooseclothing);
-        main.chooseclothing.setLocation(80, 104 + 6 + 32 + 32 + 32);
+        main.chooseclothing.setLocation(80, 80 + 6 + 32 + 32 + 32);
         main.chooseclothing.setSize(140, 16);
 
         main.add(main.mapMaker);
-        main.mapMaker.setLocation(16, 104 + 6 + 32 + 32 + 32 + 32);
-        main.mapMaker.setSize(240, 16);
+        main.mapMaker.setLocation(80, 80 + 6 + 32 + 32 + 32 + 32);
+        main.mapMaker.setSize(140, 16);
         /// me.JRB.setText("Remember me?");
 
         main.JRB.setActionCommand("RM");

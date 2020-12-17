@@ -66,7 +66,9 @@ public class AppletActionListener implements ActionListener {
         }
         if (command.equals(app.hosting.getText())) {
             if (Client.portAvailable(app.port)) {
-                app.hostingPlace = Server.main2(new String[] { "" + (app.hostIP = app.addHost()), "" });
+                app.hostIP = "0.0.0.0";
+                app.hostingPlace = Server.main2(new String[] { "" + (app.hostIP), "" });
+                gameService.tryToCreateServer(GameService.DEFAULT_SERVER_NAME, app.hostIP);
                 app.hosting.setText("Started!");
                 Client.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 try {
@@ -77,7 +79,7 @@ public class AppletActionListener implements ActionListener {
                 app.serverOutput();
                 System.err.printf("Server %s started\nwith address %s" + app.hostIP + "\nand port " + app.port,
                         gameService.getServerName(), gameService.getHostIp(), gameService.getPort());
-                app.getHosts();
+                //app.getHosts();
             } else {
                 app.hosting.setText("Server Unstartable");
             }
