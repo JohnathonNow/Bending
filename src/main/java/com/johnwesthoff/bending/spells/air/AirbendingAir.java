@@ -26,10 +26,13 @@ public class AirbendingAir extends Airbending {
     @Override
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        mx = app.world.mouseX + app.world.viewX;
-        my = app.world.mouseY + app.world.viewY;
-        X = app.world.x;
-        Y = app.world.y;
+        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
+        // direction+=180;
+        mx = ((int) (Client.lengthdir_x(16, direction)));
+        my = ((int) (Client.lengthdir_y(16, direction))) - 8;
+        X = app.world.x + mx;
+        Y = app.world.y + my;
         maker = ID;
         getMessage(app.out);
     }

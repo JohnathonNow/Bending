@@ -4,16 +4,21 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.spells.fire.Firebending;
+import static com.johnwesthoff.bending.Client.shortJump;
 
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.Client.shortJump;
+import javax.swing.JFrame;
+
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 
 /**
  * @author John
@@ -82,9 +87,14 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
-            pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
+            double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
+            pointer.world.mouseX = (int) ((scale * pointer.getWidth())
+                    * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
+            // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
+            pointer.world.mouseY = (int) ((scale * pointer.getHeight())
+                    * (e.getPoint().y / (double) pointer.getHeight()));
+            pointer.world.mouseX = (int) (e.getX() / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
         }
     }
@@ -236,13 +246,13 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             pointer.prevMove = pointer.world.move;
             switch (E) {
                 case KeyEvent.VK_A:
-                    if (pointer.world.move > -2) {
+                    if (pointer.world.move > -3) {
                         pointer.world.move = -2;
                         pointer.world.fr = 0;
                     }
                     break;
                 case KeyEvent.VK_D:
-                    if (pointer.world.move < 2) {
+                    if (pointer.world.move < 3) {
                         pointer.world.move = 2;
                         pointer.world.fr = 0;
                     }

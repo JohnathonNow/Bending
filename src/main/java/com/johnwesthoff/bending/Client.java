@@ -799,16 +799,20 @@ public class Client extends JPanel implements Runnable {
                             world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
                         }
                     }
+                    /*
                     if (world.isIce((int) world.x, (int) world.y + 6)) {
                         xspeed += world.move;
+                        
+                        // Removed for now because this makes people angry
                         xspeed *= 1.4;
                         if (xspeed > 15) {
                             xspeed = 15;
                         }
                         if (xspeed < -15) {
                             xspeed = -15;
-                        }
+                        }  
                     }
+                    */
 
                     // @TODO : be carefull of SRP && OCP
                     dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
