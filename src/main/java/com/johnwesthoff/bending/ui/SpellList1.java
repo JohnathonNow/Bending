@@ -171,29 +171,27 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
         jButton2.setText("Save");
         jButton2.addActionListener(event -> {
-            if (Client.currentlyLoggedIn) {
-                String post = "";
-    
-                for (int y = 0; y < 5; y++) {
-                    post += Spell.passives.indexOf(app.passiveList[y]) + ",";
-                }
-                for (int y = 0; y < 5; y++) {
-                    for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-                        post += Spell.spells.indexOf(app.spellList[y][i]);
-                        post += (i == app.spellList[y].length - 1) && (y == 4) ? "" : ",";
-                    }
-                }
-    
-                // System.out.println(post+","+app.jtb.getText());
-                spellsService.persistSpellsForUser(post, Client.jtb.getText());
+        
+            String post = "";
+
+            for (int y = 0; y < 5; y++) {
+                post += Spell.passives.indexOf(app.passiveList[y]) + ",";
             }
+            for (int y = 0; y < 5; y++) {
+                for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
+                    post += Spell.spells.indexOf(app.spellList[y][i]);
+                    post += (i == app.spellList[y].length - 1) && (y == 4) ? "" : ",";
+                }
+            }
+
+            // System.out.println(post+","+app.jtb.getText());
+            spellsService.persistSpellsForUser(post, Client.jtb.getText());
+        
         });
 
         jButton3.setText("Load");
         jButton3.addActionListener(event -> {
-            if (Client.currentlyLoggedIn) {
-                loadSpells();
-            }
+            loadSpells();
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
