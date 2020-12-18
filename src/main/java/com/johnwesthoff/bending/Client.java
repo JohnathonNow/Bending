@@ -1087,11 +1087,11 @@ public class Client extends JPanel implements Runnable {
                 biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         null);
                 biggraphicsBuffer.setColor(Color.white);
-                biggraphicsBuffer.fillRect(399, 199, 100, 50);
+                biggraphicsBuffer.fillRect(399, 199, 120, 50);
                 biggraphicsBuffer.setColor(Color.black);
-                biggraphicsBuffer.drawRect(400, 200, 100, 50);
-                biggraphicsBuffer.drawRect(399, 199, 100, 50);
-                biggraphicsBuffer.drawString("LOADOUTS", 400, 230);
+                biggraphicsBuffer.drawRect(400, 200, 120, 50);
+                biggraphicsBuffer.drawRect(399, 199, 120, 50);
+                biggraphicsBuffer.drawString("LOADOUTS", 404, 230);
                 biggraphicsBuffer.drawString("Starting match in " + (1 + (matchOver / 40)) + "...", 360, 300);
                 biggraphicsBuffer.drawString("Combatants:", 400, 326);
                 for (int i = 0; i < world.playerList.size(); i++) {
