@@ -79,7 +79,7 @@ public class SandEntity extends Entity {
 
         // System.out.println(System.currentTimeMillis()-time);
         time = System.currentTimeMillis();
-        if (!lol.earth.inBounds(X, Y) || lol.earth.checkCollision(X, Y)) {
+        if (!lol.earth.inBounds(X, Y) || hasCollided(lol.earth)) {
             radius /= 2;
             lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.SAND);
             lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.SAND));

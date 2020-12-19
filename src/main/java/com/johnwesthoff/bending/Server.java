@@ -144,17 +144,22 @@ public final class Server implements Runnable {
                     while (gameRunning) {
                         try {
                             Thread.sleep(1);
-                        } catch (final InterruptedException e2) {
+                        } catch (final Exception e2) {
                             e2.printStackTrace();
                         }
                         final long l = System.nanoTime();
-                        delta += (l - lastTime) / (1000000000 / 40.0d);
+                        delta += (l - lastTime) / (1000000000 / Constants.FPS);
 
                         swagTime = l;
                         lastTime = l;
 
                         if (earth == null) {
                             delta = 0;
+                            try {
+                                Thread.sleep(1);
+                            } catch (final Exception e2) {
+                                e2.printStackTrace();
+                            }
                             continue;
                         }
                         while (delta >= 1) {

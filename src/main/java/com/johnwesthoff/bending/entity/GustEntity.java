@@ -95,7 +95,7 @@ public class GustEntity extends Entity {
 
     @Override
     public void onServerUpdate(Server lol) {
-        if (collided(lol.earth)) {
+        if (hasCollided(lol.earth)) {
             lol.earth.ground.ClearCircle((int) X, (int) Y, radius);
             lol.sendMessage(DigEvent.getPacket((int)X, (int)Y, radius));
             alive = false;

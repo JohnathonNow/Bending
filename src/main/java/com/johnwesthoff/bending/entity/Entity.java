@@ -140,6 +140,22 @@ public abstract class Entity extends Object {
         Y += yspeed * World.deltaTime();
     }
 
+    public boolean hasCollided(World w) {
+        double resolution = pointDis(X, Y, previousX, previousY);
+        double ix = (X - previousX) / resolution;
+        double iy = (Y - previousY) / resolution;
+        for (int i = 0; i < resolution; i++) {
+            double tx = ix*i + previousX;
+            double ty = iy*i + previousY;
+            if (w.checkCollision((float)tx, (float)ty)) {
+                X = (float)tx;
+                Y = (float)ty;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public double lengthdir_x(double R, double T) {
         return (R * Math.cos(T * Math.PI / Constants.HALF_FULL_ANGLE));
     }

@@ -972,21 +972,9 @@ public class World implements Serializable {
 
     public void onUpdate() {
         if (serverWorld) {
-            for (int i = 0; i < entityList.size(); i++) {
-                Entity e = entityList.get(i);
-                e.move();
-            }
-
             handleEntitiesForServer();
-
-            for (int i = 0; i < entityList.size(); i++) {
-                Entity e = entityList.get(i);
-                e.onUpdate(this);
-                // e.onDraw(null,viewX,viewY);
-                if (!e.alive) {
-                    entityList.remove(e);
-                }
-            }
+        } else {
+            handleEntitiesForClient();
         }
         flowCount = 0;
         /*
@@ -1254,13 +1242,7 @@ public class World implements Serializable {
     public void drawEntities(Graphics g) {
         for (int i = 0; i < entityList.size(); i++) {
             Entity e = entityList.get(i);
-            e.move();
-            e.onUpdate(this);
             e.onDraw(g, viewX, viewY);
-            if (!e.alive) {
-                entityList.remove(e);
-                continue;
-            }
         }
     }
 
@@ -1720,13 +1702,30 @@ public class World implements Serializable {
             }
         }
     }
-
+    
+    public void handleEntitiesForClient() {
+        for (int i = 0; i < entityList.size(); i++) {
+            Entity e = entityList.get(i);
+            e.move();
+            e.onUpdate(this);
+        }
+        for (int i = 0; i < entityList.size(); i++) {
+            Entity e = entityList.get(i);
+            if (!e.alive) {
+                entityList.remove(e);
+                continue;
+            }
+        }
+    }
     public void handleEntitiesForServer() {
         for (int i = 0; i < entityList.size(); i++) {
             Entity e = entityList.get(i);
             e.move();
             e.onServerUpdate(lol);
             e.onUpdate(this);
+        }
+        for (int i = 0; i < entityList.size(); i++) {
+            Entity e = entityList.get(i);
             if (!e.alive) {
                 entityList.remove(e);
                 continue;
