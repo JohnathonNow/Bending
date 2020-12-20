@@ -680,7 +680,7 @@ public class Client extends JPanel implements Runnable {
             delta += (now - lastTime) / (1000000000 / Constants.FPS);
             owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
             lastTime = now;
-
+            boolean willSendMovement = false;
             if (!owner.isVisible()) {
                 if (!SystemTray.isSupported()) {
                     gameService.tryToRemoveServer(hostIP);
@@ -709,13 +709,14 @@ public class Client extends JPanel implements Runnable {
                 ticks++;
                 delta -= 1;
                 isMyTurn = (gameMode != Server.TURNBASED) || (whoseTurn == ID);
+                
                 if (isMyTurn) {
                     if (removeAura > 0) {
                         removeAura--;
                         world.status |= Constants.ST_DRAIN;
                         if (removeAura == 0) {
                             world.status &= ~Constants.ST_DRAIN;
-                            sendMovement();
+                            willSendMovement = true;
                         }
                     }
                     if (turnVisible > 0) {
@@ -723,7 +724,7 @@ public class Client extends JPanel implements Runnable {
                         world.status |= Constants.ST_INVISIBLE;
                         if (turnVisible == 0) {
                             world.status &= ~Constants.ST_INVISIBLE;
-                            sendMovement();
+                            willSendMovement = true;
                         }
                     }
                     if (gameMode == Server.THEHIDDEN) {
@@ -800,29 +801,20 @@ public class Client extends JPanel implements Runnable {
                         }
                     }
                     /*
-                    if (world.isIce((int) world.x, (int) world.y + 6)) {
-                        xspeed += world.move;
-                        
-                        // Removed for now because this makes people angry
-                        xspeed *= 1.4;
-                        if (xspeed > 15) {
-                            xspeed = 15;
-                        }
-                        if (xspeed < -15) {
-                            xspeed = -15;
-                        }  
-                    }
-                    */
+                     * if (world.isIce((int) world.x, (int) world.y + 6)) { xspeed += world.move;
+                     * 
+                     * // Removed for now because this makes people angry xspeed *= 1.4; if (xspeed
+                     * > 15) { xspeed = 15; } if (xspeed < -15) { xspeed = -15; } }
+                     */
 
                     // @TODO : be carefull of SRP && OCP
                     dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
-                    
+
                     if (energico < maxeng) {
                         energico += engrecharge;
                     } else {
                         energico = maxeng;
                     }
-                    
 
                     if (!world.isSolid(world.x + (int) xspeed, world.y)) {
                         world.x += xspeed;
@@ -833,13 +825,13 @@ public class Client extends JPanel implements Runnable {
                             world.vspeed *= knockbackDecay;
                         }
                         xspeed *= .75 * knockbackDecay;
-                        
+
                     }
                 }
 
                 if (Math.abs(xspeed) < .001 && xspeed != 0) {
                     xspeed = 0;
-                    sendMovement();
+                    willSendMovement = true;
                 }
 
                 for (final Player p : world.playerList) {
@@ -906,14 +898,12 @@ public class Client extends JPanel implements Runnable {
                                 0x04FFF8);// username + " has been defeated by "+getKiller(lastHit)
                     }
                     try {
-                        this.sendMovement();
+                        willSendMovement = true;
                     } catch (final Exception ex) {
                         // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
 
-                
                 // prevMove = world.move;
                 world.onUpdate();
 
@@ -921,7 +911,7 @@ public class Client extends JPanel implements Runnable {
                         || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE))) {
                     counting = 0;
                     try {
-                        sendMovement();
+                        willSendMovement = true;
                         prevMove = world.move;
                     } catch (final Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -944,7 +934,13 @@ public class Client extends JPanel implements Runnable {
 
                 if (world.keys[KeyEvent.VK_SPACE]) {
                 }
-
+            }
+            if (willSendMovement) {
+                try {
+                    sendMovement();
+                } catch (final Exception ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             draw();
             if ((now - swagTime) >= (1000000000 / Constants.FPS / 2)) {
@@ -1150,8 +1146,8 @@ public class Client extends JPanel implements Runnable {
                 graphicsBuffer.drawRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 for (int i = 0; i < 5; i++) {
-                    graphicsBuffer.drawImage(spellList[spellBook][i].getEffectiveSpell(i).getImage().getImage(), 4 + i * 34, 0, 32, 16,
-                            this);
+                    graphicsBuffer.drawImage(spellList[spellBook][i].getEffectiveSpell(i).getImage().getImage(),
+                            4 + i * 34, 0, 32, 16, this);
                     if (this.leftClick == i) {
                         graphicsBuffer.setColor(Color.orange);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
@@ -1256,8 +1252,8 @@ public class Client extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("You were defeated, press space to get back in on the action!",
                                 128, 128);
                         biggraphicsBuffer.drawString("In the meantime, use S and W to switch loadouts.", 128, 144);
-                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40)) + (!isMyTurn?" seconds after your turn starts":" seconds..."),
-                                128, 160);
+                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40))
+                                + (!isMyTurn ? " seconds after your turn starts" : " seconds..."), 128, 160);
                     }
                     if (chatActive) {
                         biggraphicsBuffer.setColor(Color.gray);
@@ -1274,8 +1270,8 @@ public class Client extends JPanel implements Runnable {
                             biggraphicsBuffer.setColor(Color.BLACK);
                         }
                         for (int xxx = 0; xxx < spellList[yyy].length; xxx++) {
-                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getEffectiveSpell(xxx).getName(), 128 + (xxx * 128),
-                                    300 + (yyy * 64));
+                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getEffectiveSpell(xxx).getName(),
+                                    128 + (xxx * 128), 300 + (yyy * 64));
                         }
                     }
                     if (world.keys[KeyEvent.VK_W]) {
