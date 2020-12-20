@@ -153,7 +153,7 @@ public abstract class Entity extends Object {
                 return true;
             }
         }
-        return false;
+        return w.checkCollision(X, Y);
     }
 
     public double lengthdir_x(double R, double T) {
