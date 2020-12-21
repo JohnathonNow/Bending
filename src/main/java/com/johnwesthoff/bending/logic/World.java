@@ -1191,8 +1191,8 @@ public class World implements Serializable {
             incX = 0;
             incY = 0;
             cameraMoved = false;
-            followx = (int)following.x;
-            followy = (int)following.y;
+            followx = (int)following.showx;
+            followy = (int)following.showy;
         }
         viewX = (int) Math.min(Math.max((followx - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
                 Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
