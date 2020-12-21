@@ -62,7 +62,16 @@ public class ResourceLoader {
 
     }
 
-    public static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
+    private static String getDir() {
+        String x = System.getenv("APPDATA");
+        if (x == null || x.equals("null")) {
+            x = System.getProperty("user.home");
+            return x + File.separator + ".bending" + File.separator;
+        }
+        return x + File.separator + "Bending" + File.separator;
+    }
+
+    public static String dir = getDir();
     public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
 
     public static BufferedImage loadImage(final String name) {

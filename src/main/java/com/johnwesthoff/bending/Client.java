@@ -320,7 +320,7 @@ public class Client extends JPanel implements Runnable {
         main.requestFocus();
         main.add(main.jUs);
         main.jUs.setLocation(16, 16);
-        main.jUs.setSize(64, 16);
+        main.jUs.setSize(80, 16);
         main.add(Client.jtb);
         Client.jtb.setLocation(96, 16);
         main.add(main.menu);
@@ -328,7 +328,7 @@ public class Client extends JPanel implements Runnable {
         main.menu.setSize(0, 0);
         main.menu.setVisible(false);
         main.add(main.connect);
-        main.connect.setLocation(80, 80 + 6);
+        main.connect.setLocation(80, 48);
         main.connect.setSize(140, 16);
         main.add(main.hosting);
         main.hosting.setLocation(80, 80 + 6 + 32);
@@ -360,7 +360,7 @@ public class Client extends JPanel implements Runnable {
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
-        main.jtp.setSize(300 - 128, 16);
+        main.jtp.setSize(300 - 128 - 16, 16);
         main.jtp.setPreferredSize(Client.jtb.getSize());
         // me.jtp.setLocation(16, 16);
         main.jtp.setVisible(true);
