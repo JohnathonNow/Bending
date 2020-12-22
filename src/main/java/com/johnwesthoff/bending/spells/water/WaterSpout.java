@@ -1,23 +1,24 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.entity.SpoutSourceEntity;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.entity.SpoutSourceEntity;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 public class WaterSpout extends Waterbending {
     public WaterSpout() {
         ID = Constants.WATERBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 500;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/waterspout.png"));
         } catch (Exception ex) {

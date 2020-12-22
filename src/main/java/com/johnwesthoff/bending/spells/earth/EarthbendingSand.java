@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -18,6 +17,8 @@ public class EarthbendingSand extends Earthbending {
     public EarthbendingSand() {
         ID = Constants.EARTHBENDING;
         subID = 4;
+        locked = true;
+        unlockXP = 300;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/earthSand.png"));
         } catch (Exception ex) {

@@ -15,6 +15,8 @@ public class WaterStorm extends Waterbending {
     public WaterStorm() {
         ID = Constants.WATERBENDING;
         subID = 6;
+        locked = true;
+        unlockXP = 600;
         icon = new ImageIcon(ResourceLoader.loadImage("waterStorm.png"));
     }
 

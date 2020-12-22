@@ -808,7 +808,7 @@ public class Client extends JPanel implements Runnable {
                      */
 
                     // @TODO : be carefull of SRP && OCP
-                    dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
+                    dig = world.getIncrementedDig(dig, Spell.lookup("AirbendingAir"), this);
 
                     if (energico < maxeng) {
                         energico += engrecharge;

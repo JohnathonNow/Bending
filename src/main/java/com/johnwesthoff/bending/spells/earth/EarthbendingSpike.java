@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 

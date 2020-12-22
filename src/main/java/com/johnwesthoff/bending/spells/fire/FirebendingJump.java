@@ -18,6 +18,8 @@ public class FirebendingJump extends Spell {
     public FirebendingJump() {
         ID = Constants.FIREBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 1000;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/firejump.png"));
         } catch (Exception ex) {

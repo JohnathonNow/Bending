@@ -18,6 +18,8 @@ public class LightningShield extends Lightning {
     public LightningShield() {
         ID = Constants.LIGHTNING;
         subID = 4;
+        locked = true;
+        unlockXP = 2000;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/lightningshield.png"));
         } catch (Exception ex) {

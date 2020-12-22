@@ -196,35 +196,42 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Presets");
+        jLabel1.setVisible(false);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 0, 0));
         jButton4.setText("Ignis");
         jButton4.addActionListener(event -> jButtonLoadSpells(15));
+        jButton4.setVisible(false);
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton6.setForeground(new java.awt.Color(153, 153, 0));
         jButton6.setText("Electro");
         jButton6.addActionListener(event -> jButtonLoadSpells(20));
+        jButton6.setVisible(false);
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton7.setForeground(new java.awt.Color(51, 153, 0));
         jButton7.setText("Terrae");
         jButton7.addActionListener(event -> jButtonLoadSpells(5));
+        jButton7.setVisible(false);
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 255));
         jButton8.setText("Aqua");
         jButton8.addActionListener(event -> jButtonLoadSpells(10));
+        jButton8.setVisible(false);
 
         jButton9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton9.setForeground(new java.awt.Color(153, 153, 153));
         jButton9.setText("A'ris");
         jButton9.addActionListener(event -> jButtonLoadSpells(0));
+        jButton9.setVisible(false);
 
         XP.setText("XP: ");
 
         USER.setText("USER:");
+        USER.setVisible(false);
 
         jLabel2.setText("Attacks:");
 
@@ -444,7 +451,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
             }
         }
         if ("Choose2".equals(e.getActionCommand())) {
-            if (row2 >= 0) {
+            if (row2 >= 0 && choochootrain2.getList().getSelectedIndex() >= 0) {
                 app.passiveList[row2] = Spell.passives.get(choochootrain2.getList().getSelectedIndex());
                 choochootrain2.setVisible(false);
                 jTable4.getModel().setValueAt(app.passiveList[row2].getName(), row2, 0);

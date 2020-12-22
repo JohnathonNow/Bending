@@ -18,6 +18,8 @@ public class LightningOvercharge extends Lightning {
     public LightningOvercharge() {
         ID = Constants.LIGHTNING;
         subID = 4;
+        locked = true;
+        unlockXP = 1500;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/lightningovercharge.png"));
         } catch (Exception ex) {

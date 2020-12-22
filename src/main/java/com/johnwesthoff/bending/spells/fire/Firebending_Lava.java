@@ -18,6 +18,8 @@ public class Firebending_Lava extends Firebending {
     public Firebending_Lava() {
         ID = Constants.FIREBENDING;
         subID = 1;
+        locked = true;
+        unlockXP = 800;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/lava.png"));
         } catch (Exception ex) {
