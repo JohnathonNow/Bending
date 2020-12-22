@@ -119,11 +119,6 @@ public abstract class Spell {
         registerSpell(new LightningMine());
         registerSpell(new LightningRod());
         registerSpell(new LightningStorm());
-        registerSpell(new Darkness());
-        registerSpell(new DarkAura());
-        registerSpell(new DarkSoulBall());
-        registerSpell(new DarkSummonBall());
-        registerSpell(new DarkTeleport());
         registerSpell(randomSpell);
         registerSpell(randomSpellMatch);
     }

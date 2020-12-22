@@ -72,7 +72,6 @@ public class WaterBallEntity extends Entity {
         if (lol.earth.checkCollision((int) X, (int) Y) || lol.earth.isLiquid((int) X, (int) Y)) {
             radius *= 2.85;
             lol.earth.ground.puddle((int) X, (int) Y, radius);
-            System.out.format("...%f %f\n", X, Y);
             lol.sendMessage(PuddleEvent.getPacket((int) X, (int) Y, radius));
             alive = false;
         }

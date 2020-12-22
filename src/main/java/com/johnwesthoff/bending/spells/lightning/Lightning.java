@@ -1,18 +1,18 @@
 
 package com.johnwesthoff.bending.spells.lightning;
 
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
-
-import javax.swing.*;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Lightning extends Spell {
     public Lightning() {

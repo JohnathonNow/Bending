@@ -44,7 +44,7 @@ public class ShardEntity extends Entity {
 
     @Override
     public void onUpdate(World apples) {
-        if ((apples.isSolid(X, Y))) {
+        if (collided(apples)) {
             // apples.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
