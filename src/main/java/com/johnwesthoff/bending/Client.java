@@ -246,11 +246,11 @@ public class Client extends JPanel implements Runnable {
                 Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom") });
         main.spellList[4] = (new Spell[] { Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"),
                 Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch") });
-        main.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
-                Spell.spells.get(19), Spell.spells.get(7) });
-        // container.add(me);
+        main.spellList[5] = (new Spell[] { Spell.lookup("AirbendingGust"), Spell.lookup("WaterbendingFreeze"),
+                Spell.lookup("Firebending_Thrower"), Spell.lookup("Firebending_Wall"),
+                Spell.lookup("EarthbendingShard") });
         Spell shield = Spell.lookup("EarthbendingShield");
-        main.passiveList = (new Spell[] {shield, shield, shield, shield, shield, shield});
+        main.passiveList = (new Spell[] { shield, shield, shield, shield, shield, shield });
         // container.add(me);
         main.JRB = new JCheckBox() {
             private static final long serialVersionUID = -3327024393489960573L;
