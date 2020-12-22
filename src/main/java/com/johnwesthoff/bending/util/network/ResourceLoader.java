@@ -62,7 +62,16 @@ public class ResourceLoader {
 
     }
 
-    public static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
+    private static String getDir() {
+        String x = System.getenv("APPDATA");
+        if (x == null || x.equals("null")) {
+            x = System.getProperty("user.home");
+            return x + File.separator + ".bending" + File.separator;
+        }
+        return x + File.separator + "Bending" + File.separator;
+    }
+
+    public static String dir = getDir();
     public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
 
     public static BufferedImage loadImage(final String name) {
@@ -92,8 +101,11 @@ public class ResourceLoader {
         }
     }
 
+    public static ImageIcon loadIconBase(final String src) {
+        return loadIcon(IMAGE_URL_BASE + src);
+    }
     public static ImageIcon loadIcon(final String src) {
-        final String name = src.replaceAll("https://west-it.webs.com/spells/", "");
+        final String name = src.replaceAll("https://west-it.webs.com/spells/", "").replaceAll(IMAGE_URL_BASE, "");
         if (imageTable.containsKey(src)) {
             return new ImageIcon(imageTable.get(src));
         }
@@ -104,14 +116,14 @@ public class ResourceLoader {
                 // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 imageTable.put(name, toReturn);
                 return new ImageIcon(toReturn);
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

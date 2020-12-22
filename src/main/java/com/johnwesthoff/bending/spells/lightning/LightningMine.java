@@ -46,7 +46,7 @@ public class LightningMine extends Lightning {
 
     @Override
     public int getCost() {
-        return 100;
+        return 750;
     }
 
     @Override

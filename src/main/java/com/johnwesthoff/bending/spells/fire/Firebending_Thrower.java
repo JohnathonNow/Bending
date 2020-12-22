@@ -18,6 +18,8 @@ public class Firebending_Thrower extends Firebending {
     public Firebending_Thrower() {
         ID = Constants.FIREBENDING;
         subID = 5;
+        locked = true;
+        unlockXP = 700;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/flamer.png"));
         } catch (Exception ex) {

@@ -18,6 +18,8 @@ public class Firebending_Wall extends Firebending {
     public Firebending_Wall() {
         ID = Constants.FIREBENDING;
         subID = 4;
+        locked = true;
+        unlockXP = 900;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/fireWall.png"));
         } catch (Exception ex) {

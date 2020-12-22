@@ -236,22 +236,21 @@ public class Client extends JPanel implements Runnable {
         container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         main.cc.setVisible(false);
         main.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
-        main.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        main.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        main.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        main.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        main.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-
+        main.spellList[0] = (new Spell[] { Spell.lookup("Airbending"), Spell.lookup("Earthbending"),
+                Spell.lookup("EarthbendingShard"), Spell.lookup("WaterbendingShard"), Spell.lookup("Firebending") });
+        main.spellList[1] = (new Spell[] { Spell.lookup("AirbendingJump"), Spell.lookup("Firebending"),
+                Spell.lookup("AirbendingGust"), Spell.lookup("EarthbendingSpike"), Spell.lookup("EarthbendingShard") });
+        main.spellList[2] = (new Spell[] { Spell.lookup("AirbendingJump"), Spell.lookup("Waterbending"),
+                Spell.lookup("WaterbendingShard"), Spell.lookup("Firebending"), Spell.lookup("AirbendingAir") });
+        main.spellList[3] = (new Spell[] { Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom"),
+                Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom") });
+        main.spellList[4] = (new Spell[] { Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"),
+                Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch") });
         main.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
                 Spell.spells.get(19), Spell.spells.get(7) });
         // container.add(me);
-        main.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
-                Spell.noSpell });
+        Spell shield = Spell.lookup("EarthbendingShield");
+        main.passiveList = (new Spell[] {shield, shield, shield, shield, shield, shield});
         // container.add(me);
         main.JRB = new JCheckBox() {
             private static final long serialVersionUID = -3327024393489960573L;
@@ -320,7 +319,7 @@ public class Client extends JPanel implements Runnable {
         main.requestFocus();
         main.add(main.jUs);
         main.jUs.setLocation(16, 16);
-        main.jUs.setSize(64, 16);
+        main.jUs.setSize(80, 16);
         main.add(Client.jtb);
         Client.jtb.setLocation(96, 16);
         main.add(main.menu);
@@ -328,7 +327,7 @@ public class Client extends JPanel implements Runnable {
         main.menu.setSize(0, 0);
         main.menu.setVisible(false);
         main.add(main.connect);
-        main.connect.setLocation(80, 80 + 6);
+        main.connect.setLocation(80, 48);
         main.connect.setSize(140, 16);
         main.add(main.hosting);
         main.hosting.setLocation(80, 80 + 6 + 32);
@@ -360,7 +359,7 @@ public class Client extends JPanel implements Runnable {
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
-        main.jtp.setSize(300 - 128, 16);
+        main.jtp.setSize(300 - 128 - 16, 16);
         main.jtp.setPreferredSize(Client.jtb.getSize());
         // me.jtp.setLocation(16, 16);
         main.jtp.setVisible(true);
@@ -709,7 +708,7 @@ public class Client extends JPanel implements Runnable {
                 ticks++;
                 delta -= 1;
                 isMyTurn = (gameMode != Server.TURNBASED) || (whoseTurn == ID);
-                
+
                 if (isMyTurn) {
                     if (removeAura > 0) {
                         removeAura--;
@@ -808,7 +807,7 @@ public class Client extends JPanel implements Runnable {
                      */
 
                     // @TODO : be carefull of SRP && OCP
-                    dig = world.getIncrementedDig(dig, Spell.getSpell(4), this);
+                    dig = world.getIncrementedDig(dig, Spell.lookup("AirbendingAir"), this);
 
                     if (energico < maxeng) {
                         energico += engrecharge;

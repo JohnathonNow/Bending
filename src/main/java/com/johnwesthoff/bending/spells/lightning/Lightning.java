@@ -46,7 +46,7 @@ public class Lightning extends Spell {
 
     @Override
     public int getCost() {
-        return 0;
+        return 100;
     }
 
     @Override

@@ -16,6 +16,8 @@ public class AirbendingTornado extends Spell {
     public AirbendingTornado() {
         ID = Constants.AIRBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 100;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/airTornado.png"));
         } catch (Exception ex) {

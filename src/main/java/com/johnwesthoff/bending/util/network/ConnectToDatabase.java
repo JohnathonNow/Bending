@@ -192,8 +192,7 @@ public final class ConnectToDatabase {
 
             StringTokenizer st = new StringTokenizer(p.getProperty("spells"), ",");
             if (st.countTokens() != 30) {
-                return new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
-                        { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } };
+                return null;
             }
             tor = new int[6][5];
             for (int y = 0; y < 5; y++) {

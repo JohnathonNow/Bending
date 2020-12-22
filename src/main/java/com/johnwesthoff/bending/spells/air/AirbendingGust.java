@@ -64,7 +64,13 @@ public class AirbendingGust extends Airbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+        double dir = Client.pointDir(0, 0, mx, my);
+        double dis = Client.pointDis(0, 0, mx, my);
+        for (int i = -30; i <= 30; i+= 30) {
+            mx = (int)Client.lengthdir_x(dis, dir + i);
+            my = -(int)Client.lengthdir_y(dis, dir + i);
+            world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+        }
     }
 }
 

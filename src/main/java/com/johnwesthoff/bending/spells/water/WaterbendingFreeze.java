@@ -18,6 +18,8 @@ public class WaterbendingFreeze extends Waterbending {
     public WaterbendingFreeze() {
         ID = Constants.WATERBENDING;
         subID = 1;
+        locked = true;
+        unlockXP = 400;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/freezeSpell.png"));
         } catch (Exception ex) {

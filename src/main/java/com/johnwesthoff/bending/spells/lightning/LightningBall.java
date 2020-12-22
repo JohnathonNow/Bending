@@ -47,7 +47,7 @@ public class LightningBall extends Lightning {
 
     @Override
     public int getCost() {
-        return 10;
+        return 200;
     }
 
     @Override

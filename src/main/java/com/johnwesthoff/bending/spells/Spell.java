@@ -9,6 +9,7 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
@@ -85,6 +86,7 @@ public abstract class Spell {
     public static ArrayList<String> spelltips = new ArrayList<>(), passivetips = new ArrayList<>();
     public static ArrayList<ImageIcon> spellimages = new ArrayList<>(), passiveimages = new ArrayList<>();
     public static ImageIcon lockedImage;
+    public static HashMap<String, Spell> spellLookup = new HashMap<>();
     public static Spell noSpell = new NOSPELL();
     public static SpellRandom randomSpell = new SpellRandom();
     public static SpellRandomMatch randomSpellMatch = new SpellRandomMatch();
@@ -174,6 +176,7 @@ public abstract class Spell {
     private static void registerSpell(Spell spell) {
         spell.subID = spells.size();
         spells.add(spell);
+        spellLookup.put(spell.getClass().getSimpleName(), spell);
     }
 
     /**
@@ -184,6 +187,7 @@ public abstract class Spell {
     private static void registerPassive(Spell spell) {
         spell.subID = passives.size();
         passives.add(spell);
+        spellLookup.put(spell.getClass().getSimpleName(), spell);
     }
 
     /**
@@ -194,6 +198,10 @@ public abstract class Spell {
      */
     public static Spell getSpell(int i) {
         return spells.get(i);
+    }
+
+    public static Spell lookup(String i) {
+        return spellLookup.get(i);
     }
 
     public static Spell getPassive(int i) {
