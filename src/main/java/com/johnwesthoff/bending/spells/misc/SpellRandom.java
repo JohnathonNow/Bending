@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIconBase;
 
 public class SpellRandom extends Spell {
     Spell choices[];
@@ -20,7 +20,7 @@ public class SpellRandom extends Spell {
         subID = 0;
         choices = new Spell[Constants.SPELL_SLOTS];
         try {
-            icon = (loadIcon("randomSpell2.png"));
+            icon = (loadIconBase("randomSpell2.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

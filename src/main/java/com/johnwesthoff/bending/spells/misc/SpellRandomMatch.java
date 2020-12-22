@@ -7,13 +7,13 @@ import java.util.logging.Logger;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.spells.Spell;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIconBase;
 
 public class SpellRandomMatch extends SpellRandom {
     public SpellRandomMatch() {
         super();
         try {
-            icon = (loadIcon("randomSpell1.png"));
+            icon = (loadIconBase("randomSpell1.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -75,7 +75,6 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         jTable1.getModel().setValueAt(this.app.spellList[4][3].getName(), 4, 3);
         jTable1.getModel().setValueAt(this.app.spellList[4][4].getName(), 4, 4);
 
-        
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable4.getTableHeader().setReorderingAllowed(false);
         choochootrain = new SpellChooser1(this);
@@ -88,13 +87,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         USER.setText("USER: " + this.app.username);
         this.setLocation(0, 0);
         for (int i = 0; i < 5; i++) {
-            jTable4.
-            getModel().
-            setValueAt(
-                app.
-                passiveList[i]
-                .getName()
-                , i, 0);
+            jTable4.getModel().setValueAt(app.passiveList[i].getName(), i, 0);
         }
     }
 
@@ -178,11 +171,13 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         jTable1.getColumnModel().getColumn(4).setResizable(false);
 
         jButton1.setText("Finish");
-        jButton1.addActionListener(event -> {Client.immaKeepTabsOnYou.setSelectedIndex(0);});
+        jButton1.addActionListener(event -> {
+            Client.immaKeepTabsOnYou.setSelectedIndex(0);
+        });
 
         jButton2.setText("Save");
         jButton2.addActionListener(event -> {
-        
+
             String post = "";
 
             for (int y = 0; y < 5; y++) {
@@ -197,7 +192,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
             // System.out.println(post+","+app.jtb.getText());
             spellsService.persistSpellsForUser(post, Client.jtb.getText());
-        
+
         });
 
         jButton3.setText("Load");
@@ -334,8 +329,9 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Loads spells for various spell lists.
-     * Loads 5 consecutive spells from Spell.spells, beginning at startIndex.
+     * Loads spells for various spell lists. Loads 5 consecutive spells from
+     * Spell.spells, beginning at startIndex.
+     * 
      * @param startIndex the starting Spell index
      */
     private void jButtonLoadSpells(int startIndex) {
