@@ -3,7 +3,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.client.Client;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 

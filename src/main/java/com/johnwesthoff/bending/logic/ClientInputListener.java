@@ -12,6 +12,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ import com.johnwesthoff.bending.Constants;
 /**
  * @author John
  */
-public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
+public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener, MouseWheelListener {
     Client pointer;
 
     public ClientInputListener(Client pointer) {
@@ -372,5 +374,19 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 }
                 break;
         }
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int tick = 1;
+        if (e.getWheelRotation() < 0) {
+            tick = -1;
+        }
+        pointer.leftClick += tick;
+        while (pointer.leftClick < 0) {
+            pointer.leftClick += Constants.SPELL_SLOTS;
+        }
+        pointer.leftClick = pointer.leftClick % Constants.SPELL_SLOTS;
+
     }
 }

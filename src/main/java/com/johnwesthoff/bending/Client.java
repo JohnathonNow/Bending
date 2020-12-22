@@ -310,6 +310,7 @@ public class Client extends JPanel implements Runnable {
         container.setMaximumSize(main.getSize());
         main.addMouseListener(inputer);
         main.addMouseMotionListener(inputer);
+        main.addMouseWheelListener(inputer);
         container.addKeyListener(inputer);
         container.addMouseListener(inputer);
         container.setResizable(true);

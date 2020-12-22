@@ -55,6 +55,7 @@ Controls
 | Cast Spell 2   | Right Click       |
 | Cast Spell 3   | Middle Click      |
 | Choose Spell   | 1-5 + Cast Spell  |
+| Choose Spell   | Scroll Wheel      |
 | Chat           | Enter             |
 | Move Camera    | Q and E           |
 | Move Camera    | CTRL + move mouse |
