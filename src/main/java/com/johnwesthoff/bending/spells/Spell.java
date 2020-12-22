@@ -192,7 +192,7 @@ public abstract class Spell {
     private static void registerPassive(Spell spell) {
         spell.subID = passives.size();
         passives.add(spell);
-        spellLookup.put(spell.getClass().getName(), spell);
+        spellLookup.put(spell.getClass().getSimpleName(), spell);
     }
 
     /**

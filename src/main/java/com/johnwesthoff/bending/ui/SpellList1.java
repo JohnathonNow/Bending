@@ -45,35 +45,37 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         // using factory to inject dependency
         spellsService = SpellsServiceFactory.create();
 
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][0].getName(), 0, 0);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][1].getName(), 0, 1);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][2].getName(), 0, 2);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][3].getName(), 0, 3);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][4].getName(), 0, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[0][0].getName(), 0, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[0][1].getName(), 0, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[0][2].getName(), 0, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[0][3].getName(), 0, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[0][4].getName(), 0, 4);
 
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][0].getName(), 1, 0);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][1].getName(), 1, 1);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][2].getName(), 1, 2);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][3].getName(), 1, 3);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][4].getName(), 1, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[1][0].getName(), 1, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[1][1].getName(), 1, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[1][2].getName(), 1, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[1][3].getName(), 1, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[1][4].getName(), 1, 4);
 
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][0].getName(), 2, 0);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][1].getName(), 2, 1);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][2].getName(), 2, 2);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][3].getName(), 2, 3);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][4].getName(), 2, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[2][0].getName(), 2, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[2][1].getName(), 2, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[2][2].getName(), 2, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[2][3].getName(), 2, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[2][4].getName(), 2, 4);
 
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][0].getName(), 3, 0);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][1].getName(), 3, 1);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][2].getName(), 3, 2);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][3].getName(), 3, 3);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][4].getName(), 3, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[3][0].getName(), 3, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[3][1].getName(), 3, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[3][2].getName(), 3, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[3][3].getName(), 3, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[3][4].getName(), 3, 4);
 
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][0].getName(), 4, 0);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][1].getName(), 4, 1);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][2].getName(), 4, 2);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][3].getName(), 4, 3);
-        jTable1.getModel().setValueAt(this.app.spellList[this.app.spellBook][4].getName(), 4, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[4][0].getName(), 4, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[4][1].getName(), 4, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[4][2].getName(), 4, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[4][3].getName(), 4, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[4][4].getName(), 4, 4);
+
+        
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable4.getTableHeader().setReorderingAllowed(false);
         choochootrain = new SpellChooser1(this);
@@ -85,6 +87,15 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         XP.setText("XP: " + this.app.Xp);
         USER.setText("USER: " + this.app.username);
         this.setLocation(0, 0);
+        for (int i = 0; i < 5; i++) {
+            jTable4.
+            getModel().
+            setValueAt(
+                app.
+                passiveList[i]
+                .getName()
+                , i, 0);
+        }
     }
 
     /**
@@ -342,6 +353,9 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         int spells[][];
 
         spells = spellsService.getSpellsFromUser(Client.jtb.getText(), app.jtp.getText());
+        if (spells == null) {
+            return;
+        }
         for (int y = 0; y < 5; y++) {
             app.passiveList[y] = Spell.passives.get(spells[5][y]);
             jTable4.getModel().setValueAt(app.passiveList[y].getName(), y, 0);
