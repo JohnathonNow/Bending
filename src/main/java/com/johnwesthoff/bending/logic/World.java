@@ -1489,50 +1489,50 @@ public class World implements Serializable {
                             break;
                         case GROUND:
                         case UGROUND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
                         case USTONE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
                         case UICE:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y  - yy, Constants.HEIGHT_INT),
                                     Crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X + 3 - xx, Constants.WIDTH_INT),
-                                    Math.min(Y + 3 - yy, Constants.HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
+                                    Math.min(Y - yy, Constants.HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
                         case LAVA:
                         case OIL:
-                            Iter.setRGB(X + 4 - xx, Y + 4 - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            Iter.setRGB(X - xx, Y - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
                             break;
                     }
                 }
             }
-            G2.drawImage(Iter, -3, -3, null);
+            G2.drawImage(Iter, 0, 0, null);
         } catch (Exception e) {
             System.err.println("X: " + viewX + "\tY:" + viewY);
             e.printStackTrace();

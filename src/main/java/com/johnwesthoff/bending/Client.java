@@ -1037,7 +1037,7 @@ public class Client extends JPanel implements Runnable {
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
         // paint(GameGraphics);
-        GameGraphics.drawImage(doubleBuffer, 0, 0, getWidth(), getHeight(), this);
+        GameGraphics.drawImage(doubleBuffer, 0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT, this);
     }
 
     @Override
