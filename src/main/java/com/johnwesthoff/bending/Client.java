@@ -109,6 +109,7 @@ public class Client extends JPanel implements Runnable {
     public int gameMode = 1;
     public int fireTime = 0;
     public int ticks = 0;
+    public Player localPlayer;
     public int whoseTurn = -1;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
@@ -542,9 +543,9 @@ public class Client extends JPanel implements Runnable {
             connection.setTcpNoDelay(true);
             out = new OrderedOutputStream(connection.getOutputStream());
             input = connection.getInputStream();
-            Player p = new Player(0, 0, Clothing, Colors, Colors2);
-            p.username = username;
-            out.addMessage(LoginEvent.getPacket(p));
+            localPlayer = new Player(0, 0, Clothing, Colors, Colors2);
+            localPlayer.username = username;
+            out.addMessage(LoginEvent.getPacket(localPlayer));
             ID = -1;
             world.ID = ID;
             playerHitbox = new Rectangle(0, 0, 20, 40);
@@ -906,7 +907,18 @@ public class Client extends JPanel implements Runnable {
 
                 // prevMove = world.move;
                 world.onUpdate();
-
+                //TODO: remove duplicated variables
+                localPlayer.x = world.x;
+                localPlayer.y = world.y;
+                localPlayer.status = world.status;
+                localPlayer.leftArmAngle = world.leftArmAngle;
+                localPlayer.rightArmAngle = world.rightArmAngle;
+                if (Math.signum(world.move) == -1) {
+                    localPlayer.left = -1;
+                }
+                if (Math.signum(world.move) == 1) {
+                    localPlayer.left = 1;
+                }
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
                         || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE))) {
                     counting = 0;
@@ -1196,7 +1208,7 @@ public class Client extends JPanel implements Runnable {
                 biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         this);
                 world.drawPlayers(biggraphicsBuffer);
-
+                localPlayer.onDraw(biggraphicsBuffer, world.viewX, world.viewY);
                 for (final Entity e : world.entityList) {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }

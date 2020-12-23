@@ -104,13 +104,13 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     public int setTo = -1;
     public int doublecast = 0;
 
-    private void cast(int index) {
-        pointer.world.leftArmAngle = Client.pointDir(
+    private double cast(int index) {
+        pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
+        return Client.pointDir(
                 pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.y - pointer.world.viewY,
                 pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.mouseY);
-        pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            cast(pointer.leftClick);
+                            pointer.world.leftArmAngle = cast(pointer.leftClick);
                         } else {
                             pointer.leftClick = setTo;
                             setTo = -1;
@@ -170,7 +170,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            cast(pointer.midClick);
+                            pointer.world.leftArmAngle = cast(pointer.midClick);
+                            pointer.world.rightArmAngle = pointer.world.leftArmAngle;
                         } else {
                             pointer.midClick = setTo;
                             setTo = -1;
@@ -185,7 +186,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                             break;
                         }
                         if (setTo == -1) {
-                            cast(pointer.rightClick);
+                            pointer.world.rightArmAngle = cast(pointer.rightClick);
                         } else {
                             pointer.rightClick = setTo;
                             setTo = -1;

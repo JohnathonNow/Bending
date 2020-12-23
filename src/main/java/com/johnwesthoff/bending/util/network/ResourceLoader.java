@@ -132,18 +132,17 @@ public class ResourceLoader {
 
         BufferedImage toReturn;
         while (true) {
-            // System.out.println(name);
             try {
                 // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 return toReturn;
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

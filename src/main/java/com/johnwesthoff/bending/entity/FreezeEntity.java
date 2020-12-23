@@ -28,6 +28,8 @@ public class FreezeEntity extends Entity {
         xspeed = hspeed;
         yspeed = vspeed;
         maker = ma;
+        previousX = X;
+        previousY = Y;
     }
 
     @Override
