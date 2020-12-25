@@ -293,7 +293,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
                                         .addComponent(USER, javax.swing.GroupLayout.PREFERRED_SIZE, 135,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410,
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(39, 39, 39)
                                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 106,
@@ -411,7 +411,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     public void mouseReleased(MouseEvent e) {
         // throw new UnsupportedOperationException("Not supported yet.");
         if (e.getComponent() == jTable1) {
-            selection = (int) (Math.floor(e.getX() / 80));
+            selection = (int) (Math.floor(e.getX() / 160));
             row = (int) (Math.floor(e.getY() / 16));
             // System.out.println(row);
             choochootrain.getList().setSelectedIndex(Spell.spells.indexOf(app.spellList[app.spellBook][selection]));
