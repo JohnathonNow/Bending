@@ -1434,7 +1434,7 @@ public class Client extends JPanel implements Runnable {
         }
         try {
             out.addMessage(MoveEvent.getPacket(world.x, world.y, world.move, world.vspeed, world.leftArmAngle,
-                    world.rightArmAngle, world.status, HP, world.ID));
+                    world.rightArmAngle, world.status, HP, world.ID, world.floatiness));
 
         } catch (final Exception e) {
             // e.printStackTrace();

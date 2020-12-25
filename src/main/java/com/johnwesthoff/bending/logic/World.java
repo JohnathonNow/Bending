@@ -1539,7 +1539,7 @@ public class World implements Serializable {
                 }
             }
             if (!isSolid(P.x, P.y + 4)) {
-                P.vspeed = Math.min(4, P.vspeed + Constants.GRAVITY);
+                P.vspeed = Math.min(4 - P.floatiness, P.vspeed + Constants.GRAVITY);
             } else {
                 P.vspeed = Math.min(0, P.vspeed);
             }

@@ -74,9 +74,9 @@ public class PlayerOnline extends Player implements Runnable {
         ready = true;
     }
 
-    public void writeMovePlayer(int id, int X, int Y, int M, int V, int LA, int RA, short st, short hp) {
+    public void writeMovePlayer(int id, int X, int Y, int M, int V, int LA, int RA, short st, short hp, int floatiness) {
         try {
-            out.addMessage(MoveEvent.getPacket(X, Y, M, V, LA, RA, st, hp, id));
+            out.addMessage(MoveEvent.getPacket(X, Y, M, V, LA, RA, st, hp, id, floatiness));
         } catch (Exception ex) {
             ex.printStackTrace();
             killMe();

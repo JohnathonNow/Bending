@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -299,10 +298,10 @@ public final class Server implements Runnable {
     }
 
     public void movePlayer(final int id, final int x, final int y, final int m, final int v, final int la, final int ra,
-            final short st, final short hp) {
+            final short st, final short hp, int floatiness) {
         for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
-                p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp);
+                p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp, floatiness);
             }
         }
     }
@@ -310,7 +309,7 @@ public final class Server implements Runnable {
     public void moveRelative(final int x, final int y) {
         for (final PlayerOnline p : playerList) {
             p.writeMovePlayer(p.ID, (int)p.x + x, (int)p.y + y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
-                    p.status, p.HP);
+                    p.status, p.HP, p.floatiness);
         }
     }
 

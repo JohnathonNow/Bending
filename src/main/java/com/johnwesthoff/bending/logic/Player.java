@@ -25,6 +25,7 @@ public class Player {
     public Rectangle playerHitbox;
     public String username = "Player";
     public int score = 0;
+    public int floatiness = 0;
     public short status = 0, HP = 0;
     public Image[] bodyParts;// Body, head, ua, la, ul, ll
     public Thread loader;

@@ -27,6 +27,7 @@ public class MoveEvent implements NetworkEvent {
             p.world.leftArmAngle = reading.getShort();
             p.world.rightArmAngle = reading.getShort();
             p.world.status = reading.getShort();
+            p.world.floatiness = reading.getInt();
         }
         for (final Player r : p.world.playerList) {
             if (r.ID == idtomove) {
@@ -37,6 +38,7 @@ public class MoveEvent implements NetworkEvent {
                 r.leftArmAngle = reading.getShort();
                 r.rightArmAngle = reading.getShort();
                 r.status = reading.getShort();
+                r.floatiness = reading.getInt();
                 break;
             }
         }
@@ -53,12 +55,13 @@ public class MoveEvent implements NetworkEvent {
         p.rightArmAngle = toRead.getShort();
         p.status = toRead.getShort();
         p.HP = toRead.getShort();
+        p.floatiness = toRead.getInt();
         p.handle.movePlayer(p.ID, (int)p.x, (int)p.y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
-                p.HP);
+                p.HP, p.floatiness);
     }
 
-    public static NetworkMessage getPacket(float x, float y, double move, double vspeed, double laa, double raa, int status, int hp, int id) {
-        ByteBuffer toSend = ByteBuffer.allocate(6 * 4);
+    public static NetworkMessage getPacket(float x, float y, double move, double vspeed, double laa, double raa, int status, int hp, int id, int floatiness) {
+        ByteBuffer toSend = ByteBuffer.allocate(7 * 4);
         toSend.putShort((short) id);
         toSend.putShort((short) x);
         toSend.putShort((short) y);
@@ -68,6 +71,7 @@ public class MoveEvent implements NetworkEvent {
         toSend.putShort((short) raa);
         toSend.putShort((short) status);
         toSend.putShort((short) hp);
+        toSend.putInt(floatiness);
         return new NetworkMessage(toSend, ID);
     }
 }
