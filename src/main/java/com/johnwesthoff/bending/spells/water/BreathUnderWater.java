@@ -45,7 +45,7 @@ public class BreathUnderWater extends Waterbending {
         if (app.world.inBounds(app.world.x, app.world.y) && app.energico > 0
                 && app.world.isType((int) app.world.x, (int) app.world.y, Constants.WATER)) {
             if (app.HP < app.MAXHP) {
-                app.energico -= 15 + (5 - number) * 5;
+                app.energico -= 30 + (5 - number) * 5;
                 app.HP++;
             }
             if (number >= 0) {
