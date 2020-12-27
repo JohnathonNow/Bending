@@ -19,7 +19,7 @@ public class AirAffinity extends Airbending {
         subID = 7;
 
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airfloat.png"));
+            icon = (loadIcon("airfloat.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

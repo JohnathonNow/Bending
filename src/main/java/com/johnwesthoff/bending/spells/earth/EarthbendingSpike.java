@@ -18,7 +18,7 @@ public class EarthbendingSpike extends Earthbending {
         ID = Constants.EARTHBENDING;
         subID = 1;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/earth.png"));
+            icon = (loadIcon("earth.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

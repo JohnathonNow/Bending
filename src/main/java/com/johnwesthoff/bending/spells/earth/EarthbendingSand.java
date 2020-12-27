@@ -20,7 +20,7 @@ public class EarthbendingSand extends Earthbending {
         locked = true;
         unlockXP = 300;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/earthSand.png"));
+            icon = (loadIcon("earthSand.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

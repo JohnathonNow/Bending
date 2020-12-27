@@ -21,7 +21,7 @@ public class LightningRod extends Lightning {
         locked = true;
         unlockXP = 1250;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/shocktower.png");
+            icon = loadIcon("shocktower.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -19,7 +19,7 @@ public class WaterbendingShard extends Waterbending {
         ID = Constants.WATERBENDING;
         subID = 4;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/watershard.png"));
+            icon = (loadIcon("watershard.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

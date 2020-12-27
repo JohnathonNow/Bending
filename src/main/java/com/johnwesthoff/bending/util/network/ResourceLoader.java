@@ -102,18 +102,17 @@ public class ResourceLoader {
     }
 
     public static ImageIcon loadIconBase(final String src) {
-        return loadIcon(IMAGE_URL_BASE + src);
+        return loadIcon(src);
     }
-    public static ImageIcon loadIcon(final String src) {
-        final String name = src.replaceAll("https://west-it.webs.com/spells/", "").replaceAll(IMAGE_URL_BASE, "");
+    public static ImageIcon loadIcon(final String name) {
+        final String src = IMAGE_URL_BASE + name;
+        
         if (imageTable.containsKey(src)) {
             return new ImageIcon(imageTable.get(src));
         }
         BufferedImage toReturn;
         while (true) {
-            // System.out.println(src);
             try {
-                // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
                  Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,12 +127,11 @@ public class ResourceLoader {
         }
     }
 
-    public static BufferedImage loadImageNoHash(final String src, final String name) {
-
+    public static BufferedImage loadImageNoHash(String src, final String name) {
+        src = IMAGE_URL_BASE + name;
         BufferedImage toReturn;
         while (true) {
             try {
-                // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
                  Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

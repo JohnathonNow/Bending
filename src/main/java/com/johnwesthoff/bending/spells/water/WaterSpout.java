@@ -20,7 +20,7 @@ public class WaterSpout extends Waterbending {
         locked = true;
         unlockXP = 500;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/waterspout.png"));
+            icon = (loadIcon("waterspout.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

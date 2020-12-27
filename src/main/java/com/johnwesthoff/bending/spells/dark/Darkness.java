@@ -20,7 +20,7 @@ public class Darkness extends Spell {
         locked = true;
         unlockXP = 2000;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/salt.png");
+            icon = loadIcon("salt.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -20,7 +20,7 @@ public class DarkAura extends Spell {
         locked = true;
         unlockXP = 3000;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/aura.png");
+            icon = loadIcon("aura.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

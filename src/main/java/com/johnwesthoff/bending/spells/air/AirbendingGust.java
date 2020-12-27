@@ -16,7 +16,7 @@ public class AirbendingGust extends Airbending {
     public AirbendingGust() {
         ID = Constants.AIRBENDING;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airGust.png"));
+            icon = (loadIcon("airGust.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

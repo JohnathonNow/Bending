@@ -19,7 +19,7 @@ public class AirbendingTornado extends Spell {
         locked = true;
         unlockXP = 100;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airTornado.png"));
+            icon = (loadIcon("airTornado.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -21,7 +21,7 @@ public class LightningOvercharge extends Lightning {
         locked = true;
         unlockXP = 1500;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/lightningovercharge.png"));
+            icon = (loadIcon("lightningovercharge.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

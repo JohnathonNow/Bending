@@ -21,7 +21,7 @@ public class Firebending_Wall extends Firebending {
         locked = true;
         unlockXP = 900;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/fireWall.png"));
+            icon = (loadIcon("fireWall.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

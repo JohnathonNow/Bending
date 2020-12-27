@@ -21,7 +21,7 @@ public class WaterbendingFreeze extends Waterbending {
         locked = true;
         unlockXP = 400;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/freezeSpell.png"));
+            icon = (loadIcon("freezeSpell.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

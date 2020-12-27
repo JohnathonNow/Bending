@@ -19,7 +19,7 @@ public class DarkTeleport extends Spell {
         locked = true;
         unlockXP = 5000;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/teleport.png");
+            icon = loadIcon("teleport.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

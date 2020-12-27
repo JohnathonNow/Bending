@@ -21,7 +21,7 @@ public class FirebendingJump extends Spell {
         locked = true;
         unlockXP = 1000;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/firejump.png"));
+            icon = (loadIcon("firejump.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

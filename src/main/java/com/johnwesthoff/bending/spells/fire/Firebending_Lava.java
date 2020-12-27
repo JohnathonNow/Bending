@@ -21,7 +21,7 @@ public class Firebending_Lava extends Firebending {
         locked = true;
         unlockXP = 800;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/lava.png"));
+            icon = (loadIcon("lava.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

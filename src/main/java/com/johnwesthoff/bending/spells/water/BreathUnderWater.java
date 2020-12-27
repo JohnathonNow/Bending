@@ -1,24 +1,23 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 public class BreathUnderWater extends Waterbending {
     public BreathUnderWater() {
         ID = Constants.WATERBENDING;
         subID = 3;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/BreathUnderWater.png"));
+            icon = (loadIcon("BreathUnderWater.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

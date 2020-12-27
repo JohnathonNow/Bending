@@ -18,7 +18,7 @@ public class AirbendingJump extends Spell {
         ID = Constants.AIRBENDING;
         subID = 1;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airJump.png"));
+            icon = (loadIcon("airJump.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

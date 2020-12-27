@@ -152,7 +152,7 @@ public abstract class Spell {
         passiveimages.clear();
         registerSpells();
         registerPassives();
-        lockedImage = (loadIcon("https://west-it.webs.com/spells/lockedSpell.png"));
+        lockedImage = (loadIcon("lockedSpell.png"));
         // System.out.println("YAY5");
         for (int i = 0; i < spells.size(); i++) {
             spellnames.add(spells.get(i).getName());

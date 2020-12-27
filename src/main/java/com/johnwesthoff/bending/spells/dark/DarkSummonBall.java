@@ -21,7 +21,7 @@ public class DarkSummonBall extends Spell {
         locked = true;
         unlockXP = 3500;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/shadowSummon.png");
+            icon = loadIcon("shadowSummon.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

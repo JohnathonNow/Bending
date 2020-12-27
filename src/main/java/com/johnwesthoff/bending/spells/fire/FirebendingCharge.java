@@ -18,7 +18,7 @@ public class FirebendingCharge extends Firebending {
         ID = Constants.FIREBENDING;
         subID = 3;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/firecharge.png"));
+            icon = (loadIcon("firecharge.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

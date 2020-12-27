@@ -17,7 +17,7 @@ public class EarthbendingShield extends Earthbending {
         ID = Constants.EARTHBENDING;
         subID = 3;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/earthshield.png"));
+            icon = (loadIcon("earthshield.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

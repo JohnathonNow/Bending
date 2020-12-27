@@ -18,7 +18,7 @@ public class FireProof extends Firebending {
         ID = Constants.FIREBENDING;
         subID = 7;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/fireproof.png"));
+            icon = (loadIcon("fireproof.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

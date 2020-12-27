@@ -47,7 +47,7 @@ public class Player {
             try {
                 for (int i = 0; i < partss.length; i++) {
                     bodyParts[i] = ResourceLoader.loadImageNoHash(
-                            "https://west-it.webs.com/bodyParts/p" + (i + 1) + "_" + parts[i] + ".png",
+                            "p" + (i + 1) + "_" + parts[i] + ".png",
                             "p" + (i + 1) + "_" + parts[i] + ".png");
                     bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.white,
                             new Color(colorss[i]));

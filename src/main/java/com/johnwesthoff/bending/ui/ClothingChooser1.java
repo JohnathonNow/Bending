@@ -396,7 +396,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                     for (int i = 0; i < cloths.length; i++) {
                         // System.out.println("YES");
                         stuff[i] = ResourceLoader.loadImageNoHash(
-                                "https://west-it.webs.com/bodyParts/p" + (i + 1) + "_" + cloths[i] + ".png",
+                                "p" + (i + 1) + "_" + cloths[i] + ".png",
                                 "p" + (i + 1) + "_" + cloths[i] + ".png");
                         stuff[i] = World.changeColor(
                                 World.changeColor(World.changeColor((BufferedImage) stuff[i], Color.white, colors[i]),

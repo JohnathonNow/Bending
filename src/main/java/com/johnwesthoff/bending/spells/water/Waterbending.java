@@ -19,7 +19,7 @@ public class Waterbending extends Spell {
         ID = Constants.WATERBENDING;
         subID = 0;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/waterSpell.png"));
+            icon = (loadIcon("waterSpell.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
