@@ -737,6 +737,10 @@ public class Client extends JPanel implements Runnable {
                                 lastHit = badTeam.get(0);
                             }
                         }
+                    } else {
+                        if (spellBook >= 5) {
+                            spellBook = 0;
+                        }
                     }
 
                     if (timeToHeal++ > 30 && HP < MAXHP) {
