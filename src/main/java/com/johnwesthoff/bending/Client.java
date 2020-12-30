@@ -1136,7 +1136,7 @@ public class Client extends JPanel implements Runnable {
                 if (lungs < maxlungs) {
                     graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 66, 32, 4);
                 }
-                graphicsBuffer.drawRect(0, 0, 4, 300);
+                graphicsBuffer.drawRect(0, 0, 4, Constants.HEIGHT_INT);
                 graphicsBuffer.setColor(Color.green);
                 graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 63,
                         (int) (30d * ((double) HP / (double) MAXHP)), 2);
