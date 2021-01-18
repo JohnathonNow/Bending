@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 public class BoneTest {
     public static void main(String[] args) {
+        boolean left = true;
         BufferedImage image = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
         File outputfile = new File("image.png");
         Graphics2D g2d = image.createGraphics();
@@ -17,8 +18,12 @@ public class BoneTest {
         Bone arm1 = bb.attachBone(spine, -6, 0, new Sprite("p3_1.png", 7, 4));
         Bone arm2 = bb.attachBone(spine, 20, 0, new Sprite("p3_1.png", 7, 4));
         arm1.setAngle(45);
-        arm2.setAngle(-45);
-        spine.draw(g2d, 10, 10, 0);
+        arm2.setAngle(-15);
+        if (left) {
+            g2d.translate(29, 0); //width of the image
+            g2d.scale(-1, 1);
+        }
+        spine.draw(g2d, 0, 0, 0);
         try {
             outputfile.createNewFile();
             ImageIO.write(image, "png", outputfile);
