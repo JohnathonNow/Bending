@@ -747,7 +747,7 @@ public class Client extends JPanel implements Runnable {
                         HP++;
                     }
                     if (world.inBounds(world.x, world.y) && energico > 0
-                        && world.isType((int) world.x, (int) world.y, World.JUICE)) {
+                        && world.isType((int) world.x, (int) world.y, Constants.JUICE)) {
                         if (HP < MAXHP) {
                             energico -= 40;
                             HP++;
