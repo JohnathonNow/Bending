@@ -26,6 +26,7 @@ import static com.johnwesthoff.bending.Constants.UGROUND;
 import static com.johnwesthoff.bending.Constants.UICE;
 import static com.johnwesthoff.bending.Constants.USTONE;
 import static com.johnwesthoff.bending.Constants.WATER;
+import static com.johnwesthoff.bending.Constants.JUICE;
 import static com.johnwesthoff.bending.Constants.WATER_COLOR;
 
 import java.awt.Color;
