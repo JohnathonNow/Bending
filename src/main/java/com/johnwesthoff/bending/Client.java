@@ -742,10 +742,16 @@ public class Client extends JPanel implements Runnable {
                             spellBook = 0;
                         }
                     }
-
                     if (timeToHeal++ > 30 && HP < MAXHP) {
                         timeToHeal = 0;
                         HP++;
+                    }
+                    if (world.inBounds(world.x, world.y) && energico > 0
+                        && world.isType((int) world.x, (int) world.y, Constants.JUICE)) {
+                        if (HP < MAXHP) {
+                            energico -= 40;
+                            HP++;
+                        }
                     }
                     if (!"Air Run".equals(passiveList[spellBook].getName())) {
                         runningSpeed = 1;
@@ -958,13 +964,19 @@ public class Client extends JPanel implements Runnable {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            draw();
-            if ((now - swagTime) >= (1000000000 / Constants.FPS / 2)) {
+            try {
+                world.ground.handleWater();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if ((now - swagTime) >= (1000000000 / Constants.FPS)) {
+                draw();
                 repaint();
                 swagTime = now;
             }
             World.setTime();
         }
+
     }
 
     private String getKiller(final int i) {
