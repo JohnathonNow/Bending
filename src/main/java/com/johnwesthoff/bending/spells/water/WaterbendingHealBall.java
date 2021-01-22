@@ -18,7 +18,7 @@ public class WaterbendingHealBall extends Waterbending {
         ID = Constants.WATERBENDING;
         subID = 6;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/watershard.png"));
+            icon = (loadIcon("watershard.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
