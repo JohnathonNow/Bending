@@ -15,14 +15,14 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.spells.*;
+import com.johnwesthoff.bending.spells.Spell;
 
 /**
  *
  * @author John
  */
 public class PassiveChooser1 extends javax.swing.JPanel {
-
+    private static final long serialVersionUID = 472334502759693391L;
     /**
      * Creates new form SpellChooser
      */
@@ -53,15 +53,15 @@ public class PassiveChooser1 extends javax.swing.JPanel {
         g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jList1 = new javax.swing.JList<Object>();
         jButton1 = new javax.swing.JButton();
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jList1.setModel(new javax.swing.AbstractListModel<Object>() {
+            private static final long serialVersionUID = 1L;
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8",
                     "Item 9", "Item 10" };
 
@@ -78,10 +78,8 @@ public class PassiveChooser1 extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Choose");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
+        jButton1.addActionListener(event -> {
+            //TODO: no behavior defined
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -104,24 +102,19 @@ public class PassiveChooser1 extends javax.swing.JPanel {
         // pack();
     }// </editor-fold>
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public javax.swing.JList getList() {
+    public javax.swing.JList<Object> getList() {
         return jList1;
     }
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
-    private javax.swing.JList jList1;
+    private javax.swing.JList<Object> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration
 
-    class ComboBoxRenderer extends JLabel implements ListCellRenderer {
+    class ComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
+        private static final long serialVersionUID = -8010091627549067273L;
+
         public ComboBoxRenderer() {
             setOpaque(true);
             setHorizontalAlignment(LEFT);
@@ -133,12 +126,8 @@ public class PassiveChooser1 extends javax.swing.JPanel {
          * returns the label, set up to display the text and image.
          */
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                boolean cellHasFocus) {
-            // Get the selected index. (The index param isn't
-            // always valid, so just use the value.)
-            String selectedIndex = (String) value;
-
+        public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,
+                boolean isSelected, boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

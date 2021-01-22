@@ -4,13 +4,13 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Graphics;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
 
 
 /**
@@ -44,9 +44,9 @@ public class SpoutSourceEntity extends Entity {
     public void onServerUpdate(Server lol) {
         /*
          * if (!lol.earth.inBounds(X, Y)||lol.earth.checkCollision(X, Y)) {
-         * lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+         * lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
          * lol.sendMessage(Server.FILL,
-         * ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(World.STONE));
+         * ByteBuffer.allocate(40).putInt(X).putInt(Y).putInt(radius).put(Constants.STONE));
          * }
          */
     }
@@ -63,6 +63,11 @@ public class SpoutSourceEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the spout source entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new SpoutSourceEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()));

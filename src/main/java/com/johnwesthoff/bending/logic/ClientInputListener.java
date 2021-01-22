@@ -12,6 +12,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,13 +21,11 @@ import javax.swing.JFrame;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.spells.fire.Firebending;
 
 /**
- *
  * @author John
  */
-public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener {
+public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener, MouseWheelListener {
     Client pointer;
 
     public ClientInputListener(Client pointer) {
@@ -89,15 +89,29 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
-            pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
+            double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
+            pointer.world.mouseX = (int) ((scale * pointer.getWidth())
+                    * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
+            // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
+            pointer.world.mouseY = (int) ((scale * pointer.getHeight())
+                    * (e.getPoint().y / (double) pointer.getHeight()));
+            pointer.world.mouseX = (int) (e.getX() / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
         }
     }
 
     public int setTo = -1;
     public int doublecast = 0;
+
+    private double cast(int index) {
+        pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
+        return Client.pointDir(
+                pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
+                pointer.world.y - pointer.world.viewY,
+                pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
+                pointer.world.mouseY);
+    }
 
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -117,9 +131,11 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
             if ((pointer.matchOver > 0) && e.getButton() == MouseEvent.BUTTON1) {
 
-                if (pointer.world.mouseX * 3 > 400 && pointer.world.mouseX * 3 < 500) {
+                if (pointer.world.mouseX * Constants.MULTIPLIER > 400
+                        && pointer.world.mouseX * Constants.MULTIPLIER < 500) {
                     // System.out.println("H2");
-                    if (pointer.world.mouseY * 3 > 200 && pointer.world.mouseY * 3 < 250) {
+                    if (pointer.world.mouseY * Constants.MULTIPLIER > 200
+                            && pointer.world.mouseY * Constants.MULTIPLIER < 250) {
                         pointer.spellselection.XP.setText("XP: " + Client.XP);
                         pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
                         pointer.spellselection.setVisible(true);
@@ -132,29 +148,14 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 switch (e.getButton()) {
                     case MouseEvent.BUTTON1:
                         pointer.world.MB1 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.leftClick = d - 1;
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.leftClick].getCost();
-                                pointer.world.leftArmAngle = Client.pointDir(
-                                        pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.y - pointer.world.viewY,
-                                        pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.mouseY);
-                                if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
-                                    if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.leftClick].getAction(pointer);
-                                    }
-                                }
-                                pointer.spellList[pointer.spellBook][pointer.leftClick].getAction(pointer);
-                            }
+                            pointer.world.leftArmAngle = cast(pointer.leftClick);
                         } else {
                             pointer.leftClick = setTo;
                             setTo = -1;
@@ -162,36 +163,15 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         break;
                     case MouseEvent.BUTTON2:
                         pointer.world.MB2 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.midClick = d - 1;
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.midClick].getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.midClick].getCost();
-                                pointer.world.leftArmAngle = Client.pointDir(
-                                        pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.y - pointer.world.viewY,
-                                        pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.mouseY);
-                                pointer.world.rightArmAngle = Client.pointDir(
-                                        pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.y - pointer.world.viewY,
-                                        pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.mouseY);
-                                if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.leftClick] instanceof Firebending)) {
-                                    if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.midClick].getAction(pointer);
-                                    }
-                                }
-                                pointer.spellList[pointer.spellBook][pointer.midClick].getAction(pointer);
-                            }
+                            pointer.world.leftArmAngle = cast(pointer.midClick);
+                            pointer.world.rightArmAngle = pointer.world.leftArmAngle;
                         } else {
                             pointer.midClick = setTo;
                             setTo = -1;
@@ -199,30 +179,14 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                         break;
                     case MouseEvent.BUTTON3:
                         pointer.world.MB3 = false;
-                        if (pointer.world.mouseX < 172 && pointer.world.mouseY < 17) {
+                        if (pointer.world.mouseX < Constants.POINTER_WORLD_MOUSE_X_LIMIT
+                                && pointer.world.mouseY < Constants.POINTER_WORLD_MOUSE_Y_LIMIT) {
                             setTo = -1;
                             pointer.rightClick = d - 1;
                             break;
                         }
                         if (setTo == -1) {
-                            if (pointer.energico >= pointer.spellList[pointer.spellBook][pointer.rightClick]
-                                    .getCost()) {
-                                pointer.energico -= pointer.spellList[pointer.spellBook][pointer.rightClick].getCost();
-                                pointer.world.rightArmAngle = Client.pointDir(
-                                        pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.y - pointer.world.viewY,
-                                        pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX)
-                                                : pointer.world.mouseX,
-                                        pointer.world.mouseY);
-                                if ((pointer.passiveList[pointer.spellBook].getName().equals("Fire Charge"))
-                                        && (pointer.spellList[pointer.spellBook][pointer.rightClick] instanceof Firebending)) {
-                                    if (pointer.random.nextInt(5 - doublecast) == 0) {
-                                        pointer.spellList[pointer.spellBook][pointer.rightClick].getAction(pointer);
-                                    }
-                                }
-                                pointer.spellList[pointer.spellBook][pointer.rightClick].getAction(pointer);
-                            }
+                            pointer.world.rightArmAngle = cast(pointer.rightClick);
                         } else {
                             pointer.rightClick = setTo;
                             setTo = -1;
@@ -278,27 +242,27 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             // throw new UnsupportedOperationException("Not supported yet.");
             int E = e.getKeyCode();
 
-            if (pointer.world == null) {
+            if (pointer.world == null || !pointer.isMyTurn) {
                 return;
             }
             pointer.world.keys[E] = true;
             pointer.prevMove = pointer.world.move;
             switch (E) {
                 case KeyEvent.VK_A:
-                    if (pointer.world.move > -2) {
+                    if (pointer.world.move > -3) {
                         pointer.world.move = -2;
                         pointer.world.fr = 0;
                     }
                     break;
                 case KeyEvent.VK_D:
-                    if (pointer.world.move < 2) {
+                    if (pointer.world.move < 3) {
                         pointer.world.move = 2;
                         pointer.world.fr = 0;
                     }
                     break;
                 case KeyEvent.VK_W:
                     if (!pointer.world.keys[KeyEvent.VK_S]) {
-                        pointer.world.jump = (float) Client.runningSpeed;
+                        pointer.world.jump = (float) (Client.runningSpeed * Constants.JUMP_COEFFICIENT);
 
                     }
                     // sendMovement();
@@ -337,10 +301,10 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 pointer.sendMessage(pointer.chatMessage);
                 if (pointer.chatMessage.contains("/suicide")) {
                     pointer.HP = 0;
-                    pointer.world.status |= World.ST_FLAMING;
+                    pointer.world.status |= Constants.ST_FLAMING;
                 }
                 if (pointer.chatMessage.contains("/vanish")) {
-                    pointer.world.status ^= World.ST_INVISIBLE;
+                    pointer.world.status ^= Constants.ST_INVISIBLE;
                 }
                 if (pointer.chatMessage.contains("/embiggen")) {
                     Client.container.dispose();// You can't change the state from
@@ -363,7 +327,6 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 pointer.chatActive = false;
             } else {
                 pointer.chatActive = true;
-                // chatMessage = "";
             }
             return;
         }
@@ -372,7 +335,6 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             pointer.chatMessage = "/";
             return;
         }
-        // hrow new UnsupportedOperationException("Not supported yet.");
         int E = e.getKeyCode();
         if (pointer.world == null) {
             return;
@@ -381,29 +343,21 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
         pointer.world.keys[E] = false;
         switch (E) {
             case KeyEvent.VK_A:
-                try {
-                    // sendMovement();
-                } catch (Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                if (pointer.world.move < 0) {
+                    pointer.world.fr = 0.1;
                 }
-                // if (pointer.world.move<0) {
-                // pointer.world.move=0;
-                // }
-                pointer.world.fr = .1;
                 break;
             case KeyEvent.VK_D:
-                try {
-                    // sendMovement();
-                } catch (Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                if (pointer.world.move > 0) {
+                    pointer.world.fr = 0.1;
                 }
-                // if (pointer.world.move>0)
-                // pointer.world.move=0;
-                pointer.world.fr = .1;
                 break;
             case KeyEvent.VK_W:
                 try {
-                    // sendMovement();
+                    if (pointer.world.vspeed < -3) {
+                        pointer.world.vspeed /= 2;
+                    }
+                    pointer.sendMovement();
                 } catch (Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -421,5 +375,19 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 }
                 break;
         }
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int tick = 1;
+        if (e.getWheelRotation() < 0) {
+            tick = -1;
+        }
+        pointer.leftClick += tick;
+        while (pointer.leftClick < 0) {
+            pointer.leftClick += Constants.SPELL_SLOTS;
+        }
+        pointer.leftClick = pointer.leftClick % Constants.SPELL_SLOTS;
+
     }
 }

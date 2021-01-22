@@ -4,16 +4,16 @@
  */
 package com.johnwesthoff.bending.entity;
 
-
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.networking.handlers.FirePuffEvent;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
 
 /**
- *
  * @author John
  */
 public class FlameThrowerEntity extends Entity {
@@ -61,13 +61,12 @@ public class FlameThrowerEntity extends Entity {
             int Iw = Server.getID();
             int mx = MX, my = MY;
             lol.earth.entityList.add((new FirePuffEntity(x, y, mx, my, maker).setID(Iw)));
-            lol.sendMessage(Server.FIREBENDING, ByteBuffer.allocate(28).putInt(6).putInt(x).putInt(y).putInt(mx)
-                    .putInt(my).putInt(maker).putInt(Iw));
+            lol.sendMessage(FirePuffEvent.getPacket(x, y, mx, my, maker, Iw));
         }
         if (life-- < 0) {
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
-            lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(40).putInt(MYID));
+            lol.sendMessage(DestroyEvent.getPacket(this));
         }
     }
 }

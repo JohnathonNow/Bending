@@ -15,6 +15,8 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 /**
  *
@@ -36,7 +38,7 @@ public class StaticShotEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(radius == 0 ? Color.blue : Color.red);
-            G.drawArc(((int) X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, 360);
+            G.drawArc(((int) X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, 0, Constants.FULL_ANGLE);
             G.drawLine((int) (X - 2) - viewX, (int) Y - viewY, (int) (X + 2) - viewX, (int) Y - viewY);
         }
     }
@@ -71,6 +73,12 @@ public class StaticShotEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the static shot entity
+     * 
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new StaticShotEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -84,9 +92,8 @@ public class StaticShotEntity extends Entity {
         for (Player p : lol.playerList) {
             if (Client.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
                 alive = false;
-                lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE,
-                        ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(0));// maker
+                lol.sendMessage(DestroyEvent.getPacket(this));
+                lol.sendMessage(ChargeEvent.getPacket(this));
                 return;
             }
         }

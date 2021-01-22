@@ -4,21 +4,17 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class WallofFireEntity extends Entity {
@@ -49,13 +45,13 @@ public class WallofFireEntity extends Entity {
             Graphics2D g = (Graphics2D) G;
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
-            g.setColor(new Color(255, r.nextInt(255), 0, r.nextInt(255)));
-            g.fillArc(((int) X - 6) - viewX, (int) (Y - 6) - viewY, 12, 12, 0, 360);
+            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+            g.fillArc(((int) X - 6) - viewX, (int) (Y - 6) - viewY, 12, 12, 0, Constants.FULL_ANGLE);
             for (int y = 0; y < 30; y += 3) {
                 for (int i = 0; i < 4; i++) {
                     int e1 = 6 - r.nextInt(12), e2 = 6 - r.nextInt(12);
-                    g.setColor(new Color(255, r.nextInt(255), 0, r.nextInt(255)));
-                    g.fillArc((int) (X + e1) - viewX, (int) (Y + e2 + y) - viewY, e1, e2, 0, 360);
+                    g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0, r.nextInt(Constants.FULL_COLOR_VALUE)));
+                    g.fillArc((int) (X + e1) - viewX, (int) (Y + e2 + y) - viewY, e1, e2, 0, Constants.FULL_ANGLE);
                 }
             }
             g.setComposite(c);
@@ -85,6 +81,23 @@ public class WallofFireEntity extends Entity {
     }
 
     @Override
+    public void checkAndHandleCollision(Client client) {
+
+        client.checkCollision(X, Y);// Just to move the hitbox so when it is passed, it works
+        // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
+        if (checkCollision(client.playerHitbox) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(35);
+            alive = false;
+            client.lastHit = maker;
+            client.world.vspeed -= 8;
+            client.xspeed += 9 - client.random.nextInt(18);
+            client.world.status |= Constants.ST_FLAMING;
+            client.killMessage = "~ smelled `'s armpits, and then died.";
+        }
+    }
+
+    @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out, this.getClass().getName());
@@ -98,6 +111,11 @@ public class WallofFireEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the wall of fire entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new WallofFireEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

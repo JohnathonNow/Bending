@@ -7,18 +7,17 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class AirbendingAir extends Airbending {
     public AirbendingAir() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 5;
         try {
-            icon = new ImageIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/spells/airAir.png", "airAir.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("airAir.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -27,10 +26,13 @@ public class AirbendingAir extends Airbending {
     @Override
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        mx = app.world.mouseX + app.world.viewX;
-        my = app.world.mouseY + app.world.viewY;
-        X = app.world.x;
-        Y = app.world.y;
+        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
+        // direction+=180;
+        mx = ((int) (Client.lengthdir_x(16, direction)));
+        my = ((int) (Client.lengthdir_y(16, direction))) - 8;
+        X = app.world.x + mx;
+        Y = app.world.y + my;
         maker = ID;
         getMessage(app.out);
     }
@@ -60,4 +62,3 @@ public class AirbendingAir extends Airbending {
         world.ground.ClearCircle(px, py, 48);
     }
 }
-

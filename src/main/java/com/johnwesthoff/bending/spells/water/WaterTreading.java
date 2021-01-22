@@ -8,16 +8,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class WaterTreading extends Waterbending {
     public WaterTreading() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 23;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/waterswim.png"));
+            icon = (loadIcon("waterswim.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,7 +43,7 @@ public class WaterTreading extends Waterbending {
     public void getPassiveAction(Client app) {
         Client.swimmingSpeed = 1 + (0.23 * (double) (number));
         if (app.world.inBounds(app.world.x, app.world.y)
-                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y] == World.WATER) {
+                && app.world.ground.cellData[(int) app.world.x][(int) app.world.y] == Constants.WATER) {
             app.lungs = app.maxlungs;
         }
     }

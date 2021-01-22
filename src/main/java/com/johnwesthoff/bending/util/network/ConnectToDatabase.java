@@ -78,9 +78,9 @@ public final class ConnectToDatabase {
             // return connectatize(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery)>0;
 
-            URL steve = new URL(base + "/yes.php?name=" + ver);
+            //URL steve = new URL(base + "/yes.php?name=" + ver);
             // steve.openConnection().getContent();
-            Scanner read = new Scanner(steve.openStream());
+            //Scanner read = new Scanner(steve.openStream());
             // System.out.println(read.next());
         } catch (Exception ex) {
             error(ex);
@@ -192,8 +192,7 @@ public final class ConnectToDatabase {
 
             StringTokenizer st = new StringTokenizer(p.getProperty("spells"), ",");
             if (st.countTokens() != 30) {
-                return new int[][] { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
-                        { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } };
+                return null;
             }
             tor = new int[6][5];
             for (int y = 0; y < 5; y++) {
@@ -212,7 +211,7 @@ public final class ConnectToDatabase {
             // ArrayList<String> signin = log(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery);
             // return signin.size()>1?true:false;
-            URL steve = new URL(base + "/getSpells.php?username=" + user + "&password=" + pass);
+            URL steve = new URL(base + "/getSpellsFromUser.php?username=" + user + "&password=" + pass);
             String req = null;
             try (Scanner read = new Scanner(steve.openStream())) {
                 req = read.next();
@@ -297,7 +296,6 @@ public final class ConnectToDatabase {
     }
 
     public void getOutfit(String user, String pass) {
-        int tor[];
         if (offline) {
             StringTokenizer st = new StringTokenizer(p.getProperty("outfit"), ",");
             int total = st.countTokens() / 3;

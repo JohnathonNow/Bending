@@ -4,15 +4,16 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.Random;
-
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.Random;
+
 /**
- *
  * @author John
  */
 public abstract class Entity extends Object {
@@ -29,42 +30,92 @@ public abstract class Entity extends Object {
     public float X, Y, yspeed, xspeed, previousX, previousY;
     public boolean alive = true;
 
+    /**
+     * Method to get the current state of the Player
+     * 
+     * @return true (if the Player is still alive) or false (else)
+     */
     public boolean getAlive() {
         return alive;
     }
 
+    /**
+     * Method to set the current state of the Player
+     * 
+     * @param a Boolean to which the state should be changed
+     */
     public void setAlive(boolean a) {
         alive = a;
     }
 
+    /**
+     * Get the x-coordinate
+     * 
+     * @return x-coordinate
+     */
     public int getX() {
         return (int) X;
     }
 
+    /**
+     * Get the y-coordinate
+     * 
+     * @return y-coordinate
+     */
     public int getY() {
         return (int) Y;
     }
 
+    /**
+     * Get the speed on the x-axis
+     * 
+     * @return speed on the x-axis
+     */
     public int getXspeed() {
         return (int) xspeed;
     }
 
+    /**
+     * Get the speed on the y-axis
+     * 
+     * @return speed on the y-axis
+     */
     public int getYspeed() {
         return (int) yspeed;
     }
 
+    /**
+     * Set the x-coordinate
+     * 
+     * @param x value to set the x coordinate (integer)
+     */
     public void setX(int x) {
         X = x;
     }
 
+    /**
+     * Set the y-coordinate
+     * 
+     * @param y value to set the y coordinate (integer)
+     */
     public void setY(int y) {
         Y = y;
     }
 
+    /**
+     * Set the speed on the x-axis
+     * 
+     * @param x value to set the speed (integer)
+     */
     public void setXspeed(int x) {
         xspeed = x;
     }
 
+    /**
+     * Set the speed on the y-axis
+     * 
+     * @param y value to set the speed (integer)
+     */
     public void setYspeed(int y) {
         yspeed = y;
     }
@@ -79,6 +130,9 @@ public abstract class Entity extends Object {
 
     }
 
+    /**
+     * Move the Player with the current set speed
+     */
     public void move() {
         previousX = X;
         previousY = Y;
@@ -86,12 +140,28 @@ public abstract class Entity extends Object {
         Y += yspeed * World.deltaTime();
     }
 
+    public boolean hasCollided(World w) {
+        double resolution = pointDis(X, Y, previousX, previousY);
+        double ix = (X - previousX) / resolution;
+        double iy = (Y - previousY) / resolution;
+        for (int i = 0; i < resolution; i++) {
+            double tx = ix*i + previousX;
+            double ty = iy*i + previousY;
+            if (w.checkCollision((float)tx, (float)ty)) {
+                X = (float)tx;
+                Y = (float)ty;
+                return true;
+            }
+        }
+        return w.checkCollision(X, Y);
+    }
+
     public double lengthdir_x(double R, double T) {
-        return (R * Math.cos(T * Math.PI / 180));
+        return (R * Math.cos(T * Math.PI / Constants.HALF_FULL_ANGLE));
     }
 
     public double lengthdir_y(double R, double T) {
-        return (-R * Math.sin(T * Math.PI / 180));
+        return (-R * Math.sin(T * Math.PI / Constants.HALF_FULL_ANGLE));
     }
 
     public double pointDir(double x1, double y1, double x2, double y2) {
@@ -102,6 +172,12 @@ public abstract class Entity extends Object {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
+    /**
+     * Get the distance to an entity
+     * 
+     * @param e the entity to which the distance should be returned
+     * @return distance
+     */
     public double distanceToEntity(Entity e) {
         return pointDis(X, Y, e.X, e.Y);
     }
@@ -122,5 +198,9 @@ public abstract class Entity extends Object {
         String whatIam = "~~~" + getClass().getName() + "~~~" + "\nX: " + X + " Y: " + Y + "\nI am "
                 + (alive ? "alive" : "dead");
         return whatIam;
+    }
+
+    public void checkAndHandleCollision(Client client) {
+        // do nothing
     }
 }

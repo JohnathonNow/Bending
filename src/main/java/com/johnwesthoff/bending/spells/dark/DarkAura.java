@@ -8,18 +8,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class DarkAura extends Spell {
     public DarkAura() {
-        ID = Server.DARKNESS;
+        ID = Constants.DARKNESS;
         subID = 2;
         locked = true;
         unlockXP = 3000;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/aura.png");
+            icon = loadIcon("aura.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -28,7 +29,7 @@ public class DarkAura extends Spell {
     @Override
     public void getAction(Client app) {
         app.removeAura = 40 * 5;
-        app.world.status |= World.ST_DRAIN;
+        app.world.status |= Constants.ST_DRAIN;
         app.sendMovement();
     }
 

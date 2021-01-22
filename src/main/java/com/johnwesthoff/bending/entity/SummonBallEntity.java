@@ -4,15 +4,14 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,7 +19,7 @@ import com.johnwesthoff.bending.logic.World;
  */
 public class SummonBallEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
 
     public SummonBallEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -35,18 +34,20 @@ public class SummonBallEntity extends Entity {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.darkGray);
 
-            int deg = r.nextInt(360);
-            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, deg, 60);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, deg, 60);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, deg, 60);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 4) - viewX, (int) (Y - 4) - viewY, 8, 8, deg, 60);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 5) - viewX, (int) (Y - 5) - viewY, 10, 10, deg, 60);
-            deg = r.nextInt(360);
-            G.fillArc(((int) X - 8) - viewX, (int) (Y - 8) - viewY, 16, 16, deg, 60);
+            int deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, deg, Constants.SIXTY_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, deg, Constants.SIXTY_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, deg, Constants.SIXTY_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 4) - viewX, (int) (Y - 4) - viewY, 8, 8, deg, Constants.SIXTY_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 5) - viewX, (int) (Y - 5) - viewY, 10, 10, deg, Constants.SIXTY_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc(((int) X - 8) - viewX, (int) (Y - 8) - viewY, 16, 16, deg, Constants.SIXTY_DEGREE_ANGLE);
+
+            //TODO: Implement using a for loop
         }
     }
 
@@ -64,8 +65,7 @@ public class SummonBallEntity extends Entity {
             alive = false;
             int yay = Server.getID();
             lol.earth.entityList.add(new EnemyEntity((int) X, (int) Y, 0, 0, maker).setID(yay));
-            lol.sendMessage(Server.DARKNESS, ByteBuffer.allocate(28).putInt(10).putInt((int) X).putInt((int) Y)
-                    .putInt(0).putInt(0).putInt(maker).putInt(yay));
+            // TODO: do this
             // apples.explode(X, Y, 32, 8, 16);
         }
     }
@@ -84,6 +84,11 @@ public class SummonBallEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the summon ball entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new SummonBallEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

@@ -6,17 +6,18 @@ import java.nio.ByteBuffer;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.RainEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class WaterStorm extends Waterbending {
     public WaterStorm() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 6;
-        icon = new ImageIcon(
-                ResourceLoader.loadImage("https://west-it.webs.com/spells/waterStorm.png", "waterStorm.png"));
+        locked = true;
+        unlockXP = 600;
+        icon = new ImageIcon(ResourceLoader.loadImage("waterStorm.png"));
     }
 
     @Override
@@ -53,4 +54,3 @@ public class WaterStorm extends Waterbending {
         world.entityList.add(new RainEntity(px, py, pid).setID(eid));
     }
 }
-

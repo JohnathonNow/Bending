@@ -12,134 +12,171 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
- *
  * @author John
  */
 public class Player {
-    public int x, y, ID, move, vspeed;
-    public boolean myTeam = false;
+    public int ID;
+    public double x, y, move, vspeed, showx, showy;
+    public boolean myTeam = false, done = false;
     public Rectangle playerHitbox;
     public String username = "Player";
     public int score = 0;
-    public short status = 0;
+    public int floatiness = 0;
+    public short status = 0, HP = 0;
     public Image[] bodyParts;// Body, head, ua, la, ul, ll
     public Thread loader;
-    public boolean done = false;
-    public short HP = 0;
-    public final byte[] partss;
-    public final int colorss[];
-    public final int colorss2[];
+    public boolean sameTeam;
+    public byte[] partss;
+    public int[] colorss, colorss2;
 
-    public Player(int X, int Y, final byte[] parts, final int colors[], final int colors2[]) {
+    public Player(int X, int Y, final byte[] parts, final int[] colors, final int[] colors2) {
         x = X;
         y = Y;
-        playerHitbox = new Rectangle(x, y, 20, 40);
+        showx = x;
+        showy = y;
+        playerHitbox = new Rectangle((int)x, (int)y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         this.partss = parts;
         this.colorss = colors;
         this.colorss2 = colors2;
-        Runnable getStuff = new Runnable() {
-
-            @Override
-            public void run() {
-                bodyParts = new Image[partss.length];
-                try {
-                    for (int i = 0; i < partss.length; i++) {
-                        bodyParts[i] = ResourceLoader.loadImageNoHash(
-                                "https://west-it.webs.com/bodyParts/p" + (i + 1) + "_" + parts[i] + ".png",
-                                "p" + (i + 1) + "_" + parts[i] + ".png");
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.white,
-                                new Color(colorss[i]));
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.lightGray,
-                                new Color(colorss2[i]));
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], new Color(0xBEBEBE),
-                                new Color(colorss2[i]).darker());
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        Runnable getStuff = () -> {
+            bodyParts = new Image[partss.length];
+            try {
+                for (int i = 0; i < partss.length; i++) {
+                    bodyParts[i] = ResourceLoader.loadImageNoHash(
+                            "p" + (i + 1) + "_" + parts[i] + ".png",
+                            "p" + (i + 1) + "_" + parts[i] + ".png");
+                    bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.white,
+                            new Color(colorss[i]));
+                    bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.lightGray,
+                            new Color(colorss2[i]));
+                    bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], new Color(0xBEBEBE),
+                            new Color(colorss2[i]).darker());
                 }
-                // System.err.println(partss[1]);
-                done = true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+            // System.err.println(partss[1]);
+            done = true;
         };
         loader = new Thread(getStuff);
         loader.start();
     }
 
+    public void truePos() {
+        /*
+        if (x > showx) {
+            showx += Constants.POSITION_CORRECTION;
+            if (x < showx) {
+                showx = x;
+            }
+        }
+        if (x < showx) {
+            showx -= Constants.POSITION_CORRECTION;
+            if (x > showx) {
+                showx = x;
+            }
+        }
+        if (y > showy) {
+            showy += Constants.POSITION_CORRECTION;
+            if (y < showy) {
+                showy = y;
+            }
+        }
+        if (y < showy) {
+            showy -= Constants.POSITION_CORRECTION;
+            if (y > showy) {
+                showy = y;
+            }
+        }
+        */
+        showx = x;
+        showy = y;
+    }
+
     public int left = 1;
-    public double leftArmAngle = 90, rightArmAngle = 90;
+    public double leftArmAngle = Constants.RIGHT_ANGLE, rightArmAngle = Constants.RIGHT_ANGLE;
 
     public void onDraw(Graphics g, int viewX, int viewY) {
-        if ((status & World.ST_INVISIBLE) != 0) {
+        if ((status & Constants.ST_INVISIBLE) != 0) {
             return;
         }
-        int offs = x % 8;
+        int offs = (int)showx % Constants.WALK_CYCLE;
+        truePos();
         if (!done) {
-            // x+=move;
-            g.drawArc(((x - 2) - viewX) * 3, ((y - 10) - viewY) * 3, 4, 4, 0, 360);
-            g.drawLine(((x) - viewX) * 3, ((y - 6) - viewY) * 3, ((x) - viewX) * 3, ((y - 3) - viewY) * 3);
-            g.drawLine(((x - 2) - viewX) * 3, ((y - 4) - viewY) * 3, ((x + 2) - viewX) * 3, ((y - 4) - viewY) * 3);
-            g.drawLine(((x) - viewX) * 3, ((y - 3) - viewY) * 3, ((x + offs - 2) - viewX) * 3, ((y) - viewY) * 3);
-            g.drawLine(((x) - viewX) * 3, ((y - 3) - viewY) * 3, ((x + 2 - offs) - viewX) * 3, ((y) - viewY) * 3);
+            // showx+=move;
+            g.drawArc((((int)showx - 2) - viewX) * Constants.MULTIPLIER, (((int)showy - 10) - viewY) * Constants.MULTIPLIER, 4, 4, 0, 360);
+            g.drawLine((((int)showx) - viewX) * Constants.MULTIPLIER, (((int)showy - 6) - viewY) * Constants.MULTIPLIER,
+                    (((int)showx) - viewX) * Constants.MULTIPLIER, (((int)showy - 3) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)showx - 2) - viewX) * Constants.MULTIPLIER, ((int)(showy - 4) - viewY) * Constants.MULTIPLIER,
+                    (((int)showx + 2) - viewX) * Constants.MULTIPLIER, (((int)showy - 4) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)showx) - viewX) * Constants.MULTIPLIER, (((int)showy - 3) - viewY) * Constants.MULTIPLIER,
+                    (((int)showx + offs - 2) - viewX) * Constants.MULTIPLIER, (((int)showy) - viewY) * Constants.MULTIPLIER);
+            g.drawLine((((int)showx) - viewX) * Constants.MULTIPLIER, (((int)showy - 3) - viewY) * Constants.MULTIPLIER,
+                    (((int)showx + 2 - offs) - viewX) * Constants.MULTIPLIER, (((int)showy) - viewY) * Constants.MULTIPLIER);
         } else {
             int yUp = 20;
 
-            if (Integer.signum(move) == -1) {
+            if (Integer.signum((int)move) == -1) {
                 left = -1;
             }
-            if (Integer.signum(move) == 1) {
+            if (Integer.signum((int)move) == 1) {
                 left = 1;
             }
             Graphics2D g2 = (Graphics2D) g;
             g2.scale(left, 1);
-            g2.drawImage(bodyParts[0], (x - viewX) * 3 * left + (left < 0 ? -18 : 0), (y - yUp - 6 - viewY) * 3, null);
+            g2.drawImage(bodyParts[0], ((int)showx - viewX) * Constants.MULTIPLIER * left + (left < 0 ? -18 : 0),
+                    ((int)showy - yUp - 6 - viewY) * Constants.MULTIPLIER, null);
             g2.drawImage(bodyParts[1],
-                    (int) (x + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * 3 * left
+                    (int) ((int)showx + 2 - ((bodyParts[1].getWidth(null) - 23) / 5) - viewX) * Constants.MULTIPLIER * left
                             + (left < 0 ? -(6 + (bodyParts[1].getWidth(null) - 23)) : 0),
-                    ((y - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * 3, null);
+                    (((int)showy - yUp - 16 - ((bodyParts[1].getHeight(null) - 31)) / 3) - viewY) * Constants.MULTIPLIER, null);
 
             double ffs = Math.toRadians(((4 - offs) * 6));
             AffineTransform previousAT = g2.getTransform();
-            g2.translate((x - 3 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
-            g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
+            g2.translate((showx - 3 - viewX) * Constants.MULTIPLIER * left, ((showy - yUp - 6) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(leftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
             g2.drawImage(bodyParts[2], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((((x - 3 - viewX) + lengthdir_x(6 * left, leftArmAngle * left))) * left * 3,
-                    (((y - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * 3);
-            g2.rotate(Math.toRadians(leftArmAngle - 90), 4 * (left + 1), 2);
+            g2.translate((((showx - 3 - viewX) + lengthdir_x(6 * left, leftArmAngle * left))) * left * Constants.MULTIPLIER,
+                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(leftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
             g2.drawImage(bodyParts[3], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((x + 9 - viewX) * 3 * left, ((y - yUp - 6) - viewY) * 3);
-            g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
+            g2.translate((showx + 9 - viewX) * Constants.MULTIPLIER * left, ((showy - yUp - 6) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(rightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
             g2.drawImage(bodyParts[2], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((((x + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * 3) * left,
-                    (((y - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * 3);
-            g2.rotate(Math.toRadians(rightArmAngle - 90), 8 - left * 4, 4);
+            g2.translate((((showx + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * Constants.MULTIPLIER) * left,
+                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(rightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
             g2.drawImage(bodyParts[3], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.drawImage(bodyParts[4], (x + 1 - viewX) * 3 * left, ((y - yUp + 7) - viewY) * 3, null);
-            g2.drawImage(bodyParts[4], (x + 5 - viewX) * 3 * left, ((y - yUp + 7) - viewY) * 3, null);
+            g2.drawImage(bodyParts[4], ((int)showx + 1 - viewX) * Constants.MULTIPLIER * left,
+                    (((int)showy - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
+            g2.drawImage(bodyParts[4], ((int)showx + 5 - viewX) * Constants.MULTIPLIER * left,
+                    (((int)showy - yUp + 7) - viewY) * Constants.MULTIPLIER, null);
 
-            g2.translate((x + 5 - viewX) * 3 * left, ((y + 13) - viewY - yUp) * 3);
+            g2.translate((showx + 5 - viewX) * Constants.MULTIPLIER * left, ((showy + 13) - viewY - yUp) * Constants.MULTIPLIER);
             g2.rotate(ffs);
             g2.drawImage(bodyParts[5], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((x + 1 - viewX) * 3 * left, ((y + 13) - viewY - yUp) * 3);
+            g2.translate((showx + 1 - viewX) * Constants.MULTIPLIER * left, ((showy + 13) - viewY - yUp) * Constants.MULTIPLIER);
             g2.rotate(-ffs);
             g2.drawImage(bodyParts[5], 0, 0, null);
             g2.setTransform(previousAT);
             g2.scale(left, 1);
         }
         g.setColor(myTeam ? Color.GREEN : Color.MAGENTA);
-        g.drawString(username, ((x - (username.length())) - viewX) * 3, (y - 40 - viewY) * 3);
+        g.drawString(username, (((int)showx - (username.length())) - viewX) * Constants.MULTIPLIER, ((int)showy - 40 - viewY) * Constants.MULTIPLIER);
     }
 
     public double lengthdir_x(double R, double T) {
@@ -159,7 +196,7 @@ public class Player {
     }
 
     public boolean checkCollision(int px, int py) {
-        playerHitbox.setLocation(x - playerHitbox.width / 2, y - (World.head + 10));
+        playerHitbox.setLocation((int)x - playerHitbox.width / 2, (int)y - (Constants.HEAD + 10));
         return (playerHitbox.contains(px, py));
     }
 }

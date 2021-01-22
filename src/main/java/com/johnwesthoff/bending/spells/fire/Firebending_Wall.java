@@ -1,24 +1,27 @@
 
 package com.johnwesthoff.bending.spells.fire;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
-
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+
 public class Firebending_Wall extends Firebending {
     public Firebending_Wall() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 4;
+        locked = true;
+        unlockXP = 900;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/fireWall.png"));
+            icon = (loadIcon("fireWall.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -28,7 +31,7 @@ public class Firebending_Wall extends Firebending {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
         maker = ID;

@@ -4,23 +4,22 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
+
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
 /**
- *
  * @author John
  */
 public class FreezeEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;
 
     public FreezeEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -29,6 +28,8 @@ public class FreezeEntity extends Entity {
         xspeed = hspeed;
         yspeed = vspeed;
         maker = ma;
+        previousX = X;
+        previousY = Y;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class FreezeEntity extends Entity {
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed - 1, (int) yspeed - 1, maker));
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed, (int) yspeed + 1, maker));
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed + 1, (int) yspeed, maker));
-            // lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(24).putInt(5).putInt(X).putInt(Y).putInt(xspeed).putInt(yspeed).putInt(maker));
+            // lol.sendMessage(Constants.WATERBENDING,ByteBuffer.allocate(24).putInt(5).putInt(X).putInt(Y).putInt(xspeed).putInt(yspeed).putInt(maker));
         }
         /*
          * if (yspeed<12) { yspeed++; }
@@ -67,7 +68,7 @@ public class FreezeEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if ((!lol.earth.inBounds(X, Y)) || lol.earth.checkCollision(X, Y)) {
             lol.earth.ground.freeze((int) X, (int) Y, radius * 4);
-            lol.sendMessage(Server.FREEZE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius * 4));
+            lol.sendMessage(FreezeEvent.getPacket(X, Y, radius * 4));
             alive = false;
         }
     }
@@ -89,6 +90,12 @@ public class FreezeEntity extends Entity {
         }
     }
 
+
+    /**
+     * Reconstruct the freeze entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new FreezeEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

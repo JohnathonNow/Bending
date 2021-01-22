@@ -13,12 +13,12 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.AiEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.networking.handlers.MessageEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-
-
 /**
- *
  * @author John
  */
 public class GuardianEntity extends EnemyEntity {
@@ -27,8 +27,7 @@ public class GuardianEntity extends EnemyEntity {
     public GuardianEntity(int x, int y, int hspeed, int vspeed, int ma) {
         super(x, y, hspeed, vspeed, ma);
         HP = 5000;
-        sprite = (ResourceLoader.loadImage("https://west-it.webs.com/Bending/guardian.png", "guardian.png"));// ,new
-                                                                                                             // Color(255,46,0),Color.BLUE);
+        sprite = (ResourceLoader.loadImage("guardian.png"));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class GuardianEntity extends EnemyEntity {
     @Override
     public void onServerUpdate(Server handle) {
         if (HP <= 0) {
-            handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
+            handle.sendMessage(DestroyEvent.getPacket(this));
             this.setAlive(false);
             if (Server.gameMode == Server.DEFENDER) {
                 PlayerOnline P = handle.getPlayer(lastHit);
@@ -108,39 +107,42 @@ public class GuardianEntity extends EnemyEntity {
                         P.score = 10000;
                     }
                     String yes = P.username + " has killed the earthbender's guardian!";
-                    handle.sendMessage(Server.MESSAGE,
-                            Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0xFF00FF), yes));
+                    handle.sendMessage(MessageEvent.getPacket(0xFF00FF, yes));
                     handle.expander.interrupt();
                 } else {
                     for (int p : handle.team1) {
                         (handle.getPlayer(p)).score = -10000;
                     }
                     String yes = "The earthbenders have failed to protect their guardian!";
-                    handle.sendMessage(Server.MESSAGE,
-                            Server.putString(ByteBuffer.allocate(yes.length() * 4 + 4).putInt(0xFF00FF), yes));
+                    handle.sendMessage(MessageEvent.getPacket(0xFF00FF, yes));
                     handle.expander.interrupt();
                 }
             }
 
         }
-        if (!handle.earth.isType((int) X, (int) Y, World.AIR)) {
+        if (!handle.earth.isType((int) X, (int) Y, Constants.AIR)) {
             if (air-- < 0) {
                 HP -= 2;
             }
         } else {
             air = 100;
         }
-        if (handle.earth.isType((int) X, (int) Y, World.LAVA)) {
+        if (handle.earth.isType((int) X, (int) Y, Constants.LAVA)) {
             HP -= 2;
         }
         if (timer++ > 90) {
             // System.out.println(X);
-            handle.sendMessage(Server.AI, ByteBuffer.allocate(28).putInt((int) X).putInt((int) Y).putInt((int) move)
-                    .putInt((int) yspeed).putInt((int) HP).putInt(MYID).putInt(target));
+            handle.sendMessage(AiEvent.getPacket(this));
             timer = 0;
         }
     }
 
+    /**
+     * Reconstruct the guardian entity
+     * 
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         // System.out.println("IM BACK!");
         world.entityList.add(new GuardianEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt())

@@ -8,17 +8,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class EarthbendingSand extends Earthbending {
     public EarthbendingSand() {
-        ID = Server.EARTHBENDING;
+        ID = Constants.EARTHBENDING;
         subID = 4;
+        locked = true;
+        unlockXP = 300;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/earthSand.png"));
+            icon = (loadIcon("earthSand.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -28,11 +30,11 @@ public class EarthbendingSand extends Earthbending {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
         double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
-                app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         if (app.world.isSolid(app.world.x, app.world.y + 4)) {
             app.energico += 50;

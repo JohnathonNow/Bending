@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.EnergyEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -16,13 +16,12 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class Lightning extends Spell {
     public Lightning() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 0;
         locked = true;
         unlockXP = 250;
         try {
-            icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstrike.png",
-                    "lightningstrike.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("lightningstrike.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -31,14 +30,12 @@ public class Lightning extends Spell {
     @Override
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        ID = Server.LIGHTNING;
-        subID = 0;
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
-                app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
+        double direction = Constants.FULL_ANGLE - Client.pointDir(app.world.x - app.world.viewX,
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         mx = ((int) (Client.lengthdir_x(8, direction)));
         my = ((int) (Client.lengthdir_y(8, direction)));
@@ -49,7 +46,7 @@ public class Lightning extends Spell {
 
     @Override
     public int getCost() {
-        return 0;
+        return 100;
     }
 
     @Override

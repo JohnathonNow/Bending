@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.CloudEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -16,13 +16,12 @@ import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class LightningStorm extends Lightning {
     public LightningStorm() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 1;
         locked = true;
         unlockXP = 500;
         try {
-            icon = new ImageIcon(ResourceLoader.loadImage("https://west-it.webs.com/spells/lightningstorm.png",
-                    "lightningstorm.png"));
+            icon = new ImageIcon(ResourceLoader.loadImage("lightningstorm.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

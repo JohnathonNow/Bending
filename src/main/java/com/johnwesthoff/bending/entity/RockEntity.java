@@ -9,20 +9,20 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
 /**
- *
  * @author John
  */
 public class RockEntity extends Entity {
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;
-    int a1, a2, a3;
-    int s1, s2, s3;
+    int a1, a2, a3, s1, s2, s3;
 
     public RockEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -31,19 +31,20 @@ public class RockEntity extends Entity {
         yspeed = vspeed;
         maker = ma;
         Random r = new Random();
-        a1 = 60 + r.nextInt(120);
-        a2 = 60 + r.nextInt(120);
-        a3 = 60 + r.nextInt(120);
-        s1 = r.nextInt(360);
-        s2 = r.nextInt(360);
-        s3 = r.nextInt(360);
+        a1 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        a2 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        a3 = Constants.SIXTY_DEGREE_ANGLE + r.nextInt(Constants.ONE_THIRD_FULL_ANGLE);
+        s1 = r.nextInt(Constants.FULL_ANGLE);
+        s2 = r.nextInt(Constants.FULL_ANGLE);
+        s3 = r.nextInt(Constants.FULL_ANGLE);
     }
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.DARK_GRAY);
-            G.fillArc((int) (X - radius / 2) - viewX, (int) (Y - radius / 2) - viewY, radius, radius, 0, 360);
+            G.fillArc((int) (X - radius / 2) - viewX, (int) (Y - radius / 2) - viewY, radius, radius, 0,
+                    Constants.FULL_ANGLE);
 
             G.setColor(Color.GRAY);
             G.fillArc(((int) X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, s1, a1);
@@ -80,9 +81,22 @@ public class RockEntity extends Entity {
         time = System.currentTimeMillis();
         if (!lol.earth.inBounds(X + xspeed, Y + yspeed) || lol.earth.checkCollision(X + xspeed, Y + yspeed)) {
             radius *= 3;
-            lol.earth.ground.FillCircleW((int) (X + xspeed), (int) (Y + yspeed), 96, World.STONE);
-            lol.sendMessage(Server.FILL, ByteBuffer.allocate(40).putInt((int) (X + xspeed)).putInt((int) (Y + yspeed))
-                    .putInt(96).put(World.STONE));
+            lol.earth.ground.FillCircleW((int) (X + xspeed), (int) (Y + yspeed), 96, Constants.STONE);
+            lol.sendMessage(FillEvent.getPacket((int) (X + xspeed), (int) (Y + yspeed), 96, Constants.STONE));
+        }
+    }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(18);
+            client.world.vspeed -= 5;
+            client.xspeed += 7 - client.random.nextInt(14);
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was built into a bridge by `.";
         }
     }
 

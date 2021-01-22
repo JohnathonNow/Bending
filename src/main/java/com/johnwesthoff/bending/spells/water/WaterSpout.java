@@ -8,17 +8,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.SpoutSourceEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class WaterSpout extends Waterbending {
     public WaterSpout() {
-        ID = Server.WATERBENDING;
+        ID = Constants.WATERBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 500;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/waterspout.png"));
+            icon = (loadIcon("waterspout.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -31,7 +33,7 @@ public class WaterSpout extends Waterbending {
         my = app.world.mouseY + app.world.viewY;
         X = mx;
         Y = my;
-        if (app.world.ground.cellData[(int) X][(int) Y] != World.WATER) {
+        if (app.world.ground.cellData[(int) X][(int) Y] != Constants.WATER) {
             app.energico += this.getCost();
             return;
         }

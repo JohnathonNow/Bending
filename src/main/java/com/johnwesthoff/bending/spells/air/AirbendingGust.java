@@ -7,16 +7,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.GustEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AirbendingGust extends Airbending {
     public AirbendingGust() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airGust.png"));
+            icon = (loadIcon("airGust.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -24,7 +24,7 @@ public class AirbendingGust extends Airbending {
 
     @Override
     public void getAction(Client app) {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         // throw new UnsupportedOperationException("Not supported yet.");
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;
@@ -64,7 +64,13 @@ public class AirbendingGust extends Airbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+        double dir = Client.pointDir(0, 0, mx, my);
+        double dis = Client.pointDis(0, 0, mx, my);
+        for (int i = -30; i <= 30; i+= 30) {
+            mx = (int)Client.lengthdir_x(dis, dir + i);
+            my = -(int)Client.lengthdir_y(dis, dir + i);
+            world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+        }
     }
 }
 

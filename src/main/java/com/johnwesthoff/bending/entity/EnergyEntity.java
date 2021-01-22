@@ -4,29 +4,23 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.nio.ByteBuffer;
-
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+
+import java.awt.*;
+import java.nio.ByteBuffer;
 
 /**
- *
  * @author John
  */
 public class EnergyEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
-    public int gravity = 0;
-    int decay = 0;
-    int a1, a2, a3;
-    int s1, s2, s3;
-    int life = 255;
-    int xstart, ystart;
+    public int radius = Constants.RADIUS_REGULAR, gravity = 0, decay = 0, life = Constants.FULL_COLOR_VALUE, xstart, ystart;
     Polygon P = new Polygon();
 
     public EnergyEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -43,7 +37,7 @@ public class EnergyEntity extends Entity {
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
 
-        G.setColor(new Color(255, 255, 0, life));
+        G.setColor(new Color(Constants.FULL_COLOR_VALUE, Constants.FULL_COLOR_VALUE, 0, life));
         P.translate(-viewX, -viewY);
         G.drawPolygon(P);
         P.translate(viewX, viewY);
@@ -51,7 +45,7 @@ public class EnergyEntity extends Entity {
         G.setColor(Color.DARK_GRAY);
         for (int i = 0; i < 14; i++) {
             G.fillArc(xstart + 10 - r.nextInt(20) - viewX - 10, ystart + 10 - r.nextInt(20) - viewY - 10,
-                    5 + r.nextInt(15), 5 + r.nextInt(15), 0, 360);
+                    5 + r.nextInt(15), 5 + r.nextInt(15), 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -82,18 +76,17 @@ public class EnergyEntity extends Entity {
         // System.out.println(System.currentTimeMillis()-time);
         time = System.currentTimeMillis();
         if (!lol.earth.inBounds(X, Y) || lol.earth.checkCollision(X, Y)) {
-            radius *= 3;
+            radius *= Constants.MULTIPLIER;
             alive = false;
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
-            lol.sendMessage(Server.CHARGE,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).putInt(200).putInt(maker));
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
+            lol.sendMessage(ChargeEvent.getPacket(this));
+                    
         }
         for (Player p : lol.playerList) {
-            if (Client.pointDis(X, Y - World.head, p.x, p.y) < 40 && maker != p.ID) {
+            if (Client.pointDis(X, Y - Constants.HEAD, p.x, p.y) < 40 && maker != p.ID) {
                 alive = false;
-                lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
-                lol.sendMessage(Server.CHARGE, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius)
-                        .putInt(200).putInt(maker));
+                lol.sendMessage(DestroyEvent.getPacket(this));
+                lol.sendMessage(ChargeEvent.getPacket(this));
             }
         }
     }

@@ -11,28 +11,26 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.AiEvent;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
- *
  * @author John
  */
 public class EnemyEntity extends Entity {
-    public int HP = 500;
+    public int HP = 500, target = 0, timer = 0, id = 0, master = 0, lastHit = -2;
     public float move = 0;
-    public int target = 0;
-    public int timer = 0;
-    public int id = 0;
-    public int master = 0;
-    public int lastHit = -2;
     float drawX = 0, drawY = 0;
     String name;
-    static BufferedImage sprite = ResourceLoader.loadImage("https://west-it.webs.com/Bending/evil.png", "evil.png");
+    static BufferedImage sprite = ResourceLoader.loadImage("evil.png");
     int air = 100;
 
     public EnemyEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -55,7 +53,8 @@ public class EnemyEntity extends Entity {
             // G.drawArc(((int)X-30)-viewX, ((int)Y-30)-viewY, 60, 60, 0, (360*HP)/500);
             G.drawImage(sprite, (int) ((drawX - viewX) * 3f) - 32, (int) ((drawY - viewY) * 3f) - 32, null);
             G.setColor(Color.DARK_GRAY);
-            G.drawString(name, (int) ((X - (name.length()) + 3) - viewX) * 3, (int) (Y - viewY - 24) * 3);
+            G.drawString(name, (int) ((X - (name.length()) + 3) - viewX) * Constants.MULTIPLIER,
+                    (int) (Y - viewY - 24) * Constants.MULTIPLIER);
         }
         // System.out.println("HI!");
     }
@@ -203,13 +202,13 @@ public class EnemyEntity extends Entity {
     public void onServerUpdate(Server handle) {
         jump = false;
         if (HP <= 0) {
-            handle.sendMessage(Server.DESTROY, ByteBuffer.allocate(30).putInt(MYID));
+            handle.sendMessage(DestroyEvent.getPacket(this));
             this.setAlive(false);
             if (Server.gameMode == Server.SURVIVAL) {
                 PlayerOnline P = handle.getPlayer(lastHit);
                 if (P != null) {
                     P.score++;
-                    handle.sendMessage(Server.SCORE, ByteBuffer.allocate(24).putInt(P.ID).putInt(P.score));
+                    handle.sendMessage(ScoreEvent.getPacket(P));
                 }
             }
         }
@@ -253,14 +252,14 @@ public class EnemyEntity extends Entity {
                 }
             }
         }
-        if (!handle.earth.isType((int) X, (int) Y, World.AIR)) {
+        if (!handle.earth.isType((int) X, (int) Y, Constants.AIR)) {
             if (air-- < 0) {
                 HP -= 2;
             }
         } else {
             air = 100;
         }
-        if (handle.earth.isType((int) X, (int) Y, World.LAVA)) {
+        if (handle.earth.isType((int) X, (int) Y, Constants.LAVA)) {
             HP -= 2;
         }
         if (((move != 0 && handle.earth.isSolid(X + (move * 8), Y - 4)) || jump) && handle.earth.isSolid(X, Y + 3)) {
@@ -270,9 +269,21 @@ public class EnemyEntity extends Entity {
         }
         if (timer++ > 90) {
             // System.out.println(X);
-            handle.sendMessage(Server.AI, ByteBuffer.allocate(28).putInt((int) X).putInt((int) Y).putInt((int) move)
-                    .putInt((int) yspeed).putInt((int) HP).putInt(MYID).putInt(target));
+            handle.sendMessage(AiEvent.getPacket(this));
             timer = 0;
+        }
+    }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && master != client.ID
+                && (client.gameMode <= 0 || !client.myTeam.contains(master))) {
+            client.hurt(7);
+            client.world.vspeed -= 4;
+            client.xspeed += 4 - client.random.nextInt(8);
+            client.lastHit = master;
+            client.killMessage = "~ was defeated by `'s dark minion.";
         }
     }
 
@@ -298,6 +309,12 @@ public class EnemyEntity extends Entity {
         return this;
     }
 
+    /**
+     * Method to reconstruct an enemy in a given world
+     * 
+     * @param in
+     * @param world World in which the enemy should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         // System.out.println("IM BACK!");
         world.entityList.add(new EnemyEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt())

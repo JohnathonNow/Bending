@@ -29,6 +29,11 @@ import com.johnwesthoff.bending.util.audio.RealClip;
  * @author John
  */
 public class ResourceLoader {
+
+    private static final String DOWNLOAD_URL_BASE = "https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/";
+    private static final String IMAGE_URL_BASE = DOWNLOAD_URL_BASE + "images/";
+    private static final String SOUND_URL_BASE = DOWNLOAD_URL_BASE + "sounds/";
+
     public static void downloadResource(final String filename, final String urlString)
             throws FileNotFoundException, IOException {
         BufferedInputStream in = null;
@@ -57,10 +62,19 @@ public class ResourceLoader {
 
     }
 
-    public static String dir = System.getenv("APPDATA") + File.separator + "Bending" + File.separator;
+    private static String getDir() {
+        String x = System.getenv("APPDATA");
+        if (x == null || x.equals("null")) {
+            x = System.getProperty("user.home");
+            return x + File.separator + ".bending" + File.separator;
+        }
+        return x + File.separator + "Bending" + File.separator;
+    }
+
+    public static String dir = getDir();
     public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
 
-    public static BufferedImage loadImage(final String src, final String name) {
+    public static BufferedImage loadImage(final String name) {
 
         if (imageTable.containsKey(name)) {
             return imageTable.get(name);
@@ -71,8 +85,8 @@ public class ResourceLoader {
             final File f = new File(dir + "images" + File.separator + name);
             if (!f.exists()) {
                 try {
-                    // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
-                    downloadResource(dir + "images" + File.separator + name, src);
+                    // example: https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/images/AgedPaper.png
+                    downloadResource(dir + "images" + File.separator + name, IMAGE_URL_BASE + name);
                 } catch (final Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -87,46 +101,46 @@ public class ResourceLoader {
         }
     }
 
-    public static ImageIcon loadIcon(final String src) {
-        final String name = src.replaceAll("https://west-it.webs.com/spells/", "");
+    public static ImageIcon loadIconBase(final String src) {
+        return loadIcon(src);
+    }
+    public static ImageIcon loadIcon(final String name) {
+        final String src = IMAGE_URL_BASE + name;
+        
         if (imageTable.containsKey(src)) {
             return new ImageIcon(imageTable.get(src));
         }
         BufferedImage toReturn;
         while (true) {
-            // System.out.println(src);
             try {
-                // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 imageTable.put(name, toReturn);
                 return new ImageIcon(toReturn);
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public static BufferedImage loadImageNoHash(final String src, final String name) {
-
+    public static BufferedImage loadImageNoHash(String src, final String name) {
+        src = IMAGE_URL_BASE + name;
         BufferedImage toReturn;
         while (true) {
-            // System.out.println(name);
             try {
-                // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 return toReturn;
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -144,12 +158,12 @@ public class ResourceLoader {
         }
     }
 
-    public static RealClip loadSound(final String src, final String name) {
+    public static RealClip loadSound(final String name) {
         RealClip clip = null;
         try {
             final File f = new File(dir + "sounds" + File.separator + name);
             if (!f.exists()) {
-                downloadResource(dir + "sounds" + File.separator + name, src);
+                downloadResource(dir + "sounds" + File.separator + name, SOUND_URL_BASE + name);
             }
             clip = new RealClip(f);
         } catch (final Exception ex) {

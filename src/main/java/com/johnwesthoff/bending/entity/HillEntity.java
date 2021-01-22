@@ -4,26 +4,24 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.PlayerOnline;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.PlayerOnline;
-import com.johnwesthoff.bending.logic.World;
-
 /**
- *
  * @author John
  */
 public class HillEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
 
     public HillEntity(int x, int y, int hspeed, int ma) {
         X = x;
@@ -41,7 +39,7 @@ public class HillEntity extends Entity {
             for (PlayerOnline P : apples.playerList) {
                 if (P.x > X - 48 && P.x < X + 48 && P.y > Y - 48 && P.y < Y + 48) {
                     P.score += 10;
-                    apples.sendMessage(Server.SCORE, ByteBuffer.allocate(24).putInt(P.ID).putInt(P.score));
+                    apples.sendMessage(ScoreEvent.getPacket(P));
                 }
             }
         }
@@ -54,7 +52,7 @@ public class HillEntity extends Entity {
         G.scale(Constants.WIDTH_SCALE, Constants.HEIGHT_SCALE);
         G.translate(-viewx, -viewy);
         G.setColor(Color.BLACK);
-        G.drawArc((int) X - 48, (int) Y - 48, 96, 96, 0, 360);
+        G.drawArc((int) X - 48, (int) Y - 48, 96, 96, 0, Constants.FULL_ANGLE);
         G.setTransform(prevTrans);
     }
 
@@ -71,6 +69,11 @@ public class HillEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the hill entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new HillEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -84,7 +87,7 @@ public class HillEntity extends Entity {
         // throw new UnsupportedOperationException("Not supported yet."); //To change
         // body of generated methods, choose Tools | Templates.
         G.setColor(Color.WHITE);
-        G.fillArc((int) X - 48 - viewX, (int) Y - 48 - viewY, 96, 96, 0, 360);
+        G.fillArc((int) X - 48 - viewX, (int) Y - 48 - viewY, 96, 96, 0, Constants.FULL_ANGLE);
     }
 
     @Override

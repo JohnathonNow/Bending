@@ -11,7 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.spells.*;
+import com.johnwesthoff.bending.app.spell.SpellsService;
+import com.johnwesthoff.bending.app.spell.SpellsServiceFactory;
+import com.johnwesthoff.bending.spells.Spell;
 
 /**
  *
@@ -20,44 +22,59 @@ import com.johnwesthoff.bending.spells.*;
 public class SpellList1 extends javax.swing.JPanel implements ActionListener, MouseListener {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = -2208869150735870837L;
+    /**
      * Creates new form SpellList
      */
     Client app;
+
     public SpellChooser1 choochootrain;
     public PassiveChooser1 choochootrain2;
 
-    public SpellList1(Client a1) {
+    /**
+     * SpellsService instance
+     */
+    private SpellsService spellsService;
+
+    public SpellList1(Client app) {
         initComponents();
-        app = a1;
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][0].getName(), 0, 0);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][1].getName(), 0, 1);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][2].getName(), 0, 2);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][3].getName(), 0, 3);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][4].getName(), 0, 4);
+        this.app = app;
 
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][0].getName(), 1, 0);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][1].getName(), 1, 1);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][2].getName(), 1, 2);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][3].getName(), 1, 3);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][4].getName(), 1, 4);
+        // using factory to inject dependency
+        spellsService = SpellsServiceFactory.create();
 
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][0].getName(), 2, 0);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][1].getName(), 2, 1);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][2].getName(), 2, 2);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][3].getName(), 2, 3);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][4].getName(), 2, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[0][0].getName(), 0, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[0][1].getName(), 0, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[0][2].getName(), 0, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[0][3].getName(), 0, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[0][4].getName(), 0, 4);
 
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][0].getName(), 3, 0);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][1].getName(), 3, 1);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][2].getName(), 3, 2);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][3].getName(), 3, 3);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][4].getName(), 3, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[1][0].getName(), 1, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[1][1].getName(), 1, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[1][2].getName(), 1, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[1][3].getName(), 1, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[1][4].getName(), 1, 4);
 
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][0].getName(), 4, 0);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][1].getName(), 4, 1);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][2].getName(), 4, 2);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][3].getName(), 4, 3);
-        jTable1.getModel().setValueAt(app.spellList[app.spellBook][4].getName(), 4, 4);
+        jTable1.getModel().setValueAt(this.app.spellList[2][0].getName(), 2, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[2][1].getName(), 2, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[2][2].getName(), 2, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[2][3].getName(), 2, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[2][4].getName(), 2, 4);
+
+        jTable1.getModel().setValueAt(this.app.spellList[3][0].getName(), 3, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[3][1].getName(), 3, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[3][2].getName(), 3, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[3][3].getName(), 3, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[3][4].getName(), 3, 4);
+
+        jTable1.getModel().setValueAt(this.app.spellList[4][0].getName(), 4, 0);
+        jTable1.getModel().setValueAt(this.app.spellList[4][1].getName(), 4, 1);
+        jTable1.getModel().setValueAt(this.app.spellList[4][2].getName(), 4, 2);
+        jTable1.getModel().setValueAt(this.app.spellList[4][3].getName(), 4, 3);
+        jTable1.getModel().setValueAt(this.app.spellList[4][4].getName(), 4, 4);
+
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable4.getTableHeader().setReorderingAllowed(false);
         choochootrain = new SpellChooser1(this);
@@ -66,9 +83,12 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         choochootrain2.setVisible(false);
         jTable1.addMouseListener(this);
         jTable4.addMouseListener(this);
-        XP.setText("XP: " + app.Xp);
-        USER.setText("USER: " + app.username);
+        XP.setText("XP: " + this.app.Xp);
+        USER.setText("USER: " + this.app.username);
         this.setLocation(0, 0);
+        for (int i = 0; i < 5; i++) {
+            jTable4.getModel().setValueAt(app.passiveList[i].getName(), i, 0);
+        }
     }
 
     /**
@@ -126,11 +146,15 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
                         { null, null, null, null, null }, { null, null, null, null, null },
                         { null, null, null, null, null } },
                 new String[] { "Spell 1", "Spell 2", "Spell 3", "Spell 4", "Spell 5" }) {
-            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class, java.lang.String.class };
+            /**
+            		 *
+            		 */
+            private static final long serialVersionUID = -31184385169514111L;
+            Class<Object>[] types = new Class[] { java.lang.String.class, java.lang.String.class,
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class };
             boolean[] canEdit = new boolean[] { false, false, false, false, false };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<Object> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
@@ -147,78 +171,73 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         jTable1.getColumnModel().getColumn(4).setResizable(false);
 
         jButton1.setText("Finish");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
+        jButton1.addActionListener(event -> {
+            Client.immaKeepTabsOnYou.setSelectedIndex(0);
         });
 
         jButton2.setText("Save");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jButton2.addActionListener(event -> {
+
+            String post = "";
+
+            for (int y = 0; y < 5; y++) {
+                post += Spell.passives.indexOf(app.passiveList[y]) + ",";
             }
+            for (int y = 0; y < 5; y++) {
+                for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
+                    post += Spell.spells.indexOf(app.spellList[y][i]);
+                    post += (i == app.spellList[y].length - 1) && (y == 4) ? "" : ",";
+                }
+            }
+
+            // System.out.println(post+","+app.jtb.getText());
+            spellsService.persistSpellsForUser(post, Client.jtb.getText());
+
         });
 
         jButton3.setText("Load");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
+        jButton3.addActionListener(event -> {
+            loadSpells();
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Presets");
+        jLabel1.setVisible(false);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 0, 0));
         jButton4.setText("Ignis");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(event -> jButtonLoadSpells(15));
+        jButton4.setVisible(false);
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton6.setForeground(new java.awt.Color(153, 153, 0));
         jButton6.setText("Electro");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        jButton6.addActionListener(event -> jButtonLoadSpells(20));
+        jButton6.setVisible(false);
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton7.setForeground(new java.awt.Color(51, 153, 0));
         jButton7.setText("Terrae");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
+        jButton7.addActionListener(event -> jButtonLoadSpells(5));
+        jButton7.setVisible(false);
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton8.setForeground(new java.awt.Color(0, 0, 255));
         jButton8.setText("Aqua");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
+        jButton8.addActionListener(event -> jButtonLoadSpells(10));
+        jButton8.setVisible(false);
 
         jButton9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton9.setForeground(new java.awt.Color(153, 153, 153));
         jButton9.setText("A'ris");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
+        jButton9.addActionListener(event -> jButtonLoadSpells(0));
+        jButton9.setVisible(false);
 
         XP.setText("XP: ");
 
         USER.setText("USER:");
+        USER.setVisible(false);
 
         jLabel2.setText("Attacks:");
 
@@ -226,6 +245,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] { { null }, { null }, { null }, { null }, { null } }, new String[] { "Spell" }) {
+            private static final long serialVersionUID = -4169876119482741280L;
             boolean[] canEdit = new boolean[] { false };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -273,7 +293,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
                                         .addComponent(USER, javax.swing.GroupLayout.PREFERRED_SIZE, 135,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410,
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(39, 39, 39)
                                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 106,
@@ -308,107 +328,36 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         // pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        Client.immaKeepTabsOnYou.setSelectedIndex(0);
-    }// GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here: SAVE
-        if (Client.currentlyLoggedIn) {
-            String post = "";
-
-            for (int y = 0; y < 5; y++) {
-                post += Spell.passives.indexOf(app.passiveList[y]) + ",";
-            }
-            for (int y = 0; y < 5; y++) {
-                for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-                    post += Spell.spells.indexOf(app.spellList[y][i]);
-                    post += (i == app.spellList[y].length - 1) && (y == 4) ? "" : ",";
-                }
-            }
-
-            // System.out.println(post+","+app.jtb.getText());
-            app.CTD.postSpells(post, Client.jtb.getText());
-        }
-    }// GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here: LOAD
-        if (Client.currentlyLoggedIn) {
-            loadSpells();
-        }
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+    /**
+     * Loads spells for various spell lists. Loads 5 consecutive spells from
+     * Spell.spells, beginning at startIndex.
+     * 
+     * @param startIndex the starting Spell index
+     */
+    private void jButtonLoadSpells(int startIndex) {
         for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-            app.spellList[row][i] = Spell.spells.get(i + 10);
+            app.spellList[row][i] = Spell.spells.get(i + startIndex);
         }
         jTable1.getModel().setValueAt(app.spellList[row][0].getName(), row, 0);
         jTable1.getModel().setValueAt(app.spellList[row][1].getName(), row, 1);
         jTable1.getModel().setValueAt(app.spellList[row][2].getName(), row, 2);
         jTable1.getModel().setValueAt(app.spellList[row][3].getName(), row, 3);
         jTable1.getModel().setValueAt(app.spellList[row][4].getName(), row, 4);
-    }// GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-        for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-            app.spellList[row][i] = Spell.spells.get(i);
-        }
-        jTable1.getModel().setValueAt(app.spellList[row][0].getName(), row, 0);
-        jTable1.getModel().setValueAt(app.spellList[row][1].getName(), row, 1);
-        jTable1.getModel().setValueAt(app.spellList[row][2].getName(), row, 2);
-        jTable1.getModel().setValueAt(app.spellList[row][3].getName(), row, 3);
-        jTable1.getModel().setValueAt(app.spellList[row][4].getName(), row, 4);
-    }// GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-        for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-            app.spellList[row][i] = Spell.spells.get(i + 5);
-        }
-        jTable1.getModel().setValueAt(app.spellList[row][0].getName(), row, 0);
-        jTable1.getModel().setValueAt(app.spellList[row][1].getName(), row, 1);
-        jTable1.getModel().setValueAt(app.spellList[row][2].getName(), row, 2);
-        jTable1.getModel().setValueAt(app.spellList[row][3].getName(), row, 3);
-        jTable1.getModel().setValueAt(app.spellList[row][4].getName(), row, 4);
-    }// GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-            app.spellList[row][i] = Spell.spells.get(i + 15);
-        }
-        jTable1.getModel().setValueAt(app.spellList[row][0].getName(), row, 0);
-        jTable1.getModel().setValueAt(app.spellList[row][1].getName(), row, 1);
-        jTable1.getModel().setValueAt(app.spellList[row][2].getName(), row, 2);
-        jTable1.getModel().setValueAt(app.spellList[row][3].getName(), row, 3);
-        jTable1.getModel().setValueAt(app.spellList[row][4].getName(), row, 4);
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        for (int i = 0; i < app.spellList[app.spellBook].length; i++) {
-            app.spellList[row][i] = Spell.spells.get(i + 20);
-        }
-        jTable1.getModel().setValueAt(app.spellList[row][0].getName(), row, 0);
-        jTable1.getModel().setValueAt(app.spellList[row][1].getName(), row, 1);
-        jTable1.getModel().setValueAt(app.spellList[row][2].getName(), row, 2);
-        jTable1.getModel().setValueAt(app.spellList[row][3].getName(), row, 3);
-        jTable1.getModel().setValueAt(app.spellList[row][4].getName(), row, 4);
-    }// GEN-LAST:event_jButton6ActionPerformed
+    } // Consolidated from the button listeners
 
     public void loadSpells() {
         int spells[][];
-        spells = app.CTD.getSpells(Client.jtb.getText(), app.jtp.getText());
+
+        spells = spellsService.getSpellsFromUser(Client.jtb.getText(), app.jtp.getText());
+        if (spells == null) {
+            return;
+        }
         for (int y = 0; y < 5; y++) {
             app.passiveList[y] = Spell.passives.get(spells[5][y]);
             jTable4.getModel().setValueAt(app.passiveList[y].getName(), y, 0);
         }
+        // be carefull of hellish loops, use collection instead?
         for (int y = 0; y < 5; y++) {
-
             for (int i = 0; i < 5; i++) {
                 app.spellList[y][i] = Spell.spells.get(spells[y][i]);
             }
@@ -462,7 +411,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     public void mouseReleased(MouseEvent e) {
         // throw new UnsupportedOperationException("Not supported yet.");
         if (e.getComponent() == jTable1) {
-            selection = (int) (Math.floor(e.getX() / 80));
+            selection = (int) (Math.floor(e.getX() / 160));
             row = (int) (Math.floor(e.getY() / 16));
             // System.out.println(row);
             choochootrain.getList().setSelectedIndex(Spell.spells.indexOf(app.spellList[app.spellBook][selection]));
@@ -512,7 +461,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
             }
         }
         if ("Choose2".equals(e.getActionCommand())) {
-            if (row2 >= 0) {
+            if (row2 >= 0 && choochootrain2.getList().getSelectedIndex() >= 0) {
                 app.passiveList[row2] = Spell.passives.get(choochootrain2.getList().getSelectedIndex());
                 choochootrain2.setVisible(false);
                 jTable4.getModel().setValueAt(app.passiveList[row2].getName(), row2, 0);

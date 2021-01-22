@@ -8,44 +8,37 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 
-/**
- *
- * @author John
- */
 public class BallLightningEntity extends Entity {
-    public int maker = 0;
-    public int radius = 16;
-    public int gravity = 1;
-    int a1, a2, a3;
-    int s1, s2, s3;
+    public int maker = 0, radius = Constants.RADIUS_REGULAR, gravity = 1;
+    public int BOUND = 10;
 
     public BallLightningEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
         Y = y;
-        xspeed = hspeed * 3;
-        yspeed = vspeed * 3;
+        xspeed = hspeed * Constants.MULTIPLIER;
+        yspeed = vspeed * Constants.MULTIPLIER;
         maker = ma;
-
     }
 
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.yellow);
-            int x = (int) X + 5 - r.nextInt(10) - viewX;
-            int y = (int) Y + 5 - r.nextInt(10) - viewY;
-            G.drawLine(x, y, x + 5 - r.nextInt(10), y + 5 - r.nextInt(10));
-            G.drawLine(x + 5 - r.nextInt(10), y + 5 - r.nextInt(10), (int) X + 5 - r.nextInt(10) - viewX,
-                    (int) Y + 5 - r.nextInt(10) - viewY);
+            int x = (int) X + 5 - r.nextInt(BOUND) - viewX;
+            int y = (int) Y + 5 - r.nextInt(BOUND) - viewY;
+            G.drawLine(x, y, x + 5 - r.nextInt(BOUND), y + 5 - r.nextInt(BOUND));
+            G.drawLine(x + 5 - r.nextInt(BOUND), y + 5 - r.nextInt(BOUND), (int) X + 5 - r.nextInt(BOUND) - viewX,
+                    (int) Y + 5 - r.nextInt(BOUND) - viewY);
 
             G.setColor(Color.white);
-            G.drawLine((int) X + 5 - r.nextInt(10) - viewX, (int) Y + 5 - r.nextInt(10) - viewY,
-                    (int) X + 5 - r.nextInt(10) - viewX, (int) Y + 5 - r.nextInt(10) - viewY);
+            G.drawLine((int) X + 5 - r.nextInt(BOUND) - viewX, (int) Y + 5 - r.nextInt(BOUND) - viewY,
+                    (int) X + 5 - r.nextInt(BOUND) - viewX, (int) Y + 5 - r.nextInt(BOUND) - viewY);
         }
     }
 
@@ -76,6 +69,19 @@ public class BallLightningEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
 
+    }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y)
+                && (maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker)))) {
+            client.hurt(10);
+            client.lastHit = maker;
+            client.world.vspeed -= client.random.nextInt(22);
+            client.xspeed += 18 - client.random.nextInt(36);
+            client.killMessage = "~ was shockingly killed by `!";
+        }
     }
 
     @Override

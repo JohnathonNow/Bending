@@ -7,16 +7,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.MissileEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class Airbending extends Spell {
     public Airbending() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airSpell.png"));
+            icon = (loadIcon("airSpell.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -26,11 +26,11 @@ public class Airbending extends Spell {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
         double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
-                app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         mx = ((int) (Client.lengthdir_x(8, direction)));
         my = ((int) (Client.lengthdir_y(8, direction)));

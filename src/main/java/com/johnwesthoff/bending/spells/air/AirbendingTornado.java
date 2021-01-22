@@ -7,17 +7,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.TornadoEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AirbendingTornado extends Spell {
     public AirbendingTornado() {
-        ID = Server.AIRBENDING;
+        ID = Constants.AIRBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 100;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/airTornado.png"));
+            icon = (loadIcon("airTornado.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }

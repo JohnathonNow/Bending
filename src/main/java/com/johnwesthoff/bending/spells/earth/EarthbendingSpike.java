@@ -9,16 +9,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class EarthbendingSpike extends Earthbending {
     public EarthbendingSpike() {
-        ID = Server.EARTHBENDING;
+        ID = Constants.EARTHBENDING;
         subID = 1;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/earth.png"));
+            icon = (loadIcon("earth.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,6 +72,6 @@ public class EarthbendingSpike extends Earthbending {
         P.addPoint(px + 28, py);
         P.addPoint(px - 28, py);
         P.addPoint(mx, my);
-        world.ground.FillPolygon(P, World.STONE);
+        world.ground.FillPolygon(P, Constants.STONE);
     }
 }

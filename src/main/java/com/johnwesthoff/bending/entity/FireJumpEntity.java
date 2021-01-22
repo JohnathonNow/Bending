@@ -12,17 +12,17 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
 /**
- *
  * @author John
  */
 public class FireJumpEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 0;
 
     public FireJumpEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -39,12 +39,14 @@ public class FireJumpEntity extends Entity {
             Graphics2D g = (Graphics2D) G;
             Composite c = g.getComposite();
             // g.setComposite(new Additive());
-            g.setColor(new Color(255, r.nextInt(255), 0, r.nextInt(255)));
-            g.fillArc((int) (X - 8) - viewX, (int) (Y - 8) - viewY, 16, 16, 0, 360);
+            g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                    r.nextInt(Constants.FULL_COLOR_VALUE)));
+            g.fillArc((int) (X - 8) - viewX, (int) (Y - 8) - viewY, 16, 16, 0, Constants.FULL_ANGLE);
             for (int i = 0; i < 6; i++) {
                 int e1 = 6 - r.nextInt(12), e2 = 6 - r.nextInt(12);
-                g.setColor(new Color(255, r.nextInt(255), 0, r.nextInt(255)));
-                g.fillArc((int) (X + e1) - viewX, (int) (Y + e2) - viewY, e1, e2, 0, 360);
+                g.setColor(new Color(Constants.FULL_COLOR_VALUE, r.nextInt(Constants.FULL_COLOR_VALUE), 0,
+                        r.nextInt(Constants.FULL_COLOR_VALUE)));
+                g.fillArc((int) (X + e1) - viewX, (int) (Y + e2) - viewY, e1, e2, 0, Constants.FULL_ANGLE);
             }
             g.setComposite(c);
         }
@@ -74,6 +76,21 @@ public class FireJumpEntity extends Entity {
     }
 
     @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(15);
+            client.world.status |= Constants.ST_FLAMING;
+            client.world.vspeed += yspeed * 2;
+            client.xspeed += xspeed;
+            client.lastHit = maker;
+            alive = false;
+            client.killMessage = "~ was flung into orbit by `'s falcon pawnch!";
+        }
+    }
+
+    @Override
     public void cerealize(ByteBuffer out) {
         try {
             Server.putString(out, this.getClass().getName());
@@ -87,6 +104,12 @@ public class FireJumpEntity extends Entity {
         }
     }
 
+    /**
+     * Reconstruct the fire jump entity
+     * 
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new FireJumpEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));

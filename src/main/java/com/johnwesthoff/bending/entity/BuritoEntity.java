@@ -4,23 +4,22 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author John
  */
 public class BuritoEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;
 
     public BuritoEntity(final int x, final int y, final int hspeed, final int vspeed, final int ma) {
@@ -37,10 +36,10 @@ public class BuritoEntity extends Entity {
             // g.setComposite(new Additive());
             G.setColor(Color.ORANGE);
             for (int i = 0; i < 4; i++) {
-                G.fillArc((int) X - viewX + (i * 2) - 4, (int) Y - viewY, 4, 4, 0, 360);
+                G.fillArc((int) X - viewX + (i * 2) - 4, (int) Y - viewY, 4, 4, 0, Constants.FULL_ANGLE);
             }
             G.setColor(Color.RED);
-            G.fillArc(4 + (int) X - viewX, (int) Y - viewY, 3, 3, 0, 360);
+            G.fillArc(4 + (int) X - viewX, (int) Y - viewY, 3, 3, 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -53,7 +52,7 @@ public class BuritoEntity extends Entity {
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
-        apples.ground.FillCircleW((int) X, (int) Y, (int) Math.sqrt(xspeed * xspeed + yspeed * yspeed), World.LAVA);
+        apples.ground.FillCircleW((int) X, (int) Y, (int) Math.sqrt(xspeed * xspeed + yspeed * yspeed), Constants.LAVA);
         if (next++ > 4) {
             next = 0;
             yspeed += gravity;
@@ -81,6 +80,12 @@ public class BuritoEntity extends Entity {
         }
     }
 
+    /**
+     * Method to reconstruct the BuritoEntity
+     * 
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(final ByteBuffer in, final World world) {
         try {
             world.entityList.add(new BuritoEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -89,4 +94,19 @@ public class BuritoEntity extends Entity {
         }
     }
 
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y) && maker != client.ID
+                && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
+            client.hurt(65);
+            client.world.status |= Constants.ST_FLAMING;
+            client.world.vspeed -= 39;
+            client.xspeed += 47 - client.random.nextInt(94);
+            client.lastHit = maker;
+            alive = false;
+            client.world.status |= Constants.ST_FLAMING;
+            client.killMessage = "~ shouldn't have stolen `'s burito...";
+        }
+    }
 }

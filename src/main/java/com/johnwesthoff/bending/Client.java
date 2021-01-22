@@ -38,11 +38,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -63,31 +60,20 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.AbstractTableModel;
 
-import com.johnwesthoff.bending.entity.BallLightningEntity;
-import com.johnwesthoff.bending.entity.BuritoEntity;
-import com.johnwesthoff.bending.entity.EnemyEntity;
+import com.johnwesthoff.bending.app.game.GameService;
+import com.johnwesthoff.bending.app.game.GameServiceFactory;
 import com.johnwesthoff.bending.entity.Entity;
-import com.johnwesthoff.bending.entity.FireBallEntity;
-import com.johnwesthoff.bending.entity.FireJumpEntity;
-import com.johnwesthoff.bending.entity.FirePuffEntity;
-import com.johnwesthoff.bending.entity.GustEntity;
-import com.johnwesthoff.bending.entity.IceShardEntity;
-import com.johnwesthoff.bending.entity.LavaBallEntity;
-import com.johnwesthoff.bending.entity.MissileEntity;
-import com.johnwesthoff.bending.entity.RockEntity;
-import com.johnwesthoff.bending.entity.SandEntity;
-import com.johnwesthoff.bending.entity.ShardEntity;
 import com.johnwesthoff.bending.entity.ShockEffectEntity;
-import com.johnwesthoff.bending.entity.SnowEntity;
-import com.johnwesthoff.bending.entity.SoulDrainEntity;
-import com.johnwesthoff.bending.entity.SpoutEntity;
-import com.johnwesthoff.bending.entity.SteamEntity;
-import com.johnwesthoff.bending.entity.TornadoEntity;
-import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.NetworkManager;
+import com.johnwesthoff.bending.networking.handlers.DeathEvent;
+import com.johnwesthoff.bending.networking.handlers.LoginEvent;
+import com.johnwesthoff.bending.networking.handlers.MapEvent;
+import com.johnwesthoff.bending.networking.handlers.MessageEvent;
+import com.johnwesthoff.bending.networking.handlers.MoveEvent;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.ui.AppletActionListener;
 import com.johnwesthoff.bending.ui.ClothingChooser1;
@@ -96,7 +82,7 @@ import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.audio.RealClip;
-import com.johnwesthoff.bending.util.network.ConnectToDatabase;
+import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
@@ -110,6 +96,7 @@ public class Client extends JPanel implements Runnable {
      *
      */
     private static final long serialVersionUID = 1L;
+
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
@@ -121,6 +108,9 @@ public class Client extends JPanel implements Runnable {
     public String chatMessage = "";
     public int gameMode = 1;
     public int fireTime = 0;
+    public int ticks = 0;
+    public Player localPlayer;
+    public int whoseTurn = -1;
     public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
             deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
     public short matchOver = 0, forcedRespawn = 0;
@@ -166,14 +156,13 @@ public class Client extends JPanel implements Runnable {
     public static boolean shortJump = false;
     public String killMessage = "~ was defeated by `.";
     public int timeToHeal = 0;
-    public JComboBox menu;
+    public JComboBox<Object> menu;
     public JButton connect, hosting, refresh, register, verify, ChooseSpells, chooseclothing, mapMaker;
     public JCheckBox JRB;
     public String[] hosts = new String[1];
     public static JTextField jtb = new JTextField();
     public JPasswordField jtp = new JPasswordField();
     public JLabel jUs = new JLabel("Username:"), jPa = new JLabel("Password:");
-    public static ConnectToDatabase CTD;
     public Register form = new Register();
     public Verify exactly = new Verify();
     public SystemTray ST;
@@ -188,14 +177,18 @@ public class Client extends JPanel implements Runnable {
     public double prevMove;
     public short turnVisible = -1, removeAura = -1;
 
+    /**
+     * GameService instance
+     */
+    public GameService gameService;
+
     public Client() {
         super();
-        // bimage = ImageIO.read(new URL("https://west-it.webs.com/AgedPaper.png"));
         new File(ResourceLoader.dir).mkdirs();
         new File(ResourceLoader.dir + "images").mkdirs();
         new File(ResourceLoader.dir + "sounds").mkdirs();
         try {
-            bimage = ResourceLoader.loadImage("https://west-it.webs.com/Bending/AgedPaper.png", "AgedPaper.png");
+            bimage = ResourceLoader.loadImage("AgedPaper.png");
             Thread.sleep(100);
         } catch (final Exception ex) {
             // ex.printStackTrace();
@@ -211,17 +204,23 @@ public class Client extends JPanel implements Runnable {
 
         gameAlive = true;
         Spell.init();
-        final Client me = new Client();
+        final Client main = new Client();
         immaKeepTabsOnYou = new JTabbedPane();
-        actioner = new AppletActionListener(me);
-        inputer = new ClientInputListener(me);
-        thisone = me;
-        me.CTD = new ConnectToDatabase();
-        me.setSize(600, 600);
-        me.setPreferredSize(me.getSize());
+        actioner = new AppletActionListener(main);
+        inputer = new ClientInputListener(main);
+        thisone = main;
+
+        // using factory to inject dependency
+        main.gameService = GameServiceFactory.create();
+        // @TODO : define here player instance
+
+        main.setSize(960, 540);
+        main.setPreferredSize(main.getSize());
+
         // JPanel e = new JPanel();
         // e.setSize(300,300);
         container = new JFrame() {
+            private static final long serialVersionUID = 1255782830759040881L;
 
             @Override
             public void paintComponents(final Graphics g) {
@@ -231,31 +230,32 @@ public class Client extends JPanel implements Runnable {
                 super.paintComponents(g);
             }
         };
-        me.owner = container;
+        main.owner = container;
         // container.setUndecorated(true);
-        me.form.setVisible(false);
-        container.setSize(me.getSize());
+        main.form.setVisible(false);
+        container.setSize(main.getSize());
         container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        me.cc.setVisible(false);
-        me.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
-        me.spellList[0] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[1] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[2] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[3] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
-        me.spellList[4] = (new Spell[] { Spell.spells.get(0), Spell.spells.get(0), Spell.spells.get(0),
-                Spell.spells.get(0), Spell.spells.get(0) });
+        main.cc.setVisible(false);
+        main.spellList = new Spell[10][5];// {{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)},{Spell.spells.get(0),Spell.spells.get(1),Spell.spells.get(2),Spell.spells.get(3),Spell.spells.get(5)}});
+        main.spellList[0] = (new Spell[] { Spell.lookup("Airbending"), Spell.lookup("Earthbending"),
+                Spell.lookup("EarthbendingShard"), Spell.lookup("WaterbendingShard"), Spell.lookup("Firebending") });
+        main.spellList[1] = (new Spell[] { Spell.lookup("AirbendingJump"), Spell.lookup("Firebending"),
+                Spell.lookup("AirbendingGust"), Spell.lookup("EarthbendingSpike"), Spell.lookup("EarthbendingShard") });
+        main.spellList[2] = (new Spell[] { Spell.lookup("AirbendingJump"), Spell.lookup("Waterbending"),
+                Spell.lookup("WaterbendingShard"), Spell.lookup("Firebending"), Spell.lookup("AirbendingAir") });
+        main.spellList[3] = (new Spell[] { Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom"),
+                Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom"), Spell.lookup("SpellRandom") });
+        main.spellList[4] = (new Spell[] { Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"),
+                Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch"), Spell.lookup("SpellRandomMatch") });
+        main.spellList[5] = (new Spell[] { Spell.lookup("AirbendingGust"), Spell.lookup("WaterbendingFreeze"),
+                Spell.lookup("Firebending_Thrower"), Spell.lookup("Firebending_Wall"),
+                Spell.lookup("EarthbendingShard") });
+        Spell shield = Spell.lookup("EarthbendingShield");
+        main.passiveList = (new Spell[] { shield, shield, shield, shield, shield, shield });
+        // container.add(me);
+        main.JRB = new JCheckBox() {
+            private static final long serialVersionUID = -3327024393489960573L;
 
-        me.spellList[5] = (new Spell[] { Spell.spells.get(1), Spell.spells.get(11), Spell.spells.get(18),
-                Spell.spells.get(19), Spell.spells.get(7) });
-        // container.add(me);
-        me.passiveList = (new Spell[] { Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell, Spell.noSpell,
-                Spell.noSpell });
-        // container.add(me);
-        me.JRB = new JCheckBox() {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
@@ -263,33 +263,35 @@ public class Client extends JPanel implements Runnable {
             }
         };
 
-        me.userpassinfo = new Properties();
+        main.userpassinfo = new Properties();
         if (new File(ResourceLoader.dir + "properties.xyz").exists()) {
             try {
-                me.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
+                main.userpassinfo.load(new FileInputStream(new File(ResourceLoader.dir + "properties.xyz")));
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (me.userpassinfo.isEmpty()) {
-            me.userpassinfo.setProperty("username", "");
-            me.userpassinfo.setProperty("password", "");
-            me.userpassinfo.setProperty("remember", "");
+        if (main.userpassinfo.isEmpty()) {
+            main.userpassinfo.setProperty("username", "");
+            main.userpassinfo.setProperty("password", "");
+            main.userpassinfo.setProperty("remember", "");
             try {
-                me.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
+                main.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
             } catch (final Exception ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if (!me.userpassinfo.getProperty("remember", "").equals("")) {
-                Client.jtb.setText(me.userpassinfo.getProperty("username", ""));
-                me.jtp.setText(me.userpassinfo.getProperty("password", ""));
-                me.JRB.setSelected(true);
+            if (!main.userpassinfo.getProperty("remember", "").equals("")) {
+                Client.jtb.setText(main.userpassinfo.getProperty("username", ""));
+                main.jtp.setText(main.userpassinfo.getProperty("password", ""));
+                main.JRB.setSelected(true);
             }
         }
-        me.setBackground(Color.white);
-        me.setLayout(null);
-        me.menu = new JComboBox() {
+        main.setBackground(Color.white);
+        main.setLayout(null);
+        main.menu = new JComboBox<Object>() {
+            private static final long serialVersionUID = -5781421606071388365L;
+
             @Override
             public Dimension getSize() {
                 final Dimension dim = super.getSize();
@@ -297,110 +299,87 @@ public class Client extends JPanel implements Runnable {
                 return dim;
             }
         };
-        me.menu.setRenderer(new RowCellRenderer());
-        me.connect = new JButton("Connect");
-        me.hosting = new JButton("Host");
-        me.refresh = new JButton("Refresh");
-        me.register = new JButton("Register");
-        me.verify = new JButton("Log In");
-        me.ChooseSpells = new JButton("Loadouts");
-        me.chooseclothing = new JButton("Gear");
-        me.mapMaker = new JButton("Map Editor");
-        container.setMaximumSize(me.getSize());
-        me.addMouseListener(inputer);
-        me.addMouseMotionListener(inputer);
+        main.menu.setRenderer(new RowCellRenderer());
+        main.connect = new JButton("Connect");
+        main.hosting = new JButton("Host");
+        main.refresh = new JButton("Refresh");
+        main.register = new JButton("Register");
+        main.verify = new JButton("Log In");
+        main.ChooseSpells = new JButton("Spellbooks");
+        main.chooseclothing = new JButton("Appearance");
+        main.mapMaker = new JButton("Map Editor");
+        container.setMaximumSize(main.getSize());
+        main.addMouseListener(inputer);
+        main.addMouseMotionListener(inputer);
+        main.addMouseWheelListener(inputer);
         container.addKeyListener(inputer);
         container.addMouseListener(inputer);
         container.setResizable(true);
         if (!(args.length > 0 && args[0].equals("Client"))) {
             container.setVisible(true);
         }
-        me.requestFocus();
-        me.add(me.jUs);
-        me.jUs.setLocation(16, 16);
-        me.jUs.setSize(64, 16);
-        me.add(Client.jtb);
+        main.requestFocus();
+        main.add(main.jUs);
+        main.jUs.setLocation(16, 16);
+        main.jUs.setSize(80, 16);
+        main.add(Client.jtb);
         Client.jtb.setLocation(96, 16);
-        me.add(me.jPa);
-        me.jPa.setLocation(16, 32);
-        me.jPa.setSize(80, 16);
-        me.add(me.jtp);
-        me.jtp.setLocation(96, 32);
-        me.add(me.register);
-        me.register.setLocation(32, 54 + 32);
-        me.register.setSize(96, 16);
-        me.add(me.verify);
-        me.verify.setLocation(160, 54 + 32);
-        me.verify.setSize(96, 16);
-        me.add(me.menu);
-        me.menu.setLocation(24, 64 + 8 + 6 + 32);
-        me.menu.setSize(120, 32);
-        me.add(me.connect);
-        me.connect.setLocation(160, 80 + 6 + 32);
-        me.connect.setSize(100, 16);
-        me.add(me.refresh);
-        me.refresh.setLocation(24, 104 + 6 + 32);
-        me.refresh.setSize(120, 16);
-        me.add(me.hosting);
-        me.hosting.setLocation(160, 104 + 6 + 32);
-        me.hosting.setSize(100, 16);
-        me.add(me.ChooseSpells);
-        me.ChooseSpells.setLocation(80, 104 + 6 + 32 + 32);
-        me.ChooseSpells.setSize(140, 16);
-        me.add(me.chooseclothing);
-        me.chooseclothing.setLocation(80, 104 + 6 + 32 + 32 + 32);
-        me.chooseclothing.setSize(140, 16);
+        main.add(main.menu);
+        main.menu.setLocation(-24, -64);
+        main.menu.setSize(0, 0);
+        main.menu.setVisible(false);
+        main.add(main.connect);
+        main.connect.setLocation(80, 48);
+        main.connect.setSize(140, 16);
+        main.add(main.hosting);
+        main.hosting.setLocation(80, 80 + 6 + 32);
+        main.hosting.setSize(140, 16);
+        main.add(main.ChooseSpells);
+        main.ChooseSpells.setLocation(80, 80 + 6 + 32 + 32);
+        main.ChooseSpells.setSize(140, 16);
+        main.add(main.chooseclothing);
+        main.chooseclothing.setLocation(80, 80 + 6 + 32 + 32 + 32);
+        main.chooseclothing.setSize(140, 16);
 
-        me.add(me.mapMaker);
-        me.mapMaker.setLocation(16, 104 + 6 + 32 + 32 + 32 + 32);
-        me.mapMaker.setSize(240, 16);
+        main.add(main.mapMaker);
+        main.mapMaker.setLocation(80, 80 + 6 + 32 + 32 + 32 + 32);
+        main.mapMaker.setSize(140, 16);
         /// me.JRB.setText("Remember me?");
 
-        me.JRB.setActionCommand("RM");
-        me.spellselection = new SpellList1(me);
-        me.spellselection.setVisible(false);
-        me.ChooseSpells.addActionListener(actioner);
-        me.ChooseSpells.setActionCommand(me.ChooseSpells.getText());
-        me.chooseclothing.addActionListener(actioner);
-        me.chooseclothing.setActionCommand(me.chooseclothing.getText());
-        me.mapMaker.addActionListener(actioner);
-        me.mapMaker.setActionCommand(me.mapMaker.getText());
-        me.add(me.JRB);
-        me.JRB.setSize(18, 16);
-        me.JRB.setLocation(80, 54);
-        final JLabel cheese = new JLabel("Remember me?");
-        cheese.setSize(110, 30);
-        cheese.setLocation(110, 48);
-        cheese.setVisible(true);
-        me.add(cheese);
-        // me.JRB.setBackground(Color.white);
-        me.JRB.setVisible(true);
-
+        main.JRB.setActionCommand("RM");
+        main.spellselection = new SpellList1(main);
+        main.spellselection.setVisible(false);
+        main.ChooseSpells.addActionListener(actioner);
+        main.ChooseSpells.setActionCommand(main.ChooseSpells.getText());
+        main.chooseclothing.addActionListener(actioner);
+        main.chooseclothing.setActionCommand(main.chooseclothing.getText());
+        main.mapMaker.addActionListener(actioner);
+        main.mapMaker.setActionCommand(main.mapMaker.getText());
         Client.jtb.setSize(300 - 128, 16);
         Client.jtb.setPreferredSize(Client.jtb.getSize());
         // me.jtb.setLocation(16, 16);dfsdfsdf
         Client.jtb.setVisible(true);
         Client.jtb.requestFocus();
         Client.jtb.addKeyListener(inputer);
-        me.jtp.setSize(300 - 128, 16);
-        me.jtp.setPreferredSize(Client.jtb.getSize());
+        main.jtp.setSize(300 - 128 - 16, 16);
+        main.jtp.setPreferredSize(Client.jtb.getSize());
         // me.jtp.setLocation(16, 16);
-        me.jtp.setVisible(true);
-        me.jtp.requestFocus();
-        me.jtp.addKeyListener(inputer);
-        me.connect.setActionCommand(me.connect.getText());
-        me.connect.addActionListener(actioner);
-        me.hosting.setActionCommand(me.hosting.getText());
-        me.hosting.addActionListener(actioner);
-        me.refresh.setActionCommand(me.refresh.getText());
-        me.refresh.addActionListener(actioner);
-        me.register.setActionCommand(me.register.getText());
-        me.register.addActionListener(actioner);
-        me.verify.setActionCommand(me.verify.getText());
-        me.verify.addActionListener(actioner);
-        me.setFocusable(true);
-        me.addKeyListener(inputer);
-        me.setVisible(true);
+        main.jtp.setVisible(true);
+        main.jtp.requestFocus();
+        main.jtp.addKeyListener(inputer);
+        main.connect.setActionCommand(main.connect.getText());
+        main.connect.addActionListener(actioner);
+        main.hosting.setActionCommand(main.hosting.getText());
+        main.hosting.addActionListener(actioner);
+        main.refresh.setActionCommand(main.refresh.getText());
+        main.refresh.addActionListener(actioner);
+        main.register.setActionCommand(main.register.getText());
+        main.register.addActionListener(actioner);
+        main.verify.setActionCommand(main.verify.getText());
+        main.verify.addActionListener(actioner);
+        main.setFocusable(true);
+        main.addKeyListener(inputer);
+        main.setVisible(true);
         UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
         UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
         immaKeepTabsOnYou.setUI(new BasicTabbedPaneUI() {
@@ -413,30 +392,29 @@ public class Client extends JPanel implements Runnable {
         immaKeepTabsOnYou.addKeyListener(inputer);
         immaKeepTabsOnYou.addMouseListener(inputer);
         immaKeepTabsOnYou.addMouseMotionListener(inputer);
-        immaKeepTabsOnYou.addTab("THEGAME", me);
-        immaKeepTabsOnYou.addTab("SPELLSELECT", me.spellselection);
-        immaKeepTabsOnYou.addTab("SPELLLIST", me.spellselection.choochootrain);
-        immaKeepTabsOnYou.addTab("PASSIVELIST", me.spellselection.choochootrain2);
-        immaKeepTabsOnYou.addTab("ClothingChooser", me.cc);
+        immaKeepTabsOnYou.addTab("THEGAME", main);
+        immaKeepTabsOnYou.addTab("SPELLSELECT", main.spellselection);
+        immaKeepTabsOnYou.addTab("SPELLLIST", main.spellselection.choochootrain);
+        immaKeepTabsOnYou.addTab("PASSIVELIST", main.spellselection.choochootrain2);
+        immaKeepTabsOnYou.addTab("ClothingChooser", main.cc);
         immaKeepTabsOnYou.setLocation(-1, -1);
         immaKeepTabsOnYou.setBackground(Color.black);
         immaKeepTabsOnYou.setBorder(BorderFactory.createEmptyBorder());
         container.setContentPane(immaKeepTabsOnYou);
-        me.repaint();
-        me.mainProcess = new Thread(me);
-        me.mainProcess.start();
-        me.getHosts();
-        me.chooseclothing.setEnabled(false);
-        me.ChooseSpells.setEnabled(false);
-        me.connect.setEnabled(false);
-        me.ST = SystemTray.getSystemTray();
+        main.repaint();
+        main.mainProcess = new Thread(main);
+        main.mainProcess.start();
+        main.getHosts();
+        main.chooseclothing.setEnabled(false);
+        main.ChooseSpells.setEnabled(false);
+        main.connect.setEnabled(false);
+        main.ST = SystemTray.getSystemTray();
         try {
             // container.getContentPane().setB
 
             final PopupMenu pop = new PopupMenu();
-            me.trayIcon = new TrayIcon(
-                    ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.png"));
-            me.trayIcon.setToolTip("DestructibleTerrain");
+            main.trayIcon = new TrayIcon(ResourceLoader.loadImage("GrassTexture.png"));
+            main.trayIcon.setToolTip("DestructibleTerrain");
             final MenuItem exitItem = new MenuItem("Exit");
             final MenuItem hideItem = new MenuItem("Hide");
             final MenuItem showItem = new MenuItem("Show");
@@ -449,14 +427,14 @@ public class Client extends JPanel implements Runnable {
             exitItem.addActionListener(actioner);
             showItem.addActionListener(actioner);
             restartItem.addActionListener(actioner);
-            me.trayIcon.setPopupMenu(pop);
-            me.trayIcon.setActionCommand("Tray");
-            me.trayIcon.addActionListener(actioner);
+            main.trayIcon.setPopupMenu(pop);
+            main.trayIcon.setActionCommand("Tray");
+            main.trayIcon.addActionListener(actioner);
             final Frame frame = new Frame("");
             frame.setUndecorated(true);
             frame.setResizable(false);
             frame.setVisible(false);
-            me.trayIcon.addMouseListener(new MouseListener() {
+            main.trayIcon.addMouseListener(new MouseListener() {
 
                 @Override
                 public void mouseClicked(final MouseEvent e) {
@@ -502,6 +480,16 @@ public class Client extends JPanel implements Runnable {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        Client.XP = main.gameService.getPlayerExperience(Client.jtb.getText(), "PASS IGNORED");
+
+        main.cc.loadClothing();
+        main.spellselection.loadSpells();
+        main.chooseclothing.setEnabled(true);
+        main.ChooseSpells.setEnabled(true);
+        main.connect.setEnabled(true);
+
+        main.gameService.getUnlocks(Client.jtb.getText(), "I NOW DO NOTHING");
+
     }
 
     // @Override
@@ -509,17 +497,15 @@ public class Client extends JPanel implements Runnable {
         try {
             loggedOn = true;
             temp = "C:";// (System.getenv("TEMP"));
-            Grass = ResourceLoader.loadImage("https://west-it.webs.com/Bending/GrassTexture.jpg", "GrassTexture.jpg");
-            Sky = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SkyTexture.jpg", "SkyTexture.jpg");
-            Sand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/SandTexture.jpg", "SandTexture.jpg");
-            Stone = ResourceLoader.loadImage("https://west-it.webs.com/Bending/StoneTexture.jpg", "StoneTexture.jpg");
-            Bark = ResourceLoader.loadImage("https://west-it.webs.com/Bending/BarkTexture.jpg", "BarkTexture.jpg");
-            Ice = ResourceLoader.loadImage("https://west-it.webs.com/Bending/iceTexture.png", "iceTexture.png");
-            Crystal = ResourceLoader.loadImage("https://west-it.webs.com/Bending/crystalTexture.png",
-                    "crystalTexture.png");
-            LavaLand = ResourceLoader.loadImage("https://west-it.webs.com/Bending/lavalandTexture.png",
-                    "lavalandTexture.png");
-            ether = ResourceLoader.loadImage("https://west-it.webs.com/Bending/ether.png", "ether.png");
+            Grass = ResourceLoader.loadImage("GrassTexture.jpg");
+            Sky = ResourceLoader.loadImage("SkyTexture.jpg");
+            Sand = ResourceLoader.loadImage("SandTexture.jpg");
+            Stone = ResourceLoader.loadImage("StoneTexture.jpg");
+            Bark = ResourceLoader.loadImage("BarkTexture.jpg");
+            Ice = ResourceLoader.loadImage("iceTexture.png");
+            Crystal = ResourceLoader.loadImage("crystalTexture.png");
+            LavaLand = ResourceLoader.loadImage("lavalandTexture.png");
+            ether = ResourceLoader.loadImage("ether.png");
             // me.getGraphics().clearRect(0, 0, me.getWidth(), me.getHeight());
             // container.requestFocus();
             // me.transferFocus();
@@ -557,344 +543,21 @@ public class Client extends JPanel implements Runnable {
             connection.setTcpNoDelay(true);
             out = new OrderedOutputStream(connection.getOutputStream());
             input = connection.getInputStream();
-            // out.write(Server.LOGIN);
-            // System.out.println("!!!!!!!!!!!!"+Clothing[1]);
-            final ByteBuffer tt = Server
-                    .putString(ByteBuffer.allocate(username.length() * 4 + 92 + 16).putLong(getAuth()), username)
-                    .put(Clothing);
-            for (int i = 0; i < Colors.length; i++) {
-                tt.putInt(Colors[i]);
-            }
-            for (int i = 0; i < Colors2.length; i++) {
-                tt.putInt(Colors2[i]);
-            }
-            tt.putInt(7);
-            out.addMesssage(tt, Server.LOGIN);
+            localPlayer = new Player(0, 0, Clothing, Colors, Colors2);
+            localPlayer.username = username;
+            out.addMessage(LoginEvent.getPacket(localPlayer));
             ID = -1;
             world.ID = ID;
             playerHitbox = new Rectangle(0, 0, 20, 40);
+            Client c = this; // this is big sad
             communication = new Thread() {
                 @Override
                 public void run() {
                     try {
                         while (gameAlive) {
-                            final int read = input.read();
-                            // System.out.println(read);
-                            // System.out.println("MR: "+Server.MESSAGEIDs[read]);
+                            NetworkMessage m = NetworkMessage.read(input);
+                            NetworkManager.getInstance().getHandler(m).clientReceived(c, m.getContent());
                             pc++;
-                            switch (read) {
-                                case Server.ID:
-                                    ID = Server.readByteBuffer(input).getInt();
-                                    world.ID = ID;
-                                    break;
-                                case Server.MESSAGE:
-                                    final ByteBuffer gotten = Server.readByteBuffer(input);
-                                    final int color = gotten.getInt();
-                                    final String message = Server.getString(gotten);
-                                    addChat(message, new Color(color));
-                                    break;
-                                case Server.LOGIN:
-                                    int iid;
-                                    final ByteBuffer rasputin = Server.readByteBuffer(input);
-                                    iid = rasputin.getInt();
-                                    // iid = input.read();
-                                    final String feliceNavidad = Server.getString(rasputin);
-                                    final Player yes = new Player(300, 300,
-                                            new byte[] { rasputin.get(), rasputin.get(), rasputin.get(), rasputin.get(),
-                                                    rasputin.get(), rasputin.get() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt() },
-                                            new int[] { rasputin.getInt(), rasputin.getInt(), rasputin.getInt(),
-                                                    rasputin.getInt(), rasputin.getInt(), rasputin.getInt() });
-                                    world.playerList.add(yes);
-                                    final boolean sameTeam = rasputin.get() == 12;
-                                    // yes.username = Server.getString(rasputin);
-                                    // system.out.println("Player joined with ID:"+iid);
-                                    if (sameTeam) {
-                                        myTeam.add(iid);
-                                    } else {
-                                        badTeam.add(iid);
-                                    }
-                                    yes.myTeam = sameTeam;
-                                    yes.ID = iid;
-                                    yes.username = feliceNavidad;
-                                    addChat(yes.username + " has joined the game.", Color.RED);
-                                    loggedIn = true;
-                                    break;
-                                case Server.MOVE:
-                                    ByteBuffer reading = Server.readByteBuffer(input);
-                                    final int idtomove = reading.getShort();
-                                    // system.out.println("ID: "+idtomove);
-                                    if (idtomove == ID) {
-                                        world.x = reading.getShort();
-                                        world.y = reading.getShort();
-                                        world.move = reading.getShort();
-                                        world.vspeed = reading.getShort();
-                                        world.leftArmAngle = reading.getShort();
-                                        world.rightArmAngle = reading.getShort();
-                                        world.status = reading.getShort();
-                                    }
-                                    for (final Player r : world.playerList) {
-                                        if (r.ID == idtomove) {
-                                            // system.out.println("hi");
-                                            r.x = reading.getShort();
-                                            r.y = reading.getShort();
-                                            r.move = reading.getShort();
-                                            r.vspeed = reading.getShort();
-                                            r.leftArmAngle = reading.getShort();
-                                            r.rightArmAngle = reading.getShort();
-                                            r.status = reading.getShort();
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                case Server.MAP:
-                                    int x;
-                                    reading = Server.readByteBuffer(input);
-                                    x = reading.getInt();
-                                    // y = input.readInt();
-                                    // System.out.println("SDFSDF"+x);
-                                    for (int i = x; i < x + 100; i++) {
-                                        reading.get(world.ground.cellData[i]);
-                                    }
-                                    // System.out.println("yay");
-                                    sendRequest = true;
-                                    break;
-                                case Server.AI:
-                                    final ByteBuffer reader = Server.readByteBuffer(input);
-                                    // putInt(e.X).putInt(e.Y).putInt(e.HP).putInt(e.move).putInt(e.yspeed).putInt(e.target).putInt(e.id);
-                                    final int redX = reader.getInt();
-                                    final int redY = reader.getInt();
-                                    final int redmove = reader.getInt();
-                                    final int redyspeed = reader.getInt();
-                                    final int redHP = reader.getInt();
-                                    final int redid = reader.getInt();
-                                    final int tar = reader.getInt();
-                                    for (final Entity p : world.entityList) {
-                                        if (!(p instanceof EnemyEntity))
-                                            continue;
-                                        final EnemyEntity e = (EnemyEntity) p;
-                                        if (e.MYID == redid) {
-                                            e.X = redX;
-                                            e.Y = redY;
-                                            e.HP = redHP;
-                                            e.move = redmove;
-                                            e.yspeed = redyspeed;
-                                            e.target = tar;
-                                        }
-
-                                    }
-                                    break;
-                                case Server.ENTIREWORLD:
-                                    // system.out.println("WOAH");
-                                    readWorld();
-                                    // system.out.println("SCORE!");
-                                    busy = false;
-                                    break;
-                                case Server.DIG:
-                                    ByteBuffer toRead = Server.readByteBuffer(input);
-                                    int ix, iy, ir;
-                                    ix = toRead.getInt();
-                                    iy = toRead.getInt();
-                                    ir = toRead.getInt();
-                                    world.ground.ClearCircle(ix, iy, ir);
-                                    // system.out.println("DIG!");
-                                    break;
-                                case Server.FILL:
-                                    toRead = Server.readByteBuffer(input);
-                                    ix = toRead.getInt();
-                                    iy = toRead.getInt();
-                                    ir = toRead.getInt();
-                                    final byte etg = toRead.get();
-                                    world.ground.FillCircleW(ix, iy, ir, etg);
-                                    // system.out.println("FILL!");
-                                    break;
-                                case Server.CHARGE:
-                                    toRead = Server.readByteBuffer(input);
-                                    ix = toRead.getInt();
-                                    iy = toRead.getInt();
-                                    ir = toRead.getInt();
-                                    final int energy = toRead.getInt();
-                                    final int maker = toRead.getInt();
-                                    if (Client.pointDis(world.x, world.y, ix, iy) < ir) {
-                                        energico += energy;
-                                        if (maker != ID && (gameMode > 0 ? !myTeam.contains(maker) : true)) {
-                                            if (maker != 0) {
-                                                lastHit = maker;
-                                            }
-                                            hurt(12);
-                                            killMessage = "~ was electrified by `.";
-                                            if (world.inBounds(world.x, world.y)
-                                                    && world.ground.cellData[(int) world.x][(int) world.y] == World.WATER) {
-                                                hurt(12);
-                                                killMessage = "~ will never go in the water during a storm again, thanks to `!";
-                                            }
-                                        }
-                                    }
-                                    world.entityList.add(new ShockEffectEntity(ix, iy, ir));
-                                    // system.out.println("FILL!");
-                                    break;
-                                case Server.HURT:
-                                    toRead = Server.readByteBuffer(input);
-                                    HP -= toRead.getInt();
-                                    // system.out.println("FILL!");
-                                    break;
-                                case Server.WORLDEXPAND:
-                                    // system.out.println("IT's getting bigger!");
-                                    busy = true;
-                                    toRead = Server.readByteBuffer(input);
-                                    final int newx = toRead.getInt();
-                                    final int si = toRead.getInt();
-                                    final byte dir = toRead.get();
-                                    world.wIdTh += si;
-                                    final byte list[][] = new byte[world.wIdTh][world.hEigHt];
-                                    for (int i = 0; i < world.ground.w; i++) {
-                                        System.arraycopy(world.ground.cellData[i], 0, list[i], 0, world.ground.h);
-                                    }
-                                    world.ground.cellData = list;
-                                    world.ground.w = world.wIdTh;
-                                    if (dir == 1) {
-                                        for (int i = newx; i < world.wIdTh; i++) {
-                                            toRead.get(world.ground.cellData[i]);
-                                        }
-                                    }
-                                    if (dir == 2) {
-                                        for (int i = newx; i < si; i++) {
-                                            toRead.get(world.ground.cellData[i]);
-                                        }
-                                        world.x += si;
-                                    }
-                                    readEntityList(toRead);
-                                    busy = false;
-                                    break;
-                                case Server.SPELL:
-                                    ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    int subID = buf.getInt();
-                                    int px = buf.getInt();
-                                    int py = buf.getInt();
-                                    int mx = buf.getInt();
-                                    int my = buf.getInt();
-                                    int pid = buf.getInt();
-                                    int eid = buf.getInt();
-                                    Spell.getSpell(subID).getActionNetwork(world, px, py, mx, my, pid, eid, buf);
-                                    break;
-                                case Server.FREEZE:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    int fX = buf.getInt();
-                                    int fY = buf.getInt();
-                                    int fR = buf.getInt();
-                                    world.ground.freeze(fX, fY, fR);
-                                    break;
-                                case Server.SANDINATE:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    fX = buf.getInt();
-                                    fY = buf.getInt();
-                                    fR = buf.getInt();
-                                    world.ground.sandinate(fX, fY, fR);
-                                    break;
-                                case Server.PUDDLE:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    fX = buf.getInt();
-                                    fY = buf.getInt();
-                                    fR = buf.getInt();
-                                    world.ground.puddle(fX, fY, fR);
-                                    break;
-                                case Server.DESTROY:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    int idtokill = buf.getInt();
-                                    for (int i = 0; i < world.entityList.size(); i++) {
-                                        if (world.entityList.get(i).MYID == idtokill) {
-                                            world.entityList.remove(i);
-                                            continue;
-                                        }
-                                    }
-                                    break;
-                                case Server.DRAIN:
-                                    buf = Server.readByteBuffer(input);
-                                    final int hpt = buf.getInt();
-                                    HP += hpt;
-                                    break;
-                                case Server.STEAM:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    final int xxxx = buf.getInt(), yyyy = buf.getInt();
-                                    idtokill = buf.getInt();
-                                    for (int i = 0; i < world.entityList.size(); i++) {
-                                        if (world.entityList.get(i).MYID == idtokill) {
-                                            world.entityList.remove(i);
-                                            continue;
-                                        }
-                                    }
-                                    world.entityList.add(new SteamEntity(xxxx, yyyy));
-                                    break;
-                                case Server.DEATH:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    fX = buf.getInt();
-                                    final int fX2 = buf.getInt();
-                                    if (fX2 != fX) {
-                                        if (fX == ID) {
-                                            XP += 25;
-                                            CTD.postXP(XP, username);
-                                            score++;
-                                            if (killingSpree == 0) {
-                                                killingSpree = Math.E;
-                                            } else {
-                                                killingSpree *= Math.E;
-                                            }
-                                        }
-                                        for (final Player p : world.playerList) {
-                                            if (p.ID == fX) {
-                                                p.score++;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case Server.SCORE:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    final int idd = buf.getInt();
-                                    final int scored = buf.getInt();
-                                    if (idd == ID) {
-                                        XP += 10;
-                                        CTD.postXP(XP, username);
-                                        score = scored;
-                                        if (killingSpree == 0) {
-                                            killingSpree = Math.E;
-                                        } else {
-                                            killingSpree *= Math.E;
-                                        }
-                                    }
-                                    for (final Player p : world.playerList) {
-                                        if (p.ID == idd) {
-                                            p.score = scored;
-                                        }
-                                    }
-                                    break;
-                                case Server.LEAVE:
-                                    // ByteBuffer buf;
-                                    buf = Server.readByteBuffer(input);
-                                    fX = buf.getInt();
-                                    for (final Player p : world.playerList) {
-                                        if (p.ID == fX) {
-                                            if (myTeam.contains(p.ID)) {
-                                                myTeam.remove(myTeam.indexOf(p.ID));
-                                            } else {
-                                                badTeam.remove(badTeam.indexOf(p.ID));
-                                            }
-                                            addChat(p.username + " has left the game.", Color.RED);
-                                            world.playerList.remove(p);
-                                            break;
-                                        }
-                                    }
-                                    break;
-                            }
-                            // Thread.sleep(25);
                         }
                     } catch (final Exception ex) {
                         // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -934,6 +597,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     public boolean busy = false;
+    public boolean isMyTurn = true;
     public int lastHit = -1;
     public byte sendcount = 0;
     public ArrayList<int[]> stuff = new ArrayList<>();
@@ -1010,7 +674,6 @@ public class Client extends JPanel implements Runnable {
             try {
                 // Thread.yield();
             } catch (final Exception e2) {
-                // TODO Auto-generated catch block
                 e2.printStackTrace();
             }
             final long now = System.nanoTime();
@@ -1018,12 +681,10 @@ public class Client extends JPanel implements Runnable {
             delta += (now - lastTime) / (1000000000 / Constants.FPS);
             owner.setTitle(" Packet Count: " + pc + " FPS: " + (1000000000 / (now - lastTime)));
             lastTime = now;
-
+            boolean willSendMovement = false;
             if (!owner.isVisible()) {
                 if (!SystemTray.isSupported()) {
-                    if (!"".equals(hostIP)) {
-                        CTD.removeServer(hostIP);
-                    }
+                    gameService.tryToRemoveServer(hostIP);
                     System.exit(0);
                 }
 
@@ -1034,7 +695,6 @@ public class Client extends JPanel implements Runnable {
                 try {
                     Thread.sleep(10);
                 } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
                 continue;
@@ -1043,133 +703,152 @@ public class Client extends JPanel implements Runnable {
                 try {
                     Thread.sleep(10);
                 } catch (final InterruptedException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
             while (delta >= 1) {
+                ticks++;
                 delta -= 1;
-                // System.out.println(delta);
-                if (removeAura > 0) {
-                    removeAura--;
-                    world.status |= World.ST_DRAIN;
-                    if (removeAura == 0) {
-                        world.status &= ~World.ST_DRAIN;
-                        sendMovement();
-                    }
-                }
-                if (turnVisible > 0) {
-                    turnVisible--;
-                    world.status |= World.ST_INVISIBLE;
-                    if (turnVisible == 0) {
-                        world.status &= ~World.ST_INVISIBLE;
-                        sendMovement();
-                    }
-                }
-                if (gameMode == Server.THEHIDDEN) {
-                    if (goodTeam) {
-                        world.status |= World.ST_INVISIBLE;
-                        spellBook = 5;// Force use of TheHidden book
-                    } else {
-                        if (!badTeam.isEmpty()) {
-                            lastHit = badTeam.get(0);
+                isMyTurn = (gameMode != Server.TURNBASED) || (whoseTurn == ID);
+
+                if (isMyTurn) {
+                    if (removeAura > 0) {
+                        removeAura--;
+                        world.status |= Constants.ST_DRAIN;
+                        if (removeAura == 0) {
+                            world.status &= ~Constants.ST_DRAIN;
+                            willSendMovement = true;
                         }
                     }
-                }
-
-                if (timeToHeal++ > 30 && HP < MAXHP) {
-                    timeToHeal = 0;
-                    HP++;
-                }
-                if (!"Air Run".equals(passiveList[spellBook].getName())) {
-                    runningSpeed = 1;
-                }
-                if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
-                        && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
-                    world.floatiness = 0;
-                    maxlungs = 100;
-                }
-                if (!"Water Treader".equals(passiveList[spellBook].getName())) {
-                    swimmingSpeed = 1;
-                }
-                if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
-                    MAXHP = 100;
-                }
-                if (!"Overcharged".equals(passiveList[spellBook].getName())) {
-                    maxeng = 1000;
-                }
-                if (HP > MAXHP) {
-                    HP = MAXHP;
-                }
-                if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
-                    knockbackDecay = 1;
-                }
-                passiveList[spellBook].getPassiveAction(this);
-                if (world.x > world.wIdTh) {
-                    world.x = world.wIdTh;
-                }
-                if (world.checkCollision(world.x, world.y - World.head)
-                        || world.isLiquid(world.x, world.y - World.head)) {
-                    if (lungs-- < 0) {
-                        HP--;
-                        killMessage = "~ suffocated after fighting `...";
+                    if (turnVisible > 0) {
+                        turnVisible--;
+                        world.status |= Constants.ST_INVISIBLE;
+                        if (turnVisible == 0) {
+                            world.status &= ~Constants.ST_INVISIBLE;
+                            willSendMovement = true;
+                        }
                     }
-                } else {
-                    lungs = maxlungs;
-                }
-                if (energico < 0) {
-                    energico = 0;
-                }
-                if (world.isType((int) world.x, (int) world.y, World.LAVA)) {
-                    world.status |= World.ST_FLAMING;
-                    killMessage = "~ burned to a crisp after fighting `!";
-                }
-                if ((world.status & World.ST_FLAMING) != 0) {
-                    HP -= random.nextInt(2);
-                    if ((passiveList[spellBook].getName().equals("Fireproof"))) {
-                        energico += (inputer.doublecast * 3);
+                    if (gameMode == Server.THEHIDDEN) {
+                        if (goodTeam) {
+                            world.status |= Constants.ST_INVISIBLE;
+                            spellBook = 5;// Force use of TheHidden book
+                        } else {
+                            if (!badTeam.isEmpty()) {
+                                lastHit = badTeam.get(0);
+                            }
+                        }
+                    } else {
+                        if (spellBook >= 5) {
+                            spellBook = 0;
+                        }
                     }
-                    if (random.nextInt(10) == 0) {
-                        world.status &= ~World.ST_FLAMING;// Stop being on fire
-                    }
-                }
-                if ((world.status & World.ST_SHOCKED) != 0) {
-                    energico -= 25;
-                    if (random.nextInt(10) == 0) {
-                        world.status &= ~World.ST_SHOCKED;// Stop being on shock
-                    }
-                }
-                if (world.inBounds(world.x, world.y) && energico > 0
-                        && world.isType((int) world.x, (int) world.y, World.JUICE)) {
-                    if (HP < MAXHP) {
-                        energico -= 40;
+                    if (timeToHeal++ > 30 && HP < MAXHP) {
+                        timeToHeal = 0;
                         HP++;
                     }
-                }
-                if (world.isIce((int) world.x, (int) world.y + 6)) {
-                    xspeed += world.move;
-                    xspeed *= 1.4;
-                    if (xspeed > 15) {
-                        xspeed = 15;
+                    if (world.inBounds(world.x, world.y) && energico > 0
+                        && world.isType((int) world.x, (int) world.y, World.JUICE)) {
+                        if (HP < MAXHP) {
+                            energico -= 40;
+                            HP++;
+                        }
                     }
-                    if (xspeed < -15) {
-                        xspeed = -15;
+                    if (!"Air Run".equals(passiveList[spellBook].getName())) {
+                        runningSpeed = 1;
                     }
-                }
-                if (world.keys[KeyEvent.VK_S]) {
-                    // world.move = 0;
-                    if ((dig += 2) >= 100) {
-                        dig = 0;
-                        Spell.getSpell(4).getAction(this);
+                    if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
+                            && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
+                        world.floatiness = 0;
+                        maxlungs = 100;
+                    }
+                    if (!"Water Treader".equals(passiveList[spellBook].getName())) {
+                        swimmingSpeed = 1;
+                    }
+                    if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
+                        MAXHP = 100;
+                    }
+                    if (!"Overcharged".equals(passiveList[spellBook].getName())) {
+                        maxeng = 1000;
+                    }
+                    if (HP > MAXHP) {
+                        HP = MAXHP;
+                    }
+                    if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
+                        knockbackDecay = 1;
+                    }
+                    passiveList[spellBook].getPassiveAction(this);
+                    if (world.x > world.wIdTh) {
+                        world.x = world.wIdTh;
+                    }
+                    if (world.checkCollision(world.x, world.y - World.head)
+                            || world.isLiquid(world.x, world.y - World.head)) {
+                        if (lungs-- < 0) {
+                            HP--;
+                            killMessage = "~ suffocated after fighting `...";
+                        }
+                    } else {
+                        lungs = maxlungs;
+                    }
+                    if (energico < 0) {
+                        energico = 0;
+                    }
+                    if (world.isType((int) world.x, (int) world.y, Constants.LAVA)) {
+                        world.status |= Constants.ST_FLAMING;
+                        killMessage = "~ burned to a crisp after fighting `!";
+                    }
+                    if ((world.status & Constants.ST_FLAMING) != 0) {
+                        HP -= random.nextInt(2);
+                        if ((passiveList[spellBook].getName().equals("Fireproof"))) {
+                            energico += (inputer.doublecast * 3);
+                        }
+                        if (random.nextInt(10) == 0) {
+                            world.status &= ~Constants.ST_FLAMING;// Stop being on fire
+                        }
+                    }
+                    if ((world.status & Constants.ST_SHOCKED) != 0) {
+                        energico -= 25;
+                        if (random.nextInt(10) == 0) {
+                            world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
+                        }
+                    }
+                    /*
+                     * if (world.isIce((int) world.x, (int) world.y + 6)) { xspeed += world.move;
+                     * 
+                     * // Removed for now because this makes people angry xspeed *= 1.4; if (xspeed
+                     * > 15) { xspeed = 15; } if (xspeed < -15) { xspeed = -15; } }
+                     */
+
+                    // @TODO : be carefull of SRP && OCP
+                    dig = world.getIncrementedDig(dig, Spell.lookup("AirbendingAir"), this);
+
+                    if (energico < maxeng) {
+                        energico += engrecharge;
+                    } else {
+                        energico = maxeng;
+                    }
+
+                    if (!world.isSolid(world.x + (int) xspeed, world.y)) {
+                        world.x += xspeed;
+                    }
+
+                    if (world.vspeed >= 0) {
+                        if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
+                            world.vspeed *= knockbackDecay;
+                        }
+                        xspeed *= .75 * knockbackDecay;
 
                     }
-                } else {
-                    dig = 0;
                 }
+
+                if (Math.abs(xspeed) < .001 && xspeed != 0) {
+                    xspeed = 0;
+                    willSendMovement = true;
+                }
+
                 for (final Player p : world.playerList) {
-                    if ((p.status & World.ST_DRAIN) != 0) {
-                        if (Math.abs(p.x - world.x) < World.AURA_RADIUS / 2) {
-                            if (Math.abs(p.y - world.y) < World.AURA_RADIUS / 2) {
+                    if ((p.status & Constants.ST_DRAIN) != 0) {
+                        if (Math.abs(p.x - world.x) < Constants.AURA_RADIUS / 2) {
+                            if (Math.abs(p.y - world.y) < Constants.AURA_RADIUS / 2) {
                                 lastHit = p.ID;
                                 killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
                                 HP--;// Lose health from aura
@@ -1178,244 +857,15 @@ public class Client extends JPanel implements Runnable {
                     }
                 }
                 for (final Entity e : world.entityList) {
-                    if (e instanceof MissileEntity) {
-                        final MissileEntity me = (MissileEntity) e;
-                        // if (pointDis(me.X, me.Y, world.x, world.y)<me.radius*2&&me.maker!=ID)
-                        if (checkCollision(me.X, me.Y) && me.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me.maker) : true)) {
-                            me.alive = false;
-                            hurt(10);
-                            xspeed += 7 - random.nextInt(14);
-                            world.vspeed -= 5;
-                            lastHit = me.maker;
-                            killMessage = "~ was blown away by `.";
-                        }
-                    }
-                    if (e instanceof TornadoEntity) {
-                        final TornadoEntity me2 = (TornadoEntity) e;
-                        if (checkCollision(me2.X, me2.Y) && me2.life < 80) {
-                            hurt(1);
-                            // world.vspeed-=1;
-                            xspeed += 1 - random.nextInt(2);
-                            xspeed *= -1;
-                            world.x = (int) me2.X + (int) xspeed;
-                            world.move = 0;
-                            lastHit = me2.maker;
-                            killMessage = "~ was sucked into `'s Tornado.";
-                        }
-                    }
-                    if (e instanceof GustEntity) {
-                        final GustEntity me2 = (GustEntity) e;
-                        if (checkCollision(me2.X, me2.Y)) {
-                            hurt(7);
-                            world.vspeed += me2.yspeed * 2;
-                            xspeed += me2.xspeed * 2;
-                            me2.alive = false;
-                            lastHit = me2.maker;
-                            lungs = maxlungs;
-                            killMessage = "~ met `'s gust of air!";
-                        }
-                    }
-                    if (e instanceof RockEntity) {
-                        final RockEntity me3 = (RockEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(18);
-                            world.vspeed -= 5;
-                            xspeed += 7 - random.nextInt(14);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ was built into a bridge by `.";
-                        }
-                    }
-                    if (e instanceof FireBallEntity) {
-                        final FireBallEntity me3 = (FireBallEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(15);
-                            world.status |= World.ST_FLAMING;
-                            world.vspeed -= 7;
-                            xspeed += 9 - random.nextInt(18);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            world.status |= World.ST_FLAMING;
-                            killMessage = "~ was burninated by `.";
-                        }
-                    }
-                    if (e instanceof FirePuffEntity) {
-                        final FirePuffEntity me3 = (FirePuffEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(2);
-                            world.status |= World.ST_FLAMING;
-                            world.vspeed -= 2;
-                            xspeed += 2 - random.nextInt(4);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            world.status |= World.ST_FLAMING;
-                            killMessage = "~ was set ablaze by `.";
-                        }
-                    }
-                    if (e instanceof EnemyEntity) {
-                        final EnemyEntity me3 = (EnemyEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.master != ID
-                                && (gameMode > 0 ? !myTeam.contains(me3.master) : true)) {
-                            hurt(7);
-                            world.vspeed -= 4;
-                            xspeed += 4 - random.nextInt(8);
-                            lastHit = me3.master;
-                            killMessage = "~ was defeated by `'s dark minion.";
-                        }
-                    }
-                    if (e instanceof BuritoEntity) {
-                        final BuritoEntity me3 = (BuritoEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(65);
-                            world.status |= World.ST_FLAMING;
-                            world.vspeed -= 39;
-                            xspeed += 47 - random.nextInt(94);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            world.status |= World.ST_FLAMING;
-                            killMessage = "~ shouldn't have stolen `'s burito...";
-                        }
-                    }
-                    if (e instanceof LavaBallEntity) {
-                        final LavaBallEntity me3 = (LavaBallEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            lastHit = me3.maker;
-                            killMessage = "How did ` beat ~?";
-                            me3.alive = false;
-                        }
-                    }
-                    if (e instanceof SoulDrainEntity) {
-                        final SoulDrainEntity me3 = (SoulDrainEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            lastHit = me3.maker;
-                            killMessage = "~'s soul was stolen by `!";
-                            me3.alive = false;
-                            final ByteBuffer bb = ByteBuffer.allocate(8);
-                            bb.putInt(lastHit).putInt(hurt(21));
-                            world.vspeed -= 5;
-                            xspeed += 7 - random.nextInt(14);
-                            try {
-                                out.addMesssage(bb, Server.DRAIN);
-                            } catch (final IOException ex) {
-                                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    }
-                    if (e instanceof FireJumpEntity) {
-                        final FireJumpEntity me3 = (FireJumpEntity) e;
-                        if (pointDis(me3.X, me3.Y, world.x, world.y) < me3.radius * 4 && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(15);
-                            world.status |= World.ST_FLAMING;
-                            world.vspeed += me3.yspeed * 2;
-                            xspeed += me3.xspeed;
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ was flung into orbit by `'s falcon pawnch!";
-                        }
-                    }
-                    if (e instanceof ShardEntity) {
-                        final ShardEntity me3 = (ShardEntity) e;
-                        if (pointDis(me3.X, me3.Y - World.head, world.x, world.y) < me3.radius * 4 && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(15);
-                            world.vspeed -= 5;
-                            xspeed += 7 - random.nextInt(14);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ was sniped by `.";
-                        }
-                    }
-                    if (e instanceof SandEntity) {
-                        final SandEntity me3 = (SandEntity) e;
-                        final double d = pointDis(me3.X, me3.Y, world.x, world.y);
-                        // System.out.println(d);
-                        if (d < me3.radius * 3 && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(2);
-                            world.vspeed -= 1;
-                            xspeed += (me3.xspeed / 64);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ was shredded by `'s shotgun.";
-                        }
-                    }
-                    if (e instanceof IceShardEntity) {
-                        final IceShardEntity me3 = (IceShardEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(15);
-                            world.vspeed -= 5;
-                            xspeed += 7 - random.nextInt(14);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ was hit by `'s icey attack!";
-                        }
-                    }
-                    if (e instanceof SnowEntity) {
-                        final SnowEntity me3 = (SnowEntity) e;
-                        if (checkCollision(me3.X, me3.Y) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(8);
-                            world.vspeed -= 3;
-                            xspeed += 3 - random.nextInt(6);
-                            lastHit = me3.maker;
-                            me3.alive = false;
-                            killMessage = "~ will need to be thawed out after fighting `!";
-                        }
-                    }
-                    if (e instanceof SpoutEntity) {
-                        final SpoutEntity me3 = (SpoutEntity) e;
-                        if (checkCollision(me3.X, me3.Y)) {
-                            if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                                hurt(5);
-                                lastHit = me3.maker;
-                            }
-                            world.vspeed -= 5;
-                            killMessage = "~ was kicked out of `'s swimming pool.";
-                        }
-                    }
-                    if (e instanceof BallLightningEntity) {
-                        final BallLightningEntity me3 = (BallLightningEntity) e;
-                        if (checkCollision(e.X, e.Y)) {
-                            if (me3.maker != ID && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                                hurt(10);
-                                lastHit = me3.maker;
-                                world.vspeed -= random.nextInt(22);
-                                xspeed += 18 - random.nextInt(36);
-                                killMessage = "~ was shockingly killed by `!";
-                            }
-                        }
-                    }
-                    if (e instanceof WallofFireEntity) {
-                        final WallofFireEntity me3 = (WallofFireEntity) e;
-                        checkCollision(me3.X, me3.Y);// Just to move the hitbox so when it is passed, it works
-                        // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
-                        if (me3.checkCollision(playerHitbox) && me3.maker != ID
-                                && (gameMode > 0 ? badTeam.contains(me3.maker) : true)) {
-                            hurt(35);
-                            me3.alive = false;
-                            lastHit = me3.maker;
-                            world.vspeed -= 8;
-                            xspeed += 9 - random.nextInt(18);
-                            world.status |= World.ST_FLAMING;
-                            killMessage = "~ smelled `'s armpits, and then died.";
-                        }
-                    }
+                    e.checkAndHandleCollision(this);
                 }
-
+                world.determineInc();
                 if (world.keys[KeyEvent.VK_CONTROL] && !world.dead) {
                     final double direction = Client.pointDir(150, 150, world.mouseX, world.mouseY);
                     final double distance = Client.pointDis(150, 150, world.mouseX, world.mouseY) / 8;
                     world.incX += Client.lengthdir_x(distance, direction);
                     world.incY -= Client.lengthdir_y(distance, direction);
+                    world.cameraMoved = true;
                 }
                 if (world.dead) {
                     world.status = 0;
@@ -1437,16 +887,17 @@ public class Client extends JPanel implements Runnable {
                     this.lungs = this.maxlungs;
                     world.y = -50;
                     world.x = -50;
+                    Spell.randomSpell.setSpells();
                     if (killingSpree >= 148.413d) {
-                        CTD.postRSSfeed(username + " had a streak going",
-                                ((int) Math.log(killingSpree)) + " kills in a row!");// Anti-cheating - use logs
+                        // Anti-cheating - use logs
+                        gameService.feedRss(String.format("%s had a streak going", username),
+                                String.format("%o kills in a row!", (int) Math.log(killingSpree)));
                     }
                     killingSpree = 0;
                     world.dead = true;
                     // this.chatActive = false;
-                    final ByteBuffer die = ByteBuffer.allocate(5).putInt(lastHit);
                     try {
-                        out.addMesssage(die, Server.DEATH);
+                        out.addMessage(DeathEvent.getPacket(lastHit, ID));
                     } catch (final IOException ex) {
                         // ex.printStackTrace();
                     }
@@ -1458,59 +909,44 @@ public class Client extends JPanel implements Runnable {
                                 0x04FFF8);// username + " has been defeated by "+getKiller(lastHit)
                     }
                     try {
-                        this.sendMovement();
+                        willSendMovement = true;
                     } catch (final Exception ex) {
                         // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                if (energico < maxeng) {
-                    energico += engrecharge;
-                } else {
-                    energico = maxeng;
-                }
-                if (world.keys[KeyEvent.VK_E]) {
-                    world.incX += 10;
-                }
-                if (world.keys[KeyEvent.VK_Q]) {
-                    world.incX -= 10;
-                }
-                if (world.keys[KeyEvent.VK_Z]) {
-                    world.incX = 0;
-                    world.incY = 0;
-                }
-                if (!world.isSolid(world.x + (int) xspeed, world.y)) {
-                    world.x += xspeed;
-                }
-                if (world.vspeed >= 0) {
-                    if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
-                        world.vspeed *= knockbackDecay;
-                    }
-                    xspeed *= .75 * knockbackDecay;
-                    if (Math.abs(xspeed) < .001 && xspeed != 0) {
-                        xspeed = 0;
-                        sendMovement();
-                    }
-                }
+
                 // prevMove = world.move;
                 world.onUpdate();
-
+                //TODO: remove duplicated variables
+                localPlayer.x = world.x;
+                localPlayer.y = world.y;
+                localPlayer.status = world.status;
+                localPlayer.leftArmAngle = world.leftArmAngle;
+                localPlayer.rightArmAngle = world.rightArmAngle;
+                if (Math.signum(world.move) == -1) {
+                    localPlayer.left = -1;
+                }
+                if (Math.signum(world.move) == 1) {
+                    localPlayer.left = 1;
+                }
                 if (((((Math.signum(prevVspeed) != Math.signum(world.vspeed)) || ((prevMove) != (world.move)))
-                        || counting++ > 200))) {
+                        || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE))) {
                     counting = 0;
                     try {
-                        sendMovement();
+                        willSendMovement = true;
                         prevMove = world.move;
-                        if (sendRequest && sendcount++ >= 30) {
-                            sendcount = 0;
-                            // System.out.println("REQUEST START");
-                            final ByteBuffer bb = ByteBuffer.allocate(24);
-                            out.addMesssage(bb.putInt(1), Server.MAP);
-                            sendRequest = false;
-                        }
                     } catch (final Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
+                }
+                if (sendRequest && sendcount++ >= Constants.NETWORK_UPDATE_MAP_RATE) {
+                    sendcount = 0;
+                    try {
+                        out.addMessage(MapEvent.getPacketClient());
+                    } catch (final Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    sendRequest = false;
                 }
 
                 prevVspeed = world.vspeed;
@@ -1520,7 +956,13 @@ public class Client extends JPanel implements Runnable {
 
                 if (world.keys[KeyEvent.VK_SPACE]) {
                 }
-
+            }
+            if (willSendMovement) {
+                try {
+                    sendMovement();
+                } catch (final Exception ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             try {
                 world.ground.handleWater();
@@ -1537,7 +979,7 @@ public class Client extends JPanel implements Runnable {
 
     }
 
-    public String getKiller(final int i) {
+    private String getKiller(final int i) {
         for (final Player p : world.playerList) {
             if (p.ID == i) {
                 return p.username;
@@ -1562,13 +1004,11 @@ public class Client extends JPanel implements Runnable {
             }
             final String yes = JOptionPane.showInputDialog("Server Name?");
             if (yes != null) {
-                serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
-
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                String serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
+                gameService.tryToCreateServer(serverName, ip);
                 return ip;
             } else {
-                serverName = "SERVER";
-                CTD.addServer(serverName.length() > 0 ? serverName : "SERVER", ip);
+                gameService.tryToCreateServer(GameService.DEFAULT_SERVER_NAME, ip);
                 // ip = InetAddress.getLocalHost().getHostAddress();
             }
             return "NO";
@@ -1586,7 +1026,7 @@ public class Client extends JPanel implements Runnable {
         ArrayList<String> yay = null;
         while (yay == null) {
             // System.err.println("LOOKING");
-            yay = CTD.getServers();
+            yay = gameService.retrieveServers();
         }
         // System.out.println(yay.size());
         hosts = new String[yay.size() / 3];
@@ -1607,42 +1047,11 @@ public class Client extends JPanel implements Runnable {
         for (int i = 0; i < newRows.length; i++) {
             newRows[i] = new Row(names[i], "PINGING", counts[i]);
         }
-        menu.setModel(new JComboBox<>(newRows).getModel());
+        menu.setModel(new JComboBox<Object>(newRows).getModel());
         // menu.setModel(new JComboBox<>(names).getModel());
         if (pinger != null) {
             pinger.interrupt();
         }
-        Runnable waffles;
-        waffles = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < counts.length; i++) {
-                    String st = "DOWN";
-                    try {
-                        final Scanner n = new Scanner(
-                                Runtime.getRuntime().exec("ping " + hosts[i] + " -n 1").getInputStream());
-                        while (n.hasNext()) {
-                            st += n.nextLine();
-                        }
-                        // System.out.println(st);
-                        final Pattern p = Pattern.compile("Average = (.*?)ms");
-                        final Matcher m = p.matcher(st);
-                        if (m.find()) {
-                            st = "PING:   " + m.group(1);
-                        }
-                    } catch (final IOException ex) {
-                    }
-                    ((Row) menu.getModel().getElementAt(i)).val = st;
-                    try {
-                        Thread.sleep(10);
-                    } catch (final InterruptedException e) {
-                        return;
-                    }
-                }
-            }
-        };
-        pinger = new Thread(waffles);
-        pinger.start();
     }
 
     @Override
@@ -1656,7 +1065,7 @@ public class Client extends JPanel implements Runnable {
         DoubleBufferGraphics.setColor(getForeground());
         paint(DoubleBufferGraphics);
         // paint(GameGraphics);
-        GameGraphics.drawImage(doubleBuffer, 0, 0, getWidth(), getHeight(), this);
+        GameGraphics.drawImage(doubleBuffer, 0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT, this);
     }
 
     @Override
@@ -1697,15 +1106,16 @@ public class Client extends JPanel implements Runnable {
                     world.dead = false;
                     passiveList[spellBook].onSpawn(this);
                     spellselection.setVisible(false);
+                    Spell.randomSpellMatch.setSpells();
                 }
                 biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         null);
                 biggraphicsBuffer.setColor(Color.white);
-                biggraphicsBuffer.fillRect(399, 199, 100, 50);
+                biggraphicsBuffer.fillRect(399, 199, 120, 50);
                 biggraphicsBuffer.setColor(Color.black);
-                biggraphicsBuffer.drawRect(400, 200, 100, 50);
-                biggraphicsBuffer.drawRect(399, 199, 100, 50);
-                biggraphicsBuffer.drawString("LOADOUTS", 400, 230);
+                biggraphicsBuffer.drawRect(400, 200, 120, 50);
+                biggraphicsBuffer.drawRect(399, 199, 120, 50);
+                biggraphicsBuffer.drawString("LOADOUTS", 404, 230);
                 biggraphicsBuffer.drawString("Starting match in " + (1 + (matchOver / 40)) + "...", 360, 300);
                 biggraphicsBuffer.drawString("Combatants:", 400, 326);
                 for (int i = 0; i < world.playerList.size(); i++) {
@@ -1738,7 +1148,7 @@ public class Client extends JPanel implements Runnable {
                 if (lungs < maxlungs) {
                     graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 66, 32, 4);
                 }
-                graphicsBuffer.drawRect(0, 0, 4, 300);
+                graphicsBuffer.drawRect(0, 0, 4, Constants.HEIGHT_INT);
                 graphicsBuffer.setColor(Color.green);
                 graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 63,
                         (int) (30d * ((double) HP / (double) MAXHP)), 2);
@@ -1764,33 +1174,34 @@ public class Client extends JPanel implements Runnable {
                 graphicsBuffer.drawRect(1, 1, 2,
                         (int) ((double) Constants.HEIGHT_INT * ((double) dpyeng / (double) maxeng)));
                 for (int i = 0; i < 5; i++) {
-                    graphicsBuffer.drawImage(spellList[spellBook][i].getImage().getImage(), 4 + i * 34, 0, 32, 16,
-                            this);
+                    graphicsBuffer.drawImage(spellList[spellBook][i].getEffectiveSpell(i).getImage().getImage(),
+                            4 + i * 34, 0, 32, 16, this);
                     if (this.leftClick == i) {
                         graphicsBuffer.setColor(Color.orange);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                         graphicsBuffer.drawString("L", 4 + i * 34, 10);
+                    } else if (this.rightClick == i) {
+                        graphicsBuffer.setColor(Color.red);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("R", 4 + i * 34, 10);
+                    } else if (this.midClick == i) {
+                        graphicsBuffer.setColor(Color.YELLOW);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                        graphicsBuffer.drawString("M", 4 + i * 34, 10);
+                    } else if (inputer.setTo == i) {
+                        graphicsBuffer.setColor(Color.GREEN);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                     } else {
-                        if (this.rightClick == i) {
-                            graphicsBuffer.setColor(Color.red);
-                            graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                            graphicsBuffer.drawString("R", 4 + i * 34, 10);
-                        } else {
-                            if (this.midClick == i) {
-                                graphicsBuffer.setColor(Color.YELLOW);
-                                graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                graphicsBuffer.drawString("M", 4 + i * 34, 10);
-                            } else {
-                                if (inputer.setTo == i) {
-                                    graphicsBuffer.setColor(Color.GREEN);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                                } else {
-                                    graphicsBuffer.setColor(Color.white);
-                                    graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-
-                                }
-                            }
-                        }
+                        graphicsBuffer.setColor(Color.white);
+                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
+                    }
+                    if (!spellList[spellBook][i].isEnergyEfficient(this, i)) {
+                        graphicsBuffer.setColor(Color.MAGENTA);
+                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 14);
+                    }
+                    if (!spellList[spellBook][i].isCooledDown(this, i)) {
+                        graphicsBuffer.setColor(Color.CYAN);
+                        graphicsBuffer.drawRect(6 + i * 34, 2, 28, 12);
                     }
                 }
                 graphicsBuffer.setColor(Color.BLUE);
@@ -1813,7 +1224,7 @@ public class Client extends JPanel implements Runnable {
                 biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         this);
                 world.drawPlayers(biggraphicsBuffer);
-
+                localPlayer.onDraw(biggraphicsBuffer, world.viewX, world.viewY);
                 for (final Entity e : world.entityList) {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
@@ -1869,8 +1280,8 @@ public class Client extends JPanel implements Runnable {
                         biggraphicsBuffer.drawString("You were defeated, press space to get back in on the action!",
                                 128, 128);
                         biggraphicsBuffer.drawString("In the meantime, use S and W to switch loadouts.", 128, 144);
-                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40)) + "...",
-                                128, 160);
+                        biggraphicsBuffer.drawString("Forced respawn in " + (1 + ((400 - forcedRespawn) / 40))
+                                + (!isMyTurn ? " seconds after your turn starts" : " seconds..."), 128, 160);
                     }
                     if (chatActive) {
                         biggraphicsBuffer.setColor(Color.gray);
@@ -1887,8 +1298,8 @@ public class Client extends JPanel implements Runnable {
                             biggraphicsBuffer.setColor(Color.BLACK);
                         }
                         for (int xxx = 0; xxx < spellList[yyy].length; xxx++) {
-                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getName(), 128 + (xxx * 128),
-                                    300 + (yyy * 64));
+                            biggraphicsBuffer.drawString(spellList[yyy][xxx].getEffectiveSpell(xxx).getName(),
+                                    128 + (xxx * 128), 300 + (yyy * 64));
                         }
                     }
                     if (world.keys[KeyEvent.VK_W]) {
@@ -1903,8 +1314,11 @@ public class Client extends JPanel implements Runnable {
                         }
                         world.keys[KeyEvent.VK_S] = false;
                     }
+                    if (isMyTurn) {
+                        forcedRespawn++;
+                    }
                     if ((!(gameMode == Server.THEHIDDEN && !goodTeam)) || lastHit == ID) {
-                        if (world.keys[KeyEvent.VK_SPACE] || forcedRespawn++ > 400) {
+                        if (world.keys[KeyEvent.VK_SPACE] || forcedRespawn > 400) {
                             forcedRespawn = 0;
                             world.y = 0;
                             world.x = (goodTeam ? world.wIdTh / 2 : 0) + random.nextInt(world.wIdTh / 2);
@@ -1927,11 +1341,8 @@ public class Client extends JPanel implements Runnable {
     }
 
     public void sendMessage(final String s, final int color) {
-        final ByteBuffer bb = ByteBuffer.allocate(s.length() * 4 + 4);
-        bb.putInt(color);
-        Server.putString(bb, s);
         try {
-            out.addMesssage(bb, Server.MESSAGE);
+            out.addMessage(MessageEvent.getPacket(color, s));
         } catch (final IOException ex) {
             // ex.printStackTrace();
         }
@@ -1953,11 +1364,10 @@ public class Client extends JPanel implements Runnable {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
-    public void readWorld() throws Exception {
-        ByteBuffer toRead;
+    public void readWorld(ByteBuffer toRead) throws Exception {
         busy = true;
+        world.following = null;
         world.status = 0;
-        toRead = Server.readByteBuffer(input);// ByteBuffer.wrap(buf);
         // //system.out.println(toRead.remaining());
         world.ground.w = toRead.getInt();
         world.ground.h = toRead.getInt();
@@ -1988,8 +1398,8 @@ public class Client extends JPanel implements Runnable {
         }
         goodTeam = true;
         if (badTeam.contains(ID)) {
-            final ArrayList<Integer> TeamTemp = (ArrayList<Integer>) badTeam.clone();
-            badTeam = (ArrayList<Integer>) myTeam.clone();
+            final ArrayList<Integer> TeamTemp = badTeam;
+            badTeam = myTeam;
             myTeam = TeamTemp;
             goodTeam = false;
         }
@@ -2039,18 +1449,8 @@ public class Client extends JPanel implements Runnable {
             return;
         }
         try {
-            // out.write(Server.MOVE);
-            final ByteBuffer toSend = ByteBuffer.allocate(4 * 4);
-            toSend.putShort((short) world.x);
-            toSend.putShort((short) world.y);
-            toSend.putShort((short) world.move);
-            toSend.putShort((short) world.vspeed);
-            toSend.putShort((short) world.leftArmAngle);
-            toSend.putShort((short) world.rightArmAngle);
-            toSend.putShort(world.status);
-            toSend.putShort(HP);
-            // Server.writeByteBuffer(toSend, out);
-            out.addMesssage(toSend, Server.MOVE);
+            out.addMessage(MoveEvent.getPacket(world.x, world.y, world.move, world.vspeed, world.leftArmAngle,
+                    world.rightArmAngle, world.status, HP, world.ID, world.floatiness));
 
         } catch (final Exception e) {
             // e.printStackTrace();
@@ -2066,11 +1466,9 @@ public class Client extends JPanel implements Runnable {
                 if (!toRead.hasRemaining())
                     break;
                 final String className = Server.getString(toRead);
-                final Class[] args1 = new Class[2];
-                args1[0] = ByteBuffer.class;
-                args1[1] = World.class;
                 try {
-                    Class.forName(className).getMethod("reconstruct", args1).invoke(null, toRead, world);
+                    Class.forName(className).getMethod("reconstruct", ByteBuffer.class, World.class).invoke(null,
+                            toRead, world);
                     world.entityList.get(world.entityList.size() - 1).setID(toRead.getInt());
                 } catch (ClassNotFoundException | NoSuchMethodException | SecurityException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -2124,7 +1522,6 @@ public class Client extends JPanel implements Runnable {
     }
 
     public String hostIP = "";
-    public String serverName = "";
     public ServerGUI sgui;
 
     public void serverOutput() {
@@ -2133,6 +1530,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     static class ImagePanel extends JPanel {
+        private static final long serialVersionUID = 7707876428305555174L;
         private final Image image;
 
         public ImagePanel(final Image image) {
@@ -2178,15 +1576,16 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    private static class RowCellRenderer extends JTable implements ListCellRenderer {
+    private static class RowCellRenderer extends JTable implements ListCellRenderer<Object> {
+        private static final long serialVersionUID = -4593849054661400146L;
 
         public RowCellRenderer() {
             setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         }
 
         @Override
-        public Component getListCellRendererComponent(final JList list, final Object value, final int index,
-                final boolean isSelected, final boolean cellHasFocus) {
+        public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value,
+                final int index, final boolean isSelected, final boolean cellHasFocus) {
             setModel(new RowTableModel((Row) value));
             this.getColumnModel().getColumn(0).setWidth(100);
             if (isSelected) {
@@ -2197,7 +1596,7 @@ public class Client extends JPanel implements Runnable {
     }
 
     private static class RowTableModel extends AbstractTableModel {
-
+        private static final long serialVersionUID = -1141890084123415074L;
         private final Row row;
 
         public RowTableModel(final Row row) {
@@ -2233,8 +1632,8 @@ public class Client extends JPanel implements Runnable {
         }
     }
 
-    public RealClip airCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/airCast.wav", "aircast.wav");
-    public RealClip fireCast = ResourceLoader.loadSound("https://west-it.webs.com/sounds/fireCast.wav", "firecast.wav");
+    public RealClip airCast = ResourceLoader.loadSound("aircast.wav");
+    public RealClip fireCast = ResourceLoader.loadSound("firecast.wav");
 
     public void drawChat() {
         for (int i = 0; i < chat.length; i++) {
@@ -2264,4 +1663,5 @@ public class Client extends JPanel implements Runnable {
         }
         return authCode;
     }
+
 }

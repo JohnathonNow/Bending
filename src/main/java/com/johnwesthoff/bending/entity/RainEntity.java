@@ -8,11 +8,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.networking.handlers.PuddleEvent;
 
 /**
- *
  * @author John
  */
 public class RainEntity extends Entity {
@@ -33,7 +35,7 @@ public class RainEntity extends Entity {
         G.setColor(Color.GRAY);
         for (int i = 0; i < 14; i++) {
             G.fillArc((int) X + 20 - r.nextInt(80) - viewX, (int) Y + 10 - r.nextInt(20) - viewY - 10,
-                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, 360);
+                    20 + r.nextInt(40), 5 + r.nextInt(15), 0, Constants.FULL_ANGLE);
         }
     }
 
@@ -55,14 +57,14 @@ public class RainEntity extends Entity {
         if (r.nextInt(12) == 5) {
             int x = (int) X + 40 - r.nextInt(80);
             // lol.earth.entityList.add((new WaterBallEntity(x,y,0,0,maker).setID(Iw)));
-            // lol.sendMessage(Server.WATERBENDING,ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
+            // lol.sendMessage(Constants.WATERBENDING,ByteBuffer.allocate(28).putInt(0).putInt(x).putInt(y).putInt(0).putInt(5).putInt(-1).putInt(Iw));
             lol.earth.ground.puddle(x, (int) Y, 10);
-            lol.sendMessage(Server.PUDDLE, ByteBuffer.allocate(40).putInt(x).putInt((int) Y).putInt(10));
+            lol.sendMessage(PuddleEvent.getPacket(x, (int) Y, 10));
         }
         if (life-- < 0) {
-            // lol.earth.ground.FillCircleW(X, Y, radius, World.STONE);
+            // lol.earth.ground.FillCircleW(X, Y, radius, Constants.STONE);
             alive = false;
-            lol.sendMessage(Server.DESTROY, ByteBuffer.allocate(40).putInt(MYID));
+            lol.sendMessage(DestroyEvent.getPacket(this));
         }
     }
 }

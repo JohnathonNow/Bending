@@ -15,14 +15,14 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DigEvent;
 
 /**
- *
  * @author John
  */
 public class GustEntity extends Entity {
     // public int maker = 0;
-    public int radius = 16;
+    public int radius = Constants.RADIUS_REGULAR;
 
     public GustEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -36,15 +36,17 @@ public class GustEntity extends Entity {
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
             G.setColor(Color.lightGray);
-            int deg = r.nextInt(360);
-            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, deg, 15);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, deg, 15);
+            int deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 1) - viewX, (int) (Y - 1) - viewY, 2, 2, deg, Constants.FIFTEEN_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 2) - viewX, (int) (Y - 2) - viewY, 4, 4, deg, Constants.FIFTEEN_DEGREE_ANGLE);
             G.setColor(Color.white);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, deg, 15);
-            deg = r.nextInt(360);
-            G.fillArc((int) (X - 4) - viewX, (int) (Y - 4) - viewY, 8, 8, deg, 15);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 3) - viewX, (int) (Y - 3) - viewY, 6, 6, deg, Constants.FIFTEEN_DEGREE_ANGLE);
+            deg = r.nextInt(Constants.FULL_ANGLE);
+            G.fillArc((int) (X - 4) - viewX, (int) (Y - 4) - viewY, 8, 8, deg, Constants.FIFTEEN_DEGREE_ANGLE);
+
+            //TODO: Implement using for loop
         }
     }
 
@@ -78,6 +80,12 @@ public class GustEntity extends Entity {
         }
     }
 
+
+    /**
+     * Reconstruct the gust entity
+     * @param in
+     * @param world World in which the entity should be reconstructed
+     */
     public static void reconstruct(ByteBuffer in, World world) {
         try {
             world.entityList.add(new GustEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
@@ -88,24 +96,25 @@ public class GustEntity extends Entity {
 
     @Override
     public void onServerUpdate(Server lol) {
-        if (collided(lol.earth)) {
+        if (hasCollided(lol.earth)) {
             lol.earth.ground.ClearCircle((int) X, (int) Y, radius);
-            lol.sendMessage(Server.DIG, ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius));
+            lol.sendMessage(DigEvent.getPacket((int)X, (int)Y, radius));
             alive = false;
         }
     }
 
-    private boolean collided(World w) {
-        double direction = Client.pointDir(previousX, previousY, X, Y);
-        int speed = (int) Client.pointDis(previousX, previousY, X, Y);
-        for (int i = 0; i <= speed; i++) {
-            if (w.checkCollision(X + (int) Client.lengthdir_x(i, direction),
-                    Y + (int) Client.lengthdir_y(i, direction))) {
-                X = X + (int) Client.lengthdir_x(i, direction);
-                Y = Y + (int) Client.lengthdir_y(i, direction);
-                return true;
-            }
+
+    @Override
+    public void checkAndHandleCollision(Client client) {
+
+        if (client.checkCollision(X, Y)) {
+            client.hurt(7);
+            client.world.vspeed += yspeed;
+            client.xspeed += xspeed;
+            alive = false;
+            client.lastHit = maker;
+            client.lungs = client.maxlungs;
+            client.killMessage = "~ met `'s gust of air!";
         }
-        return false;
     }
 }

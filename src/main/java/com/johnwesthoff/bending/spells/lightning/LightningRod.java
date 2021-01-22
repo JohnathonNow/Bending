@@ -1,26 +1,27 @@
 
 package com.johnwesthoff.bending.spells.lightning;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
-
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RodEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+
 public class LightningRod extends Lightning {
     public LightningRod() {
-        ID = Server.LIGHTNING;
+        ID = Constants.LIGHTNING;
         subID = 5;
         locked = true;
         unlockXP = 1250;
         try {
-            icon = loadIcon("https://west-it.webs.com/spells/shocktower.png");
+            icon = loadIcon("shocktower.png");
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -30,7 +31,7 @@ public class LightningRod extends Lightning {
     public void getAction(Client app) {
 
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = 0;
         my = 0;
         maker = ID;

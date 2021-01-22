@@ -9,12 +9,14 @@ import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.SpellEvent;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
 import com.johnwesthoff.bending.spells.air.AirRun;
 import com.johnwesthoff.bending.spells.air.Airbending;
@@ -48,6 +50,8 @@ import com.johnwesthoff.bending.spells.lightning.LightningOvercharge;
 import com.johnwesthoff.bending.spells.lightning.LightningRod;
 import com.johnwesthoff.bending.spells.lightning.LightningShield;
 import com.johnwesthoff.bending.spells.lightning.LightningStorm;
+import com.johnwesthoff.bending.spells.misc.SpellRandom;
+import com.johnwesthoff.bending.spells.misc.SpellRandomMatch;
 import com.johnwesthoff.bending.spells.water.BreathUnderWater;
 import com.johnwesthoff.bending.spells.water.WaterSpout;
 import com.johnwesthoff.bending.spells.water.WaterStorm;
@@ -77,14 +81,21 @@ public abstract class Spell {
     public int maker = 0;
     public boolean locked = false;
     public int unlockXP = 0;
+    private int timer = 0;
     public static ArrayList<Spell> spells = new ArrayList<>(), passives = new ArrayList<>();
     public static ArrayList<String> spellnames = new ArrayList<>(), passivenames = new ArrayList<>();
     public static ArrayList<String> spelltips = new ArrayList<>(), passivetips = new ArrayList<>();
     public static ArrayList<ImageIcon> spellimages = new ArrayList<>(), passiveimages = new ArrayList<>();
     public static ImageIcon lockedImage;
+    public static HashMap<String, Spell> spellLookup = new HashMap<>();
     public static Spell noSpell = new NOSPELL();
+    public static SpellRandom randomSpell = new SpellRandom();
+    public static SpellRandomMatch randomSpellMatch = new SpellRandomMatch();
     protected ImageIcon icon;
 
+    /**
+     * Registers all available spells
+     */
     public static void registerSpells() {
         registerSpell(new Airbending());
         registerSpell(new AirbendingGust());
@@ -111,14 +122,14 @@ public abstract class Spell {
         registerSpell(new LightningMine());
         registerSpell(new LightningRod());
         registerSpell(new LightningStorm());
-        registerSpell(new Darkness());
-        registerSpell(new DarkAura());
-        registerSpell(new DarkSoulBall());
-        registerSpell(new DarkSummonBall());
-        registerSpell(new DarkTeleport());
         registerSpell(new WaterbendingHealBall());
+        registerSpell(randomSpell);
+        registerSpell(randomSpellMatch);
     }
 
+    /**
+     * Registers all available (passive) spells
+     */
     private static void registerPassives() {
         registerPassive(new AirRun());
         registerPassive(new AirAffinity());
@@ -143,7 +154,7 @@ public abstract class Spell {
         passiveimages.clear();
         registerSpells();
         registerPassives();
-        lockedImage = (loadIcon("https://west-it.webs.com/spells/lockedSpell.png"));
+        lockedImage = (loadIcon("lockedSpell.png"));
         // System.out.println("YAY5");
         for (int i = 0; i < spells.size(); i++) {
             spellnames.add(spells.get(i).getName());
@@ -155,23 +166,47 @@ public abstract class Spell {
             passiveimages.add(passives.get(i).getImage());
             passivetips.add(passives.get(i).getTip());
         }
+        randomSpell.setSpells();
+        randomSpellMatch.setSpells();
     }
 
+    /**
+     * Registers a new spell
+     * 
+     * @param spell spell to initialize
+     */
     private static void registerSpell(Spell spell) {
         spell.subID = spells.size();
         spells.add(spell);
+        spellLookup.put(spell.getClass().getSimpleName(), spell);
     }
 
+    /**
+     * Registers a new (passive) spell
+     * 
+     * @param spell spell to initialize
+     */
     private static void registerPassive(Spell spell) {
         spell.subID = passives.size();
         passives.add(spell);
+        spellLookup.put(spell.getClass().getSimpleName(), spell);
     }
-    
-    public static Spell getSpell(int i){
+
+    /**
+     * Gets the spell
+     * 
+     * @param i
+     * @return Current spell
+     */
+    public static Spell getSpell(int i) {
         return spells.get(i);
     }
 
-    public static Spell getPassive(int i){
+    public static Spell lookup(String i) {
+        return spellLookup.get(i);
+    }
+
+    public static Spell getPassive(int i) {
         return passives.get(i);
     }
 
@@ -188,32 +223,46 @@ public abstract class Spell {
         }
     }
 
+    /**
+     * Gets the class of the spell
+     * 
+     * @return Class of the spell
+     */
     public int getID() {
         return ID;
     }
 
     public void getMessage(OrderedOutputStream out) {
-        ByteBuffer bb = ByteBuffer.allocate(24);
-        bb.putInt((int) subID).putInt((int) X).putInt((int) Y).putInt((int) mx).putInt((int) my);
         try {
-            out.addMesssage(bb, Server.SPELL);
-        } catch (IOException ex) {
-            // ex.printStackTrace();
+            out.addMessage(SpellEvent.getPacket(subID, (int) X, (int) Y, (int) mx, (int) my));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
     /**
-     * Executes the command for the spell as a result of a player action
+     * Gets the spell that results from this spell being cast from a given slot This
+     * is useful for SpellRandom, which calls a different spell than itself
      * 
+     * @param slot the slot this spell is being called from
+     * @return the spell to be used when the spell is in a given slot
+     */
+    public Spell getEffectiveSpell(int slot) {
+        return this;
+    }
+
+    /**
+     * Executes the command for the spell as a result of a player action
+     *
      * @param app the client performing this action and having its state modified as
      *            a result
-     *
      */
     public abstract void getAction(Client app);
 
     /**
      * Executes the command for the spell as a result of a network event
-     * 
+     *
      * @param world the game state object being modified as a result of this spell
      * @param px    the x coordinate of the casting player
      * @param py    the y coordinate of the casting player
@@ -221,7 +270,6 @@ public abstract class Spell {
      * @param my    the y coordinate of the mouse of the casting player
      * @param pid   the id of the casting player
      * @param eid   the id of the first entity created by casting this spell
-     *
      */
     public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
             ByteBuffer buf);
@@ -231,6 +279,37 @@ public abstract class Spell {
     public abstract String getName();
 
     public abstract void getPassiveAction(Client app);
+
+    public int getCoolDown() {
+        return (int) (getCost() * Constants.FPS / 600);
+    }
+
+    public boolean isCooledDown(Client app, int index) {
+        return app.ticks >= this.getEffectiveSpell(index).timer;
+    }
+
+    public boolean isEnergyEfficient(Client app, int index) {
+        // lol that's a malopropism
+        return app.energico >= this.getEffectiveSpell(index).getCost();
+    }
+
+    public void startCoolDown(Client app, int index) {
+        this.timer = app.ticks + this.getEffectiveSpell(index).getCoolDown();
+    }
+
+    public void cast(Client app, int index) {
+        if (this.isCooledDown(app, index) && this.isEnergyEfficient(app, index) && app.isMyTurn) {
+            app.energico -= this.getEffectiveSpell(index).getCost();
+            if ((app.passiveList[app.spellBook].getName().equals("Fire Charge"))
+                    && (this.getEffectiveSpell(index) instanceof Firebending)) {
+                if (app.random.nextInt(5 - app.inputer.doublecast) == 0) {
+                    this.getAction(app);
+                }
+            }
+            this.getAction(app);
+            this.startCoolDown(app, index);
+        }
+    }
 
     public String getTip() {
         return "<html>A basic air spell<br>Low Energy Cost<br>Travels in a straight line<br>Deals low damage</html>";

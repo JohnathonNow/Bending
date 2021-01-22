@@ -13,15 +13,14 @@ and "working" online multiplayer<sup  id="a1">[1](#fn1)</sup>.
 There should be no expectation that the code here is "good". It was almost entirely
 written by a highschooler who was undeterred by two consecutive last-place finishes in
 [Java4k](https://en.wikipedia.org/wiki/Java_4K_Game_Programming_Contest).
-As such, most of the code is laid out very poorly, completely ignores all best practices,
-completely, and is absolutely riddled with linter warnings. That said, the game compiles
+As such, most of the code is laid out very poorly, completely ignores all best practices, and is absolutely riddled with linter warnings. That said, the game compiles
 fine, and it even runs, too. In fact, it's been tested to run on both Linux and Windows!<sup  id="a2">[2](#fn2)</sup>
 
 Building + Running
 ------------------
 
 As of 2020 the game can be built using maven and Java 8+. Simply clone this repo, cd into its root,
-and run `mvn package`. This will create a jar file under the target directory, which can be run through
+and run `mvn package`. This will create a jar file under the `target` directory, which can be run through
 `java -jar ./target/bending.jar`
 
 If you don't want to build it yourself, you can simply [download the latest release](https://github.com/JohnathonNow/Bending/releases/latest/download/bending.jar)
@@ -41,7 +40,7 @@ You can host the server yourself by clicking the Host button. It will
 ask you for server details - your answers here don't matter anymore. The game will be hosted
 on port 25565. You can join a server, including your own, by clicking the Join button. It will
 prompt you for a server address - if you are hosting it yourself, you can leave this blank.
-Otherwise enter the address of the server you wish to play on. I will forever have a server running
+Otherwise enter the address of the server you wish to play on. I will for as long as reasonable have a server running
 on [johnwesthoff.com](johnwesthoff.com) for the latest release of the game.
 
 Controls
@@ -56,6 +55,7 @@ Controls
 | Cast Spell 2   | Right Click       |
 | Cast Spell 3   | Middle Click      |
 | Choose Spell   | 1-5 + Cast Spell  |
+| Choose Spell   | Scroll Wheel      |
 | Chat           | Enter             |
 | Move Camera    | Q and E           |
 | Move Camera    | CTRL + move mouse |

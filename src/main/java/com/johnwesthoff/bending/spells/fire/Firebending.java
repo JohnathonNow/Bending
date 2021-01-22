@@ -8,17 +8,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.FireBallEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class Firebending extends Spell {
     public Firebending() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 0;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/fireball.png"));
+            icon = (loadIcon("fireball.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -28,14 +28,14 @@ public class Firebending extends Spell {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         if (app.world.isLiquid(X, Y)) {
             app.energico += 50;
         }
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
-                app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
+        double direction = Constants.FULL_ANGLE - Client.pointDir(app.world.x - app.world.viewX,
+                app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         mx = ((int) (Client.lengthdir_x(12, direction)));
         my = ((int) (Client.lengthdir_y(12, direction)));

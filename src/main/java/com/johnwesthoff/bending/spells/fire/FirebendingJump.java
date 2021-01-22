@@ -1,24 +1,27 @@
 
 package com.johnwesthoff.bending.spells.fire;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
-
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.FireJumpEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+
 public class FirebendingJump extends Spell {
     public FirebendingJump() {
-        ID = Server.FIREBENDING;
+        ID = Constants.FIREBENDING;
         subID = 2;
+        locked = true;
+        unlockXP = 1000;
         try {
-            icon = (loadIcon("https://west-it.webs.com/spells/firejump.png"));
+            icon = (loadIcon("firejump.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -28,11 +31,11 @@ public class FirebendingJump extends Spell {
     public void getAction(Client app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
-        Y = app.world.y - World.head;
+        Y = app.world.y - Constants.HEAD;
         mx = (app.world.mouseX - app.world.viewX);
         my = (app.world.mouseY - app.world.viewY);
         app.xspeed = -Math.min(Math.max(((app.world.x - app.world.viewX) - app.world.mouseX), -16), 16);
-        app.world.vspeed = -Math.min(Math.max(((app.world.y - World.head - app.world.viewY) - app.world.mouseY), -16),
+        app.world.vspeed = -Math.min(Math.max(((app.world.y - Constants.HEAD - app.world.viewY) - app.world.mouseY), -16),
                 16);
         my = (int) app.world.vspeed;
         app.world.keepMoving = false;
