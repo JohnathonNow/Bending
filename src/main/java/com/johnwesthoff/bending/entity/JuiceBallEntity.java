@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
 /**
  *
@@ -66,14 +67,12 @@ public class JuiceBallEntity extends Entity {
          */
     }
 
-
     @Override
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
             radius = 24;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, World.JUICE);
-            lol.sendMessage(Server.FILL,
-                    ByteBuffer.allocate(40).putInt((int) X).putInt((int) Y).putInt(radius).put(World.JUICE));
+            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.JUICE);
+            lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), 96, Constants.JUICE));
             alive = false;
         }
     }

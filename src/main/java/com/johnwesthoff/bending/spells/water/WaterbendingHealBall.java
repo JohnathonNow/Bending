@@ -8,16 +8,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.entity.IceShardEntity;
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.JuiceBallEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class WaterbendingHealBall extends Waterbending {
     public WaterbendingHealBall() {
-        ID = Server.WATERBENDING;
-        subID = 4;
+        ID = Constants.WATERBENDING;
+        subID = 6;
         try {
             icon = (loadIcon("https://west-it.webs.com/spells/watershard.png"));
         } catch (Exception ex) {
