@@ -124,7 +124,7 @@ public class Client extends JPanel implements Runnable {
     public ClothingChooser1 cc = new ClothingChooser1(this);
     public double engrecharge = 4;
     public Random random = new Random();
-    public String serverIP = "LocalHost";
+    public String serverIP;
     public Thread mainProcess;
     public boolean notDone = true;
     public boolean ignored = true;
@@ -188,7 +188,7 @@ public class Client extends JPanel implements Runnable {
         new File(ResourceLoader.dir + "sounds").mkdirs();
         try {
             bimage = ResourceLoader.loadImage("AgedPaper.png");
-            Thread.sleep(100);
+            //Thread.sleep(100);
         } catch (final Exception ex) {
             // ex.printStackTrace();
         }
