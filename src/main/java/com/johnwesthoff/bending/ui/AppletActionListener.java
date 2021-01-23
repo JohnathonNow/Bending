@@ -52,7 +52,7 @@ public class AppletActionListener implements ActionListener {
             app.notDone = false;
             // app.setResizable(true);
             app.username = Client.jtb.getText();
-            app.serverIP = JOptionPane.showInputDialog("Server IP?");
+            //app.serverIP = JOptionPane.showInputDialog("Server IP?");
             app.init();
             if (app.start()) {
                 app.spellselection.setVisible(false);

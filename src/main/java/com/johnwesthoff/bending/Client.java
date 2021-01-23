@@ -176,7 +176,6 @@ public class Client extends JPanel implements Runnable {
     public static JTabbedPane immaKeepTabsOnYou;
     public double prevMove;
     public short turnVisible = -1, removeAura = -1;
-
     /**
      * GameService instance
      */
@@ -205,6 +204,11 @@ public class Client extends JPanel implements Runnable {
         gameAlive = true;
         Spell.init();
         final Client main = new Client();
+        if (args.length > 0) {
+            main.serverIP = args[0];
+        } else {
+            main.serverIP = "johnwesthoff.com";
+        }
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(main);
         inputer = new ClientInputListener(main);
@@ -1002,7 +1006,7 @@ public class Client extends JPanel implements Runnable {
             if (an != 0) {
                 ip = InetAddress.getLocalHost().getHostAddress();
             }
-            final String yes = JOptionPane.showInputDialog("Server Name?");
+            final String yes = this.serverIP;
             if (yes != null) {
                 String serverName = yes.replaceAll("[^A-Za-z0-9\\s]", "").replaceAll(" ", "");
                 gameService.tryToCreateServer(serverName, ip);
