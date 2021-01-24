@@ -91,6 +91,7 @@ public abstract class Spell {
     public static Spell noSpell = new NOSPELL();
     public static SpellRandom randomSpell = new SpellRandom();
     public static SpellRandomMatch randomSpellMatch = new SpellRandomMatch();
+    public static boolean inited = false;
     protected ImageIcon icon;
 
     /**
@@ -144,6 +145,8 @@ public abstract class Spell {
     }
 
     public static void init() {
+        if (inited) return;
+        inited = true;
         spells.clear();
         spellnames.clear();
         spelltips.clear();

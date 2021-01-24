@@ -48,6 +48,7 @@ import com.johnwesthoff.bending.networking.handlers.AiEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.MessageEvent;
 import com.johnwesthoff.bending.networking.handlers.TurnEvent;
+import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 /**
@@ -123,6 +124,7 @@ public final class Server implements Runnable {
     Thread worldHandle, udplistener;
 
     public Server() {
+        Spell.init();
         playerService = PlayerServiceFactory.create();
         try {
             SocialSecurity = new ServerSocket(25565);
