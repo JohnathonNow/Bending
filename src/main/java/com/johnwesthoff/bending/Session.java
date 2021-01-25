@@ -22,6 +22,7 @@ import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
 public class Session {
+    public ClientUI clientui;
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
@@ -36,7 +37,7 @@ public class Session {
     public int whoseTurn = -1;
     public short matchOver = 0, forcedRespawn = 0;
     public static AppletActionListener actioner;
-    public static ClientInputListener inputer;
+    public ClientInputListener inputer;
     public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
@@ -65,7 +66,8 @@ public class Session {
     public short MAXHP, HP = MAXHP = 100;
     public static boolean gameAlive = true;
     public int maxlungs, lungs = maxlungs = 100;
-    public static double runningSpeed = 1d, swimmingSpeed = 1d;
+    public double runningSpeed = 1d, swimmingSpeed = 1d;
+    public double knockbackDecay;
     public static Client thisone;
     public static int XP = 0;
     public double prevVspeed = 0;
@@ -236,12 +238,12 @@ public class Session {
         Session.actioner = actioner;
     }
 
-    public static ClientInputListener getInputer() {
+    public ClientInputListener getInputer() {
         return inputer;
     }
 
-    public static void setInputer(ClientInputListener inputer) {
-        Session.inputer = inputer;
+    public void setInputer(ClientInputListener inputer) {
+        this.inputer = inputer;
     }
 
     public ArrayList<Integer> getMyTeam() {
@@ -508,20 +510,28 @@ public class Session {
         this.lungs = lungs;
     }
 
-    public static double getRunningSpeed() {
+    public double getRunningSpeed() {
         return runningSpeed;
     }
 
-    public static void setRunningSpeed(double runningSpeed) {
-        Session.runningSpeed = runningSpeed;
+    public void setRunningSpeed(double runningSpeed) {
+        this.runningSpeed = runningSpeed;
     }
 
-    public static double getSwimmingSpeed() {
+    public double getSwimmingSpeed() {
         return swimmingSpeed;
     }
 
-    public static void setSwimmingSpeed(double swimmingSpeed) {
-        Session.swimmingSpeed = swimmingSpeed;
+    public void setSwimmingSpeed(double swimmingSpeed) {
+        this.swimmingSpeed = swimmingSpeed;
+    }
+
+    public double getKnockbackDecay() {
+        return knockbackDecay;
+    }
+
+    public void setKnockbackDecay(double knockbackDecay) {
+        this.knockbackDecay = knockbackDecay;
     }
 
     public static Client getThisone() {
@@ -835,4 +845,9 @@ public class Session {
     public void setSwagTime(long swagTime) {
         this.swagTime = swagTime;
     }
+
+    public static void setInstance(Session instance) {
+        Session.instance = instance;
+    }
+
 }

@@ -24,15 +24,13 @@ public class Client {
 
     public boolean tick() {
         World world = session.getWorld();
-        boolean willSendMovement = false;
-        turnSpecific();
+        boolean willSendMovement = turnSpecific();
 
         if (Math.abs(session.getXspeed()) < .001 && session.getXspeed() != 0) {
             session.setXspeed(0);
             willSendMovement = true;
         }
 
-        
         for (final Entity e : session.getWorld().entityList) {
             e.checkAndHandleCollision(this);
         }
@@ -49,7 +47,7 @@ public class Client {
             session.setXspeed(0);
         }
 
-        handleDeath();
+        willSendMovement |= handleDeath();
         session.getWorld().onUpdate();
         Player localPlayer = session.getLocalPlayer();
         localPlayer.x = session.getWorld().x;
@@ -63,8 +61,8 @@ public class Client {
         if (Math.signum(session.getWorld().move) == 1) {
             localPlayer.left = 1;
         }
-        if (((Math.signum(session.getPrevVspeed()) != Math.signum(session.getWorld().vspeed)) || ((session.getPrevMove()) != (world.move)))
-                || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE) {
+        if (((Math.signum(session.getPrevVspeed()) != Math.signum(session.getWorld().vspeed))
+                || ((session.getPrevMove()) != (world.move))) || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE) {
             counting = 0;
             willSendMovement = true;
             session.setPrevMove(world.move);
@@ -94,197 +92,182 @@ public class Client {
         }
     }
 
-    private void turnSpecific() {
-        isMyTurn = (gameMode != Server.TURNBASED) || (whoseTurn == ID);
+    private boolean turnSpecific() {
+        boolean wsm = false;
+        World world = session.getWorld();
+        if ((session.getGameMode() == Server.TURNBASED) && (session.getWhoseTurn() != session.getID())) {
+            return wsm;
+        }
+        wsm |= handleStatusEffects();
+        handlePassiveEffect();
+        handleHealing();
+        if (world.x > world.wIdTh) {
+            world.x = world.wIdTh;
+        }
 
-        if (isMyTurn) {
-            handleStatusEffects();
-            if (timeToHeal++ > 30 && HP < MAXHP) {
-                timeToHeal = 0;
-                HP++;
-            }
-            if (world.inBounds(world.x, world.y) && energico > 0
-                    && world.isType((int) world.x, (int) world.y, Constants.JUICE)) {
-                if (HP < MAXHP) {
-                    energico -= 40;
-                    HP++;
-                }
-            }
-            handlePassiveEffect();
-            if (HP > MAXHP) {
-                HP = MAXHP;
-            }
-            
-            
-            if (world.x > world.wIdTh) {
-                world.x = world.wIdTh;
-            }
-            if (world.checkCollision(world.x, world.y - World.head) || world.isLiquid(world.x, world.y - World.head)) {
-                if (lungs-- < 0) {
-                    HP--;
-                    killMessage = "~ suffocated after fighting `...";
-                }
-            } else {
-                lungs = maxlungs;
-            }
-            if (energico < 0) {
-                energico = 0;
-            }
-            if (world.isType((int) world.x, (int) world.y, Constants.LAVA)) {
-                world.status |= Constants.ST_FLAMING;
-                killMessage = "~ burned to a crisp after fighting `!";
-            }
-            if ((world.status & Constants.ST_FLAMING) != 0) {
-                HP -= random.nextInt(2);
-                if ((passiveList[spellBook].getName().equals("Fireproof"))) {
-                    energico += (inputer.doublecast * 3);
-                }
-                if (random.nextInt(10) == 0) {
-                    world.status &= ~Constants.ST_FLAMING;// Stop being on fire
-                }
-            }
-            if ((world.status & Constants.ST_SHOCKED) != 0) {
-                energico -= 25;
-                if (random.nextInt(10) == 0) {
-                    world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
-                }
-            }
-            /*
-             * if (world.isIce((int) world.x, (int) world.y + 6)) { xspeed += world.move;
-             * 
-             * // Removed for now because this makes people angry xspeed *= 1.4; if (xspeed
-             * > 15) { xspeed = 15; } if (xspeed < -15) { xspeed = -15; } }
-             */
+        // @TODO : be carefull of SRP && OCP
+        session.setDig(world.getIncrementedDig(session.getDig(), Spell.lookup("AirbendingAir"), this));
 
-            // @TODO : be carefull of SRP && OCP
-            dig = world.getIncrementedDig(dig, Spell.lookup("AirbendingAir"), this);
+        if (!world.isSolid(world.x + (int) session.getXspeed(), world.y)) {
+            world.x += session.getXspeed();
+        }
 
-            if (energico < maxeng) {
-                energico += engrecharge;
-            } else {
-                energico = maxeng;
-            }
-
-            if (!world.isSolid(world.x + (int) xspeed, world.y)) {
-                world.x += xspeed;
-            }
-
-            for (final Player p : world.playerList) {
-                if ((p.status & Constants.ST_DRAIN) != 0) {
-                    if (Math.abs(p.x - world.x) < Constants.AURA_RADIUS / 2) {
-                        if (Math.abs(p.y - world.y) < Constants.AURA_RADIUS / 2) {
-                            lastHit = p.ID;
-                            killMessage = "~'s soul was corrupted by `'s Aura of Darkness.";
-                            HP--;// Lose health from aura
-                        }
+        for (final Player p : world.playerList) {
+            if ((p.status & Constants.ST_DRAIN) != 0) {
+                if (Math.abs(p.x - world.x) < Constants.AURA_RADIUS / 2) {
+                    if (Math.abs(p.y - world.y) < Constants.AURA_RADIUS / 2) {
+                        session.setLastHit(p.ID);
+                        session.setKillMessage("~'s soul was corrupted by `'s Aura of Darkness.");
+                        session.setHP((short) (session.getHP() - 1));// Lose health from aura
                     }
                 }
             }
         }
+        return wsm;
+    }
+
+    private void handleHealing() {
+        if (session.timeToHeal++ > 30 && session.HP < session.MAXHP) {
+            session.timeToHeal = 0;
+            session.HP++;
+        }
+        if (session.world.inBounds(session.world.x, session.world.y) && session.energico > 0
+                && session.world.isType((int) session.world.x, (int) session.world.y, Constants.JUICE)) {
+            if (session.HP < session.MAXHP) {
+                session.energico -= 40;
+                session.HP++;
+            }
+        }
+        if (session.HP > session.MAXHP) {
+            session.HP = session.MAXHP;
+        }
+        if (session.world.checkCollision(session.world.x, session.world.y - World.head) || session.world.isLiquid(session.world.x, session.world.y - World.head)) {
+            if (session.lungs-- < 0) {
+                session.HP--;
+                session.killMessage = "~ suffocated after fighting `...";
+            }
+        } else {
+            session.lungs = session.maxlungs;
+        }
+        if (session.energico < 0) {
+            session.energico = 0;
+        }
+        if (session.energico < session.maxeng) {
+            session.energico += session.engrecharge;
+        } else {
+            session.energico = session.maxeng;
+        }
     }
 
     private void handlePassiveEffect() {
-        if (!"Air Run".equals(passiveList[spellBook].getName())) {
-            runningSpeed = 1;
+        if (!"Air Run".equals(session.passiveList[session.spellBook].getName())) {
+            session.runningSpeed = 1;
         }
-        if ((!"Air Affinity".equals(passiveList[spellBook].getName()))
-                && (!"Earth Stance".equals(passiveList[spellBook].getName()))) {
-            world.floatiness = 0;
-            maxlungs = 100;
+        if ((!"Air Affinity".equals(session.passiveList[session.spellBook].getName()))
+                && (!"Earth Stance".equals(session.passiveList[session.spellBook].getName()))) {
+            session.world.floatiness = 0;
+            session.maxlungs = 100;
         }
-        if (!"Water Treader".equals(passiveList[spellBook].getName())) {
-            swimmingSpeed = 1;
+        if (!"Water Treader".equals(session.passiveList[session.spellBook].getName())) {
+            session.swimmingSpeed = 1;
         }
-        if (!"Earth Shield".equals(passiveList[spellBook].getName())) {
-            MAXHP = 100;
+        if (!"Earth Shield".equals(session.passiveList[session.spellBook].getName())) {
+            session.MAXHP = 100;
         }
-        if (!"Overcharged".equals(passiveList[spellBook].getName())) {
-            maxeng = 1000;
+        if (!"Overcharged".equals(session.passiveList[session.spellBook].getName())) {
+            session.maxeng = 1000;
         }
-        if (!"Earth Stance".equals(passiveList[spellBook].getName())) {
-            knockbackDecay = 1;
+        if (!"Earth Stance".equals(session.passiveList[session.spellBook].getName())) {
+            session.knockbackDecay = 1;
         }
-        if (world.vspeed >= 0) {
-            if ("Earth Stance".equals(passiveList[spellBook].getName()) && world.vspeed < 0) {
-                world.vspeed *= knockbackDecay;
+        if (session.world.vspeed >= 0) {
+            if ("Earth Stance".equals(session.passiveList[session.spellBook].getName()) && session.world.vspeed < 0) {
+                session.world.vspeed *= session.knockbackDecay;
             }
-            xspeed *= .75 * knockbackDecay;
+            session.xspeed *= .75 * session.knockbackDecay;
 
         }
-        passiveList[spellBook].getPassiveAction(this);
+        session.passiveList[session.spellBook].getPassiveAction(this);
     }
 
     private boolean handleStatusEffects() {
         boolean willSendMovement = false;
-        if (removeAura > 0) {
-            removeAura--;
-            world.status |= Constants.ST_DRAIN;
-            if (removeAura == 0) {
-                world.status &= ~Constants.ST_DRAIN;
+        if (session.removeAura > 0) {
+            session.removeAura--;
+            session.world.status |= Constants.ST_DRAIN;
+            if (session.removeAura == 0) {
+                session.world.status &= ~Constants.ST_DRAIN;
                 willSendMovement = true;
             }
         }
-        if (turnVisible > 0) {
-            turnVisible--;
-            world.status |= Constants.ST_INVISIBLE;
-            if (turnVisible == 0) {
-                world.status &= ~Constants.ST_INVISIBLE;
+        if (session.turnVisible > 0) {
+            session.turnVisible--;
+            session.world.status |= Constants.ST_INVISIBLE;
+            if (session.turnVisible == 0) {
+                session.world.status &= ~Constants.ST_INVISIBLE;
                 willSendMovement = true;
             }
         }
-        if (gameMode == Server.THEHIDDEN) {
-            if (goodTeam) {
-                world.status |= Constants.ST_INVISIBLE;
-                spellBook = 5;// Force use of TheHidden book
+        if (session.gameMode == Server.THEHIDDEN) {
+            if (session.goodTeam) {
+                session.world.status |= Constants.ST_INVISIBLE;
+                session.spellBook = 5;// Force use of TheHidden book
             } else {
-                if (!badTeam.isEmpty()) {
-                    lastHit = badTeam.get(0);
+                if (!session.badTeam.isEmpty()) {
+                    session.lastHit = session.badTeam.get(0);
                 }
             }
         } else {
-            if (spellBook >= 5) {
-                spellBook = 0;
+            if (session.spellBook >= 5) {
+                session.spellBook = 0;
+            }
+        }
+        if (session.world.isType((int) session.world.x, (int) session.world.y, Constants.LAVA)) {
+            session.world.status |= Constants.ST_FLAMING;
+            session.killMessage = "~ burned to a crisp after fighting `!";
+        }
+        if ((session.world.status & Constants.ST_FLAMING) != 0) {
+            session.HP -= session.random.nextInt(2);
+            if ((session.passiveList[session.spellBook].getName().equals("Fireproof"))) {
+                session.energico += (session.inputer.doublecast * 3);
+            }
+            if (session.random.nextInt(10) == 0) {
+                session.world.status &= ~Constants.ST_FLAMING;// Stop being on fire
+            }
+        }
+        if ((session.world.status & Constants.ST_SHOCKED) != 0) {
+            session.energico -= 25;
+            if (session.random.nextInt(10) == 0) {
+                session.world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
             }
         }
         return willSendMovement;
     }
 
     private boolean handleDeath() {
-        if (HP <= 0) {
+        World world = session.getWorld();
+        if (session.getHP() <= 0) {
             world.viewdX = world.viewX;
             world.viewdY = world.viewY;
-            HP = MAXHP;
-            this.lungs = this.maxlungs;
+            session.setHP(session.getMAXHP());
+            session.setLungs(session.getMaxlungs());
             world.y = -50;
             world.x = -50;
             Spell.randomSpell.setSpells();
-            if (killingSpree >= 148.413d) {
-                // Anti-cheating - use logs
-                gameService.feedRss(String.format("%s had a streak going", username),
-                        String.format("%o kills in a row!", (int) Math.log(killingSpree)));
-            }
-            killingSpree = 0;
             world.dead = true;
             // this.chatActive = false;
             try {
-                out.addMessage(DeathEvent.getPacket(lastHit, ID));
+                session.getOut().addMessage(DeathEvent.getPacket(session.getLastHit(), session.getID()));
             } catch (final IOException ex) {
                 // ex.printStackTrace();
             }
-            if (lastHit == ID) {
-                XP -= 25;
-                this.sendMessage(username + " has committed suicide.", 0xFF0436);
+            if (session.getLastHit() == session.getID()) {
+                session.clientui.sendMessage(session.getUsername() + " has committed suicide.", 0xFF0436);
             } else {
-                this.sendMessage(killMessage.replaceAll("~", username).replaceAll("`", getKiller(lastHit)), 0x04FFF8);// username
-                                                                                                                      // +
-                                                                                                                      // "
-                                                                                                                      // has
-                                                                                                                      // been
-                                                                                                                      // defeated
-                                                                                                                      // by
-                                                                                                                      // "+getKiller(lastHit)
+                session.clientui.sendMessage(session.killMessage.replaceAll("~", session.getUsername()).replaceAll("`",
+                        session.clientui.getKiller(session.getLastHit())), 0x04FFF8);
             }
-        return true;
+            return true;
         }
         return false;
     }
