@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JColorChooser;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.avatar.AvatarService;
 import com.johnwesthoff.bending.app.avatar.AvatarServiceFactory;
 import com.johnwesthoff.bending.logic.World;
@@ -38,14 +39,14 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     byte[] cloths = new byte[] { 1, 1, 1, 1, 1, 1 };
     Image[] stuff = new Image[6];
     boolean done = false;
-    Client app;
+    Session app;
     Image background;
 
-    public ClothingChooser1(Client app) {
+    public ClothingChooser1(Session session) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
-        this.app = app;
+        this.app = session;
         avatarService = AvatarServiceFactory.create();
         // g = canvas.getGraphics();
         try {

@@ -91,7 +91,7 @@ import com.johnwesthoff.bending.util.network.StringLongBoolean;
  *
  * @author Family
  */
-public class Client extends JPanel implements Runnable {
+public class ClientUI extends JPanel implements Runnable {
     /**
      *
      */
@@ -983,7 +983,7 @@ public class Client extends JPanel implements Runnable {
 
     }
 
-    private String getKiller(final int i) {
+    public String getKiller(final int i) {
         for (final Player p : world.playerList) {
             if (p.ID == i) {
                 return p.username;
