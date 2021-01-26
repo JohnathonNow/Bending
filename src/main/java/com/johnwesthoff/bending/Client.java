@@ -264,7 +264,7 @@ public class Client {
             if (session.getLastHit() == session.getID()) {
                 session.clientui.sendMessage(session.getUsername() + " has committed suicide.", 0xFF0436);
             } else {
-                session.clientui.sendMessage(session.killMessage.replaceAll("~", session.getUsername()).replaceAll("`",
+                session.clientui.sendMessage(session.killMessage.replace("~", session.getUsername()).replace("`",
                         session.clientui.getKiller(session.getLastHit())), 0x04FFF8);
             }
             return true;
