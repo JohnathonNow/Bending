@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
@@ -16,7 +16,7 @@ public class TurnEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer buf) {
+    public void clientReceived(Session p, ByteBuffer buf) {
         p.whoseTurn = buf.getInt();
         p.world.following = p.world.getPlayer(p.whoseTurn);
     }

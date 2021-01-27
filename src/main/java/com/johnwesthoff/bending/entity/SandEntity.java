@@ -8,12 +8,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
@@ -87,11 +88,11 @@ public class SandEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        final double d = Client.pointDis(X, Y, client.world.x, client.world.y);
+        final double d = Ops.pointDis(X, Y, client.world.x, client.world.y);
         if (d < radius * 3 && maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-            client.hurt(2);
+            client.client.hurt(2);
             client.world.vspeed -= 1;
             client.xspeed += (xspeed / 64);
             client.lastHit = maker;

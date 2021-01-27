@@ -5,17 +5,18 @@ import static com.johnwesthoff.bending.util.math.Ops.lengthdir_y;
 import static com.johnwesthoff.bending.util.math.Ops.pointDir;
 import static com.johnwesthoff.bending.util.math.Ops.pointDis;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.entity.Entity;
+import com.johnwesthoff.bending.entity.ShockEffectEntity;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DeathEvent;
 import com.johnwesthoff.bending.networking.handlers.MapEvent;
 import com.johnwesthoff.bending.spells.Spell;
-import java.awt.event.KeyEvent;
 
 public class Client {
     private Session session = Session.getInstance();
@@ -32,7 +33,7 @@ public class Client {
         }
 
         for (final Entity e : session.getWorld().entityList) {
-            e.checkAndHandleCollision(this);
+            e.checkAndHandleCollision(session);
         }
         session.getWorld().determineInc();
         handleCamera();
@@ -141,7 +142,8 @@ public class Client {
         if (session.HP > session.MAXHP) {
             session.HP = session.MAXHP;
         }
-        if (session.world.checkCollision(session.world.x, session.world.y - World.head) || session.world.isLiquid(session.world.x, session.world.y - World.head)) {
+        if (session.world.checkCollision(session.world.x, session.world.y - World.head)
+                || session.world.isLiquid(session.world.x, session.world.y - World.head)) {
             if (session.lungs-- < 0) {
                 session.HP--;
                 session.killMessage = "~ suffocated after fighting `...";
@@ -187,7 +189,7 @@ public class Client {
             session.xspeed *= .75 * session.knockbackDecay;
 
         }
-        session.passiveList[session.spellBook].getPassiveAction(this);
+        session.passiveList[session.spellBook].getPassiveAction(session);
     }
 
     private boolean handleStatusEffects() {
@@ -279,5 +281,30 @@ public class Client {
             }
         }
         return "No One";
+    }
+
+    public Session getSession() {
+        return Session.getInstance();
+    }
+
+    public boolean checkCollision(final float px, final float py) {
+        session.localPlayer.playerHitbox.setLocation((int) session.world.x - session.localPlayer.playerHitbox.width / 2,
+                (int) session.world.y - (World.head + 10));
+        return (session.localPlayer.playerHitbox.contains(px, py));
+    }
+
+    public int hurt(double pain) {
+        if (session.passiveList[session.spellBook].getName().equals("Lightning Shield")) {
+            if (session.random.nextInt(15 - (session.shockdrain * 2)) == 0) {
+                pain *= .25;
+                if (pain < 1) {
+                    pain = 1;
+                }
+                session.energico -= pain * 50;
+                session.world.entityList.add(new ShockEffectEntity((int) session.world.x, (int) session.world.y, 6 + (int) pain));
+            }
+        }
+        session.HP -= pain;
+        return (int) pain;
     }
 }

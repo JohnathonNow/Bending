@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
@@ -15,9 +15,9 @@ public class EntireWorldEvent implements NetworkEvent {
     }
     
     @Override
-    public void clientReceived(Client p, ByteBuffer reading) {
+    public void clientReceived(Session p, ByteBuffer reading) {
         try {
-            p.readWorld(reading);
+            p.net.readWorld(reading);
         } catch (Exception e) {
             e.printStackTrace();
         }

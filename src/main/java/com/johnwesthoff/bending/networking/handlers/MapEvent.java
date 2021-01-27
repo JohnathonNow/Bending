@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -17,7 +17,7 @@ public class MapEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer reading) {
+    public void clientReceived(Session p, ByteBuffer reading) {
         int x;
         x = reading.getInt();
         for (int i = x; i < x + 100; i++) {

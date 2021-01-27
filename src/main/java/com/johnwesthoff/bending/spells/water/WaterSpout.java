@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.entity.SpoutSourceEntity;
 import com.johnwesthoff.bending.logic.World;
@@ -27,7 +27,7 @@ public class WaterSpout extends Waterbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;

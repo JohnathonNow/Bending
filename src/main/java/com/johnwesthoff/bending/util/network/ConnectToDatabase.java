@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 
 public final class ConnectToDatabase {
     String base = "https://72.92.89.110:1024";// "https://johnbot.net78.net";//"https://72.92.89.250:1024";//;//;//;//;//
@@ -300,13 +301,13 @@ public final class ConnectToDatabase {
             StringTokenizer st = new StringTokenizer(p.getProperty("outfit"), ",");
             int total = st.countTokens() / 3;
             for (int i = 0; i < total; i++) {
-                Client.Clothing[i] = Byte.parseByte(st.nextToken());
+                Session.getInstance().clientui.Clothing[i] = Byte.parseByte(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                Client.Colors[i] = Integer.parseInt(st.nextToken());
+                Session.getInstance().clientui.Colors[i] = Integer.parseInt(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                Client.Colors2[i] = Integer.parseInt(st.nextToken());
+                Session.getInstance().clientui.Colors2[i] = Integer.parseInt(st.nextToken());
             }
             return;
         }
@@ -328,13 +329,13 @@ public final class ConnectToDatabase {
             StringTokenizer st = new StringTokenizer(req, ",");
             int total = st.countTokens() / 3;
             for (int i = 0; i < total; i++) {
-                Client.Clothing[i] = Byte.parseByte(st.nextToken());
+                Session.getInstance().clientui.Clothing[i] = Byte.parseByte(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                Client.Colors[i] = Integer.parseInt(st.nextToken());
+                Session.getInstance().clientui.Colors[i] = Integer.parseInt(st.nextToken());
             }
             for (int i = 0; i < total; i++) {
-                Client.Colors2[i] = Integer.parseInt(st.nextToken());
+                Session.getInstance().clientui.Colors2[i] = Integer.parseInt(st.nextToken());
             }
             // System.out.println(tor);
         } catch (MalformedURLException | NumberFormatException ex) {
@@ -370,7 +371,7 @@ public final class ConnectToDatabase {
     public void postUnlocks(String username) {
         if (offline) {
             try {
-                p.setProperty("unlocks", "" + Client.unlocks);
+                p.setProperty("unlocks", "" + Session.getInstance().unlocks);
                 p.store(new FileOutputStream(new File(ResourceLoader.dir + "login.xyz")), "");
             } catch (IOException ex) {
                 Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -383,7 +384,7 @@ public final class ConnectToDatabase {
             // ArrayList<String> signin = log(Susername, Spassword,
             // "jdbc:mysql://SQL09.FREEMYSQL.NET/waffles", userQuery);
             // return signin.size()>1?true:false;
-            URL steve = new URL(base + "/postUnlocks.php?username=" + username + "&spells=" + Client.unlocks);
+            URL steve = new URL(base + "/postUnlocks.php?username=" + username + "&spells=" + Session.getInstance().unlocks);
             Scanner read = new Scanner(steve.openStream());
             read.next();
         } catch (IOException ex) {
@@ -393,7 +394,7 @@ public final class ConnectToDatabase {
 
     public void getUnlocks(String user, String pass) {
         if (offline) {
-            Client.unlocks.construct(p.getProperty("unlocks"));
+            Session.getInstance().unlocks.construct(p.getProperty("unlocks"));
             return;
         }
         try {
@@ -411,7 +412,7 @@ public final class ConnectToDatabase {
                 Logger.getLogger(ConnectToDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
             // System.err.println(req);
-            Client.unlocks.construct(req);
+            Session.getInstance().unlocks.construct(req);
 
             // System.out.println(tor);
         } catch (MalformedURLException | NumberFormatException ex) {

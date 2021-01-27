@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.EnemyEntity;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
@@ -18,7 +18,7 @@ public class AiEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client c, ByteBuffer reader) {
+    public void clientReceived(Session c, ByteBuffer reader) {
         final int redX = reader.getInt();
         final int redY = reader.getInt();
         final int redmove = reader.getInt();

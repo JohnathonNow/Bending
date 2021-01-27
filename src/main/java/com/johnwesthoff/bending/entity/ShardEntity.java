@@ -10,12 +10,13 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DigEvent;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
@@ -100,11 +101,11 @@ public class ShardEntity extends Entity {
 
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (Client.pointDis(X, Y - World.head, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+        if (Ops.pointDis(X, Y - World.head, client.world.x, client.world.y) < radius * 4 && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-            client.hurt(15);
+            client.client.hurt(15);
             client.world.vspeed -= 5;
             client.xspeed += 7 - client.random.nextInt(14);
             client.lastHit = maker;
@@ -118,12 +119,12 @@ public class ShardEntity extends Entity {
      * @return true (if the shard collided with the client) or false (else)
      */
     private boolean collided(World w) {
-        double direction = Client.pointDir(previousX, previousY, X, Y);
-        int speed = (int) Client.pointDis(previousX, previousY, X, Y);
+        double direction = Ops.pointDir(previousX, previousY, X, Y);
+        int speed = (int) Ops.pointDis(previousX, previousY, X, Y);
         for (int i = 0; i < speed; i++) {
-            if (w.isSolid(X + (int) Client.lengthdir_x(i, direction), Y + (int) Client.lengthdir_y(i, direction))) {
-                X = X + (int) Client.lengthdir_x(i, direction);
-                Y = Y + (int) Client.lengthdir_y(i, direction);
+            if (w.isSolid(X + (int) Ops.lengthdir_x(i, direction), Y + (int) Ops.lengthdir_y(i, direction))) {
+                X = X + (int) Ops.lengthdir_x(i, direction);
+                Y = Y + (int) Ops.lengthdir_y(i, direction);
                 return true;
             }
         }

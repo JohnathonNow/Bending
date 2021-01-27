@@ -1,7 +1,7 @@
 
 package com.johnwesthoff.bending.spells;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
@@ -21,7 +21,7 @@ public class NOSPELL extends Spell {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
 
     }
 
@@ -36,7 +36,7 @@ public class NOSPELL extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
     }
 
     @Override

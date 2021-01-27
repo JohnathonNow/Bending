@@ -7,11 +7,12 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 
 public class EarthbendingSand extends Earthbending {
     public EarthbendingSand() {
@@ -27,20 +28,20 @@ public class EarthbendingSand extends Earthbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         if (app.world.isSolid(app.world.x, app.world.y + 4)) {
             app.energico += 50;
         }
-        mx = ((int) (Client.lengthdir_x(18, direction)));
-        my = ((int) (Client.lengthdir_y(18, direction)));
+        mx = ((int) (Ops.lengthdir_x(18, direction)));
+        my = ((int) (Ops.lengthdir_y(18, direction)));
         maker = ID;
         getMessage(app.out);
     }
@@ -61,7 +62,7 @@ public class EarthbendingSand extends Earthbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -71,40 +72,40 @@ public class EarthbendingSand extends Earthbending {
         final int number = buf.getInt();
         world.entityList.add(new SandEntity(px, py, mx, my, pid).setID(eid));
         if (number > 3) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 30),
-                    my + (int) Client.lengthdir_y(4, 30), pid).setID(eid + 1));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -30),
-                    my + (int) Client.lengthdir_y(4, -30), pid).setID(eid + 2));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 30),
+                    my + (int) Ops.lengthdir_y(4, 30), pid).setID(eid + 1));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -30),
+                    my + (int) Ops.lengthdir_y(4, -30), pid).setID(eid + 2));
         }
         if (number > 5) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 45),
-                    my + (int) Client.lengthdir_y(4, 45), pid).setID(eid + 3));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -45),
-                    my + (int) Client.lengthdir_y(4, -45), pid).setID(eid + 4));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 45),
+                    my + (int) Ops.lengthdir_y(4, 45), pid).setID(eid + 3));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -45),
+                    my + (int) Ops.lengthdir_y(4, -45), pid).setID(eid + 4));
         }
         if (number > 7) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 60),
-                    my + (int) Client.lengthdir_y(4, 60), pid).setID(eid + 5));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -60),
-                    my + (int) Client.lengthdir_y(4, -60), pid).setID(eid + 6));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 60),
+                    my + (int) Ops.lengthdir_y(4, 60), pid).setID(eid + 5));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -60),
+                    my + (int) Ops.lengthdir_y(4, -60), pid).setID(eid + 6));
         }
         if (number > 12) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 15),
-                    my + (int) Client.lengthdir_y(4, 15), pid).setID(eid + 7));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -15),
-                    my + (int) Client.lengthdir_y(4, -15), pid).setID(eid + 8));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 15),
+                    my + (int) Ops.lengthdir_y(4, 15), pid).setID(eid + 7));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -15),
+                    my + (int) Ops.lengthdir_y(4, -15), pid).setID(eid + 8));
         }
         if (number > 16) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 35),
-                    my + (int) Client.lengthdir_y(4, 35), pid).setID(eid + 9));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -35),
-                    my + (int) Client.lengthdir_y(4, -35), pid).setID(eid + 10));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 35),
+                    my + (int) Ops.lengthdir_y(4, 35), pid).setID(eid + 9));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -35),
+                    my + (int) Ops.lengthdir_y(4, -35), pid).setID(eid + 10));
         }
         if (number > 20) {
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, 45),
-                    my + (int) Client.lengthdir_y(4, 45), pid).setID(eid + 11));
-            world.entityList.add(new SandEntity(px, py, mx + (int) Client.lengthdir_x(4, -45),
-                    my + (int) Client.lengthdir_y(4, -45), pid).setID(eid + 12));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, 45),
+                    my + (int) Ops.lengthdir_y(4, 45), pid).setID(eid + 11));
+            world.entityList.add(new SandEntity(px, py, mx + (int) Ops.lengthdir_x(4, -45),
+                    my + (int) Ops.lengthdir_y(4, -45), pid).setID(eid + 12));
         }
     }
 }

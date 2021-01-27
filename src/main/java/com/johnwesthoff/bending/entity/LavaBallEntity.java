@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -97,8 +97,8 @@ public class LavaBallEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
-        if (client.checkCollision(X, Y) && maker != client.ID
+    public void checkAndHandleCollision(Session client) {
+        if (client.client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.lastHit = maker;
             client.killMessage = "How did ` beat ~?";

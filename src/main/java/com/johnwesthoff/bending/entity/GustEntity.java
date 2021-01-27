@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -105,10 +105,10 @@ public class GustEntity extends Entity {
 
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y)) {
-            client.hurt(7);
+        if (client.client.checkCollision(X, Y)) {
+            client.client.hurt(7);
             client.world.vspeed += yspeed;
             client.xspeed += xspeed;
             alive = false;

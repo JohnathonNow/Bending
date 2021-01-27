@@ -1,18 +1,18 @@
 
 package com.johnwesthoff.bending.spells.water;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.entity.IceShardEntity;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.entity.IceShardEntity;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 
 public class WaterbendingShard extends Waterbending {
     public WaterbendingShard() {
@@ -26,7 +26,7 @@ public class WaterbendingShard extends Waterbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
@@ -35,11 +35,11 @@ public class WaterbendingShard extends Waterbending {
         }
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = Constants.FULL_ANGLE - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = Constants.FULL_ANGLE - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Client.lengthdir_x(9, direction)));
-        my = ((int) (Client.lengthdir_y(9, direction)));
+        mx = ((int) (Ops.lengthdir_x(9, direction)));
+        my = ((int) (Ops.lengthdir_y(9, direction)));
         maker = ID;
         getMessage(app.out);
     }
@@ -60,7 +60,7 @@ public class WaterbendingShard extends Waterbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -7,11 +7,12 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.ShardEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 
 public class EarthbendingShard extends Earthbending {
     public EarthbendingShard() {
@@ -25,19 +26,19 @@ public class EarthbendingShard extends Earthbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
         if (app.world.isSolid(app.world.x, app.world.y + 4)) {
             app.energico += 50;
         }
-        mx = ((int) (Client.lengthdir_x(32, direction)));
-        my = ((int) (Client.lengthdir_y(32, direction)));
+        mx = ((int) (Ops.lengthdir_x(32, direction)));
+        my = ((int) (Ops.lengthdir_y(32, direction)));
         maker = ID;
         getMessage(app.out);
     }

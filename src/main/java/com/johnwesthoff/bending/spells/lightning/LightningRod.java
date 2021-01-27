@@ -1,7 +1,7 @@
 
 package com.johnwesthoff.bending.spells.lightning;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.entity.RodEntity;
@@ -28,7 +28,7 @@ public class LightningRod extends Lightning {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
 
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
@@ -49,7 +49,7 @@ public class LightningRod extends Lightning {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
     }
 
     @Override

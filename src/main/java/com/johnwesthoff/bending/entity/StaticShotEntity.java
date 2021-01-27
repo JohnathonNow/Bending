@@ -10,13 +10,13 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  *
@@ -90,7 +90,7 @@ public class StaticShotEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         for (Player p : lol.playerList) {
-            if (Client.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
+            if (Ops.pointDis(X, Y, p.x, p.y) < radius && maker != p.ID) {
                 alive = false;
                 lol.sendMessage(DestroyEvent.getPacket(this));
                 lol.sendMessage(ChargeEvent.getPacket(this));

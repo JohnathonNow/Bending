@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -26,13 +26,13 @@ public class AirAffinity extends Airbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
     }
 
     int number = 0;
 
     @Override
-    public void onSpawn(Client me) {
+    public void onSpawn(Session me) {
         number = 0;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Airbending) {
@@ -42,7 +42,7 @@ public class AirAffinity extends Airbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         app.maxlungs = 150 + (75 * number);
         app.world.floatiness = 2;
     }

@@ -4,7 +4,7 @@ package com.johnwesthoff.bending.spells.misc;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.spells.Spell;
 
 import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIconBase;
@@ -30,7 +30,7 @@ public class SpellRandomMatch extends SpellRandom {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

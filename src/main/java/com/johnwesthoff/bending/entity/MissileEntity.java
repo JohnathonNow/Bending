@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -93,12 +93,12 @@ public class MissileEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y) && maker != client.ID
+        if (client.client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             alive = false;
-            client.hurt(10);
+            client.client.hurt(10);
             client.xspeed += 7 - client.random.nextInt(14);
             client.world.vspeed -= 5;
             client.lastHit = maker;

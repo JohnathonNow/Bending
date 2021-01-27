@@ -4,7 +4,7 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -86,11 +86,11 @@ public class SpoutEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y)) {
+        if (client.client.checkCollision(X, Y)) {
             if (maker != client.ID && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-                client.hurt(5);
+                client.client.hurt(5);
                 client.lastHit = maker;
             }
             client.world.vspeed -= 5;

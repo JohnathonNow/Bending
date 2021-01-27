@@ -4,7 +4,7 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
@@ -108,10 +108,10 @@ public class TornadoEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y) && life < 80) {
-            client.hurt(1);
+        if (client.client.checkCollision(X, Y) && life < 80) {
+            client.client.hurt(1);
             client.xspeed += 1 - client.random.nextInt(2);
             client.xspeed *= -1;
             client.world.x = (int) X + (int) client.xspeed;
