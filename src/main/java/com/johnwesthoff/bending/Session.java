@@ -22,7 +22,9 @@ import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
 public class Session {
+    public Client client;
     public ClientUI clientui;
+    public ClientNetworking net;
     public boolean goodTeam = false;
     public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
@@ -36,14 +38,11 @@ public class Session {
     public Player localPlayer;
     public int whoseTurn = -1;
     public short matchOver = 0, forcedRespawn = 0;
-    public static AppletActionListener actioner;
-    public ClientInputListener inputer;
     public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
     public int port = 25565;
     public Properties userpassinfo;
-    public ClothingChooser1 cc = new ClothingChooser1(this);
     public double engrecharge = 4;
     public Random random = new Random();
     public String serverIP;
@@ -75,13 +74,10 @@ public class Session {
     public String killMessage = "~ was defeated by `.";
     public int timeToHeal = 0;
     public String[] hosts = new String[1];
-    public Register form = new Register();
-    public Verify exactly = new Verify();
     public Spell[][] spellList;
     public Spell[] passiveList;
     public int leftClick = 0, rightClick = 1, midClick = 2;
     public double xspeed = 0;
-    public SpellList1 spellselection;
     public double prevMove;
     public short turnVisible = -1, removeAura = -1;
     public GameService gameService;
@@ -116,6 +112,22 @@ public class Session {
             instance = new Session();
         }
         return instance;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public ClientUI getClientui() {
+        return clientui;
+    }
+
+    public void setClientui(ClientUI clientui) {
+        this.clientui = clientui;
     }
 
     public boolean isGoodTeam() {
@@ -230,22 +242,6 @@ public class Session {
         this.forcedRespawn = forcedRespawn;
     }
 
-    public static AppletActionListener getActioner() {
-        return actioner;
-    }
-
-    public static void setActioner(AppletActionListener actioner) {
-        Session.actioner = actioner;
-    }
-
-    public ClientInputListener getInputer() {
-        return inputer;
-    }
-
-    public void setInputer(ClientInputListener inputer) {
-        this.inputer = inputer;
-    }
-
     public ArrayList<Integer> getMyTeam() {
         return myTeam;
     }
@@ -308,14 +304,6 @@ public class Session {
 
     public void setUserpassinfo(Properties userpassinfo) {
         this.userpassinfo = userpassinfo;
-    }
-
-    public ClothingChooser1 getCc() {
-        return cc;
-    }
-
-    public void setCc(ClothingChooser1 cc) {
-        this.cc = cc;
     }
 
     public double getEngrecharge() {
@@ -590,22 +578,6 @@ public class Session {
         this.hosts = hosts;
     }
 
-    public Register getForm() {
-        return form;
-    }
-
-    public void setForm(Register form) {
-        this.form = form;
-    }
-
-    public Verify getExactly() {
-        return exactly;
-    }
-
-    public void setExactly(Verify exactly) {
-        this.exactly = exactly;
-    }
-
     public Spell[][] getSpellList() {
         return spellList;
     }
@@ -652,14 +624,6 @@ public class Session {
 
     public void setXspeed(double xspeed) {
         this.xspeed = xspeed;
-    }
-
-    public SpellList1 getSpellselection() {
-        return spellselection;
-    }
-
-    public void setSpellselection(SpellList1 spellselection) {
-        this.spellselection = spellselection;
     }
 
     public double getPrevMove() {
@@ -849,5 +813,4 @@ public class Session {
     public static void setInstance(Session instance) {
         Session.instance = instance;
     }
-
 }

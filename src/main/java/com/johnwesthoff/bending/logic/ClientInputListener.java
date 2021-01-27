@@ -20,15 +20,16 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Constants;
 
 /**
  * @author John
  */
 public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener, MouseWheelListener {
-    Client pointer;
+    ClientUI pointer;
 
-    public ClientInputListener(Client pointer) {
+    public ClientInputListener(ClientUI pointer) {
         this.pointer = pointer;
     }
 
