@@ -19,9 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.app.game.GameService;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
@@ -36,9 +36,9 @@ public class AppletActionListener implements ActionListener {
 
     private final GameService gameService;
 
-    Client app;
+    ClientUI app;
 
-    public AppletActionListener(final Client app) {
+    public AppletActionListener(final ClientUI app) {
         this.app = app;
 
         // using factory to inject dependency

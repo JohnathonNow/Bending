@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JColorChooser;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.avatar.AvatarService;
 import com.johnwesthoff.bending.app.avatar.AvatarServiceFactory;
@@ -42,7 +43,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     Session app;
     Image background;
 
-    public ClothingChooser1(Session session) {
+    public ClothingChooser1(ClientUI cui) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
@@ -58,7 +59,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics G) {
-        G.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
+        G.drawImage(app.bimage, 0, 0, getWidth(), getHeight(), null);
         G.drawImage(stuff[4], 9 + 100, 60 + 12 + 200, this);
         G.drawImage(stuff[4], 24 + 100, 60 + 12 + 200, this);
 

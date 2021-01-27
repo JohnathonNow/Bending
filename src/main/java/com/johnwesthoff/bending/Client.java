@@ -229,7 +229,7 @@ public class Client {
         if ((session.world.status & Constants.ST_FLAMING) != 0) {
             session.HP -= session.random.nextInt(2);
             if ((session.passiveList[session.spellBook].getName().equals("Fireproof"))) {
-                session.energico += (session.inputer.doublecast * 3);
+                session.energico += (session.clientui.inputer.doublecast * 3);
             }
             if (session.random.nextInt(10) == 0) {
                 session.world.status &= ~Constants.ST_FLAMING;// Stop being on fire
@@ -262,14 +262,22 @@ public class Client {
                 // ex.printStackTrace();
             }
             if (session.getLastHit() == session.getID()) {
-                session.clientui.sendMessage(session.getUsername() + " has committed suicide.", 0xFF0436);
+                session.net.sendMessage(session.getUsername() + " has committed suicide.", 0xFF0436);
             } else {
-                session.clientui.sendMessage(session.killMessage.replace("~", session.getUsername()).replace("`",
-                        session.clientui.getKiller(session.getLastHit())), 0x04FFF8);
+                session.net.sendMessage(session.killMessage.replace("~", session.getUsername()).replace("`",
+                        getKiller(session.getLastHit())), 0x04FFF8);
             }
             return true;
         }
         return false;
     }
 
+    public String getKiller(final int i) {
+        for (final Player p : Session.getInstance().world.playerList) {
+            if (p.ID == i) {
+                return p.username;
+            }
+        }
+        return "No One";
+    }
 }

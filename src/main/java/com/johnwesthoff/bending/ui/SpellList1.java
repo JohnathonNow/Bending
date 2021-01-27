@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.app.spell.SpellsService;
 import com.johnwesthoff.bending.app.spell.SpellsServiceFactory;
 import com.johnwesthoff.bending.spells.Spell;
@@ -28,7 +29,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
     /**
      * Creates new form SpellList
      */
-    Client app;
+    ClientUI app;
 
     public SpellChooser1 choochootrain;
     public PassiveChooser1 choochootrain2;
@@ -38,9 +39,9 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
      */
     private SpellsService spellsService;
 
-    public SpellList1(Client app) {
+    public SpellList1(ClientUI clientui) {
         initComponents();
-        this.app = app;
+        this.app = clientui;
 
         // using factory to inject dependency
         spellsService = SpellsServiceFactory.create();
@@ -87,7 +88,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         USER.setText("USER: " + this.app.username);
         this.setLocation(0, 0);
         for (int i = 0; i < 5; i++) {
-            jTable4.getModel().setValueAt(app.passiveList[i].getName(), i, 0);
+            jTable4.getModel().setValueAt(clientui.passiveList[i].getName(), i, 0);
         }
     }
 
