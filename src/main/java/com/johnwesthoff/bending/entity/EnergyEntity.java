@@ -4,16 +4,18 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Client;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.nio.ByteBuffer;
+
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
-
-import java.awt.*;
-import java.nio.ByteBuffer;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
@@ -83,7 +85,7 @@ public class EnergyEntity extends Entity {
                     
         }
         for (Player p : lol.playerList) {
-            if (Client.pointDis(X, Y - Constants.HEAD, p.x, p.y) < 40 && maker != p.ID) {
+            if (Ops.pointDis(X, Y - Constants.HEAD, p.x, p.y) < 40 && maker != p.ID) {
                 alive = false;
                 lol.sendMessage(DestroyEvent.getPacket(this));
                 lol.sendMessage(ChargeEvent.getPacket(this));

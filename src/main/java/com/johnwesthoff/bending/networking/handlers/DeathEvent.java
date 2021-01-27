@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -17,7 +17,7 @@ public class DeathEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer buf) {
+    public void clientReceived(Session p, ByteBuffer buf) {
         final int fX = buf.getInt();
         final int fX2 = buf.getInt();
         if (fX2 != fX) {

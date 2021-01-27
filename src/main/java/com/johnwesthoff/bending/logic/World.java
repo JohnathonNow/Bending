@@ -11,6 +11,7 @@ import static com.johnwesthoff.bending.Constants.ETHER;
 import static com.johnwesthoff.bending.Constants.GROUND;
 import static com.johnwesthoff.bending.Constants.HEAD;
 import static com.johnwesthoff.bending.Constants.ICE;
+import static com.johnwesthoff.bending.Constants.JUICE;
 import static com.johnwesthoff.bending.Constants.LAND_TEX_SIZE;
 import static com.johnwesthoff.bending.Constants.LAVA;
 import static com.johnwesthoff.bending.Constants.LIQUID_LIST;
@@ -20,13 +21,11 @@ import static com.johnwesthoff.bending.Constants.SAND;
 import static com.johnwesthoff.bending.Constants.STONE;
 import static com.johnwesthoff.bending.Constants.ST_DRAIN;
 import static com.johnwesthoff.bending.Constants.ST_FLAMING;
-import static com.johnwesthoff.bending.Constants.ST_INVISIBLE;
 import static com.johnwesthoff.bending.Constants.TREE;
 import static com.johnwesthoff.bending.Constants.UGROUND;
 import static com.johnwesthoff.bending.Constants.UICE;
 import static com.johnwesthoff.bending.Constants.USTONE;
 import static com.johnwesthoff.bending.Constants.WATER;
-import static com.johnwesthoff.bending.Constants.JUICE;
 import static com.johnwesthoff.bending.Constants.WATER_COLOR;
 
 import java.awt.Color;
@@ -37,7 +36,6 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,12 +47,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.Entity;
 import com.johnwesthoff.bending.entity.ExplosionEntity;
 import com.johnwesthoff.bending.entity.HouseEntity;
 import com.johnwesthoff.bending.entity.WaterEntity;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.Coordinate;
+import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
@@ -312,7 +312,7 @@ public class World implements Serializable {
             // this.move = 0;
             if ((dig += 2) >= 100) {
                 dig = 0;
-                spell.getAction(main);
+                spell.getAction(main.getSession());
             }
         }
         return dig;
@@ -1007,9 +1007,9 @@ public class World implements Serializable {
             if (inBounds(x + move, y + (int) vspeed)) {
                 double toMove = move, XXX1 = x + 3, YYY1 = y - 4, XXX2 = x - 3, YYY2 = y - 4;
                 if (isLiquid(x, y)) {
-                    toMove *= Client.swimmingSpeed;
+                    toMove *= Session.getInstance().swimmingSpeed;
                 } else {
-                    toMove *= Client.runningSpeed;
+                    toMove *= Session.getInstance().runningSpeed;
                 }
                 while (true) {
                     YYY1 += 1;
@@ -1108,20 +1108,20 @@ public class World implements Serializable {
             yy[0] = (0);
             firePolygonred.addPoint(xx[0], yy[0]);
             int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
-            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
             firePolygonred.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 48 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 20 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 }
                 firePolygonred.addPoint(xx[i], yy[i]);
             }
@@ -1134,20 +1134,20 @@ public class World implements Serializable {
             firePolygonorange.addPoint(xx[0], yy[0]);
             dir = 100 + random.nextInt(45);
             len = 40 + random.nextInt(40);
-            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
             firePolygonorange.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 40 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 12 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 }
                 firePolygonorange.addPoint(xx[i], yy[i]);
             }
@@ -1160,20 +1160,20 @@ public class World implements Serializable {
             firePolygonyellow.addPoint(xx[0], yy[0]);
             dir = 100 + random.nextInt(45);
             len = 32 + random.nextInt(32);
-            xx[1] = xx[0] + (int) Client.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Client.lengthdir_y(len, dir);
+            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
+            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
             firePolygonyellow.addPoint(xx[1], yy[1]);
             for (int i = 2; i < xx.length; i++) {
                 if (i % 2 == 1) {
                     dir = 35 + random.nextInt(90);
                     len = 32 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 } else {
                     dir = 225 + random.nextInt(90);
                     len = 4 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) Client.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Client.lengthdir_y(len, dir);
+                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
+                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
                 }
                 firePolygonyellow.addPoint(xx[i], yy[i]);
             }
@@ -1189,9 +1189,9 @@ public class World implements Serializable {
 
     public void onDraw(Graphics g) {
         // int incX, incY;
-        // incX = (int)Client.lengthdir_x(Client.pointDis(x, y, mouseX,
+        // incX = (int)Ops.lengthdir_x(Client.pointDis(x, y, mouseX,
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        // incY = (int)Client.lengthdir_y(Client.pointDis(x, y, mouseX,
+        // incY = (int)Ops.lengthdir_y(Client.pointDis(x, y, mouseX,
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
         float followx = x;
         float followy = y;

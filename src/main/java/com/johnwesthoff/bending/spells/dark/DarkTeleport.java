@@ -7,10 +7,11 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 
 public class DarkTeleport extends Spell {
     public DarkTeleport() {
@@ -26,13 +27,13 @@ public class DarkTeleport extends Spell {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         mx = app.world.mouseX + app.world.viewX;
         my = app.world.mouseY + app.world.viewY;
-        if (Client.pointDis(app.world.x, app.world.y, mx, my) < 600) {
+        if (Ops.pointDis(app.world.x, app.world.y, mx, my) < 600) {
             app.world.x = mx;
             app.world.y = my;
-            app.sendMovement();
+            app.net.sendMovement();
             app.energico = 0;
         } else {
             app.energico += getCost();
@@ -50,7 +51,7 @@ public class DarkTeleport extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
     }
 
     @Override

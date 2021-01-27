@@ -7,11 +7,12 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.JuiceBallEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 
 public class WaterbendingHealBall extends Waterbending {
     public WaterbendingHealBall() {
@@ -25,17 +26,17 @@ public class WaterbendingHealBall extends Waterbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Client.lengthdir_x(9, direction)));
-        my = ((int) (Client.lengthdir_y(9, direction)));
+        mx = ((int) (Ops.lengthdir_x(9, direction)));
+        my = ((int) (Ops.lengthdir_y(9, direction)));
         maker = ID;
         getMessage(app.out);
     }
@@ -56,7 +57,7 @@ public class WaterbendingHealBall extends Waterbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -136,7 +136,7 @@ public class ClientUI extends JPanel implements Runnable {
         }
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(clientui);
-        clientui.inputer = new ClientInputListener(clientui);
+        clientui.inputer = new ClientInputListener(sess);
 
         // using factory to inject dependency
         sess.gameService = GameServiceFactory.create();
@@ -579,7 +579,7 @@ public class ClientUI extends JPanel implements Runnable {
                     sess.world.x = (sess.goodTeam ? sess.world.wIdTh / 2 : 0)
                             + sess.random.nextInt(sess.world.wIdTh / 2);
                     sess.world.dead = false;
-                    sess.passiveList[sess.spellBook].onSpawn(sess.client);
+                    sess.passiveList[sess.spellBook].onSpawn(sess);
                     spellselection.setVisible(false);
                     Spell.randomSpellMatch.setSpells();
                 }
@@ -671,11 +671,11 @@ public class ClientUI extends JPanel implements Runnable {
                         graphicsBuffer.setColor(Color.white);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                     }
-                    if (!sess.spellList[sess.spellBook][i].isEnergyEfficient(sess.client, i)) {
+                    if (!sess.spellList[sess.spellBook][i].isEnergyEfficient(sess, i)) {
                         graphicsBuffer.setColor(Color.MAGENTA);
                         graphicsBuffer.drawRect(5 + i * 34, 1, 30, 14);
                     }
-                    if (!sess.spellList[sess.spellBook][i].isCooledDown(sess.client, i)) {
+                    if (!sess.spellList[sess.spellBook][i].isCooledDown(sess, i)) {
                         graphicsBuffer.setColor(Color.CYAN);
                         graphicsBuffer.drawRect(6 + i * 34, 2, 28, 12);
                     }
@@ -793,7 +793,7 @@ public class ClientUI extends JPanel implements Runnable {
                             world.y = 0;
                             world.x = (sess.goodTeam ? world.wIdTh / 2 : 0) + sess.random.nextInt(world.wIdTh / 2);
                             world.dead = false;
-                            sess.passiveList[sess.spellBook].onSpawn(sess.client);
+                            sess.passiveList[sess.spellBook].onSpawn(sess);
                             sess.HP = sess.MAXHP;
                             sess.lastHit = sess.ID;
                         }

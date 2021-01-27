@@ -2,13 +2,14 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.SandEntity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
+import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 
 public class SpellEvent implements NetworkEvent {
@@ -20,7 +21,7 @@ public class SpellEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer buf) {
+    public void clientReceived(Session p, ByteBuffer buf) {
         int subID = buf.getInt();
         int px = buf.getInt();
         int py = buf.getInt();
@@ -49,45 +50,45 @@ public class SpellEvent implements NetworkEvent {
             number /= (32);
             p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX, mY, ID).setID(Iw));
             if (number > 3) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 30),
-                        mY + (int) Client.lengthdir_y(4, 30), ID).setID(Iw + 1));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -30),
-                        mY + (int) Client.lengthdir_y(4, -30), ID).setID(Iw + 2));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 30),
+                        mY + (int) Ops.lengthdir_y(4, 30), ID).setID(Iw + 1));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -30),
+                        mY + (int) Ops.lengthdir_y(4, -30), ID).setID(Iw + 2));
                 Server.MYID += 2;
             }
             if (number > 5) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                        mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 3));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                        mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 4));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 45),
+                        mY + (int) Ops.lengthdir_y(4, 45), ID).setID(Iw + 3));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -45),
+                        mY + (int) Ops.lengthdir_y(4, -45), ID).setID(Iw + 4));
                 Server.MYID += 2;
             }
             if (number > 7) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 60),
-                        mY + (int) Client.lengthdir_y(4, 60), ID).setID(Iw + 5));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -60),
-                        mY + (int) Client.lengthdir_y(4, -60), ID).setID(Iw + 6));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 60),
+                        mY + (int) Ops.lengthdir_y(4, 60), ID).setID(Iw + 5));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -60),
+                        mY + (int) Ops.lengthdir_y(4, -60), ID).setID(Iw + 6));
                 Server.MYID += 2;
             }
             if (number > 12) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 15),
-                        mY + (int) Client.lengthdir_y(4, 15), ID).setID(Iw + 7));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -15),
-                        mY + (int) Client.lengthdir_y(4, -15), ID).setID(Iw + 8));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 15),
+                        mY + (int) Ops.lengthdir_y(4, 15), ID).setID(Iw + 7));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -15),
+                        mY + (int) Ops.lengthdir_y(4, -15), ID).setID(Iw + 8));
                 Server.MYID += 2;
             }
             if (number > 16) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 35),
-                        mY + (int) Client.lengthdir_y(4, 35), ID).setID(Iw + 9));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -35),
-                        mY + (int) Client.lengthdir_y(4, -35), ID).setID(Iw + 10));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 35),
+                        mY + (int) Ops.lengthdir_y(4, 35), ID).setID(Iw + 9));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -35),
+                        mY + (int) Ops.lengthdir_y(4, -35), ID).setID(Iw + 10));
                 Server.MYID += 2;
             }
             if (number > 20) {
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, 45),
-                        mY + (int) Client.lengthdir_y(4, 45), ID).setID(Iw + 11));
-                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Client.lengthdir_x(4, -45),
-                        mY + (int) Client.lengthdir_y(4, -45), ID).setID(Iw + 12));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, 45),
+                        mY + (int) Ops.lengthdir_y(4, 45), ID).setID(Iw + 11));
+                p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX + (int) Ops.lengthdir_x(4, -45),
+                        mY + (int) Ops.lengthdir_y(4, -45), ID).setID(Iw + 12));
                 Server.MYID += 2;
             }
             nm.getContent().putInt(number);

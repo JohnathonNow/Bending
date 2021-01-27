@@ -6,10 +6,11 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class AirbendingAir extends Airbending {
@@ -24,13 +25,13 @@ public class AirbendingAir extends Airbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
-        double direction = 360 - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Client.lengthdir_x(16, direction)));
-        my = ((int) (Client.lengthdir_y(16, direction))) - 8;
+        mx = ((int) (Ops.lengthdir_x(16, direction)));
+        my = ((int) (Ops.lengthdir_y(16, direction))) - 8;
         X = app.world.x + mx;
         Y = app.world.y + my;
         maker = ID;
@@ -53,7 +54,7 @@ public class AirbendingAir extends Airbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

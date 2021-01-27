@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 
@@ -15,7 +15,7 @@ public class HurtEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer toRead) {
+    public void clientReceived(Session p, ByteBuffer toRead) {
         p.HP -= toRead.getInt();
 
     }

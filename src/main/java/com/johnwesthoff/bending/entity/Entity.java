@@ -5,7 +5,7 @@ package com.johnwesthoff.bending.entity;
  */
 
 import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 
@@ -200,7 +200,7 @@ public abstract class Entity extends Object {
         return whatIam;
     }
 
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
         // do nothing
     }
 }

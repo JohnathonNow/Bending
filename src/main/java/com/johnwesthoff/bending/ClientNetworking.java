@@ -47,7 +47,7 @@ public class ClientNetworking {
                     try {
                         while (sess.gameAlive) {
                             NetworkMessage m = NetworkMessage.read(sess.input);
-                            NetworkManager.getInstance().getHandler(m).clientReceived(sess.client, m.getContent());
+                            NetworkManager.getInstance().getHandler(m).clientReceived(sess, m.getContent());
                             sess.pc++;
                         }
                     } catch (final Exception ex) {
@@ -122,7 +122,7 @@ public class ClientNetworking {
             p.myTeam = sess.myTeam.contains(p.ID) && sess.gameMode > 0;
         }
         sess.HP = sess.MAXHP;
-        sess.passiveList[sess.spellBook].onSpawn(sess.client);
+        sess.passiveList[sess.spellBook].onSpawn(sess);
         for (final Player p : sess.world.playerList) {
             p.score = 0;
         }

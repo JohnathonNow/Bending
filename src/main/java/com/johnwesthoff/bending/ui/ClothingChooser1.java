@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JColorChooser;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.avatar.AvatarService;
@@ -40,14 +39,14 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
     byte[] cloths = new byte[] { 1, 1, 1, 1, 1, 1 };
     Image[] stuff = new Image[6];
     boolean done = false;
-    Session app;
+    ClientUI app;
     Image background;
 
     public ClothingChooser1(ClientUI cui) {
         initComponents();
         Thread me = new Thread(this);
         me.start();
-        this.app = session;
+        this.app = cui;
         avatarService = AvatarServiceFactory.create();
         // g = canvas.getGraphics();
         try {
@@ -120,7 +119,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
         buttonHead.setText("Head");
         buttonHead.addActionListener(event -> {
             cloths[1]++;
-            if (cloths[1] == 4 && !Client.unlocks.get(0, 1)) {
+            if (cloths[1] == 4 && !Session.getInstance().unlocks.get(0, 1)) {
                 cloths[1]++;
             }
             if (cloths[1] > waffles2) {
@@ -242,7 +241,7 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
 
         jButton1.setText("Save");
         jButton1.addActionListener(event -> {
-            if (Client.currentlyLoggedIn) {
+            if (Session.getInstance().currentlyLoggedIn) {
                 String post = "";
                 for (int i = 0; i < cloths.length; i++) {
                     post += cloths[i];
@@ -257,25 +256,25 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
                     post += i == colors2.length - 1 ? "" : ",";
                 }
                 // System.out.println(post);
-                avatarService.changesAppearance(post, Client.jtb.getText());
+                avatarService.changesAppearance(post, app.jtb.getText());
             }
         });
 
         jButton2.setText("Load");
         jButton2.addActionListener(event -> {
-            if (Client.currentlyLoggedIn) {
+            if (Session.getInstance().currentlyLoggedIn) {
                 loadClothing();
             }
         });
 
         jButton3.setText("Finish");
         jButton3.addActionListener(event -> {
-            Client.Clothing = cloths;
+            app.Clothing = cloths;
             for (int i = 0; i < colors.length; i++) {
-                Client.Colors[i] = colors[i].getRGB();
-                Client.Colors2[i] = colors2[i].getRGB();
+                app.Colors[i] = colors[i].getRGB();
+                app.Colors2[i] = colors2[i].getRGB();
             }
-            Client.immaKeepTabsOnYou.setSelectedIndex(0);
+            app.immaKeepTabsOnYou.setSelectedIndex(0);
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(this);
@@ -370,13 +369,13 @@ public class ClothingChooser1 extends javax.swing.JPanel implements Runnable {
      * Loads the clothing of the client
      */
     public void loadClothing() {
-        avatarService.getAppearance(Client.jtb.getText(), app.jtp.getText());
+        avatarService.getAppearance(app.jtb.getText(), app.jtp.getText());
 
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = new Color(Client.Colors[i]);
-            colors2[i] = new Color(Client.Colors2[i]);
+            colors[i] = new Color(app.Colors[i]);
+            colors2[i] = new Color(app.Colors2[i]);
         }
-        cloths = Client.Clothing;
+        cloths = app.Clothing;
         getImages();
     }
 

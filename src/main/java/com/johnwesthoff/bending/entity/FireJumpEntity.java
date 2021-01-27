@@ -12,10 +12,11 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
@@ -76,11 +77,11 @@ public class FireJumpEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (Client.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
+        if (Ops.pointDis(X, Y, client.world.x, client.world.y) < radius * 4 && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-            client.hurt(15);
+            client.client.hurt(15);
             client.world.status |= Constants.ST_FLAMING;
             client.world.vspeed += yspeed * 2;
             client.xspeed += xspeed;

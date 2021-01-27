@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -275,11 +275,11 @@ public class EnemyEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y) && master != client.ID
+        if (client.client.checkCollision(X, Y) && master != client.ID
                 && (client.gameMode <= 0 || !client.myTeam.contains(master))) {
-            client.hurt(7);
+            client.client.hurt(7);
             client.world.vspeed -= 4;
             client.xspeed += 4 - client.random.nextInt(8);
             client.lastHit = master;

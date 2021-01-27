@@ -13,8 +13,9 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.SpellEvent;
 import com.johnwesthoff.bending.spells.air.AirAffinity;
@@ -24,11 +25,6 @@ import com.johnwesthoff.bending.spells.air.AirbendingAir;
 import com.johnwesthoff.bending.spells.air.AirbendingGust;
 import com.johnwesthoff.bending.spells.air.AirbendingJump;
 import com.johnwesthoff.bending.spells.air.AirbendingTornado;
-import com.johnwesthoff.bending.spells.dark.DarkAura;
-import com.johnwesthoff.bending.spells.dark.DarkSoulBall;
-import com.johnwesthoff.bending.spells.dark.DarkSummonBall;
-import com.johnwesthoff.bending.spells.dark.DarkTeleport;
-import com.johnwesthoff.bending.spells.dark.Darkness;
 import com.johnwesthoff.bending.spells.earth.Earthbending;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
 import com.johnwesthoff.bending.spells.earth.EarthbendingShard;
@@ -213,16 +209,14 @@ public abstract class Spell {
         return passives.get(i);
     }
 
-    public void onSpawn(Client me) {
+    public void onSpawn(Session me) {
 
     }
 
     public void unlock() {
-        if (Client.XP >= unlockXP) {
+        Session sess = Session.getInstance();
+        if (sess.XP >= unlockXP) {
             locked = false;
-        }
-        if (getName().equals("Burito")) {
-            locked = !(Client.jtb.getText().equals("Joey") && Client.currentlyLoggedIn);
         }
     }
 
@@ -261,7 +255,7 @@ public abstract class Spell {
      * @param app the client performing this action and having its state modified as
      *            a result
      */
-    public abstract void getAction(Client app);
+    public abstract void getAction(Session app);
 
     /**
      * Executes the command for the spell as a result of a network event
@@ -281,36 +275,36 @@ public abstract class Spell {
 
     public abstract String getName();
 
-    public abstract void getPassiveAction(Client app);
+    public abstract void getPassiveAction(Session app);
 
     public int getCoolDown() {
         return (int) (getCost() * Constants.FPS / 600);
     }
 
-    public boolean isCooledDown(Client app, int index) {
+    public boolean isCooledDown(Session app, int index) {
         return app.ticks >= this.getEffectiveSpell(index).timer;
     }
 
-    public boolean isEnergyEfficient(Client app, int index) {
+    public boolean isEnergyEfficient(Session app, int index) {
         // lol that's a malopropism
         return app.energico >= this.getEffectiveSpell(index).getCost();
     }
 
-    public void startCoolDown(Client app, int index) {
+    public void startCoolDown(Session app, int index) {
         this.timer = app.ticks + this.getEffectiveSpell(index).getCoolDown();
     }
 
-    public void cast(Client app, int index) {
-        if (this.isCooledDown(app, index) && this.isEnergyEfficient(app, index) && app.isMyTurn) {
-            app.energico -= this.getEffectiveSpell(index).getCost();
-            if ((app.passiveList[app.spellBook].getName().equals("Fire Charge"))
+    public void cast(Session sess, int index) {
+        if (this.isCooledDown(sess, index) && this.isEnergyEfficient(sess, index) && sess.isMyTurn) {
+            sess.energico -= this.getEffectiveSpell(index).getCost();
+            if ((sess.passiveList[sess.spellBook].getName().equals("Fire Charge"))
                     && (this.getEffectiveSpell(index) instanceof Firebending)) {
-                if (app.random.nextInt(5 - app.inputer.doublecast) == 0) {
-                    this.getAction(app);
+                if (sess.random.nextInt(5 - sess.clientui.inputer.doublecast) == 0) {
+                    this.getAction(sess);
                 }
             }
-            this.getAction(app);
-            this.startCoolDown(app, index);
+            this.getAction(sess);
+            this.startCoolDown(sess, index);
         }
     }
 

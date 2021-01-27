@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.spells.*;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.spells.Spell;
 
 /**
  *
@@ -49,7 +49,7 @@ public class SpellChooser1 extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         // super.paintComponent(g);
 
-        g.drawImage(Client.bimage, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(Session.getInstance().clientui.bimage, 0, 0, getWidth(), getHeight(), null);
     }
 
     /**

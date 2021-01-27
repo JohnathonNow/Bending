@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
@@ -21,7 +21,7 @@ public class LoginEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer rasputin) {
+    public void clientReceived(Session p, ByteBuffer rasputin) {
         int iid;
         iid = rasputin.getInt();
         final String feliceNavidad = Server.getString(rasputin);
@@ -42,7 +42,7 @@ public class LoginEvent implements NetworkEvent {
         yes.myTeam = sameTeam;
         yes.ID = iid;
         yes.username = feliceNavidad;
-        p.addChat(yes.username + " has joined the game.", Color.RED);
+        p.clientui.addChat(yes.username + " has joined the game.", Color.RED);
         p.loggedIn = true;
         yes.sameTeam = sameTeam;
     }

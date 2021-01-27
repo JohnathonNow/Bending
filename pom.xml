@@ -58,7 +58,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>com.johnwesthoff.bending.Client</mainClass>
+              <mainClass>com.johnwesthoff.bending.ClientUI</mainClass>
             </manifest>
           </archive>
         </configuration>

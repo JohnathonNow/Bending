@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -87,11 +87,11 @@ public class RockEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y) && maker != client.ID
+        if (client.client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-            client.hurt(18);
+            client.client.hurt(18);
             client.world.vspeed -= 5;
             client.xspeed += 7 - client.random.nextInt(14);
             client.lastHit = maker;

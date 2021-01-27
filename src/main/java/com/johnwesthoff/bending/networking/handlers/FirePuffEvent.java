@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.FirePuffEntity;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -17,7 +17,7 @@ public class FirePuffEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer buf) {
+    public void clientReceived(Session p, ByteBuffer buf) {
         int px = buf.getInt();
         int py = buf.getInt();
         int mx = buf.getInt();

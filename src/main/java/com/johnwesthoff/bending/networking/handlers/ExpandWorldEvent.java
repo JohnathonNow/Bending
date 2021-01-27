@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 
@@ -14,7 +14,7 @@ public class ExpandWorldEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer toRead) {
+    public void clientReceived(Session p, ByteBuffer toRead) {
         p.busy = true;
         final int newx = toRead.getInt();
         final int si = toRead.getInt();
@@ -37,7 +37,7 @@ public class ExpandWorldEvent implements NetworkEvent {
             }
             p.world.x += si;
         }
-        p.readEntityList(toRead);
+        p.net.readEntityList(toRead);
         p.busy = false;
 
     }

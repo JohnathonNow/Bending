@@ -2,7 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
@@ -16,7 +16,7 @@ public class FillEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client p, ByteBuffer toRead) {
+    public void clientReceived(Session p, ByteBuffer toRead) {
         final int ix = toRead.getInt();
         final int iy = toRead.getInt();
         final int ir = toRead.getInt();

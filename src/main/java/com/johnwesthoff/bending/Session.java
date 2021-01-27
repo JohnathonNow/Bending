@@ -9,15 +9,9 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.johnwesthoff.bending.app.game.GameService;
-import com.johnwesthoff.bending.logic.ClientInputListener;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
-import com.johnwesthoff.bending.ui.AppletActionListener;
-import com.johnwesthoff.bending.ui.ClothingChooser1;
-import com.johnwesthoff.bending.ui.Register;
-import com.johnwesthoff.bending.ui.SpellList1;
-import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 import com.johnwesthoff.bending.util.network.StringLongBoolean;
 
@@ -33,6 +27,7 @@ public class Session {
     public boolean chatActive = false;
     public String chatMessage = "";
     public int gameMode = 1;
+    public int shockdrain = 0;
     public int fireTime = 0;
     public int ticks = 0;
     public Player localPlayer;

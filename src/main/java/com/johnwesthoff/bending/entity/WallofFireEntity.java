@@ -4,15 +4,19 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.logic.World;
 
 /**
  * @author John
@@ -81,13 +85,13 @@ public class WallofFireEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        client.checkCollision(X, Y);// Just to move the hitbox so when it is passed, it works
+        client.client.checkCollision(X, Y);// Just to move the hitbox so when it is passed, it works
         // pointDis(me3.X, me3.Y, world.x, world.y)<me3.height
-        if (checkCollision(client.playerHitbox) && maker != client.ID
+        if (checkCollision(client.localPlayer.playerHitbox) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
-            client.hurt(35);
+            client.client.hurt(35);
             alive = false;
             client.lastHit = maker;
             client.world.vspeed -= 8;

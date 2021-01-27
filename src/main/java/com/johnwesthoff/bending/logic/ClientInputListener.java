@@ -4,8 +4,6 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.Client.shortJump;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,16 +18,17 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
  */
 public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener, MouseWheelListener {
-    ClientUI pointer;
+    Session pointer;
 
-    public ClientInputListener(ClientUI pointer) {
+    public ClientInputListener(Session pointer) {
         this.pointer = pointer;
     }
 
@@ -38,7 +37,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     }
 
     public int getStuff() {
-        return -(pointer.getWidth() - pointer.getHeight()) / (2);
+        return -(pointer.clientui.getWidth() - pointer.clientui.getHeight()) / (2);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             return;
         }
         int button = e.getButton();
-        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
+        double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -81,7 +80,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
+        double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
             pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
@@ -91,12 +90,12 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     @Override
     public void mouseMoved(MouseEvent e) {
         if (pointer.world != null) {
-            double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
-            pointer.world.mouseX = (int) ((scale * pointer.getWidth())
-                    * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
+            double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
+            pointer.world.mouseX = (int) ((scale * pointer.clientui.getWidth())
+                    * ((e.getPoint().x - (pointer.clientui.getWidth() - pointer.clientui.getHeight())) / (double) pointer.clientui.getWidth()));
             // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
-            pointer.world.mouseY = (int) ((scale * pointer.getHeight())
-                    * (e.getPoint().y / (double) pointer.getHeight()));
+            pointer.world.mouseY = (int) ((scale * pointer.clientui.getHeight())
+                    * (e.getPoint().y / (double) pointer.clientui.getHeight()));
             pointer.world.mouseX = (int) (e.getX() / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
         }
@@ -107,7 +106,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
 
     private double cast(int index) {
         pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
-        return Client.pointDir(
+        return Ops.pointDir(
                 pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.y - pointer.world.viewY,
                 pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
@@ -120,12 +119,12 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             if (pointer.world == null) {
                 return;
             }
-            double scale = pointer.owner.getHeight() / (double) Constants.HEIGHT_INT;
-            pointer.world.mouseX = (int) ((scale * pointer.getWidth())
-                    * ((e.getPoint().x - (pointer.getWidth() - pointer.getHeight())) / (double) pointer.getWidth()));
+            double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
+            pointer.world.mouseX = (int) ((scale * pointer.clientui.getWidth())
+                    * ((e.getPoint().x - (pointer.clientui.getWidth() - pointer.clientui.getHeight())) / (double) pointer.clientui.getWidth()));
             // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
-            pointer.world.mouseY = (int) ((scale * pointer.getHeight())
-                    * (e.getPoint().y / (double) pointer.getHeight()));
+            pointer.world.mouseY = (int) ((scale * pointer.clientui.getHeight())
+                    * (e.getPoint().y / (double) pointer.clientui.getHeight()));
             pointer.world.mouseX = (int) (e.getX() / scale);
             pointer.world.mouseY = (int) (e.getY() / scale);
             // world.mouseY = (e.getY()/scale);
@@ -137,10 +136,10 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     // System.out.println("H2");
                     if (pointer.world.mouseY * Constants.MULTIPLIER > 200
                             && pointer.world.mouseY * Constants.MULTIPLIER < 250) {
-                        pointer.spellselection.XP.setText("XP: " + Client.XP);
-                        pointer.spellselection.USER.setText("USER: " + Client.jtb.getText());
-                        pointer.spellselection.setVisible(true);
-                        Client.immaKeepTabsOnYou.setSelectedIndex(1);
+                        pointer.clientui.spellselection.XP.setText("XP: " + pointer.XP);
+                        pointer.clientui.spellselection.USER.setText("USER: " + pointer.clientui.jtb.getText());
+                        pointer.clientui.spellselection.setVisible(true);
+                        pointer.clientui.immaKeepTabsOnYou.setSelectedIndex(1);
                     }
                 }
             }
@@ -263,7 +262,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     break;
                 case KeyEvent.VK_W:
                     if (!pointer.world.keys[KeyEvent.VK_S]) {
-                        pointer.world.jump = (float) (Client.runningSpeed * Constants.JUMP_COEFFICIENT);
+                        pointer.world.jump = (float) (pointer.runningSpeed * Constants.JUMP_COEFFICIENT);
 
                     }
                     // sendMovement();
@@ -298,8 +297,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (pointer.chatActive) {
-                pointer.chatMessage = Client.username + ": " + pointer.chatMessage;
-                pointer.sendMessage(pointer.chatMessage);
+                pointer.chatMessage = pointer.username + ": " + pointer.chatMessage;
+                pointer.net.sendMessage(pointer.chatMessage);
                 if (pointer.chatMessage.contains("/suicide")) {
                     pointer.HP = 0;
                     pointer.world.status |= Constants.ST_FLAMING;
@@ -308,21 +307,21 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     pointer.world.status ^= Constants.ST_INVISIBLE;
                 }
                 if (pointer.chatMessage.contains("/embiggen")) {
-                    Client.container.dispose();// You can't change the state from
+                    pointer.clientui.container.dispose();// You can't change the state from
                     // a listener, so kill it first
-                    if (!Client.container.isUndecorated()) {
-                        Client.container.setLocation(0, 0);
-                        Client.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        Client.container.setUndecorated(true);
+                    if (!pointer.clientui.container.isUndecorated()) {
+                        pointer.clientui.container.setLocation(0, 0);
+                        pointer.clientui.container.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        pointer.clientui.container.setUndecorated(true);
                     } else {
-                        Client.container.setExtendedState(JFrame.NORMAL);
-                        Client.container.setUndecorated(false);
+                        pointer.clientui.container.setExtendedState(JFrame.NORMAL);
+                        pointer.clientui.container.setUndecorated(false);
                     }
-                    Client.container.pack();
-                    Client.container.setVisible(true);
+                    pointer.clientui.container.pack();
+                    pointer.clientui.container.setVisible(true);
                 }
                 if (pointer.chatMessage.contains("/quit")) {
-                    Client.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
+                    pointer.clientui.actioner.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "Restart"));
                 }
                 pointer.chatMessage = "";
                 pointer.chatActive = false;
@@ -358,7 +357,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                     if (pointer.world.vspeed < -3) {
                         pointer.world.vspeed /= 2;
                     }
-                    pointer.sendMovement();
+                    pointer.net.sendMovement();
                 } catch (Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -372,7 +371,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
                 break;
             case KeyEvent.VK_C:
                 if (!pointer.chatActive) {
-                    shortJump = !shortJump;
+                    pointer.shortJump = !pointer.shortJump;
                 }
                 break;
         }

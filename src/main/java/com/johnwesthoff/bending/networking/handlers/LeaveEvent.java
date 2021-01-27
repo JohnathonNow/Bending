@@ -3,7 +3,7 @@ package com.johnwesthoff.bending.networking.handlers;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -18,7 +18,7 @@ public class LeaveEvent implements NetworkEvent {
     }
 
     @Override
-    public void clientReceived(Client c, ByteBuffer buf) {
+    public void clientReceived(Session c, ByteBuffer buf) {
         int id = buf.getInt();
         for (final Player p : c.world.playerList) {
             if (p.ID == id) {
@@ -27,7 +27,7 @@ public class LeaveEvent implements NetworkEvent {
                 } else {
                     c.badTeam.remove(c.badTeam.indexOf(p.ID));
                 }
-                c.addChat(p.username + " has left the game.", Color.RED);
+                c.clientui.addChat(p.username + " has left the game.", Color.RED);
                 c.world.playerList.remove(p);
                 break;
             }

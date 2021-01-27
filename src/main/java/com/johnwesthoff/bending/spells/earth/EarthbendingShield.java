@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -26,7 +26,7 @@ public class EarthbendingShield extends Earthbending {
     int number = 0;
 
     @Override
-    public void onSpawn(Client me) {
+    public void onSpawn(Session me) {
         number = 0;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Earthbending) {
@@ -37,7 +37,7 @@ public class EarthbendingShield extends Earthbending {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         if (app.energico > 0 && app.HP < app.MAXHP) {
             app.energico -= 150;
             app.HP += 5;
@@ -45,7 +45,7 @@ public class EarthbendingShield extends Earthbending {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         /*
          * if (app.energico>0) { app.energico--; }
          */

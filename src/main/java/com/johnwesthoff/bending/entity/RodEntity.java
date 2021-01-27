@@ -5,15 +5,16 @@ package com.johnwesthoff.bending.entity;
  */
 
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.logic.World;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  * @author John
@@ -44,11 +45,11 @@ public class RodEntity extends Entity {
             G.drawArc((int) X - 4 - viewX, (int) Y - 36 - viewY - 4, 8, 8, 0, Constants.FULL_ANGLE);
             G.setColor(Color.YELLOW);
             int dir = r.nextInt(Constants.FULL_ANGLE), dis = 8 + r.nextInt(Constants.RADIUS_REGULAR);
-            int xx = (int) X + (int) Client.lengthdir_x(dis, dir) - viewX,
-                    yy = (int) Y + (int) Client.lengthdir_y(dis, dir) - 34 - viewY;
+            int xx = (int) X + (int) Ops.lengthdir_x(dis, dir) - viewX,
+                    yy = (int) Y + (int) Ops.lengthdir_y(dis, dir) - 34 - viewY;
             dir = r.nextInt(Constants.FULL_ANGLE);
             dis = 8 + r.nextInt(Constants.RADIUS_REGULAR);
-            int xxx = xx + (int) Client.lengthdir_x(dis, dir), yyy = yy + (int) Client.lengthdir_y(dis, dir);
+            int xxx = xx + (int) Ops.lengthdir_x(dis, dir), yyy = yy + (int) Ops.lengthdir_y(dis, dir);
             G.drawLine((int) X - viewX, (int) Y - 34 - viewY, xx, yy);
             G.drawLine(xx, yy, xxx, yyy);
         }

@@ -1,18 +1,19 @@
 
 package com.johnwesthoff.bending.spells.lightning;
 
-import com.johnwesthoff.bending.Client;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.Server;
-import com.johnwesthoff.bending.entity.BallLightningEntity;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
-import com.johnwesthoff.bending.util.network.ResourceLoader;
-
-import javax.swing.*;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.entity.BallLightningEntity;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
+import com.johnwesthoff.bending.util.math.Ops;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class LightningBall extends Lightning {
     public LightningBall() {
@@ -29,17 +30,17 @@ public class LightningBall extends Lightning {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - Constants.HEAD;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = Constants.FULL_ANGLE - Client.pointDir(app.world.x - app.world.viewX,
+        double direction = Constants.FULL_ANGLE - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - Constants.HEAD - app.world.viewY, app.world.mouseX, app.world.mouseY);
         // direction+=180;
-        mx = ((int) (Client.lengthdir_x(8, direction)));
-        my = ((int) (Client.lengthdir_y(8, direction)));
+        mx = ((int) (Ops.lengthdir_x(8, direction)));
+        my = ((int) (Ops.lengthdir_y(8, direction)));
         maker = ID;
         app.HP -= 3;
         getMessage(app.out);
@@ -56,7 +57,7 @@ public class LightningBall extends Lightning {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

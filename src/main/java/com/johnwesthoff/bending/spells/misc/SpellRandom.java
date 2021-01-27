@@ -1,7 +1,7 @@
 
 package com.johnwesthoff.bending.spells.misc;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
@@ -27,7 +27,7 @@ public class SpellRandom extends Spell {
     }
 
     @Override
-    public void getAction(Client app) {
+    public void getAction(Session app) {
         throw new UnsupportedOperationException("This should never be called!");
     }
 
@@ -47,7 +47,7 @@ public class SpellRandom extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Client app) {
+    public void getPassiveAction(Session app) {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 

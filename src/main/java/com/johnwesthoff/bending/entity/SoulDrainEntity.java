@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Client;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
@@ -98,9 +98,9 @@ public class SoulDrainEntity extends Entity {
     }
 
     @Override
-    public void checkAndHandleCollision(Client client) {
+    public void checkAndHandleCollision(Session client) {
 
-        if (client.checkCollision(X, Y) && maker != client.ID
+        if (client.client.checkCollision(X, Y) && maker != client.ID
                 && (client.gameMode <= 0 || client.badTeam.contains(maker))) {
             client.lastHit = maker;
             client.killMessage = "~'s soul was stolen by `!";
@@ -108,9 +108,9 @@ public class SoulDrainEntity extends Entity {
             client.world.vspeed -= 5;
             client.xspeed += 7 - client.random.nextInt(14);
             try {
-                client.out.addMessage(DrainEvent.getPacket(client.lastHit, client.hurt(21)));
+                client.out.addMessage(DrainEvent.getPacket(client.lastHit, client.client.hurt(21)));
             } catch (final IOException ex) {
-                // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
