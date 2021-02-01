@@ -72,7 +72,7 @@ public class JuiceBallEntity extends Entity {
         if (lol.earth.checkCollision(X, Y)) {
             radius = 24;
             lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.JUICE);
-            lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), 96, Constants.JUICE));
+            lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.JUICE));
             alive = false;
         }
     }

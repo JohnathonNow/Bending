@@ -87,6 +87,7 @@ public class Constants {
     public static final int LIGHTNING = 5;
     public static final int DARKNESS = 6;
     public static final int RANDOM = 7;
+    public static final int CHEMISTRY = 8;
 
     public static final int SPELL_SLOTS = 5;
 }

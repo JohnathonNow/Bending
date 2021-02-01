@@ -1,5 +1,5 @@
 
-package com.johnwesthoff.bending.spells.water;
+package com.johnwesthoff.bending.spells.chemistry;
 
 import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
@@ -14,10 +14,10 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.math.Ops;
 
-public class WaterbendingHealBall extends Waterbending {
-    public WaterbendingHealBall() {
-        ID = Constants.WATERBENDING;
-        subID = 6;
+public class Chemistry extends Spell {
+    public Chemistry() {
+        ID = Constants.CHEMISTRY;
+        subID = 0;
         try {
             icon = (loadIcon("healingjuice.png"));
         } catch (Exception ex) {
@@ -48,12 +48,12 @@ public class WaterbendingHealBall extends Waterbending {
 
     @Override
     public String getName() {
-        return "Heal Ball";
+        return "Healing Potion";
     }
 
     @Override
     public String getTip() {
-        return "<html>An intermediate water spell<br>Low-Moderate Energy Cost<br>Makes healing juice</html>";
+        return "<html>A basic chemistry spell<br>Low-Moderate Energy Cost<br>Makes healing potion</html>";
     }
 
     @Override

@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
-import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
@@ -25,6 +24,7 @@ import com.johnwesthoff.bending.spells.air.AirbendingAir;
 import com.johnwesthoff.bending.spells.air.AirbendingGust;
 import com.johnwesthoff.bending.spells.air.AirbendingJump;
 import com.johnwesthoff.bending.spells.air.AirbendingTornado;
+import com.johnwesthoff.bending.spells.chemistry.Chemistry;
 import com.johnwesthoff.bending.spells.earth.Earthbending;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
 import com.johnwesthoff.bending.spells.earth.EarthbendingShard;
@@ -54,10 +54,8 @@ import com.johnwesthoff.bending.spells.water.WaterStorm;
 import com.johnwesthoff.bending.spells.water.WaterTreading;
 import com.johnwesthoff.bending.spells.water.Waterbending;
 import com.johnwesthoff.bending.spells.water.WaterbendingFreeze;
-import com.johnwesthoff.bending.spells.water.WaterbendingHealBall;
 import com.johnwesthoff.bending.spells.water.WaterbendingShard;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
-
 /*
  * Energy cost table:
  * <100 ~ Very Low
@@ -119,7 +117,7 @@ public abstract class Spell {
         registerSpell(new LightningMine());
         registerSpell(new LightningRod());
         registerSpell(new LightningStorm());
-        registerSpell(new WaterbendingHealBall());
+        registerSpell(new Chemistry());
         registerSpell(randomSpell);
         registerSpell(randomSpellMatch);
     }
