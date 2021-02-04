@@ -293,8 +293,8 @@ public abstract class Spell {
     }
 
     public void cast(Session sess, int index) {
-        if (this.isCooledDown(sess, index) && this.isEnergyEfficient(sess, index) && sess.isMyTurn) {
-            sess.energico -= this.getEffectiveSpell(index).getCost();
+        if (this.isCooledDown(sess, index) && /* this.isEnergyEfficient(sess, index) && */ sess.isMyTurn) {
+            //sess.energico -= this.getEffectiveSpell(index).getCost();
             if ((sess.passiveList[sess.spellBook].getName().equals("Fire Charge"))
                     && (this.getEffectiveSpell(index) instanceof Firebending)) {
                 if (sess.random.nextInt(5 - sess.clientui.inputer.doublecast) == 0) {
