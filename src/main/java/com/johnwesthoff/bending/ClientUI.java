@@ -623,7 +623,6 @@ public class ClientUI extends JPanel implements Runnable {
                 if (sess.lungs < sess.maxlungs) {
                     graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 66, 32, 4);
                 }
-                graphicsBuffer.drawRect(0, 0, 4, Constants.HEIGHT_INT);
                 graphicsBuffer.setColor(Color.green);
                 graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 63,
                         (int) (30d * ((double) sess.HP / (double) sess.MAXHP)), 2);
@@ -637,17 +636,6 @@ public class ClientUI extends JPanel implements Runnable {
                     graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 60,
                             (int) (30d * ((double) sess.dig / (double) 100)), 2);
                 }
-                if (sess.dpyeng > sess.energico) {
-                    sess.dpyeng -= ((sess.dpyeng - sess.energico) / 10);
-                } else {
-                    sess.dpyeng = sess.energico;
-                }
-                graphicsBuffer.setColor(Color.orange);
-                graphicsBuffer.fillRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) sess.dpyeng / (double) sess.maxeng)));
-                graphicsBuffer.setColor(Color.red);
-                graphicsBuffer.drawRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) sess.dpyeng / (double) sess.maxeng)));
                 for (int i = 0; i < 5; i++) {
                     graphicsBuffer.drawImage(
                             sess.spellList[sess.spellBook][i].getEffectiveSpell(i).getImage().getImage(), 4 + i * 34, 0,
@@ -676,13 +664,6 @@ public class ClientUI extends JPanel implements Runnable {
                         graphicsBuffer.drawRect(5 + i * 34, 1, 30, 12);
                     }
                 }
-                graphicsBuffer.setColor(Color.BLUE);
-                graphicsBuffer.fillRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) sess.energico / (double) sess.maxeng)));
-
-                graphicsBuffer.setColor(purple);
-                graphicsBuffer.drawRect(1, 1, 2,
-                        (int) ((double) Constants.HEIGHT_INT * ((double) sess.energico / (double) sess.maxeng)));
                 // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
                 biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
                         this);
