@@ -15,6 +15,7 @@ public class Constants {
     public static final int NETWORK_UPDATE_POSITION_RATE = 30;
     public static final int NETWORK_UPDATE_MAP_RATE = 1200;
     public static final int POSITION_CORRECTION = 4;
+    public static final int MANA_REGEN_RATE = 10;
 
     public static final int POINTER_WORLD_MOUSE_X_LIMIT = 172;
     public static final int POINTER_WORLD_MOUSE_Y_LIMIT = 17;

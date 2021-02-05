@@ -24,6 +24,7 @@ public class Client {
     private int sendcount = 0;
 
     public boolean tick() {
+        session.mana_drain = 0;
         World world = session.getWorld();
         boolean willSendMovement = turnSpecific();
 
@@ -135,7 +136,7 @@ public class Client {
         if (session.world.inBounds(session.world.x, session.world.y) && session.energico > 0
                 && session.world.isType((int) session.world.x, (int) session.world.y, Constants.JUICE)) {
             if (session.HP < session.MAXHP) {
-                session.energico -= 40;
+                session.mana_drain += Constants.MANA_REGEN_RATE * 3 / 4;
                 session.HP++;
             }
         }
@@ -151,14 +152,7 @@ public class Client {
         } else {
             session.lungs = session.maxlungs;
         }
-        if (session.energico < 0) {
-            session.energico = 0;
-        }
-        if (session.energico < session.maxeng) {
-            session.energico += session.engrecharge;
-        } else {
-            session.energico = session.maxeng;
-        }
+        session.mana_flow += Constants.MANA_REGEN_RATE - Math.min(session.mana_drain, Constants.MANA_REGEN_RATE);
     }
 
     private void handlePassiveEffect() {
@@ -238,9 +232,9 @@ public class Client {
             }
         }
         if ((session.world.status & Constants.ST_SHOCKED) != 0) {
-            session.energico -= 25;
+            session.mana_drain += Constants.MANA_REGEN_RATE;
             if (session.random.nextInt(10) == 0) {
-                session.world.status &= ~Constants.ST_SHOCKED;// Stop being on fire
+                session.world.status &= ~Constants.ST_SHOCKED;// Stop being shocked
             }
         }
         return willSendMovement;
@@ -301,7 +295,8 @@ public class Client {
                     pain = 1;
                 }
                 session.energico -= pain * 50;
-                session.world.entityList.add(new ShockEffectEntity((int) session.world.x, (int) session.world.y, 6 + (int) pain));
+                session.world.entityList
+                        .add(new ShockEffectEntity((int) session.world.x, (int) session.world.y, 6 + (int) pain));
             }
         }
         session.HP -= pain;

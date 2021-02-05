@@ -276,12 +276,12 @@ public abstract class Spell {
 
     public abstract int getCoolDown();
 
-    public boolean isCooledDown(Session app, int index) {
-        return app.ticks >= this.getEffectiveSpell(index).timer;
+    public final boolean isCooledDown(Session app, int index) {
+        return app.mana_flow >= this.getEffectiveSpell(index).timer;
     }
 
-    public void startCoolDown(Session app, int index) {
-        this.timer = app.ticks + this.getEffectiveSpell(index).getCoolDown();
+    public final void startCoolDown(Session app, int index) {
+        this.timer = app.mana_flow + this.getEffectiveSpell(index).getCoolDown() * Constants.MANA_REGEN_RATE;
     }
 
     public void cast(Session sess, int index) {

@@ -94,6 +94,8 @@ public class Session {
     public int pc = 0;
     public boolean refreshShadows = false;
     public long swagTime = 0;
+    public int mana_flow = 0;
+    public int mana_drain = 0;
 
 
     private static Session instance = null;
