@@ -35,8 +35,8 @@ public class WaterStorm extends Waterbending {
     }
 
     @Override
-    public int getCost() {
-        return 656;
+    public int getCoolDown() {
+        return (int) (656 * Constants.FPS / 600);
     }
 
     @Override

@@ -32,7 +32,6 @@ public class AirbendingGust extends Airbending {
         X = app.world.pressX + app.world.viewX;
         Y = app.world.pressY + app.world.viewY;
         if (app.world.isSolid(X, Y) || Ops.pointDis(app.world.x, app.world.y, X, Y) > 300) {
-            app.energico += this.getCost();
             return;
         }
         double direction = Ops.pointDir(mx, my, X, Y);
@@ -44,8 +43,8 @@ public class AirbendingGust extends Airbending {
     }
 
     @Override
-    public int getCost() {
-        return 200;
+    public int getCoolDown() {
+        return (int) (200 * Constants.FPS / 600);
     }
 
     @Override

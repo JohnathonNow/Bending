@@ -47,8 +47,8 @@ public class WaterbendingFreeze extends Waterbending {
     }
 
     @Override
-    public int getCost() {
-        return 250;
+    public int getCoolDown() {
+        return (int) (250 * Constants.FPS / 600);
     }
 
     @Override

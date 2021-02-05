@@ -39,8 +39,8 @@ public class AirbendingAir extends Airbending {
     }
 
     @Override
-    public int getCost() {
-        return 75;
+    public int getCoolDown() {
+        return (int) (75 * Constants.FPS / 600);
     }
 
     @Override

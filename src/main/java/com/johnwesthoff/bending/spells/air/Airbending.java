@@ -40,8 +40,8 @@ public class Airbending extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 100;
+    public int getCoolDown() {
+        return (int) (100 * Constants.FPS / 600);
     }
 
     @Override

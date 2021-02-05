@@ -42,8 +42,8 @@ public class DarkSummonBall extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 555;
+    public int getCoolDown() {
+        return (int) (555 * Constants.FPS / 600);
     }
 
     @Override

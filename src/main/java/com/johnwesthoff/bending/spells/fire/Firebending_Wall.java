@@ -40,8 +40,8 @@ public class Firebending_Wall extends Firebending {
     }
 
     @Override
-    public int getCost() {
-        return 750;
+    public int getCoolDown() {
+        return (int) (750 * Constants.FPS / 600);
     }
 
     @Override

@@ -39,8 +39,8 @@ public class LightningRod extends Lightning {
     }
 
     @Override
-    public int getCost() {
-        return 200;
+    public int getCoolDown() {
+        return (int) (200 * Constants.FPS / 600);
     }
 
     @Override

@@ -47,8 +47,8 @@ public class Firebending_Lava extends Firebending {
     }
 
     @Override
-    public int getCost() {
-        return 450;
+    public int getCoolDown() {
+        return (int) (450 * Constants.FPS / 600);
     }
 
     @Override

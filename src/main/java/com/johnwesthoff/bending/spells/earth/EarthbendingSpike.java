@@ -43,7 +43,6 @@ public class EarthbendingSpike extends Earthbending {
         if (!app.world.isSolid(X, Y) || Ops.pointDis(app.world.x, app.world.y, X, Y) > 300
                 || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
                 || !app.world.inBounds(mx + 56, my)) {
-            app.energico += this.getCost();
             return;
         }
         if (app.world.isSolid(app.world.x, app.world.y + 4)) {
@@ -53,8 +52,8 @@ public class EarthbendingSpike extends Earthbending {
     }
 
     @Override
-    public int getCost() {
-        return 450;
+    public int getCoolDown() {
+        return (int) (450 * Constants.FPS / 600);
     }
 
     @Override

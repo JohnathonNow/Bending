@@ -33,8 +33,8 @@ public class DarkAura extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 500;
+    public int getCoolDown() {
+        return (int) (500 * Constants.FPS / 600);
     }
 
     @Override

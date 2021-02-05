@@ -671,13 +671,9 @@ public class ClientUI extends JPanel implements Runnable {
                         graphicsBuffer.setColor(Color.white);
                         graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
                     }
-                    if (!sess.spellList[sess.spellBook][i].isEnergyEfficient(sess, i)) {
-                        graphicsBuffer.setColor(Color.MAGENTA);
-                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 14);
-                    }
                     if (!sess.spellList[sess.spellBook][i].isCooledDown(sess, i)) {
                         graphicsBuffer.setColor(Color.CYAN);
-                        graphicsBuffer.drawRect(6 + i * 34, 2, 28, 12);
+                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 12);
                     }
                 }
                 graphicsBuffer.setColor(Color.BLUE);

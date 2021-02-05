@@ -35,14 +35,12 @@ public class DarkTeleport extends Spell {
             app.world.y = my;
             app.net.sendMovement();
             app.energico = 0;
-        } else {
-            app.energico += getCost();
         }
     }
 
     @Override
-    public int getCost() {
-        return 1000;
+    public int getCoolDown() {
+        return (int) (1000 * Constants.FPS / 600);
     }
 
     @Override

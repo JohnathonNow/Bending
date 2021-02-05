@@ -44,8 +44,8 @@ public class FirebendingJump extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 400;
+    public int getCoolDown() {
+        return (int) (400 * Constants.FPS / 600);
     }
 
     @Override

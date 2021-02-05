@@ -32,7 +32,7 @@ public class SpellRandom extends Spell {
     }
 
     @Override
-    public int getCost() {
+    public int getCoolDown() {
         throw new UnsupportedOperationException("This should never be called!");
     }
 

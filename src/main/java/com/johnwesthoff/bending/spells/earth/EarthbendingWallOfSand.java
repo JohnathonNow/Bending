@@ -44,8 +44,8 @@ public class EarthbendingWallOfSand extends Earthbending {
     }
 
     @Override
-    public int getCost() {
-        return 425;
+    public int getCoolDown() {
+        return (int) (425 * Constants.FPS / 600);
     }
 
     @Override

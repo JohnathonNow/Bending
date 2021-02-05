@@ -47,8 +47,8 @@ public class EarthbendingSand extends Earthbending {
     }
 
     @Override
-    public int getCost() {
-        return 325;
+    public int getCoolDown() {
+        return (int) (325 * Constants.FPS / 600);
     }
 
     @Override

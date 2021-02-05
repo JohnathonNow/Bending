@@ -53,8 +53,8 @@ public class FirebendingCharge extends Firebending {
     }
 
     @Override
-    public int getCost() {
-        return 0;
+    public int getCoolDown() {
+        return (int) (0 * Constants.FPS / 600);
     }
 
     @Override

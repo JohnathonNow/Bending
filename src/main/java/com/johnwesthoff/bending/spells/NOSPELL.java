@@ -26,7 +26,7 @@ public class NOSPELL extends Spell {
     }
 
     @Override
-    public int getCost() {
+    public int getCoolDown() {
         return 0;
     }
 

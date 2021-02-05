@@ -34,19 +34,15 @@ public class WaterSpout extends Waterbending {
         X = mx;
         Y = my;
         if (app.world.ground.cellData[(int) X][(int) Y] != Constants.WATER) {
-            app.energico += this.getCost();
             return;
-        }
-        if (app.world.isLiquid(app.world.x, app.world.y)) {
-            app.energico += 150;
         }
         maker = ID;
         getMessage(app.out);
     }
 
     @Override
-    public int getCost() {
-        return 450;
+    public int getCoolDown() {
+        return (int) (450 * Constants.FPS / 600);
     }
 
     @Override
@@ -64,4 +60,3 @@ public class WaterSpout extends Waterbending {
         world.entityList.add(new SpoutSourceEntity(px, py, 50, pid).setID(eid));
     }
 }
-

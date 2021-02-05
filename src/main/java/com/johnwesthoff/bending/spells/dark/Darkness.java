@@ -33,8 +33,8 @@ public class Darkness extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 300;
+    public int getCoolDown() {
+        return (int) (300 * Constants.FPS / 600);
     }
 
     @Override

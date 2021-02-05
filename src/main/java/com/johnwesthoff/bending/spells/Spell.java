@@ -269,23 +269,15 @@ public abstract class Spell {
     public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
             ByteBuffer buf);
 
-    public abstract int getCost();
 
     public abstract String getName();
 
     public abstract void getPassiveAction(Session app);
 
-    public int getCoolDown() {
-        return (int) (getCost() * Constants.FPS / 600);
-    }
+    public abstract int getCoolDown();
 
     public boolean isCooledDown(Session app, int index) {
         return app.ticks >= this.getEffectiveSpell(index).timer;
-    }
-
-    public boolean isEnergyEfficient(Session app, int index) {
-        // lol that's a malopropism
-        return app.energico >= this.getEffectiveSpell(index).getCost();
     }
 
     public void startCoolDown(Session app, int index) {
@@ -293,8 +285,7 @@ public abstract class Spell {
     }
 
     public void cast(Session sess, int index) {
-        if (this.isCooledDown(sess, index) && /* this.isEnergyEfficient(sess, index) && */ sess.isMyTurn) {
-            //sess.energico -= this.getEffectiveSpell(index).getCost();
+        if (this.isCooledDown(sess, index) && sess.isMyTurn) {
             if ((sess.passiveList[sess.spellBook].getName().equals("Fire Charge"))
                     && (this.getEffectiveSpell(index) instanceof Firebending)) {
                 if (sess.random.nextInt(5 - sess.clientui.inputer.doublecast) == 0) {

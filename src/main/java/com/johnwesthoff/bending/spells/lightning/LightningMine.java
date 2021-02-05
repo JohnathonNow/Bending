@@ -46,8 +46,8 @@ public class LightningMine extends Lightning {
     }
 
     @Override
-    public int getCost() {
-        return 750;
+    public int getCoolDown() {
+        return (int) (750 * Constants.FPS / 600);
     }
 
     @Override

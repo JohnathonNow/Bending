@@ -45,8 +45,8 @@ public class Waterbending extends Spell {
     }
 
     @Override
-    public int getCost() {
-        return 150;
+    public int getCoolDown() {
+        return (int) (150 * Constants.FPS / 600);
     }
 
     @Override
