@@ -51,7 +51,7 @@ public class Firebending_Wall extends Firebending {
 
     @Override
     public String getTip() {
-        return "<html>An advanced fire spell<br>Very Very High Energy Cost<br>Projects two separating columns of fire<br>Not effected by gravity</html>";
+        return "<html>An advanced fire spell<br>Very Very High Cooldown<br>Projects two separating columns of fire<br>Not effected by gravity</html>";
     }
 
     @Override

@@ -56,7 +56,7 @@ public class Waterbending extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An essential water spell<br>Low Energy Cost<br>Highly affected by gravity<br>Creates a pool of water</html>";
+        return "<html>An essential water spell<br>Low Cooldown<br>Highly affected by gravity<br>Creates a pool of water</html>";
     }
 
     @Override

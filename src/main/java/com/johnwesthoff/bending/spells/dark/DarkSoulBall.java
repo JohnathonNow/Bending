@@ -58,7 +58,7 @@ public class DarkSoulBall extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>A basic darkness spell<br>Moderate-High Energy Cost<br>Steal the health of your foe<br>Unaffected by gravity</html>";
+        return "<html>A basic darkness spell<br>Moderate-High Cooldown<br>Steal the health of your foe<br>Unaffected by gravity</html>";
     }
 
     @Override

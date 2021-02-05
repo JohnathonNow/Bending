@@ -58,7 +58,7 @@ public class Firebending_Lava extends Firebending {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate fire spell<br>Moderate-High Energy Cost<br>Shoot a lava ball<br>Lightly effected by gravity<br>Creates a pool of lava</html>";
+        return "<html>An intermediate fire spell<br>Moderate-High Cooldown<br>Shoot a lava ball<br>Lightly effected by gravity<br>Creates a pool of lava</html>";
     }
 
     @Override

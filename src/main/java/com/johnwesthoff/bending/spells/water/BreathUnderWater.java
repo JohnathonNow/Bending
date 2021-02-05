@@ -65,7 +65,7 @@ public class BreathUnderWater extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>A passive water spell<br>High Energy Cost<br>Heal when in water</html>";
+        return "<html>A passive water spell<br>High Cooldown<br>Heal when in water</html>";
     }
 
     @Override

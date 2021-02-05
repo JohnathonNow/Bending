@@ -57,7 +57,7 @@ import com.johnwesthoff.bending.spells.water.WaterbendingFreeze;
 import com.johnwesthoff.bending.spells.water.WaterbendingShard;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 /*
- * Energy cost table:
+ * Cooldown reference table:
  * <100 ~ Very Low
  * >100 ~ Low
  * >200 ~ Moderate-Low
@@ -298,7 +298,7 @@ public abstract class Spell {
     }
 
     public String getTip() {
-        return "<html>A basic air spell<br>Low Energy Cost<br>Travels in a straight line<br>Deals low damage</html>";
+        return "<html>A basic air spell<br>Low Cooldown<br>Travels in a straight line<br>Deals low damage</html>";
     }
 
     public final ImageIcon getImage() {

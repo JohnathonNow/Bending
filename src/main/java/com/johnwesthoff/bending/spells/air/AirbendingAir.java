@@ -50,7 +50,7 @@ public class AirbendingAir extends Airbending {
 
     @Override
     public String getTip() {
-        return "<html>A useful air spell<br>Very Low Energy Cost<br>Digs you out of tight spots</html>";
+        return "<html>A useful air spell<br>Very Low Cooldown<br>Digs you out of tight spots</html>";
     }
 
     @Override

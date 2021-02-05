@@ -55,7 +55,7 @@ public class EarthbendingShard extends Earthbending {
 
     @Override
     public String getTip() {
-        return "<html>A basic earth spell<br>Low-Moderate Energy Cost<br>Travels quickly in a straight line<br>Deals moderate damage</html>";
+        return "<html>A basic earth spell<br>Low-Moderate Cooldown<br>Travels quickly in a straight line<br>Deals moderate damage</html>";
     }
 
     @Override

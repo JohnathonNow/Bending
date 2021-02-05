@@ -56,7 +56,7 @@ public class WaterbendingShard extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate water spell<br>Low-Moderate Energy Cost<br>Not affected by gravity<br>Deals light damage<br>Creates an ice block</html>";
+        return "<html>An intermediate water spell<br>Low-Moderate Cooldown<br>Not affected by gravity<br>Deals light damage<br>Creates an ice block</html>";
     }
 
     @Override

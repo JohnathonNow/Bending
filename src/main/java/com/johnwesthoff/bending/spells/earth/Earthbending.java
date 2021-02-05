@@ -56,7 +56,7 @@ public class Earthbending extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>A basic earth spell<br>Low Energy Cost<br>Highly affected by gravity<br>Deals moderate damage</html>";
+        return "<html>A basic earth spell<br>Low Cooldown<br>Highly affected by gravity<br>Deals moderate damage</html>";
     }
 
     @Override

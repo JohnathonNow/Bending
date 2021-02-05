@@ -46,7 +46,7 @@ public class WaterStorm extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate water spell<br>Very High Energy Cost<br>Summon a storm cloud</html>";
+        return "<html>An intermediate water spell<br>Very High Cooldown<br>Summon a storm cloud</html>";
     }
 
     @Override

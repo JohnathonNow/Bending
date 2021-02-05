@@ -56,7 +56,7 @@ public class Firebending extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>A basic fire spell<br>Low-Moderate Energy Cost<br>Shoot a fire ball<br>Lightly effected by gravity</html>";
+        return "<html>A basic fire spell<br>Low-Moderate Cooldown<br>Shoot a fire ball<br>Lightly effected by gravity</html>";
     }
 
     @Override

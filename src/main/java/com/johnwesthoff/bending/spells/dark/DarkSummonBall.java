@@ -57,7 +57,7 @@ public class DarkSummonBall extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate darkness spell<br>High Energy Cost<br>Summon an undead minion</html>";
+        return "<html>An intermediate darkness spell<br>High Cooldown<br>Summon an undead minion</html>";
     }
 
     @Override

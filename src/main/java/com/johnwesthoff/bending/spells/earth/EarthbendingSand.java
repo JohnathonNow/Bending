@@ -58,7 +58,7 @@ public class EarthbendingSand extends Earthbending {
 
     @Override
     public String getTip() {
-        return "<html>An advanced earth spell<br>Moderate Energy Cost<br>Highly affected by gravity<br>Deals High damage</html>";
+        return "<html>An advanced earth spell<br>Moderate Cooldown<br>Highly affected by gravity<br>Deals High damage</html>";
     }
 
     @Override

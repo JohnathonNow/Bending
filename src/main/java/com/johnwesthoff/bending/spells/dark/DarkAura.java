@@ -48,7 +48,7 @@ public class DarkAura extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate darkness spell<br>High Energy Cost<br>For five seconds, nearby players are hurt</html>";
+        return "<html>An intermediate darkness spell<br>High Cooldown<br>For five seconds, nearby players are hurt</html>";
     }
 
     @Override

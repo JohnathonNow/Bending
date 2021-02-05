@@ -55,7 +55,7 @@ public class Firebending_Thrower extends Firebending {
 
     @Override
     public String getTip() {
-        return "<html>A basic fire spell<br>Low-Moderate Energy Cost<br>Set your foes on fire!<br>Lightly effected by gravity</html>";
+        return "<html>A basic fire spell<br>Low-Moderate Cooldown<br>Set your foes on fire!<br>Lightly effected by gravity</html>";
     }
 
     @Override

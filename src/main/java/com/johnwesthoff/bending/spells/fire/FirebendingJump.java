@@ -55,7 +55,7 @@ public class FirebendingJump extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An agile fire spell<br>Moderate-High Energy Cost<br>Fly in a chosen direction<br>Burn those in your path</html>";
+        return "<html>An agile fire spell<br>Moderate-High Cooldown<br>Fly in a chosen direction<br>Burn those in your path</html>";
     }
 
     @Override

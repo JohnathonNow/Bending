@@ -56,7 +56,7 @@ public class LightningStorm extends Lightning {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate lightning spell<br>Low-Moderate Energy Cost<br>Low Health Cost<br>Fires from overhead<br>Deals low damage<br>Restores energy in blast vicinity</html>";
+        return "<html>An intermediate lightning spell<br>Low-Moderate Cooldown<br>Low Health Cost<br>Fires from overhead<br>Deals low damage<br>Restores energy in blast vicinity</html>";
     }
 
     @Override

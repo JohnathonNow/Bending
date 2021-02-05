@@ -54,7 +54,7 @@ public class DarkTeleport extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate darkness spell<br>Total Energy Cost<br>Teleport to a point of your choice</html>";
+        return "<html>An intermediate darkness spell<br>Total Cooldown<br>Teleport to a point of your choice</html>";
     }
 
     @Override

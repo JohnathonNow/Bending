@@ -61,7 +61,7 @@ public class LightningMine extends Lightning {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate lightning spell<br>Low Health Cost<br>Low Energy Cost<br>Creates a static charge<br>Deals low damage<br></html>";
+        return "<html>An intermediate lightning spell<br>Low Health Cost<br>Low Cooldown<br>Creates a static charge<br>Deals low damage<br></html>";
     }
 
     @Override

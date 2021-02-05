@@ -58,7 +58,7 @@ public class WaterbendingFreeze extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>A basic water spell<br>Low-Moderate Energy Cost<br>Highly affected by gravity<br>Freezes nearby water</html>";
+        return "<html>A basic water spell<br>Low-Moderate Cooldown<br>Highly affected by gravity<br>Freezes nearby water</html>";
     }
 
     @Override

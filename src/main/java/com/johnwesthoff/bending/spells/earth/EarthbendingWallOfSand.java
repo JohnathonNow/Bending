@@ -55,7 +55,7 @@ public class EarthbendingWallOfSand extends Earthbending {
 
     @Override
     public String getTip() {
-        return "<html>A basic earth spell<br>Moderate-High Energy Cost<br>Creates sand where you need it</html>";
+        return "<html>A basic earth spell<br>Moderate-High Cooldown<br>Creates sand where you need it</html>";
     }
 
     @Override

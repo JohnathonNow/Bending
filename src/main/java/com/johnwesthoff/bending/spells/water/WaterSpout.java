@@ -52,7 +52,7 @@ public class WaterSpout extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate water spell<br>Moderate-High Energy Cost<br>Summon a waterspout from a water source</html>";
+        return "<html>An intermediate water spell<br>Moderate-High Cooldown<br>Summon a waterspout from a water source</html>";
     }
 
     @Override

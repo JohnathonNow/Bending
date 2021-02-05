@@ -47,7 +47,7 @@ public class AirbendingTornado extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate air spell<br>High Energy Cost<br>Summons a tornado</html>";
+        return "<html>An intermediate air spell<br>High Cooldown<br>Summons a tornado</html>";
     }
 
     @Override

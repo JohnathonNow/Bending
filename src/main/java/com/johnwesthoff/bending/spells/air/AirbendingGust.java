@@ -54,7 +54,7 @@ public class AirbendingGust extends Airbending {
 
     @Override
     public String getTip() {
-        return "<html>An advanced air spell<br>Low-Moderate Energy Cost<br>Summons a gust</html>";
+        return "<html>An advanced air spell<br>Low-Moderate Cooldown<br>Summons a gust</html>";
     }
 
     @Override

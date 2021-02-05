@@ -53,7 +53,7 @@ public class Chemistry extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>A basic chemistry spell<br>Low-Moderate Energy Cost<br>Makes healing potion</html>";
+        return "<html>A basic chemistry spell<br>Low-Moderate Cooldown<br>Makes healing potion</html>";
     }
 
     @Override

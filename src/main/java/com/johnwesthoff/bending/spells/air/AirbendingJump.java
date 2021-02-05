@@ -53,7 +53,7 @@ public class AirbendingJump extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>An agile air spell<br>Low-Moderate Energy Cost<br>Fly in a chosen direction</html>";
+        return "<html>An agile air spell<br>Low-Moderate Cooldown<br>Fly in a chosen direction</html>";
     }
 
     @Override

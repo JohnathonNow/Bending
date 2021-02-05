@@ -63,7 +63,7 @@ public class EarthbendingSpike extends Earthbending {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate earth spell<br>Moderate-High Energy Cost<br>Summon a spike from the ground</html>";
+        return "<html>An intermediate earth spell<br>Moderate-High Cooldown<br>Summon a spike from the ground</html>";
     }
 
     @Override

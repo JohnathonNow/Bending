@@ -54,7 +54,7 @@ public class LightningRod extends Lightning {
 
     @Override
     public String getTip() {
-        return "<html>An intermediate lightning spell<br>Low-Moderate Energy Cost<br>Strongly affected by gravity<br>Drains enemy energy</html>";
+        return "<html>An intermediate lightning spell<br>Low-Moderate Cooldown<br>Strongly affected by gravity<br>Drains enemy energy</html>";
     }
 
     @Override

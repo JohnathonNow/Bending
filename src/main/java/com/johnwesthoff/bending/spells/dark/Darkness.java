@@ -48,7 +48,7 @@ public class Darkness extends Spell {
 
     @Override
     public String getTip() {
-        return "<html>A basic darkness spell<br>Moderate Energy Cost<br>Turn invisible for a short time</html>";
+        return "<html>A basic darkness spell<br>Moderate Cooldown<br>Turn invisible for a short time</html>";
     }
 
     @Override
