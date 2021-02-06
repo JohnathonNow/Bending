@@ -29,6 +29,14 @@ public class FireProof extends Firebending {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void getPassiveAction(Session app) {
+        if ((app.world.status & Constants.ST_FLAMING) != 0) {
+            app.mana_drain -= (number - 1)*2;
+        }
+    }
+
+
     int number = 0;
 
     @Override
