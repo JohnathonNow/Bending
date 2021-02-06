@@ -32,7 +32,8 @@ public class FireProof extends Firebending {
     @Override
     public void getPassiveAction(Session app) {
         if ((app.world.status & Constants.ST_FLAMING) != 0) {
-            app.mana_drain -= (number - 1)*2;
+            app.mana_drain -= (number + 1)*2;
+            app.HP += app.random.nextInt(2);
         }
     }
 

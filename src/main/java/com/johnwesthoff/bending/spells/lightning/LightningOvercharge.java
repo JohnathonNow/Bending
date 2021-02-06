@@ -35,7 +35,7 @@ public class LightningOvercharge extends Lightning {
 
     @Override
     public void onSpawn(Session me) {
-        number = 1;
+        number = 0;
         for (Spell e : me.spellList[me.spellBook]) {
             if (e instanceof Lightning) {
                 number++;
@@ -46,7 +46,9 @@ public class LightningOvercharge extends Lightning {
 
     @Override
     public void getPassiveAction(Session app) {
-        app.maxeng = 1000 + (number * 166);
+        if ((app.world.status & Constants.ST_SHOCKED) != 0) {
+            app.mana_drain -= (number + 1)*2;
+        }
     }
 
     @Override
@@ -61,7 +63,7 @@ public class LightningOvercharge extends Lightning {
 
     @Override
     public String getTip() {
-        return "<html>A passive lightning spell<br>Have more energy</html>";
+        return "<html>A passive lightning spell<br>Immunity to shock</html>";
     }
 
     @Override
