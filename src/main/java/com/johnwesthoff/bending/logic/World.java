@@ -1261,15 +1261,6 @@ public class World implements Serializable {
             
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
-                if (((r.status & ST_FLAMING)) != 0) {
-                    drawFire(g, ((int)r.x + 4 - viewX) * Constants.WIDTH_SCALE, ((int)r.y - viewY) * Constants.HEIGHT_SCALE);
-                }
-                if (((r.status & ST_DRAIN)) != 0) {
-                    g.setColor(Color.BLACK);
-                    g.drawArc(((int)r.x - viewX - (AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
-                            ((int)r.y - viewY - (AURA_RADIUS)) * Constants.WIDTH_SCALE, AURA_RADIUS * Constants.HEIGHT_SCALE,
-                            AURA_RADIUS * Constants.HEIGHT_SCALE, random.nextInt(360), random.nextInt(90));
-                }
             }
         }
     }
