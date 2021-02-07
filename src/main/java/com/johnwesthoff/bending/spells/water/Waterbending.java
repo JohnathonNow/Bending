@@ -66,7 +66,6 @@ public class Waterbending extends Spell {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        System.out.format("%d %d\n", px, py);
         world.entityList.add(new WaterBallEntity(px, py, mx, my, pid).setID(eid));
     }
 }
