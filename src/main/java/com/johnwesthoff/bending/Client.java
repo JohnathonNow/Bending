@@ -52,17 +52,23 @@ public class Client {
         willSendMovement |= handleDeath();
         session.getWorld().onUpdate();
         Player localPlayer = session.getLocalPlayer();
-        localPlayer.x = session.getWorld().x;
-        localPlayer.y = session.getWorld().y;
-        localPlayer.status = session.getWorld().status;
-        localPlayer.leftArmAngle = session.getWorld().leftArmAngle;
-        localPlayer.rightArmAngle = session.getWorld().rightArmAngle;
+        int oldLeft = localPlayer.left;
         if (Math.signum(session.getWorld().move) == -1) {
             localPlayer.left = -1;
         }
         if (Math.signum(session.getWorld().move) == 1) {
             localPlayer.left = 1;
         }
+        if (oldLeft != localPlayer.left) {
+            world.leftArmAngle = 180 - world.leftArmAngle;
+            world.rightArmAngle = 180 - world.rightArmAngle;
+        }
+        localPlayer.x = session.getWorld().x;
+        localPlayer.y = session.getWorld().y;
+        localPlayer.status = session.getWorld().status;
+        localPlayer.leftArmAngle = session.getWorld().leftArmAngle;
+        localPlayer.rightArmAngle = session.getWorld().rightArmAngle;
+        
         if (((Math.signum(session.getPrevVspeed()) != Math.signum(session.getWorld().vspeed))
                 || ((session.getPrevMove()) != (world.move))) || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE) {
             counting = 0;

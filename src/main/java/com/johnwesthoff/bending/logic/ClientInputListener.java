@@ -107,9 +107,9 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
     private double cast(int index) {
         pointer.spellList[pointer.spellBook][index].getEffectiveSpell(index).cast(pointer, index);
         return Ops.pointDir(
-                pointer.world.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
+                pointer.localPlayer.left == 1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.y - pointer.world.viewY,
-                pointer.world.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
+                pointer.localPlayer.left == -1 ? (pointer.world.x - pointer.world.viewX) : pointer.world.mouseX,
                 pointer.world.mouseY);
     }
 
