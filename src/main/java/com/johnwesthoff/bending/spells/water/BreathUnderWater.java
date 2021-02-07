@@ -43,13 +43,7 @@ public class BreathUnderWater extends Waterbending {
     public void getPassiveAction(Session app) {
         if (app.world.inBounds(app.world.x, app.world.y) && app.energico > 0
                 && app.world.isType((int) app.world.x, (int) app.world.y, Constants.WATER)) {
-            if (app.HP < app.MAXHP) {
-                app.energico -= 30 + (5 - number) * 5;
-                app.HP++;
-            }
-            if (number >= 0) {
-                app.lungs = app.maxlungs;
-            }
+            app.timeToHeal += number + 1;
         }
     }
 
@@ -65,7 +59,7 @@ public class BreathUnderWater extends Waterbending {
 
     @Override
     public String getTip() {
-        return "<html>A passive water spell<br>High Cooldown<br>Heal when in water</html>";
+        return "<html>A passive water spell<br>High Cooldown<br>Heal faster when in water</html>";
     }
 
     @Override
