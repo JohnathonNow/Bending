@@ -25,6 +25,7 @@ import com.johnwesthoff.bending.util.math.Ops;
 public class StaticShotEntity extends Entity {
     // public int maker = 0;
     public int radius = 0;
+    private int state = 0;
 
     public StaticShotEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -45,10 +46,11 @@ public class StaticShotEntity extends Entity {
 
     @Override
     public void onUpdate(World apples) {
-        if (apples.checkCollision(X, Y)) {
+        if (apples.checkCollision(X, Y) && state == 0) {
             xspeed = 0;
             yspeed = 0;
             radius = 96;
+            state = 1;
             // apples.explode(X, Y, 32, 8, 16);
         }
         if (!apples.inBounds(X, Y)) {
@@ -96,6 +98,19 @@ public class StaticShotEntity extends Entity {
                 lol.sendMessage(ChargeEvent.getPacket(this));
                 return;
             }
+        }
+        if (state == 1) {
+            for (Entity e : lol.earth.entityList) {
+                if (e instanceof StaticShotEntity && e.MYID != MYID) {
+                    if (Ops.pointDis(X, Y, e.X, e.Y) < radius) {
+                        alive = false;
+                        lol.sendMessage(DestroyEvent.getPacket(this));
+                        lol.sendMessage(ChargeEvent.getPacket(this));
+                        return;
+                    }
+                }
+            }
+            state = 2;
         }
     }
 }
