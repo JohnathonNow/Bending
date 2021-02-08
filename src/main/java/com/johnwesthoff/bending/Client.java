@@ -69,7 +69,7 @@ public class Client {
         localPlayer.status = session.getWorld().status;
         localPlayer.leftArmAngle = session.getWorld().leftArmAngle;
         localPlayer.rightArmAngle = session.getWorld().rightArmAngle;
-        
+
         if (((Math.signum(session.getPrevVspeed()) != Math.signum(session.getWorld().vspeed))
                 || ((session.getPrevMove()) != (world.move))) || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE) {
             counting = 0;
@@ -105,6 +105,7 @@ public class Client {
         boolean wsm = false;
         World world = session.getWorld();
         if ((session.getGameMode() == Server.TURNBASED) && (session.getWhoseTurn() != session.getID())) {
+            session.world.move = 0;
             return wsm;
         }
         wsm |= handleStatusEffects();
@@ -154,6 +155,12 @@ public class Client {
                 || session.world.isLiquid(session.world.x, session.world.y - World.head)) {
             if (session.lungs-- < 0) {
                 session.HP--;
+                session.killMessage = "~ suffocated after fighting `...";
+            }
+        } else if (session.world.isGas(session.world.x, session.world.y - World.head)) {
+            session.lungs -= Constants.GAS_BREATH_TIME;
+            if (session.lungs < 0) {
+                session.HP -= Constants.GAS_BREATH_DAMAGE;
                 session.killMessage = "~ suffocated after fighting `...";
             }
         } else {

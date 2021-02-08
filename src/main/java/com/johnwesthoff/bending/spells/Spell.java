@@ -25,6 +25,7 @@ import com.johnwesthoff.bending.spells.air.AirbendingGust;
 import com.johnwesthoff.bending.spells.air.AirbendingJump;
 import com.johnwesthoff.bending.spells.air.AirbendingTornado;
 import com.johnwesthoff.bending.spells.chemistry.Chemistry;
+import com.johnwesthoff.bending.spells.chemistry.ChemistryPoison;
 import com.johnwesthoff.bending.spells.earth.Earthbending;
 import com.johnwesthoff.bending.spells.earth.EarthbendingSand;
 import com.johnwesthoff.bending.spells.earth.EarthbendingShard;
@@ -118,6 +119,7 @@ public abstract class Spell {
         registerSpell(new LightningRod());
         registerSpell(new LightningStorm());
         registerSpell(new Chemistry());
+        registerSpell(new ChemistryPoison());
         registerSpell(randomSpell);
         registerSpell(randomSpellMatch);
     }

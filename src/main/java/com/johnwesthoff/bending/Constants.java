@@ -51,7 +51,7 @@ public class Constants {
     public static final int LAND_TEX_SIZE = 256;
     public static final byte FALLING = 64;
     public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8,
-            CRYSTAL = 9, ETHER = 10, JUICE = 11;
+            CRYSTAL = 9, ETHER = 10, JUICE = 11, GAS = 12;
     public static final byte UGROUND = GROUND | FALLING;
     public static final byte UICE = ICE | FALLING;
     public static final byte USTONE = STONE | FALLING;
@@ -91,4 +91,6 @@ public class Constants {
     public static final int CHEMISTRY = 8;
 
     public static final int SPELL_SLOTS = 5;
+	public static final int GAS_BREATH_TIME = 10;
+	public static final short GAS_BREATH_DAMAGE = 3;
 }

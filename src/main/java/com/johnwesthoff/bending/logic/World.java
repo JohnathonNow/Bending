@@ -11,6 +11,7 @@ import static com.johnwesthoff.bending.Constants.ETHER;
 import static com.johnwesthoff.bending.Constants.GROUND;
 import static com.johnwesthoff.bending.Constants.HEAD;
 import static com.johnwesthoff.bending.Constants.ICE;
+import static com.johnwesthoff.bending.Constants.GAS;
 import static com.johnwesthoff.bending.Constants.JUICE;
 import static com.johnwesthoff.bending.Constants.LAND_TEX_SIZE;
 import static com.johnwesthoff.bending.Constants.LAVA;
@@ -67,8 +68,7 @@ public class World implements Serializable {
     public CollisionChecker ground;
     public final CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
     public float x = 450, y = 0;
-    public short status = 0; //See Constants
-
+    public short status = 0; // See Constants
 
     public final ArrayList<Player> playerList = new ArrayList<>();
     public boolean serverWorld = false, dead = false;
@@ -87,6 +87,7 @@ public class World implements Serializable {
     public static int body = 13;
     public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint;
     public Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
+    public final Color GAS_COLOR = new Color(20, 195, 20, 127);
     public BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT + 12, Constants.HEIGHT_INT + 12,
             BufferedImage.TYPE_INT_ARGB);
 
@@ -101,6 +102,7 @@ public class World implements Serializable {
     public Server lol = null;
     public Player following = null;
     public Graphics2D Gter = Iter.createGraphics();
+
     public World() {
         this(true, 900, 900, null, null, null, null, null, null, null, null, null, null);
         x = 150;
@@ -150,7 +152,7 @@ public class World implements Serializable {
 
         liquidStats[aList[JUICE]][0] = 5;// 5
         liquidStats[aList[JUICE]][1] = 6;// 6
-        liquidStats[aList[JUICE]][2] = new Color(23,240,16).getRGB();
+        liquidStats[aList[JUICE]][2] = new Color(23, 240, 16).getRGB();
         liquidStats[aList[JUICE]][3] = 10;
 
         liquidStats[aList[SAND]][0] = 8;// 1
@@ -217,7 +219,6 @@ public class World implements Serializable {
     public String username;
     public int idddd;
 
-
     public Player getPlayer(int id) {
         for (Player p : playerList) {
             if (p.ID == id) {
@@ -254,26 +255,29 @@ public class World implements Serializable {
      */
     public void load(final byte parts[], final int colors[], final int colors2[]) {
         Runnable getStuff =
-            /* Per sonic-lint, declaring a new instance of a single-method class was a bad smell, and for readability
-               it is more appropriate to replace with a lambda method */
-            () -> {
-                bodyParts = new Image[parts.length];
-                try {
-                    for (int i = 0; i < parts.length; i++) {
-                        bodyParts[i] = ResourceLoader.loadImage("p" + (i + 1) + "_" + parts[i] + ".png");
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.white,
-                                new Color(colors[i]));
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.lightGray,
-                                new Color(colors2[i]));
-                        bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], new Color(0xBEBEBE),
-                                new Color(colors2[i]).darker());
+                /*
+                 * Per sonic-lint, declaring a new instance of a single-method class was a bad
+                 * smell, and for readability it is more appropriate to replace with a lambda
+                 * method
+                 */
+                () -> {
+                    bodyParts = new Image[parts.length];
+                    try {
+                        for (int i = 0; i < parts.length; i++) {
+                            bodyParts[i] = ResourceLoader.loadImage("p" + (i + 1) + "_" + parts[i] + ".png");
+                            bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.white,
+                                    new Color(colors[i]));
+                            bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], Color.lightGray,
+                                    new Color(colors2[i]));
+                            bodyParts[i] = World.changeColor((BufferedImage) bodyParts[i], new Color(0xBEBEBE),
+                                    new Color(colors2[i]).darker());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                bodyParts[0] = World.changeColor((BufferedImage) bodyParts[0], Color.white, Color.red);
-                done = true;
-            };
+                    bodyParts[0] = World.changeColor((BufferedImage) bodyParts[0], Color.white, Color.red);
+                    done = true;
+                };
         loader = new Thread(getStuff);
         loader.start();
     }
@@ -364,6 +368,30 @@ public class World implements Serializable {
                 // }
                 for (int x = minx; x < maxx; x++) {
                     for (int y = maxy; y > miny; y--) {
+                        if (cellData[x][h - y] == GAS) {
+                            if (h - y < 4) {
+                                cellData[x][h - y] = AIR;
+                            } else {
+                                for (int i = 0; i < 8; i--) {
+                                    if (cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][h - y - 1] == AIR) {
+                                        cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][h - y
+                                                - 1] = cellData[x][h - y];
+                                        cellData[x][h - y] = AIR;
+                                        if (flowCount++ > maxFlow)
+                                            return;
+                                        break;
+                                    }
+                                    if (cellData[Math.min(Math.max(x - (i * flipped), 0), w - 1)][h - y - 1] == AIR) {
+                                        cellData[Math.min(Math.max(x - (i * flipped), 0), w - 1)][h - y
+                                                - 1] = cellData[x][h - y];
+                                        cellData[x][h - y] = AIR;
+                                        if (flowCount++ > maxFlow)
+                                            return;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         if (aList[cellData[x][y]] == -1) {
                             continue;
                         }
@@ -756,12 +784,24 @@ public class World implements Serializable {
          * @param R
          */
         public void puddle(int X, int Y, int R) {
+            puddle(X, Y, R, WATER);
+        }
+
+        /**
+         * Changes air to type
+         * 
+         * @param X    X coordinate
+         * @param Y    Y coordinate
+         * @param R
+         * @param type the new type
+         */
+        public void puddle(int X, int Y, int R, byte type) {
             // long time = System.nanoTime();
             for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
                 for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
                     if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
                             && cellData[i1][i2] == AIR) {
-                        cellData[i1][i2] = WATER;
+                        cellData[i1][i2] = type;
                     }
                 }
             }
@@ -956,6 +996,23 @@ public class World implements Serializable {
                 return false;
             return (ground.cellData[(int) x][(int) y] == OIL || ground.cellData[(int) x][(int) y] == ETHER
                     || ground.cellData[(int) x][(int) y] == WATER || ground.cellData[(int) x][(int) y] == LAVA);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the cell is gas
+     * 
+     * @param x X value of the cell
+     * @param y Y value of the cell
+     * @return true (if the current cell is gas) or false (else)
+     */
+    public boolean isGas(float x, float y) {
+        try {
+            if (!inBounds(x, y))
+                return false;
+            return (ground.cellData[(int) x][(int) y] == GAS);
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
@@ -1199,8 +1256,8 @@ public class World implements Serializable {
             incX = 0;
             incY = 0;
             cameraMoved = false;
-            followx = (int)following.showx;
-            followy = (int)following.showy;
+            followx = (int) following.showx;
+            followy = (int) following.showy;
         }
         viewX = (int) Math.min(Math.max((followx - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
                 Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
@@ -1258,7 +1315,7 @@ public class World implements Serializable {
      */
     public void drawPlayers(Graphics g) {
         if (!playerList.isEmpty()) {
-            
+
             for (Player r : playerList) {
                 r.onDraw(g, viewX, viewY);
             }
@@ -1322,53 +1379,50 @@ public class World implements Serializable {
 
             for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
                 for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
-                    //final int minX = Math.min(X + 3 - xx, WIDTH_INT);
-                    //final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
+                    // final int minX = Math.min(X + 3 - xx, WIDTH_INT);
+                    // final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
                     switch (ground.cellData[X][Y]) {
                         default:
                             break;
                         case GROUND:
                         case UGROUND:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Grass.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case SAND:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Sand.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case STONE:
                         case USTONE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Stone.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case TREE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Bark.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ICE:
                         case UICE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Ice.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case CRYSTAL:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y  - yy, Constants.HEIGHT_INT),
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
                                     Crystal.getRGB(X % landTexSize, Y % landTexSize));
                             break;
                         case ETHER:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT),
-                                    Math.min(Y - yy, Constants.HEIGHT_INT), Ether.getRGB(X % 100, Y % 100));
+                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                    Ether.getRGB(X % 100, Y % 100));
                             break;
                         case WATER:
                         case LAVA:
                         case JUICE:
                         case OIL:
                             Iter.setRGB(X - xx, Y - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                            break;
+                        case GAS:
+                            Iter.setRGB(X - xx, Y - yy, GAS_COLOR.getRGB());
                             break;
                     }
                 }
@@ -1498,7 +1552,8 @@ public class World implements Serializable {
             if (!isSolid(P.x, P.y - 4)) {
                 P.y -= 4;
                 if (inBounds(P.x + P.move, P.y + P.vspeed)) {
-                    int toMove = (int)P.move, XXX1 = (int)P.x + 3, YYY1 = (int)P.y - 4, XXX2 = (int)P.x - 3, YYY2 = (int)P.y - 4;
+                    int toMove = (int) P.move, XXX1 = (int) P.x + 3, YYY1 = (int) P.y - 4, XXX2 = (int) P.x - 3,
+                            YYY2 = (int) P.y - 4;
                     while (true) {
                         YYY1 += 1;
                         if (!inBounds(XXX1, YYY1)) {
@@ -1543,7 +1598,7 @@ public class World implements Serializable {
             }
         }
     }
-    
+
     public void handleEntitiesForClient() {
         for (int i = 0; i < entityList.size(); i++) {
             Entity e = entityList.get(i);
@@ -1558,6 +1613,7 @@ public class World implements Serializable {
             }
         }
     }
+
     public void handleEntitiesForServer() {
         for (int i = 0; i < entityList.size(); i++) {
             Entity e = entityList.get(i);

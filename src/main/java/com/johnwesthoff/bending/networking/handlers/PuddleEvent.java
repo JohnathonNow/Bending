@@ -2,6 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -20,7 +21,8 @@ public class PuddleEvent implements NetworkEvent {
         final int fX = buf.getInt();
         final int fY = buf.getInt();
         final int fR = buf.getInt();
-        p.world.ground.puddle(fX, fY, fR);
+        final int fT = buf.getInt();
+        p.world.ground.puddle(fX, fY, fR, (byte)fT);
 
     }
 
@@ -31,7 +33,11 @@ public class PuddleEvent implements NetworkEvent {
     }
 
     public static NetworkMessage getPacket(int x, int y, int r) {
-        ByteBuffer b = ByteBuffer.allocate(40).putInt(x).putInt(y).putInt(r);
-        return new NetworkMessage(b, ID);
+        return getPacket(x, y, r, Constants.WATER);
     }
+
+	public static NetworkMessage getPacket(int x, int y, int r, int type) {
+        ByteBuffer b = ByteBuffer.allocate(40).putInt(x).putInt(y).putInt(r).putInt(type);
+        return new NetworkMessage(b, ID);
+	}
 }
