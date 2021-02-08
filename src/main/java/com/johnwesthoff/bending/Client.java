@@ -60,8 +60,9 @@ public class Client {
             localPlayer.left = 1;
         }
         if (oldLeft != localPlayer.left) {
-            world.leftArmAngle = 180 - world.leftArmAngle;
-            world.rightArmAngle = 180 - world.rightArmAngle;
+            double t = world.leftArmAngle;
+            world.leftArmAngle = world.rightArmAngle;
+            world.rightArmAngle = t;
         }
         localPlayer.x = session.getWorld().x;
         localPlayer.y = session.getWorld().y;

@@ -120,12 +120,17 @@ public class Player {
                     (((int)showx + 2 - offs) - viewX) * Constants.MULTIPLIER, (((int)showy) - viewY) * Constants.MULTIPLIER);
         } else {
             int yUp = 20;
-
+            int ol = left;
             if (Integer.signum((int)move) == -1) {
                 left = -1;
             }
             if (Integer.signum((int)move) == 1) {
                 left = 1;
+            }
+            if (ol != left) {
+                double t = leftArmAngle;
+                leftArmAngle = rightArmAngle;
+                rightArmAngle = t;
             }
             Graphics2D g2 = (Graphics2D) g;
             g2.scale(left, 1);
