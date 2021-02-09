@@ -104,7 +104,8 @@ public class Client {
     private boolean turnSpecific() {
         boolean wsm = false;
         World world = session.getWorld();
-        if ((session.getGameMode() == Server.TURNBASED) && (session.getWhoseTurn() != session.getID())) {
+        session.setMyTurn((session.getGameMode() != Server.TURNBASED) || (session.getWhoseTurn() == session.getID()));
+        if (!session.isMyTurn) {
             session.world.move = 0;
             return wsm;
         }
