@@ -40,13 +40,9 @@ public class EarthbendingSpike extends Earthbending {
         mx = X - ((int) (Ops.lengthdir_x(72, direction)));
         my = Y + ((int) (Ops.lengthdir_y(72, direction)));
         maker = ID;
-        if (!app.world.isSolid(X, Y) || Ops.pointDis(app.world.x, app.world.y, X, Y) > 300
-                || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
+        if (!app.world.isSolid(X, Y) || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
                 || !app.world.inBounds(mx + 56, my)) {
             return;
-        }
-        if (app.world.isSolid(app.world.x, app.world.y + 4)) {
-            app.energico += 150;
         }
         getMessage(app.out);
     }
