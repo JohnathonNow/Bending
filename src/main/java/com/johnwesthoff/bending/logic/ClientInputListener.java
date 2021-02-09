@@ -47,10 +47,8 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             return;
         }
         int button = e.getButton();
-        double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
         if (pointer.world != null) {
-            pointer.world.mouseX = (int) ((e.getX()) / scale);
-            pointer.world.mouseY = (int) (e.getY() / scale);
+            setMouseCoordinates(e);
             pointer.world.pressX = pointer.world.mouseX;
             pointer.world.pressY = pointer.world.mouseY;
         }
@@ -78,26 +76,22 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
         }
     }
 
+    private void setMouseCoordinates(MouseEvent e) {
+        if (pointer.world != null) {
+            pointer.world.mouseX = (int) (e.getX() * Constants.WIDTH_INT / pointer.clientui.getWidth());
+            pointer.world.mouseY = (int) (e.getY() * Constants.HEIGHT_INT / pointer.clientui.getHeight());
+        }
+    }
+
     @Override
     public void mouseDragged(MouseEvent e) {
-        double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
-        if (pointer.world != null) {
-            pointer.world.mouseX = (int) ((e.getX() + getStuff()) / scale);
-            pointer.world.mouseY = (int) (e.getY() / scale);
-        }
+        setMouseCoordinates(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         if (pointer.world != null) {
-            double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
-            pointer.world.mouseX = (int) ((scale * pointer.clientui.getWidth())
-                    * ((e.getPoint().x - (pointer.clientui.getWidth() - pointer.clientui.getHeight())) / (double) pointer.clientui.getWidth()));
-            // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
-            pointer.world.mouseY = (int) ((scale * pointer.clientui.getHeight())
-                    * (e.getPoint().y / (double) pointer.clientui.getHeight()));
-            pointer.world.mouseX = (int) (e.getX() / scale);
-            pointer.world.mouseY = (int) (e.getY() / scale);
+            setMouseCoordinates(e);
         }
     }
 
@@ -119,15 +113,7 @@ public class ClientInputListener implements MouseListener, KeyListener, MouseMot
             if (pointer.world == null) {
                 return;
             }
-            double scale = pointer.clientui.owner.getHeight() / (double) Constants.HEIGHT_INT;
-            pointer.world.mouseX = (int) ((scale * pointer.clientui.getWidth())
-                    * ((e.getPoint().x - (pointer.clientui.getWidth() - pointer.clientui.getHeight())) / (double) pointer.clientui.getWidth()));
-            // world.mouseX = ((e.getX()-(this.getWidth()-getHeight())/2)/scale);
-            pointer.world.mouseY = (int) ((scale * pointer.clientui.getHeight())
-                    * (e.getPoint().y / (double) pointer.clientui.getHeight()));
-            pointer.world.mouseX = (int) (e.getX() / scale);
-            pointer.world.mouseY = (int) (e.getY() / scale);
-            // world.mouseY = (e.getY()/scale);
+            setMouseCoordinates(e);
 
             if ((pointer.matchOver > 0) && e.getButton() == MouseEvent.BUTTON1) {
 
