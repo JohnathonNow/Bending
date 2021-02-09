@@ -353,6 +353,7 @@ public class World implements Serializable {
         public void handleWater() {
             try {
                 flowCount = 0;
+                maxFlow = Integer.MAX_VALUE;
                 flipped *= -1;
                 int minx, maxx, miny, maxy;
                 minx = Math.max(viewX - 25, 0);
@@ -372,7 +373,7 @@ public class World implements Serializable {
                             if (h - y < 4) {
                                 cellData[x][h - y] = AIR;
                             } else {
-                                for (int i = 0; i < 8; i--) {
+                                for (int i = 0; i < 8; i++) {
                                     if (cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][h - y - 1] == AIR) {
                                         cellData[Math.min(Math.max(x + (i * flipped), 0), w - 1)][h - y
                                                 - 1] = cellData[x][h - y];

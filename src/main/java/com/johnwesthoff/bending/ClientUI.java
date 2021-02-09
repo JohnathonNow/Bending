@@ -473,7 +473,7 @@ public class ClientUI extends JPanel implements Runnable {
             final long now = System.nanoTime();
 
             delta += (now - sess.lastTime) / (1000000000 / Constants.FPS);
-            owner.setTitle(" Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)));
+            owner.setTitle(" Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)) + " Delta: " + delta);
             sess.lastTime = now;
             boolean willSendMovement = false;
             if (!owner.isVisible()) {
