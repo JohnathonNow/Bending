@@ -104,6 +104,13 @@ public class Session {
         // Empty to prevent construction of session outside of this class
     }
 
+
+    public static Session newInstance() {
+        instance = new Session();
+        return instance;
+    }
+
+
     public static Session getInstance() {
         if (instance == null) {
             instance = new Session();

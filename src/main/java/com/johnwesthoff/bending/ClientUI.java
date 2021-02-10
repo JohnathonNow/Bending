@@ -121,11 +121,11 @@ public class ClientUI extends JPanel implements Runnable {
     Polygon lineOfSight = new Polygon();
 
     public static void main(final String args[]) {
-        System.out.println("Loading BENDING v 2.020.09.17" + System.getProperty("os.name") + File.separator);
+        Session sess = Session.newInstance();
+        System.out.println("Loading v 2.021.02.10");
         Spell.init();
         final Client client = new Client();
         final ClientUI clientui = new ClientUI();
-        Session sess = Session.getInstance();
         sess.gameAlive = true;
         clientui.cc = new ClothingChooser1(clientui);
         sess.clientui = clientui;
