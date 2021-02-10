@@ -507,6 +507,11 @@ public class ClientUI extends JPanel implements Runnable {
                 sess.ticks++;
                 delta -= 1;
                 willSendMovement |= sess.client.tick();
+                try {
+                    sess.world.ground.handleWater();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             if (willSendMovement) {
                 try {
@@ -514,11 +519,6 @@ public class ClientUI extends JPanel implements Runnable {
                 } catch (final Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            try {
-                sess.world.ground.handleWater();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
             if ((now - swagTime) >= (1000000000 / Constants.FPS)) {
                 draw();
