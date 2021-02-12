@@ -1,6 +1,8 @@
 package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Server;
@@ -61,7 +63,7 @@ public class LoginEvent implements NetworkEvent {
             po.colorss = colors;
             po.colorss2 = colors2;
             po.UDPPORT = 0;
-            System.err.println(po.username + " joined with ID " + po.ID + ".");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, po.username + " joined with ID " + po.ID + ".");
             String gm = "";
             switch (Server.gameMode) {
                 default:

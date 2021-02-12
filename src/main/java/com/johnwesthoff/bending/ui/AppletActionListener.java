@@ -76,8 +76,6 @@ public class AppletActionListener implements ActionListener {
                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             app.serverOutput();
-            System.err.printf("Server %s started\nwith address %s" + "\nand port " + sess.port,
-                    gameService.getServerName(), gameService.getHostIp(), gameService.getPort());
             //app.getHosts();
         }
         if (command.equals(app.ChooseSpells.getText())) {
