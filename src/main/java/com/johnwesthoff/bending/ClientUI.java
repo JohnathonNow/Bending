@@ -134,7 +134,7 @@ public class ClientUI extends JPanel implements Runnable {
         if (args.length > 0) {
             sess.serverIP = args[0];
         } else {
-            sess.serverIP = "johnwesthoff.com";
+            sess.serverIP = "game.johnwesthoff.com";
         }
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(clientui);
