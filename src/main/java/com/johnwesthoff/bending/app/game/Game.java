@@ -1,5 +1,6 @@
 package com.johnwesthoff.bending.app.game;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.util.network.ConnectToDatabase;
 
 public class Game {
@@ -9,7 +10,7 @@ public class Game {
 
     private String serverName;
     private String hostIp;
-    private int port = 25565;
+    private int port = Constants.PORT;
 
     Game(ConnectToDatabase connection) {
         this.connection = connection;

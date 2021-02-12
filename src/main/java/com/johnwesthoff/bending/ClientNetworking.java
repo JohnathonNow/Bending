@@ -24,7 +24,7 @@ public class ClientNetworking {
     public boolean start() {
         Session sess = Session.getInstance();
         try {
-            sess.connection = new Socket(sess.serverIP, 25565);
+            sess.connection = new Socket(sess.serverIP, Constants.PORT);
             sess.isAlive = true;
             sess.world = new World(false, Constants.WIDTH_EXT, Constants.HEIGHT_EXT,
                     sess.clientui.createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), sess.clientui.Grass,

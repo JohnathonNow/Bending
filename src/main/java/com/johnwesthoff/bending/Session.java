@@ -36,7 +36,7 @@ public class Session {
     public ArrayList<Integer> myTeam = new ArrayList<>(), badTeam = new ArrayList<>();
     public static boolean currentlyLoggedIn = false;
     public double maxeng, dpyeng, energico = maxeng = dpyeng = 1000;
-    public int port = 25565;
+    public int port = Constants.PORT;
     public Properties userpassinfo;
     public double engrecharge = 4;
     public Random random = new Random();

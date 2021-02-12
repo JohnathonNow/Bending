@@ -70,7 +70,7 @@ public final class Server implements Runnable {
         return MYID++;
     }
 
-    int port = 25565;
+    int port = Constants.PORT;
     public ArrayList<Integer> team1 = new ArrayList<>(), team2 = new ArrayList<>();
     public ArrayList<PlayerOnline> playerList = new ArrayList<>();
     static ServerSocket SocialSecurity;
@@ -127,7 +127,7 @@ public final class Server implements Runnable {
         Spell.init();
         playerService = PlayerServiceFactory.create();
         try {
-            SocialSecurity = new ServerSocket(25565);
+            SocialSecurity = new ServerSocket(Constants.PORT);
             playerAcceptor.start();
             spawnX = (int) earth.x;
             spawnY = (int) earth.y;
