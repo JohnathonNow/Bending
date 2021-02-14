@@ -122,7 +122,7 @@ public class ClientUI extends JPanel implements Runnable {
 
     public static void main(final String args[]) {
         Session sess = Session.newInstance();
-        System.out.println("Loading v 2.021.02.10");
+        System.out.println("Loading 1.2");
         Spell.init();
         final Client client = new Client();
         final ClientUI clientui = new ClientUI();

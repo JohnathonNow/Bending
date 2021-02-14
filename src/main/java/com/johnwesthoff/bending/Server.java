@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -353,18 +352,6 @@ public final class Server implements Runnable {
     public int mapRotation = 0;
     public int maxMap = 1;
 
-    public static void writeByteBuffer(final ByteBuffer toSend, final OutputStream output) throws IOException {
-
-        final byte yay[] = new byte[toSend.position()];// toSend.slice().array();
-        // S System.a
-        System.arraycopy(toSend.array(), 0, yay, 0, toSend.position());
-        // output.write(toSend.position());
-        final byte[] size = ByteBuffer.allocate(4).putInt(yay.length).array();
-        // System.err.println(yay.length);
-        output.write(size);
-        output.write(yay);
-        output.flush();
-    }
 
     public static ByteBuffer putString(final ByteBuffer yes, final String y) {
         yes.putInt(y.length());

@@ -94,4 +94,5 @@ public class Constants {
 	public static final int GAS_BREATH_TIME = 10;
 	public static final short GAS_BREATH_DAMAGE = 3;
 	public static final int PORT = 26077;
+	public static final int ARM_SPEED = 40;
 }

@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
@@ -33,6 +34,10 @@ public class Player {
     public boolean sameTeam;
     public byte[] partss;
     public int[] colorss, colorss2;
+    public int left = 1;
+    public double leftArmAngle = Constants.RIGHT_ANGLE, rightArmAngle = Constants.RIGHT_ANGLE;
+    public double displayedLeftArmAngle = Constants.RIGHT_ANGLE;
+    public double displayedRightArmAngle = Constants.RIGHT_ANGLE;
 
     public Player(int X, int Y, final byte[] parts, final int[] colors, final int[] colors2) {
         x = X;
@@ -98,8 +103,7 @@ public class Player {
         showy = y;
     }
 
-    public int left = 1;
-    public double leftArmAngle = Constants.RIGHT_ANGLE, rightArmAngle = Constants.RIGHT_ANGLE;
+
 
     public void onDraw(Graphics g, int viewX, int viewY) {
         if ((status & Constants.ST_INVISIBLE) != 0) {
@@ -127,8 +131,29 @@ public class Player {
             if (Integer.signum((int)move) == 1) {
                 left = 1;
             }
+
+            displayedLeftArmAngle = Ops.wrap(displayedLeftArmAngle, 360);
+            displayedRightArmAngle = Ops.wrap(displayedRightArmAngle, 360);
+            leftArmAngle = Ops.wrap(leftArmAngle, 360);
+            rightArmAngle = Ops.wrap(rightArmAngle, 360);
+
+            if (Math.abs(displayedLeftArmAngle - leftArmAngle) <= Constants.ARM_SPEED) {
+                displayedLeftArmAngle = leftArmAngle;
+            } else {
+                displayedLeftArmAngle += (Ops.angleDir(displayedLeftArmAngle, leftArmAngle)) * Constants.ARM_SPEED;
+            }
+
+            if (Math.abs(displayedRightArmAngle - rightArmAngle) <= Constants.ARM_SPEED) {
+                displayedRightArmAngle = rightArmAngle;
+            } else {
+                displayedRightArmAngle += (Ops.angleDir(displayedRightArmAngle, rightArmAngle)) * Constants.ARM_SPEED;
+            }
+            
             if (ol != left) {
-                double t = leftArmAngle;
+                double t = displayedLeftArmAngle;
+                displayedLeftArmAngle = displayedRightArmAngle;
+                displayedRightArmAngle = t;
+                t = leftArmAngle;
                 leftArmAngle = rightArmAngle;
                 rightArmAngle = t;
             }
@@ -144,24 +169,24 @@ public class Player {
             double ffs = Math.toRadians(((4 - offs) * 6));
             AffineTransform previousAT = g2.getTransform();
             g2.translate((showx - 3 - viewX) * Constants.MULTIPLIER * left, ((showy - yUp - 6) - viewY) * Constants.MULTIPLIER);
-            g2.rotate(Math.toRadians(leftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
+            g2.rotate(Math.toRadians(displayedLeftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
             g2.drawImage(bodyParts[2], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((((showx - 3 - viewX) + lengthdir_x(6 * left, leftArmAngle * left))) * left * Constants.MULTIPLIER,
-                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, leftArmAngle * left)) - viewY) * Constants.MULTIPLIER);
-            g2.rotate(Math.toRadians(leftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
+            g2.translate((((showx - 3 - viewX) + lengthdir_x(6 * left, displayedLeftArmAngle * left))) * left * Constants.MULTIPLIER,
+                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, displayedLeftArmAngle * left)) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(displayedLeftArmAngle - Constants.RIGHT_ANGLE), 4 * (left + 1), 2);
             g2.drawImage(bodyParts[3], 0, 0, null);
             g2.setTransform(previousAT);
 
             g2.translate((showx + 9 - viewX) * Constants.MULTIPLIER * left, ((showy - yUp - 6) - viewY) * Constants.MULTIPLIER);
-            g2.rotate(Math.toRadians(rightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
+            g2.rotate(Math.toRadians(displayedRightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
             g2.drawImage(bodyParts[2], 0, 0, null);
             g2.setTransform(previousAT);
 
-            g2.translate((((showx + 9 - viewX) + this.lengthdir_x(6 * left, rightArmAngle * left)) * Constants.MULTIPLIER) * left,
-                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, rightArmAngle * left)) - viewY) * Constants.MULTIPLIER);
-            g2.rotate(Math.toRadians(rightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
+            g2.translate((((showx + 9 - viewX) + this.lengthdir_x(6 * left, displayedRightArmAngle * left)) * Constants.MULTIPLIER) * left,
+                    (((showy - yUp - 6) - this.lengthdir_y(6 * left, displayedRightArmAngle * left)) - viewY) * Constants.MULTIPLIER);
+            g2.rotate(Math.toRadians(displayedRightArmAngle - Constants.RIGHT_ANGLE), 8 - left * 4, 4);
             g2.drawImage(bodyParts[3], 0, 0, null);
             g2.setTransform(previousAT);
 
