@@ -10,8 +10,8 @@ public class Constants {
     public static final int WIDTH_SCALE = WIDTH_EXT / WIDTH_INT;
     public static final int HEIGHT_SCALE = HEIGHT_EXT / HEIGHT_INT;
     public static final double FPS = 60.0d;
-    public static final double GRAVITY = 0.5d;
-    public static final double JUMP_COEFFICIENT = 0.7d;
+    public static final double GRAVITY = 0.4d;
+    public static final double JUMP_COEFFICIENT = 0.6d;
     public static final int NETWORK_UPDATE_POSITION_RATE = 30;
     public static final int NETWORK_UPDATE_MAP_RATE = 1200;
     public static final int POSITION_CORRECTION = 4;
@@ -97,4 +97,5 @@ public class Constants {
 	public static final int ARM_SPEED = 40;
     public static final String DEFAULT_SERVER = "game.johnwesthoff.com";
 	public static final int JUMP_LEDGE_ASSIST = 6; //number of frames you can jump after falling off a ledge
+	public static final double RUNNING_SPEED = 1.5d;
 }

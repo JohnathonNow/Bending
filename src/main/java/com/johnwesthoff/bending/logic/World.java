@@ -1125,7 +1125,7 @@ public class World implements Serializable {
         }
         if (canijump && jump > 0) {
             vspeed = (int) (-10 * jump);
-            move *= 2;
+            //move *= 2;
         }
         int s = (int) Math.signum(vspeed);
         canifall = true;

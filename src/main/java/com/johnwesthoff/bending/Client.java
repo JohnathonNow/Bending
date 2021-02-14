@@ -172,7 +172,7 @@ public class Client {
 
     private void handlePassiveEffect() {
         if (!"Air Run".equals(session.passiveList[session.spellBook].getName())) {
-            session.runningSpeed = 1;
+            session.runningSpeed = Constants.RUNNING_SPEED;
         }
         if ((!"Air Affinity".equals(session.passiveList[session.spellBook].getName()))
                 && (!"Earth Stance".equals(session.passiveList[session.spellBook].getName()))) {

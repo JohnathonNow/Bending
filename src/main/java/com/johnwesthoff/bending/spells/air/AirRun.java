@@ -43,7 +43,7 @@ public class AirRun extends Airbending {
 
     @Override
     public void getPassiveAction(Session app) {
-        app.runningSpeed = 1 + (0.19 * (double) (number));
+        app.runningSpeed = Constants.RUNNING_SPEED + (0.19 * (double) (number));
     }
 
     @Override
