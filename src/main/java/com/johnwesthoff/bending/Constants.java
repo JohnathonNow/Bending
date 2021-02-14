@@ -95,4 +95,6 @@ public class Constants {
 	public static final short GAS_BREATH_DAMAGE = 3;
 	public static final int PORT = 26077;
 	public static final int ARM_SPEED = 40;
+    public static final String DEFAULT_SERVER = "game.johnwesthoff.com";
+	public static final int JUMP_LEDGE_ASSIST = 6; //number of frames you can jump after falling off a ledge
 }

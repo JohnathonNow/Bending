@@ -83,6 +83,7 @@ public class World implements Serializable {
     public boolean fallingTerrain = false;
     public int landTexSize = 256;
     public int FPS = 0;
+    public int falledFrames = 0;
     public static int head = 26;
     public static int body = 13;
     public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint;
@@ -1105,6 +1106,7 @@ public class World implements Serializable {
             }
         }
         boolean canifall = true;
+        boolean canijump = false;
         for (int i = 1; i <= 4; i++) {
             if (isSolid(x, y + i)) {
                 canifall = false;
@@ -1113,21 +1115,17 @@ public class World implements Serializable {
         }
         if (canifall) {
             vspeed = Math.min(4 - floatiness, vspeed + Constants.GRAVITY);
+            falledFrames++;
+            canijump = falledFrames < Constants.JUMP_LEDGE_ASSIST;
         } else {
             vspeed = Math.min(0, vspeed);
             keepMoving = false;
-
-            if (jump > 0) {
-                vspeed = (int) (-10 * jump);
-                move *= 2;
-                // toKeepMove = move*3;
-                // jumpHeight = (int)y;
-                // if (Client.shortJump)
-                // {
-                // toKeepMove = 0;
-                // }
-                // keepMoving = (toKeepMove!=0);
-            }
+            canijump = true;
+            falledFrames = 0;
+        }
+        if (canijump && jump > 0) {
+            vspeed = (int) (-10 * jump);
+            move *= 2;
         }
         int s = (int) Math.signum(vspeed);
         canifall = true;
