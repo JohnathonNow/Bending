@@ -304,12 +304,12 @@ public class Client {
 
     public int hurt(double pain) {
         if (session.passiveList[session.spellBook].getName().equals("Lightning Shield")) {
-            if (session.random.nextInt(15 - (session.shockdrain * 2)) == 0) {
+            if (session.random.nextInt(17 - (session.shockdrain * 3)) == 0) {
                 pain *= .25;
                 if (pain < 1) {
                     pain = 1;
                 }
-                session.energico -= pain * 50;
+                session.world.status |= Constants.ST_SHOCKED;
                 session.world.entityList
                         .add(new ShockEffectEntity((int) session.world.x, (int) session.world.y, 6 + (int) pain));
             }

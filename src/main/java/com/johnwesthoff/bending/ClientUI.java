@@ -2,6 +2,7 @@ package com.johnwesthoff.bending;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -59,6 +60,7 @@ import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
 import com.johnwesthoff.bending.util.audio.RealClip;
+import com.johnwesthoff.bending.util.graphics.Additive;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 /**
@@ -677,12 +679,12 @@ public class ClientUI extends JPanel implements Runnable {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
                 // The below lines are commented out until we get a faster way to do this
-                // Composite c = biggraphicsBuffer.getComposite();
-                // biggraphicsBuffer.setComposite(Additive.additive);
+                //Composite c = biggraphicsBuffer.getComposite();
+                //biggraphicsBuffer.setComposite(Additive.additive);
                 for (final Entity e : world.entityList) {
                     e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                // biggraphicsBuffer.setComposite(c);
+                //biggraphicsBuffer.setComposite(c);
                 if (sess.chatActive) {
                     biggraphicsBuffer.setColor(Color.gray);
                     biggraphicsBuffer.fillRect(32, 810,
