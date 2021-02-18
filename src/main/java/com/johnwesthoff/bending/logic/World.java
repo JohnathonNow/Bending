@@ -656,22 +656,13 @@ public class World implements Serializable {
          */
         public void FillPolygon(Polygon P, byte type) {
             int x, y, minX = w, minY = h, maxX = 0, maxY = 0;
-
             for (int i = 0; i < P.npoints; i++) {
                 x = P.xpoints[i];
                 y = P.ypoints[i];
-                if (x > maxX) {
-                    maxX = Math.min(x, w);
-                }
-                if (y > maxY) {
-                    maxY = y > h ? w : y;
-                }
-                if (x < minX) {
-                    minX = Math.max(x, 0);
-                }
-                if (y < minY) {
-                    minY = Math.max(y, 0);
-                }
+                minX = Math.min(Math.max(0, x), minX);
+                maxX = Math.max(Math.min(w, x), maxX);
+                minY = Math.min(Math.max(0, y), minY);
+                maxY = Math.max(Math.min(h, y), maxY);
             }
             for (x = minX; x <= maxX; x++) {
                 for (y = minY; y <= maxY; y++) {
@@ -681,10 +672,6 @@ public class World implements Serializable {
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillPolygon(P);
-            // G2D.setPaint(null);
         }
 
         /**
