@@ -936,6 +936,26 @@ public class World implements Serializable {
     public boolean keepMoving = false;
 
     /**
+     * Counts the number of solid cells in a circle at (x, y) and radius r
+     * 
+     * @param x x coordinate of the center of the circle
+     * @param y y coordinate of the center of the circle
+     * @param r radius of the circle
+     * @return the number of solid cells in the circle
+     */
+    public int countSolidCircle(int x, int y, int r) {
+        int ret = 0;
+        for (int i = x - r; i <= x + r; i++) {
+            for (int j = y - r; j <= y + r; j++) {
+                if (Math.round(Math.sqrt(Math.pow(i - x, 2) + Math.pow(j - y, 2))) <= r && isSolid(i, j)) {
+                    ret++;
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
      * Checks if the cell is solid
      * 
      * @param x X value of the cell

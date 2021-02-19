@@ -40,7 +40,7 @@ public class EarthbendingSpike extends Earthbending {
         mx = X - ((int) (Ops.lengthdir_x(72, direction)));
         my = Y + ((int) (Ops.lengthdir_y(72, direction)));
         maker = ID;
-        if (!app.world.isSolid(X, Y) || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
+        if (app.world.countSolidCircle((int)X, (int)Y, 20) == 0 || !app.world.inBounds(mx, my) || !app.world.inBounds(mx - 56, my)
                 || !app.world.inBounds(mx + 56, my)) {
             return;
         }
@@ -69,6 +69,7 @@ public class EarthbendingSpike extends Earthbending {
         P.addPoint(px - (int) Ops.lengthdir_x(20, dir + 90), py + (int) Ops.lengthdir_y(20, dir + 90));
         P.addPoint(mx, my);
         P.addPoint(px - (int) Ops.lengthdir_x(20, dir - 90), py + (int) Ops.lengthdir_y(20, dir - 90));
+        world.ground.FillCircleW(px, py, 40, Constants.STONE);
         world.ground.FillPolygon(P, Constants.STONE);
     }
 }
