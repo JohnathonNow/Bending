@@ -69,7 +69,7 @@ public class EarthbendingSpike extends Earthbending {
         P.addPoint(px - (int) Ops.lengthdir_x(20, dir + 90), py + (int) Ops.lengthdir_y(20, dir + 90));
         P.addPoint(mx, my);
         P.addPoint(px - (int) Ops.lengthdir_x(20, dir - 90), py + (int) Ops.lengthdir_y(20, dir - 90));
-        world.ground.FillCircleW(px, py, 40, Constants.STONE);
+        world.ground.fillCircleW(px, py, 20, Constants.STONE);
         world.ground.FillPolygon(P, Constants.STONE);
     }
 }

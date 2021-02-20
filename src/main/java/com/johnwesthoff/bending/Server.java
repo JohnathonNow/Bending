@@ -541,7 +541,7 @@ public final class Server implements Runnable {
                 case 1:
                     earth.ground.FillRectW(0, 800, 100, 900, Constants.LAVA);
                     for (int x = 0; x <= 900; x += 100) {
-                        earth.ground.FillCircleW(x, 800, 100, Constants.STONE);
+                        earth.ground.fillCircleW(x, 800, 50, Constants.STONE);
                     }
                     break;
                 case 2:

@@ -76,16 +76,16 @@ public class LavaBallEntity extends Entity {
     public void onServerUpdate(Server lol) {
         for (Player p : lol.playerList) {
             if (p.ID != maker && p.checkCollision((int) X, (int) Y)) {
-                radius = 24;
-                lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.LAVA);
+                radius = 12;
+                lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.LAVA);
                 lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.LAVA));
                 alive = false;
                 return;
             }
         }
         if (lol.earth.checkCollision(X, Y)) {
-            radius = 24;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.LAVA);
+            radius = 12;
+            lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.LAVA);
             lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.LAVA));
             alive = false;
         }

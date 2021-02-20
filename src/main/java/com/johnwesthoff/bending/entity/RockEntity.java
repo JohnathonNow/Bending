@@ -81,8 +81,8 @@ public class RockEntity extends Entity {
         time = System.currentTimeMillis();
         if (!lol.earth.inBounds(X + xspeed, Y + yspeed) || lol.earth.checkCollision(X + xspeed, Y + yspeed)) {
             radius *= 3;
-            lol.earth.ground.FillCircleW((int) (X + xspeed), (int) (Y + yspeed), 96, Constants.STONE);
-            lol.sendMessage(FillEvent.getPacket((int) (X + xspeed), (int) (Y + yspeed), 96, Constants.STONE));
+            lol.earth.ground.fillCircleW((int) (X + xspeed), (int) (Y + yspeed), 48, Constants.STONE);
+            lol.sendMessage(FillEvent.getPacket((int) (X + xspeed), (int) (Y + yspeed), 48, Constants.STONE));
         }
     }
 

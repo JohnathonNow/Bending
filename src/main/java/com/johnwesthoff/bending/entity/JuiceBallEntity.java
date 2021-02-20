@@ -70,8 +70,8 @@ public class JuiceBallEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
-            radius = 24;
-            lol.earth.ground.FillCircleW((int) X, (int) Y, radius, Constants.JUICE);
+            radius = 12;
+            lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.JUICE);
             lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.JUICE));
             alive = false;
         }

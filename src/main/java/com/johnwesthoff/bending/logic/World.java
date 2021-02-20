@@ -682,32 +682,27 @@ public class World implements Serializable {
          * @param r radius of circle
          */
         public void fillCircle(int x, int y, int r) {
-            FillCircleW(x, y, r*2, Constants.STONE);
+            fillCircleW(x, y, r, Constants.STONE);
         }
 
         /**
          * Fills a given circle and sets the terrain of the cell to the new value
          * 
-         * @param X X coordinate
-         * @param Y Y coordinate
-         * @param R DIAMETER of circle center
-         * @param T Value for the cell data
+         * @param x X coordinate
+         * @param y Y coordinate
+         * @param r radius of circle center
+         * @param t Value for the cell data
          */
-        public void FillCircleW(int X, int Y, int R, byte T) {
+        public void fillCircleW(int x, int y, int r, byte t) {
             // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1) {
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) <= r) {
                         if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
-                            cellData[i1][i2] = T;
+                            cellData[i1][i2] = t;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
         }
 
         /**
