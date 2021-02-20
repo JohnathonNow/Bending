@@ -534,9 +534,9 @@ public final class Server implements Runnable {
             switch (i) {
                 default:
                 case 0:
-                    earth.ground.FillCircle(150, 900, 150);
-                    earth.ground.FillCircle(450, 900, 150);
-                    earth.ground.FillCircle(750, 900, 150);
+                    earth.ground.fillCircle(150, 900, 150);
+                    earth.ground.fillCircle(450, 900, 150);
+                    earth.ground.fillCircle(750, 900, 150);
                     break;
                 case 1:
                     earth.ground.FillRectW(0, 800, 100, 900, Constants.LAVA);
