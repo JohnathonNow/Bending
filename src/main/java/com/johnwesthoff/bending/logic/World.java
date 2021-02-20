@@ -677,25 +677,12 @@ public class World implements Serializable {
         /**
          * Sets the circle's terrain to GROUND
          * 
-         * @param X X coordinate
-         * @param Y Y coordinate
-         * @param R
+         * @param x x coordinate of circle center
+         * @param y y coordinate of circle center
+         * @param r radius of circle
          */
-        public void FillCircle(int X, int Y, int R) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1) {
-                        if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER)
-                            cellData[i1][i2] = GROUND;
-                    }
-                }
-            }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(grassPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
+        public void fillCircle(int x, int y, int r) {
+            FillCircleW(x, y, r*2, Constants.STONE);
         }
 
         /**
@@ -703,7 +690,7 @@ public class World implements Serializable {
          * 
          * @param X X coordinate
          * @param Y Y coordinate
-         * @param R
+         * @param R DIAMETER of circle center
          * @param T Value for the cell data
          */
         public void FillCircleW(int X, int Y, int R, byte T) {
@@ -1513,14 +1500,14 @@ public class World implements Serializable {
      * @param c
      */
     public void unexplode(int x, int y, int r, int n, int c) {
-        ground.FillCircle(x, y, r);
+        ground.fillCircle(x, y, r / 2);
         int tobe, xx, yy;
         for (int i = 0; i <= n; i++) {
             tobe = (int) (.5 + (r * random.nextFloat()));
             tobe += tobe % 2 == 0 ? 1 : 0;
             xx = x + c - random.nextInt(c * 2);
             yy = y + c - random.nextInt(c * 2);
-            ground.FillCircle(xx, yy, tobe);
+            ground.fillCircle(xx, yy, tobe / 2);
         }
     }
 
