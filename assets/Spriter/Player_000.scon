@@ -1488,7 +1488,7 @@
 				},
 				{
 					"id": 1,
-					"interval": 100,
+					"interval": 60,
 					"length": 1000,
 					"mainline": {
 						"key": [
