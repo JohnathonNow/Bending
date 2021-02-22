@@ -68,7 +68,7 @@ public class EarthbendingSand extends Earthbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.ground.sandinate(px, py, 96);
+        world.ground.sandinate(px, py, 48);
         final int number = buf.getInt();
         world.entityList.add(new SandEntity(px, py, mx, my, pid).setID(eid));
         if (number > 3) {

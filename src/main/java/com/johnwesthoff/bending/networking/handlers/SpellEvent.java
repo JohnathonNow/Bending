@@ -46,7 +46,7 @@ public class SpellEvent implements NetworkEvent {
         nm.getContent().putInt(p.ID).putInt(Iw);
         if (Spell.getSpell(subID) instanceof EarthbendingSand) {
             // TODO this code is duplicated and should not be
-            int number = p.handle.earth.ground.sandinate(Xx, Yy, 96);
+            int number = p.handle.earth.ground.sandinate(Xx, Yy, 48);
             number /= (32);
             p.handle.earth.entityList.add(new SandEntity(Xx, Yy, mX, mY, ID).setID(Iw));
             if (number > 3) {

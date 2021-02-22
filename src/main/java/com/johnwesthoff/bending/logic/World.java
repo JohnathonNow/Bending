@@ -715,16 +715,18 @@ public class World implements Serializable {
          * @param from the old type
          * @param to   the new type
          */
-        public void replaceCircle(int x, int y, int r, byte from, byte to) {
-            // long time = System.nanoTime();
+        public int replaceCircle(int x, int y, int r, byte from, byte to) {
+            int count = 0;
             for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
                 for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
                     if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) <= r
                             && cellData[i1][i2] == from) {
                         cellData[i1][i2] = to;
+                        count++;
                     }
                 }
             }
+            return count;
         }
 
         /**
@@ -743,22 +745,11 @@ public class World implements Serializable {
          * 
          * @param X X coordinate
          * @param Y Y coordinate
-         * @param R
+         * @param R radius of circle
          * @return
          */
-        public int sandinate(int X, int Y, int R) {
-            int toReturn = 0;
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
-                            && cellData[i1][i2] == SAND) {
-                        cellData[i1][i2] = AIR;
-                        toReturn++;
-                    }
-                }
-            }
-            return toReturn;
+        public int sandinate(int x, int y, int r) {
+            return replaceCircle(x, y, r, SAND, AIR);
         }
 
         /**
@@ -777,19 +768,11 @@ public class World implements Serializable {
          * 
          * @param X    X coordinate
          * @param Y    Y coordinate
-         * @param R
+         * @param R    radius of circle
          * @param type the new type
          */
-        public void puddle(int X, int Y, int R, byte type) {
-            // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
-                            && cellData[i1][i2] == AIR) {
-                        cellData[i1][i2] = type;
-                    }
-                }
-            }
+        public void puddle(int x, int y, int r, byte type) {
+            replaceCircle(x, y, r, AIR, type);
         }
 
         /**
