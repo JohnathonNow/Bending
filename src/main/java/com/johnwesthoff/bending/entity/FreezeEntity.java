@@ -67,8 +67,8 @@ public class FreezeEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         if ((!lol.earth.inBounds(X, Y)) || lol.earth.checkCollision(X, Y)) {
-            lol.earth.ground.freeze((int) X, (int) Y, radius * 4);
-            lol.sendMessage(FreezeEvent.getPacket(X, Y, radius * 4));
+            lol.earth.ground.freeze((int) X, (int) Y, radius * 2);
+            lol.sendMessage(FreezeEvent.getPacket(X, Y, radius * 2));
             alive = false;
         }
     }

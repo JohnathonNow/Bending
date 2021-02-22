@@ -706,22 +706,36 @@ public class World implements Serializable {
         }
 
         /**
-         * Changes water to ice
+         * Changes all pieces of `from` witin a circle centered at (X, Y) and radius r
+         * to `to`
          * 
-         * @param X
-         * @param Y
-         * @param R
+         * @param x    X coordinate
+         * @param y    Y coordinate
+         * @param r    radius of circle
+         * @param from the old type
+         * @param to   the new type
          */
-        public void freeze(int X, int Y, int R) {
+        public void replaceCircle(int x, int y, int r, byte from, byte to) {
             // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2) + .1
-                            && cellData[i1][i2] == WATER) {
-                        cellData[i1][i2] = ICE;
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) <= r
+                            && cellData[i1][i2] == from) {
+                        cellData[i1][i2] = to;
                     }
                 }
             }
+        }
+
+        /**
+         * Changes water to ice within a circle of radius r centerd at (x, y)
+         * 
+         * @param x x coordinate of circle
+         * @param x y coordinate of circle
+         * @param r radius of circle
+         */
+        public void freeze(int x, int y, int r) {
+            replaceCircle(x, y, r, WATER, ICE);
         }
 
         /**

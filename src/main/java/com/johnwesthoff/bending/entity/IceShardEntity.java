@@ -103,8 +103,8 @@ public class IceShardEntity extends Entity {
         }
         if (time++ > 1) {
             time = 0;
-            lol.earth.ground.freeze((int) (previousX - (xspeed * 4)), (int) (previousY - (yspeed * 4)), 54);
-            lol.sendMessage(FreezeEvent.getPacket((previousX - (xspeed * 4)), (previousY - (yspeed * 4)), 54 * 4));
+            lol.earth.ground.freeze((int) (previousX - (xspeed * 4)), (int) (previousY - (yspeed * 4)), 27);
+            lol.sendMessage(FreezeEvent.getPacket((previousX - (xspeed * 4)), (previousY - (yspeed * 4)), 27));
         }
     }
 
