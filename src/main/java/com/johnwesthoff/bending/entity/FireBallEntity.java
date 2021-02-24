@@ -75,8 +75,8 @@ public class FireBallEntity extends Entity {
     @Override
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
-            radius *= 4;
-            lol.earth.ground.ClearCircle((int) X, (int) Y, radius);
+            radius *= 2;
+            lol.earth.ground.clearCircle((int) X, (int) Y, radius);
             lol.sendMessage(DigEvent.getPacket((int)X, (int)Y, radius));
             alive = false;
         }

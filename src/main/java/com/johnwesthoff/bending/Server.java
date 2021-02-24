@@ -526,7 +526,7 @@ public final class Server implements Runnable {
             }
         }
         Arrays.fill(score, 0);
-        earth.ground.ClearCircleStrong(150, 150, 9000);
+        earth.ground.clearCircleStrong(150, 150, 9000);
         final File mapsFolder = new File(dir + "maps");
         System.out.println(mapsFolder.getPath());
         final File[] mapFiles = mapsFolder.listFiles();

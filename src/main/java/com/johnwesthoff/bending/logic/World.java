@@ -196,10 +196,10 @@ public class World implements Serializable {
         ground = new CollisionChecker(wIdTh, hEigHt);
         // G2D.setPaint(null);
         if (!serverWorld) {
-            ground.ClearCircle(150, 1, 300);
-            ground.ClearCircle(450, 1, 300);
-            ground.ClearCircle(750, 1, 300);
-            ground.ClearCircle(750, 900, 450);
+            ground.clearCircle(150, 1, 150);
+            ground.clearCircle(450, 1, 150);
+            ground.clearCircle(750, 1, 150);
+            ground.clearCircle(750, 900, 225);
             /*
              * entityList.add(new HouseEntity(450,150,20,20)); entityList.add(new
              * HouseEntity(500,140,20,20)); entityList.add(new
@@ -210,7 +210,7 @@ public class World implements Serializable {
             // entityList.add(new HouseEntity(750,899,60,30).setLook(Color.red,
             // Color.darkGray, Color.blue, Color.cyan, true));
         } else {
-            ground.ClearCircle(150, 0, 150);
+            ground.clearCircle(150, 0, 75);
         }
     }
 
@@ -544,31 +544,23 @@ public class World implements Serializable {
         /**
          * Clears a circle using the standard square method
          *
-         * @param X - X coordinate of the circle's center
-         * @param Y - Y coordinate of the circle's center
-         * @param R - Radius of the circle
+         * @param x - X coordinate of the circle's center
+         * @param y - Y coordinate of the circle's center
+         * @param r - Radius of the circle
          */
-        public void ClearCircle(int X, int Y, int R) {
+        public void clearCircle(int x, int y, int r) {
             // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2) < Math.pow((R / 2), 2)) {
-                        if (cellData[i1][i2] == OIL) {
-                            if (random.nextInt(10) == 2) {
-                                cellData[i1][i2] = AIR;
-                                // oilExplode(i1, i2);
-                                entityList.add(new ExplosionEntity(i1, i2, 8, 1));
-                                ClearCircle(i1, i2, 10);
-                            }
-                        } // if (cellData[i1][i2]!=STONE)
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2) <= r*r) {
                         if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER) {
                             cellData[i1][i2] = AIR;
                         }
                     }
                 }
             }
-            for (int i1 = Math.max(X - (R + 2), 0); i1 < Math.min(X + (R + 2), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 2), 0); i2 < Math.min(Y + (R + 2), h); i2++) {
+            for (int i1 = Math.max(x - (r + 2), 0); i1 < Math.min(x + (r + 2), w); i1++) {
+                for (int i2 = Math.max(y - (r + 2), 0); i2 < Math.min(y + (r + 2), h); i2++) {
                     // try to floodfill
                     if (cellData[i1][i2] < 64 && isSolid(i1, i2)) {
                         // not unsupported and is solid
@@ -581,33 +573,19 @@ public class World implements Serializable {
         /**
          * Clears the circle at the given position
          * 
-         * @param X X coordinate
-         * @param Y Y coordinate
-         * @param R
+         * @param x X coordinate
+         * @param y Y coordinate
+         * @param r radius of circle
          */
-        public void ClearCircleStrong(int X, int Y, int R) {
+        public void clearCircleStrong(int x, int y, int r) {
             // long time = System.nanoTime();
-            for (int i1 = Math.max(X - (R + 1), 0); i1 < Math.min(X + (R + 1), w); i1++) {
-                for (int i2 = Math.max(Y - (R + 1), 0); i2 < Math.min(Y + (R + 1), h); i2++) {
-                    if (Math.round(Math.sqrt(Math.pow(i1 - X, 2) + Math.pow(i2 - Y, 2))) < (R / 2)) {
-                        if (cellData[i1][i2] == OIL) {
-                            if (random.nextInt(10) == 2) {
-                                cellData[i1][i2] = AIR;
-                                // oilExplode(i1, i2);
-                                entityList.add(new ExplosionEntity(i1, i2, 8, 1));
-                                ClearCircle(i1, i2, 10);
-                            }
-                        }
+            for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
+                for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
+                    if (Math.round(Math.sqrt(Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2))) <= r) {
                         cellData[i1][i2] = AIR;
                     }
                 }
             }
-            // G2D.setColor(Color.white);
-            // G2D.setPaint(skyPaint);
-            // G2D.fillArc(X-(R/2), Y-(R/2), R, R, 0, 360);
-            // G2D.setPaint(null);
-            // System.out.println(System.nanoTime()-time);
-
         }
 
         /**
@@ -830,7 +808,7 @@ public class World implements Serializable {
             F = (int) Math.ceil(distance / R);
             double x = X1, y = Y1;
             for (double i = 0; i <= F; i++) {
-                ClearCircle((int) x, (int) y, R);
+                clearCircle((int) x, (int) y, R);
                 x += lengthdir_x(distance / F, direction);
                 y += lengthdir_y(distance / F, direction);
             }
@@ -1469,7 +1447,7 @@ public class World implements Serializable {
      * @param c
      */
     public void explode(int x, int y, int r, int n, int c) {
-        ground.ClearCircle(x, y, r);
+        ground.clearCircle(x, y, r);
         entityList.add(new ExplosionEntity(x, y, r / 2, 2));
         int tobe, xx, yy;
         for (int i = 0; i <= n; i++) {
@@ -1478,7 +1456,7 @@ public class World implements Serializable {
             xx = x + c - random.nextInt(c * 2);
             yy = y + c - random.nextInt(c * 2);
             entityList.add(new ExplosionEntity(xx, yy, tobe / 2, 2));
-            ground.ClearCircle(x + c - random.nextInt(c * 2), y + c - random.nextInt(c * 2), tobe);
+            ground.clearCircle(x + c - random.nextInt(c * 2), y + c - random.nextInt(c * 2), tobe);
         }
     }
 

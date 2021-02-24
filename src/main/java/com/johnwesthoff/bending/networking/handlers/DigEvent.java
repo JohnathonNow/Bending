@@ -20,7 +20,7 @@ public class DigEvent implements NetworkEvent {
         ix = toRead.getInt();
         iy = toRead.getInt();
         ir = toRead.getInt();
-        p.world.ground.ClearCircle(ix, iy, ir);
+        p.world.ground.clearCircle(ix, iy, ir);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class DigEvent implements NetworkEvent {
         ix = toRead.getInt();
         iy = toRead.getInt();
         ir = toRead.getInt();
-        p.handle.earth.ground.ClearCircle(ix, iy, ir);
+        p.handle.earth.ground.clearCircle(ix, iy, ir);
         p.handle.sendMessage(getPacket(ix, iy, ir));
     }
 
