@@ -12,7 +12,7 @@ public class Constants {
     public static final double FPS = 60.0d;
     public static final double GRAVITY = 0.4d;
     public static final double JUMP_COEFFICIENT = 0.6d;
-    public static final int NETWORK_UPDATE_POSITION_RATE = 30;
+    public static final int NETWORK_UPDATE_POSITION_RATE = 4;
     public static final int NETWORK_UPDATE_MAP_RATE = 1200;
     public static final int POSITION_CORRECTION = 4;
     public static final int MANA_REGEN_RATE = 10;
