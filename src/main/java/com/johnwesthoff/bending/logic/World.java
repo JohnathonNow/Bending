@@ -956,7 +956,7 @@ public class World implements Serializable {
      * @param y Y value of the cell
      * @return true (if the current cell is liquid) or false (else)
      */
-    public boolean isLiquid(float x, float y) {
+    public boolean isLiquid(double x, double y) {
         try {
             if (!inBounds(x, y))
                 return false;
@@ -974,7 +974,7 @@ public class World implements Serializable {
      * @param y Y value of the cell
      * @return true (if the current cell is gas) or false (else)
      */
-    public boolean isGas(float x, float y) {
+    public boolean isGas(double x, double y) {
         try {
             if (!inBounds(x, y))
                 return false;
@@ -1213,8 +1213,8 @@ public class World implements Serializable {
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
         // incY = (int)Ops.lengthdir_y(Client.pointDis(x, y, mouseX,
         // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        float followx = x;
-        float followy = y;
+        double followx = x;
+        double followy = y;
         if (following != null) {
             incX = 0;
             incY = 0;
@@ -1420,7 +1420,7 @@ public class World implements Serializable {
         return (i1 >= 0 && i1 < wIdTh && i2 >= 0 && i2 < hEigHt);
     }
 
-    public boolean checkCollision(float x, float y) {
+    public boolean checkCollision(double x, double y) {
         return (isSolid(x, y));
     }
 

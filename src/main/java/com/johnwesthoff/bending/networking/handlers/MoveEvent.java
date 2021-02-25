@@ -20,10 +20,10 @@ public class MoveEvent implements NetworkEvent {
     public void clientReceived(Session p, ByteBuffer reading) {
         final int idtomove = reading.getShort();
         if (idtomove == p.ID) {
-            p.world.x = reading.getShort();
-            p.world.y = reading.getShort();
-            p.world.move = reading.getShort();
-            p.world.vspeed = reading.getShort();
+            p.world.x = (float)reading.getDouble();
+            p.world.y = (float)reading.getDouble();
+            p.world.move = reading.getDouble();
+            p.world.vspeed = reading.getDouble();
             p.world.leftArmAngle = reading.getShort();
             p.world.rightArmAngle = reading.getShort();
             p.world.status = reading.getShort();
@@ -31,10 +31,10 @@ public class MoveEvent implements NetworkEvent {
         }
         for (final Player r : p.world.playerList) {
             if (r.ID == idtomove) {
-                r.x = reading.getShort();
-                r.y = reading.getShort();
-                r.move = reading.getShort();
-                r.vspeed = reading.getShort();
+                r.x = reading.getDouble();
+                r.y = reading.getDouble();
+                r.move = reading.getDouble();
+                r.vspeed = reading.getDouble();
                 r.leftArmAngle = reading.getShort();
                 r.rightArmAngle = reading.getShort();
                 r.status = reading.getShort();
@@ -47,26 +47,26 @@ public class MoveEvent implements NetworkEvent {
     @Override
     public void serverReceived(PlayerOnline p, ByteBuffer toRead) {
         toRead.getShort();
-        p.x = toRead.getShort();
-        p.y = toRead.getShort();
-        p.move = toRead.getShort();
-        p.vspeed = toRead.getShort();
+        p.x = toRead.getDouble();
+        p.y = toRead.getDouble();
+        p.move = toRead.getDouble();
+        p.vspeed = toRead.getDouble();
         p.leftArmAngle = toRead.getShort();
         p.rightArmAngle = toRead.getShort();
         p.status = toRead.getShort();
         p.HP = toRead.getShort();
         p.floatiness = toRead.getInt();
-        p.handle.movePlayer(p.ID, (int)p.x, (int)p.y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
+        p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
                 p.HP, p.floatiness);
     }
 
-    public static NetworkMessage getPacket(float x, float y, double move, double vspeed, double laa, double raa, int status, int hp, int id, int floatiness) {
-        ByteBuffer toSend = ByteBuffer.allocate(7 * 4);
+    public static NetworkMessage getPacket(double x, double y, double move, double vspeed, double laa, double raa, int status, int hp, int id, int floatiness) {
+        ByteBuffer toSend = ByteBuffer.allocate(9 * 8);
         toSend.putShort((short) id);
-        toSend.putShort((short) x);
-        toSend.putShort((short) y);
-        toSend.putShort((short) move);
-        toSend.putShort((short) vspeed);
+        toSend.putDouble(x);
+        toSend.putDouble(y);
+        toSend.putDouble(move);
+        toSend.putDouble(vspeed);
         toSend.putShort((short) laa);
         toSend.putShort((short) raa);
         toSend.putShort((short) status);

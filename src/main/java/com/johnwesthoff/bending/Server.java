@@ -298,7 +298,7 @@ public final class Server implements Runnable {
         }
     }
 
-    public void movePlayer(final int id, final int x, final int y, final int m, final int v, final int la, final int ra,
+    public void movePlayer(final int id, final double x, final double y, final double m, final double v, final int la, final int ra,
             final short st, final short hp, int floatiness) {
         for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
