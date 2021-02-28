@@ -12,6 +12,7 @@ import com.johnwesthoff.bending.entity.MissileEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.math.Ops;
+import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class Airbending extends Spell {
     public Airbending() {
@@ -57,5 +58,6 @@ public class Airbending extends Spell {
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
         world.entityList.add(new MissileEntity(px, py, mx, my, pid).setID(eid));
+        ResourceLoader.loadSound("aircast.wav").start();
     }
 }

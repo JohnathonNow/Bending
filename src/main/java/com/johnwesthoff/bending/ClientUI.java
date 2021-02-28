@@ -899,8 +899,6 @@ public class ClientUI extends JPanel implements Runnable {
         }
     }
 
-    public RealClip airCast = ResourceLoader.loadSound("aircast.wav");
-    public RealClip fireCast = ResourceLoader.loadSound("firecast.wav");
 
     public void drawChat() {
         Session sess = Session.getInstance();

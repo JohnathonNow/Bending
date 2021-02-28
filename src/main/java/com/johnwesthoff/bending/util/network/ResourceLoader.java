@@ -24,6 +24,7 @@ import javax.swing.ImageIcon;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.util.audio.RealClip;
+
 /**
  *
  * @author John
@@ -33,6 +34,10 @@ public class ResourceLoader {
     private static final String DOWNLOAD_URL_BASE = "https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/";
     private static final String IMAGE_URL_BASE = DOWNLOAD_URL_BASE + "images/";
     private static final String SOUND_URL_BASE = DOWNLOAD_URL_BASE + "sounds/";
+
+    public static String dir = getDir();
+    public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
+    public static HashMap<String, RealClip> soundTable = new HashMap<>();
 
     public static void downloadResource(final String filename, final String urlString)
             throws FileNotFoundException, IOException {
@@ -71,11 +76,7 @@ public class ResourceLoader {
         return x + File.separator + "Bending" + File.separator;
     }
 
-    public static String dir = getDir();
-    public static HashMap<String, BufferedImage> imageTable = new HashMap<>();
-
     public static BufferedImage loadImage(final String name) {
-
         if (imageTable.containsKey(name)) {
             return imageTable.get(name);
         }
@@ -85,7 +86,8 @@ public class ResourceLoader {
             final File f = new File(dir + "images" + File.separator + name);
             if (!f.exists()) {
                 try {
-                    // example: https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/images/AgedPaper.png
+                    // example:
+                    // https://github.com/JohnathonNow/Bending/raw/main/assets/Bending/images/AgedPaper.png
                     downloadResource(dir + "images" + File.separator + name, IMAGE_URL_BASE + name);
                 } catch (final Exception ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,9 +106,10 @@ public class ResourceLoader {
     public static ImageIcon loadIconBase(final String src) {
         return loadIcon(src);
     }
+
     public static ImageIcon loadIcon(final String name) {
         final String src = IMAGE_URL_BASE + name;
-        
+
         if (imageTable.containsKey(src)) {
             return new ImageIcon(imageTable.get(src));
         }
@@ -115,14 +118,14 @@ public class ResourceLoader {
             try {
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
                 imageTable.put(name, toReturn);
                 return new ImageIcon(toReturn);
             } catch (final IOException ex) {
-                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -134,7 +137,7 @@ public class ResourceLoader {
             try {
                 downloadResource(dir + "images" + File.separator + name, src);
             } catch (final Exception ex) {
-                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 toReturn = (BufferedImage) (ImageIO.read(new File(dir + "images" + File.separator + name)));
@@ -159,17 +162,18 @@ public class ResourceLoader {
     }
 
     public static RealClip loadSound(final String name) {
-        RealClip clip = null;
-        try {
-            final File f = new File(dir + "sounds" + File.separator + name);
-            if (!f.exists()) {
-                downloadResource(dir + "sounds" + File.separator + name, SOUND_URL_BASE + name);
+        if (!soundTable.containsKey(name)) {
+            try {
+                final File f = new File(dir + "sounds" + File.separator + name);
+                if (!f.exists()) {
+                    downloadResource(dir + "sounds" + File.separator + name, SOUND_URL_BASE + name);
+                }
+                soundTable.put(name, new RealClip(f));
+            } catch (final Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
-            clip = new RealClip(f);
-        } catch (final Exception ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return clip;
+        return soundTable.get(name);
     }
 
 }
