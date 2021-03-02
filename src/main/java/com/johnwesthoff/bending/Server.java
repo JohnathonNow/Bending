@@ -141,6 +141,7 @@ public final class Server implements Runnable {
                 public void run() {
                     long lastTime = System.nanoTime();
                     double delta = 0;
+                    int gatherPingsTimer = 0;
                     while (gameRunning) {
                         try {
                             Thread.sleep(1);
@@ -217,6 +218,11 @@ public final class Server implements Runnable {
                             }
                             // earth.ground.ShowData();
                             handleAI();
+                            gatherPingsTimer++;
+                        }
+                        if (gatherPingsTimer > Constants.PING_RATE) {
+                            gatherPingsTimer = 0;
+                            ping();
                         }
                         World.setTime();
                     }
@@ -299,10 +305,10 @@ public final class Server implements Runnable {
     }
 
     public void movePlayer(final int id, final double x, final double y, final double m, final double v, final int la, final int ra,
-            final short st, final short hp, int floatiness) {
+            final short st, final short hp, int floatiness, int ping) {
         for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
-                p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp, floatiness);
+                p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp, floatiness, ping);
             }
         }
     }
@@ -310,26 +316,10 @@ public final class Server implements Runnable {
     public void moveRelative(final int x, final int y) {
         for (final PlayerOnline p : playerList) {
             p.writeMovePlayer(p.ID, (int)p.x + x, (int)p.y + y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
-                    p.status, p.HP, p.floatiness);
+                    p.status, p.HP, p.floatiness, 0);
         }
     }
 
-    int call = 0;
-
-    public void fixStuff() {
-        call++;
-        for (final Entity p : earth.entityList) {
-            if (p instanceof EnemyEntity) {
-                final EnemyEntity e = (EnemyEntity) p;
-                e.onServerUpdate(this);
-                if (call > 100) {
-                    call = 0;
-                    sendMessage(AiEvent.getPacket(e));
-                }
-            }
-        }
-
-    }
 
     public Thread expander;
 
@@ -727,6 +717,11 @@ public final class Server implements Runnable {
             } else {
                 continue;
             }
+        }
+    }
+    public void ping() {
+        for (final PlayerOnline p : playerList) {
+            p.ping();
         }
     }
 }

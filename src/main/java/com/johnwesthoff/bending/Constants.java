@@ -98,4 +98,5 @@ public class Constants {
     public static final String DEFAULT_SERVER = "game.johnwesthoff.com";
 	public static final int JUMP_LEDGE_ASSIST = 6; //number of frames you can jump after falling off a ledge
 	public static final double RUNNING_SPEED = 1.5d;
+	protected static final int PING_RATE = (int) (FPS * 10);
 }

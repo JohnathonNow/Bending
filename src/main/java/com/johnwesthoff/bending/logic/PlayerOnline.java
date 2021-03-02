@@ -17,6 +17,7 @@ import com.johnwesthoff.bending.networking.NetworkManager;
 import com.johnwesthoff.bending.networking.handlers.EntireWorldEvent;
 import com.johnwesthoff.bending.networking.handlers.LeaveEvent;
 import com.johnwesthoff.bending.networking.handlers.MoveEvent;
+import com.johnwesthoff.bending.networking.handlers.PingEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
@@ -33,6 +34,8 @@ public class PlayerOnline extends Player implements Runnable {
     public OrderedOutputStream out;
     public boolean ready = false, alive = true, loggedIn = false, voted = false;
     public Server handle;
+    public long ping;
+    public long pingSendTime;
 
     public PlayerOnline(int X, int Y, Socket s, int ide, Server h) {
         super(X, Y, new byte[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 }, new int[] { 1, 1, 1, 1, 1, 1 });
@@ -42,6 +45,8 @@ public class PlayerOnline extends Player implements Runnable {
         Thread me = new Thread(this);
         handle = h;
         me.start();
+        pingSendTime = 0;
+        ping = 0;
     }
 
     public void killMe() {
@@ -74,9 +79,9 @@ public class PlayerOnline extends Player implements Runnable {
         ready = true;
     }
 
-    public void writeMovePlayer(int id, double X, double Y, double M, double V, int LA, int RA, short st, short hp, int floatiness) {
+    public void writeMovePlayer(int id, double X, double Y, double M, double V, int LA, int RA, short st, short hp, int floatiness, int pingOther) {
         try {
-            out.addMessage(MoveEvent.getPacket(X, Y, M, V, LA, RA, st, hp, id, floatiness));
+            out.addMessage(MoveEvent.getPacket(X, Y, M, V, LA, RA, st, hp, id, floatiness, (int)ping + pingOther));
         } catch (Exception ex) {
             ex.printStackTrace();
             killMe();
@@ -157,6 +162,15 @@ public class PlayerOnline extends Player implements Runnable {
         } catch (Exception ex) {
             ex.printStackTrace();
             killMe();
+        }
+    }
+
+    public void ping() {
+        pingSendTime = System.currentTimeMillis();
+        try {
+            out.addMessage(PingEvent.getPacket());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -51,7 +51,7 @@ public class ClientNetworking {
                             sess.pc++;
                         }
                     } catch (final Exception ex) {
-                        // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };

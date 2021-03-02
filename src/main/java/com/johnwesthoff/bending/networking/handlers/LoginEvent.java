@@ -56,6 +56,7 @@ public class LoginEvent implements NetworkEvent {
         try {
             po.out.addMessage(IdEvent.getPacket(po.ID));
             po.writeWorld();
+            //po.ping();
             byte[] clothing = new byte[] { bb.get(), bb.get(), bb.get(), bb.get(), bb.get(), bb.get() };
             po.partss = clothing;
             int[] colors = new int[] { bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt() };
@@ -107,6 +108,7 @@ public class LoginEvent implements NetworkEvent {
                 }
             }
             po.loggedIn = true;
+            
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

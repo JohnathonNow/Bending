@@ -2,6 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
@@ -39,6 +40,8 @@ public class MoveEvent implements NetworkEvent {
                 r.rightArmAngle = reading.getShort();
                 r.status = reading.getShort();
                 r.floatiness = reading.getInt();
+                int ping = reading.getInt();
+                p.world.movePlayer((int)(ping * Constants.FPS / 1000), r);
                 break;
             }
         }
@@ -57,11 +60,16 @@ public class MoveEvent implements NetworkEvent {
         p.HP = toRead.getShort();
         p.floatiness = toRead.getInt();
         p.handle.movePlayer(p.ID, p.x, p.y, p.move, p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle, p.status,
-                p.HP, p.floatiness);
+                p.HP, p.floatiness, (int)p.ping);
+        p.handle.earth.movePlayer((int)(p.ping * Constants.FPS / 1000), p);
     }
 
     public static NetworkMessage getPacket(double x, double y, double move, double vspeed, double laa, double raa, int status, int hp, int id, int floatiness) {
-        ByteBuffer toSend = ByteBuffer.allocate(9 * 8);
+        return getPacket(x, y, move, vspeed, laa, raa, status, hp, id, floatiness, 0);
+    }
+
+    public static NetworkMessage getPacket(double x, double y, double move, double vspeed, double laa, double raa, int status, int hp, int id, int floatiness, int ping) {
+        ByteBuffer toSend = ByteBuffer.allocate(10 * 8);
         toSend.putShort((short) id);
         toSend.putDouble(x);
         toSend.putDouble(y);
@@ -72,6 +80,7 @@ public class MoveEvent implements NetworkEvent {
         toSend.putShort((short) status);
         toSend.putShort((short) hp);
         toSend.putInt(floatiness);
+        toSend.putInt(ping);
         return new NetworkMessage(toSend, ID);
     }
 }

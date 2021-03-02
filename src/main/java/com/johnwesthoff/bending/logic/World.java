@@ -552,7 +552,7 @@ public class World implements Serializable {
             // long time = System.nanoTime();
             for (int i1 = Math.max(x - (r + 1), 0); i1 < Math.min(x + (r + 1), w); i1++) {
                 for (int i2 = Math.max(y - (r + 1), 0); i2 < Math.min(y + (r + 1), h); i2++) {
-                    if (Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2) <= r*r) {
+                    if (Math.pow(i1 - x, 2) + Math.pow(i2 - y, 2) <= r * r) {
                         if (cellData[i1][i2] != CRYSTAL && cellData[i1][i2] != ETHER) {
                             cellData[i1][i2] = AIR;
                         }
@@ -1089,7 +1089,7 @@ public class World implements Serializable {
         }
         if (canijump && jump > 0) {
             vspeed = (int) (-10 * jump);
-            //move *= 2;
+            // move *= 2;
         }
         int s = (int) Math.signum(vspeed);
         canifall = true;
@@ -1508,15 +1508,18 @@ public class World implements Serializable {
     }
 
     /**
-     * Moves the players
+     *  Moves a single player `p` as though `ticks` have passed
+     * 
+     * @param ticks How many ticks to move
+     * @param p The player to move
      */
-    public void movePlayers() {
-        for (Player P : playerList) {
-            if (!isSolid(P.x, P.y - 4)) {
-                P.y -= 4;
-                if (inBounds(P.x + P.move, P.y + P.vspeed)) {
-                    int toMove = (int) P.move, XXX1 = (int) P.x + 3, YYY1 = (int) P.y - 4, XXX2 = (int) P.x - 3,
-                            YYY2 = (int) P.y - 4;
+    public void movePlayer(int ticks, Player p) {
+        for (int _i = 0; _i < ticks; _i++) {
+            if (!isSolid(p.x, p.y - 4)) {
+                p.y -= 4;
+                if (inBounds(p.x + p.move, p.y + p.vspeed)) {
+                    int toMove = (int) p.move, XXX1 = (int) p.x + 3, YYY1 = (int) p.y - 4, XXX2 = (int) p.x - 3,
+                            YYY2 = (int) p.y - 4;
                     while (true) {
                         YYY1 += 1;
                         if (!inBounds(XXX1, YYY1)) {
@@ -1540,25 +1543,34 @@ public class World implements Serializable {
                         toMove = 4;
                     if (toMove < -4)
                         toMove = -4;
-                    P.x += !isSolid(P.x + toMove, P.y + P.vspeed) ? toMove : 0;
+                    p.x += !isSolid(p.x + toMove, p.y + p.vspeed) ? toMove : 0;
                 }
                 for (int i = 0; i < 4; i++) {
-                    if (P.y > 0 && isSolid(P.x, P.y + 1)) {
+                    if (p.y > 0 && isSolid(p.x, p.y + 1)) {
                         break;
                     }
-                    P.y += 1;
+                    p.y += 1;
                 }
             }
-            if (!isSolid(P.x, P.y + 4)) {
-                P.vspeed = Math.min(4 - P.floatiness, P.vspeed + Constants.GRAVITY);
+            if (!isSolid(p.x, p.y + 4)) {
+                p.vspeed = Math.min(4 - p.floatiness, p.vspeed + Constants.GRAVITY);
             } else {
-                P.vspeed = Math.min(0, P.vspeed);
+                p.vspeed = Math.min(0, p.vspeed);
             }
-            if (!isSolid(P.x, P.y + P.vspeed)) {
-                P.y += P.vspeed;
+            if (!isSolid(p.x, p.y + p.vspeed)) {
+                p.y += p.vspeed;
             } else {
-                P.vspeed = 0;
+                p.vspeed = 0;
             }
+        }
+    }
+
+    /**
+     * Moves the players
+     */
+    public void movePlayers() {
+        for (Player p : playerList) {
+            movePlayer(1, p);
         }
     }
 
