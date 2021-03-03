@@ -58,6 +58,6 @@ public class Airbending extends Spell {
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
         world.entityList.add(new MissileEntity(px, py, mx, my, pid).setID(eid));
-        ResourceLoader.loadSound("aircast.wav").start();
+        world.playSound("aircast.wav");
     }
 }

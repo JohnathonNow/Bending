@@ -1705,4 +1705,10 @@ public class World implements Serializable {
         lol = 1;
         return lol;
     }
+
+	public void playSound(String sound) {
+        if (!serverWorld) { 
+            ResourceLoader.loadSound(sound).start();
+        }
+	}
 }
