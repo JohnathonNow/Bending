@@ -6,13 +6,12 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.entity.MissileEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.math.Ops;
-import com.johnwesthoff.bending.util.network.ResourceLoader;
 
 public class Airbending extends Spell {
     public Airbending() {

@@ -71,11 +71,15 @@ public class TornadoEntity extends Entity {
         if (!apples.isSolid(X, Y - 10)) {
             Y -= 10;
         }
+        if (apples.isSolid(X + xspeed, Y)) {
+            xspeed = 0;
+        }
         for (int i = 1; i < 10; i++) {
             if (!apples.isSolid(X, Y + i)) {
                 Y += i;
             }
         }
+        
         /*
          * if (yspeed<12) { yspeed++; }
          */
