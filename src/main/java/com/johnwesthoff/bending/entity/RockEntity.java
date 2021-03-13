@@ -16,9 +16,7 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
-/**
- * @author John
- */
+
 public class RockEntity extends Entity {
     public int radius = Constants.RADIUS_REGULAR;
     public int gravity = 1;

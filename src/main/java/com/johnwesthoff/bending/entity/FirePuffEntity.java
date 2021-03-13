@@ -16,9 +16,7 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.SteamEvent;
 
-/**
- * @author John
- */
+
 public class FirePuffEntity extends Entity {
     // public int maker = 0;
     public int radius = 3;

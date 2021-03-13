@@ -17,9 +17,7 @@ import com.johnwesthoff.bending.networking.handlers.ChargeEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.util.math.Ops;
 
-/**
- * @author John
- */
+
 public class EnergyEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR, gravity = 0, decay = 0, life = Constants.FULL_COLOR_VALUE, xstart, ystart;

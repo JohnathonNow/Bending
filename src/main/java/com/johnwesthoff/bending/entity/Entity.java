@@ -13,9 +13,6 @@ import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-/**
- * @author John
- */
 public abstract class Entity extends Object {
     public static Random r = new Random();
     public int MYID = 0;
@@ -145,11 +142,11 @@ public abstract class Entity extends Object {
         double ix = (X - previousX) / resolution;
         double iy = (Y - previousY) / resolution;
         for (int i = 0; i < resolution; i++) {
-            double tx = ix*i + previousX;
-            double ty = iy*i + previousY;
-            if (w.checkCollision((float)tx, (float)ty)) {
-                X = (float)tx;
-                Y = (float)ty;
+            double tx = ix * i + previousX;
+            double ty = iy * i + previousY;
+            if (w.checkCollision((float) tx, (float) ty)) {
+                X = (float) tx;
+                Y = (float) ty;
                 return true;
             }
         }

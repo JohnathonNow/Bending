@@ -16,9 +16,7 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
 import com.johnwesthoff.bending.util.math.Ops;
 
-/**
- * @author John
- */
+
 public class SandEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

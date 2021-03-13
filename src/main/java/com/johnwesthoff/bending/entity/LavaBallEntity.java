@@ -20,9 +20,7 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
 import com.johnwesthoff.bending.networking.handlers.SteamEvent;
 
-/**
- * @author John
- */
+
 public class LavaBallEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

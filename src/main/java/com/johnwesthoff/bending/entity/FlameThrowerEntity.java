@@ -13,9 +13,7 @@ import com.johnwesthoff.bending.networking.handlers.FirePuffEvent;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class FlameThrowerEntity extends Entity {
 
     int life = 60;

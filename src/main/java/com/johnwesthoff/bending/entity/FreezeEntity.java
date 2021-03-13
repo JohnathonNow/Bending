@@ -14,9 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author John
- */
+
 public class FreezeEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

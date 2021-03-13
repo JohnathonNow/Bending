@@ -10,9 +10,7 @@ import com.johnwesthoff.bending.logic.World;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class GroundinatorEntity extends Entity {
     public GroundinatorEntity(int x, int y, int hspeed, int vspeed) {
         X = x;

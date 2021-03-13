@@ -12,9 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author John
- */
+
 public class HouseEntity extends Entity {
     Polygon P = new Polygon();
     public int houseW = 20, houseH = 20, houseX = 450 - houseW, houseY = 150 - houseH;

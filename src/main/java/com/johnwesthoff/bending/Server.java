@@ -50,9 +50,7 @@ import com.johnwesthoff.bending.networking.handlers.TurnEvent;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 
-/**
- * @author John
- */
+
 public final class Server implements Runnable {
     public static final int TEAMDEATHMATCH = 1, FREEFORALL = -1, KINGOFTHEHILL = -2, THEHIDDEN = 2, SURVIVAL = 3,
             DEFENDER = 4, TURNBASED = -3;

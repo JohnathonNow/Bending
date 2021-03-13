@@ -58,9 +58,7 @@ import com.johnwesthoff.bending.util.Coordinate;
 import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-/**
- * @author John
- */
+
 public class World implements Serializable {
     private static final long serialVersionUID = -5361438813968515971L;
     public int incX, incY, floatiness = 0, viewX = 0, viewY = 0, viewdX = 0, viewdY = 0, flowCount = 0, maxFlow = 5000;

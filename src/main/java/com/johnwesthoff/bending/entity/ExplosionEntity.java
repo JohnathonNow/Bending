@@ -10,9 +10,7 @@ import com.johnwesthoff.bending.logic.World;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class ExplosionEntity extends Entity {
     int radius = 1, maxradius, speed;
 

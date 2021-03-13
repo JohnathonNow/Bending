@@ -18,9 +18,7 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 
-/**
- * @author John
- */
+
 public class WallofFireEntity extends Entity {
     // public int maker = 0;
     public int height = 30;

@@ -9,9 +9,7 @@ import com.johnwesthoff.bending.logic.World;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class EffectEntity extends Entity {
     Color c;
     int life;

@@ -19,9 +19,7 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DrainEvent;
 
 
-/**
- * @author John
- */
+
 public class SoulDrainEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

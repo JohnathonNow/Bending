@@ -14,9 +14,7 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.PuddleEvent;
 
-/**
- * @author John
- */
+
 public class RainEntity extends Entity {
 
     int life = 250;

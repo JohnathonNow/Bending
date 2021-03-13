@@ -22,9 +22,7 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.util.math.Ops;
 
-/**
- * @author John
- */
+
 public class ClientInputListener implements MouseListener, KeyListener, MouseMotionListener, MouseWheelListener {
     Session pointer;
 

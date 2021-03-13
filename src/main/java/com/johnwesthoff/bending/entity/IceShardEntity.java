@@ -19,9 +19,7 @@ import com.johnwesthoff.bending.networking.handlers.FillEvent;
 import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 import com.johnwesthoff.bending.util.math.Ops;
 
-/**
- * @author John
- */
+
 public class IceShardEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

@@ -17,9 +17,7 @@ import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-/**
- * @author John
- */
+
 public class Player {
     public int ID;
     public double x, y, move, vspeed, showx, showy;

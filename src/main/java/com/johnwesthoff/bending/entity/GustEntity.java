@@ -17,9 +17,7 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DigEvent;
 
-/**
- * @author John
- */
+
 public class GustEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

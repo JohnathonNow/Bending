@@ -18,9 +18,7 @@ import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.util.math.Ops;
 
-/**
- * @author John
- */
+
 public class FireJumpEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

@@ -15,9 +15,7 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.PuddleEvent;
 
-/**
- * @author John
- */
+
 public class WaterBallEntity extends Entity {
     // public int maker = 0;
     public int radius = 16;

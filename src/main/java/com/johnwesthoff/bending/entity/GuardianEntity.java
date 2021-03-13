@@ -18,9 +18,7 @@ import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.MessageEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-/**
- * @author John
- */
+
 public class GuardianEntity extends EnemyEntity {
     static BufferedImage sprite;
 

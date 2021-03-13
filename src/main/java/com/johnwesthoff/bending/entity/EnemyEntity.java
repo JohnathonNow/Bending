@@ -22,9 +22,7 @@ import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.ScoreEvent;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-/**
- * @author John
- */
+
 public class EnemyEntity extends Entity {
     public int HP = 500, target = 0, timer = 0, id = 0, master = 0, lastHit = -2;
     public float move = 0;

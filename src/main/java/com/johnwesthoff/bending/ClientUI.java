@@ -2,7 +2,6 @@ package com.johnwesthoff.bending;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -59,18 +58,9 @@ import com.johnwesthoff.bending.ui.Register;
 import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
-import com.johnwesthoff.bending.util.audio.RealClip;
-import com.johnwesthoff.bending.util.graphics.Additive;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-/**
- *
- * @author Family
- */
 public class ClientUI extends JPanel implements Runnable {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
     public ClothingChooser1 cc = new ClothingChooser1(this);
@@ -479,7 +469,8 @@ public class ClientUI extends JPanel implements Runnable {
             final long now = System.nanoTime();
 
             delta += (now - sess.lastTime) / (1000000000 / Constants.FPS);
-            owner.setTitle(" Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)) + " Delta: " + delta);
+            owner.setTitle(
+                    " Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)) + " Delta: " + delta);
             sess.lastTime = now;
             boolean willSendMovement = false;
             if (!owner.isVisible()) {
@@ -679,12 +670,12 @@ public class ClientUI extends JPanel implements Runnable {
                     e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
                 }
                 // The below lines are commented out until we get a faster way to do this
-                //Composite c = biggraphicsBuffer.getComposite();
-                //biggraphicsBuffer.setComposite(Additive.additive);
+                // Composite c = biggraphicsBuffer.getComposite();
+                // biggraphicsBuffer.setComposite(Additive.additive);
                 for (final Entity e : world.entityList) {
                     e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
                 }
-                //biggraphicsBuffer.setComposite(c);
+                // biggraphicsBuffer.setComposite(c);
                 if (sess.chatActive) {
                     biggraphicsBuffer.setColor(Color.gray);
                     biggraphicsBuffer.fillRect(32, 810,
@@ -888,17 +879,16 @@ public class ClientUI extends JPanel implements Runnable {
                 return "";
             }
             switch (columnIndex) {
-                case 0:
-                    return row.getId();
-                case 1:
-                    return row.getVal();
-                case 2:
-                    return row.getExtra();
+            case 0:
+                return row.getId();
+            case 1:
+                return row.getVal();
+            case 2:
+                return row.getExtra();
             }
             return null;
         }
     }
-
 
     public void drawChat() {
         Session sess = Session.getInstance();

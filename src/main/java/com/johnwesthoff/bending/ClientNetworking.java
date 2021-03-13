@@ -16,10 +16,6 @@ import com.johnwesthoff.bending.networking.handlers.MoveEvent;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
-/**
- *
- * @author Family
- */
 public class ClientNetworking {
     public boolean start() {
         Session sess = Session.getInstance();
@@ -196,6 +192,5 @@ public class ClientNetworking {
 
         }
     }
-    
 
 }

@@ -12,9 +12,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class SteamEntity extends Entity {
     int life = 100;
 

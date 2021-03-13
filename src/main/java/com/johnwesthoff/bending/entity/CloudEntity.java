@@ -13,9 +13,7 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
-/**
- * @author John
- */
+
 public class CloudEntity extends Entity {
 
     int life = 250, maker;

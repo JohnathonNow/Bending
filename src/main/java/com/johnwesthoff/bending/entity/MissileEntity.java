@@ -16,9 +16,7 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 
-/**
- * @author John
- */
+
 public class MissileEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;

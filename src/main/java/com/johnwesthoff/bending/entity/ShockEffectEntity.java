@@ -11,9 +11,7 @@ import com.johnwesthoff.bending.logic.World;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class ShockEffectEntity extends Entity {
     public int radius = Constants.RADIUS_REGULAR;
     public int life = 3;

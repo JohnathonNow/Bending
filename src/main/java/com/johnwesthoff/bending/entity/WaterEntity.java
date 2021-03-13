@@ -10,9 +10,7 @@ import com.johnwesthoff.bending.logic.World;
 import java.awt.*;
 import java.nio.ByteBuffer;
 
-/**
- * @author John
- */
+
 public class WaterEntity extends Entity {
 
     public WaterEntity(int x, int y, World creator) {
