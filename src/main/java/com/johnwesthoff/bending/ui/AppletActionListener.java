@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 
 import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.ClientUI;
+import com.johnwesthoff.bending.Main;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.game.GameService;
@@ -142,7 +143,7 @@ public class AppletActionListener implements ActionListener {
                 app.container.dispatchEvent(windowClosing);
                 app.container = null;
                 Thread.sleep(100);
-                ClientUI.main(new String[] {});
+                Main.reload();
                 sess.currentlyLoggedIn = false;
 
             } catch (IOException | InterruptedException ex) {

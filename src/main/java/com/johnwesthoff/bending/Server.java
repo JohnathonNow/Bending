@@ -43,13 +43,11 @@ import com.johnwesthoff.bending.entity.WallofFireEntity;
 import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.networking.handlers.AiEvent;
 import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 import com.johnwesthoff.bending.networking.handlers.MessageEvent;
 import com.johnwesthoff.bending.networking.handlers.TurnEvent;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.network.NetworkMessage;
-
 
 public final class Server implements Runnable {
     public static final int TEAMDEATHMATCH = 1, FREEFORALL = -1, KINGOFTHEHILL = -2, THEHIDDEN = 2, SURVIVAL = 3,
@@ -198,7 +196,8 @@ public final class Server implements Runnable {
                                         oldTim = tim + 15000;
                                         Player turn = playerList.get(whoseTurn);
                                         sendMessage(TurnEvent.getPacket(turn.ID));
-                                        sendMessage(MessageEvent.getPacket(0x00FF3C, "It is " + turn.username + "'s turn."));
+                                        sendMessage(MessageEvent.getPacket(0x00FF3C,
+                                                "It is " + turn.username + "'s turn."));
                                     } else {
                                         whoseTurn = -1;
                                         oldTim = tim + 3000;
@@ -302,8 +301,8 @@ public final class Server implements Runnable {
         }
     }
 
-    public void movePlayer(final int id, final double x, final double y, final double m, final double v, final int la, final int ra,
-            final short st, final short hp, int floatiness, int ping) {
+    public void movePlayer(final int id, final double x, final double y, final double m, final double v, final int la,
+            final int ra, final short st, final short hp, int floatiness, int ping) {
         for (final PlayerOnline p : playerList) {
             if (p.ID != id) {
                 p.writeMovePlayer(id, x, y, m, v, la, ra, st, hp, floatiness, ping);
@@ -313,33 +312,29 @@ public final class Server implements Runnable {
 
     public void moveRelative(final int x, final int y) {
         for (final PlayerOnline p : playerList) {
-            p.writeMovePlayer(p.ID, (int)p.x + x, (int)p.y + y, (int)p.move, (int)p.vspeed, (int) p.leftArmAngle, (int) p.rightArmAngle,
-                    p.status, p.HP, p.floatiness, 0);
+            p.writeMovePlayer(p.ID, (int) p.x + x, (int) p.y + y, (int) p.move, (int) p.vspeed, (int) p.leftArmAngle,
+                    (int) p.rightArmAngle, p.status, p.HP, p.floatiness, 0);
         }
     }
-
 
     public Thread expander;
 
     public void startExpander() {
-        expander = new Thread(
-            () -> {
-                while (gameRunning) {
-                    loadMap(mapRotation);
-                    try {
-                        Thread.sleep(5 * 60 * 1000);
-                    } catch (final InterruptedException ex) {
-                        // Up! Time for a new map!
-                    }
+        expander = new Thread(() -> {
+            while (gameRunning) {
+                loadMap(mapRotation);
+                try {
+                    Thread.sleep(5 * 60 * 1000);
+                } catch (final InterruptedException ex) {
+                    // Up! Time for a new map!
                 }
             }
-        );
+        });
         expander.start();
     }
 
     public int mapRotation = 0;
     public int maxMap = 1;
-
 
     public static ByteBuffer putString(final ByteBuffer yes, final String y) {
         yes.putInt(y.length());
@@ -479,27 +474,27 @@ public final class Server implements Runnable {
 
         String gm = "";
         switch (gameMode) {
-            case TEAMDEATHMATCH:
-                gm = "Team Death Match";
-                break;
-            case FREEFORALL:
-                gm = "Free for All";
-                break;
-            case KINGOFTHEHILL:
-                gm = "King of the Hill";
-                break;
-            case THEHIDDEN:
-                gm = "The Hidden";
-                break;
-            case SURVIVAL:
-                gm = "Survival";
-                break;
-            case DEFENDER:
-                gm = "Defender";
-                break;
-            case TURNBASED:
-                gm = "Turnbased Free for All";
-                break;
+        case TEAMDEATHMATCH:
+            gm = "Team Death Match";
+            break;
+        case FREEFORALL:
+            gm = "Free for All";
+            break;
+        case KINGOFTHEHILL:
+            gm = "King of the Hill";
+            break;
+        case THEHIDDEN:
+            gm = "The Hidden";
+            break;
+        case SURVIVAL:
+            gm = "Survival";
+            break;
+        case DEFENDER:
+            gm = "Defender";
+            break;
+        case TURNBASED:
+            gm = "Turnbased Free for All";
+            break;
         }
         yes = "The next game type will be " + gm + ".";
 
@@ -520,33 +515,33 @@ public final class Server implements Runnable {
         final File[] mapFiles = mapsFolder.listFiles();
         if (mapFiles == null || mapFiles.length == 0) {
             switch (i) {
-                default:
-                case 0:
-                    earth.ground.fillCircle(150, 900, 150);
-                    earth.ground.fillCircle(450, 900, 150);
-                    earth.ground.fillCircle(750, 900, 150);
-                    break;
-                case 1:
-                    earth.ground.FillRectW(0, 800, 100, 900, Constants.LAVA);
-                    for (int x = 0; x <= 900; x += 100) {
-                        earth.ground.fillCircleW(x, 800, 50, Constants.STONE);
-                    }
-                    break;
-                case 2:
-                    final Polygon P = new Polygon();
-                    P.addPoint(0, 900);
-                    P.addPoint(25, 800);
-                    P.addPoint(100, 600);
-                    P.addPoint(300, 750);
-                    P.addPoint(400, 700);
-                    P.addPoint(500, 500);
-                    P.addPoint(600, 720);
-                    P.addPoint(700, 820);
-                    P.addPoint(800, 860);
-                    P.addPoint(900, 900);
-                    earth.ground.FillRectW(0, 700, 200, 900, Constants.WATER);
-                    earth.ground.FillPolygon(P, Constants.ICE);
-                    break;
+            default:
+            case 0:
+                earth.ground.fillCircle(150, 900, 150);
+                earth.ground.fillCircle(450, 900, 150);
+                earth.ground.fillCircle(750, 900, 150);
+                break;
+            case 1:
+                earth.ground.FillRectW(0, 800, 100, 900, Constants.LAVA);
+                for (int x = 0; x <= 900; x += 100) {
+                    earth.ground.fillCircleW(x, 800, 50, Constants.STONE);
+                }
+                break;
+            case 2:
+                final Polygon P = new Polygon();
+                P.addPoint(0, 900);
+                P.addPoint(25, 800);
+                P.addPoint(100, 600);
+                P.addPoint(300, 750);
+                P.addPoint(400, 700);
+                P.addPoint(500, 500);
+                P.addPoint(600, 720);
+                P.addPoint(700, 820);
+                P.addPoint(800, 860);
+                P.addPoint(900, 900);
+                earth.ground.FillRectW(0, 700, 200, 900, Constants.WATER);
+                earth.ground.FillPolygon(P, Constants.ICE);
+                break;
             }
         } else {
             final Random r = new Random();
@@ -566,16 +561,15 @@ public final class Server implements Runnable {
         }
         // earth.entityList.add(new EnemyEntity(300,300,0,0,500).setID(Server.getID()));
         switch (gameMode) {
-            default:
-                earth.entityList.clear();
-                break;
-            case KINGOFTHEHILL:
-                earth.entityList.add(new HillEntity(earth.wIdTh / 2, earth.hEigHt / 2, 0, 0).setID(Server.getID()));
-                break;
-            case DEFENDER:
-                earth.entityList
-                        .add(new GuardianEntity(earth.wIdTh / 4, earth.hEigHt / 2, 0, 0, -2).setID(Server.getID()));
-                break;
+        default:
+            earth.entityList.clear();
+            break;
+        case KINGOFTHEHILL:
+            earth.entityList.add(new HillEntity(earth.wIdTh / 2, earth.hEigHt / 2, 0, 0).setID(Server.getID()));
+            break;
+        case DEFENDER:
+            earth.entityList.add(new GuardianEntity(earth.wIdTh / 4, earth.hEigHt / 2, 0, 0, -2).setID(Server.getID()));
+            break;
         }
         earth.entityList.add(new PumpkinEntity(earth.wIdTh / 2, earth.hEigHt / 2).floor(earth).setID(Server.getID()));
         for (final PlayerOnline p : playerList) {
@@ -717,6 +711,7 @@ public final class Server implements Runnable {
             }
         }
     }
+
     public void ping() {
         for (final PlayerOnline p : playerList) {
             p.ping();

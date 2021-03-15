@@ -112,8 +112,8 @@ public class ClientUI extends JPanel implements Runnable {
     // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
     Polygon lineOfSight = new Polygon();
 
-    public static void main(final String args[]) {
-        Session sess = Session.newInstance();
+    public static void launch() {
+        Session sess = Session.getInstance();
         System.out.println("Loading 1.2");
         Spell.init();
         final Client client = new Client();
@@ -123,11 +123,6 @@ public class ClientUI extends JPanel implements Runnable {
         sess.clientui = clientui;
         sess.client = client;
         sess.net = new ClientNetworking();
-        if (args.length > 0) {
-            sess.serverIP = args[0];
-        } else {
-            sess.serverIP = Constants.DEFAULT_SERVER;
-        }
         immaKeepTabsOnYou = new JTabbedPane();
         actioner = new AppletActionListener(clientui);
         clientui.inputer = new ClientInputListener(sess);
@@ -237,9 +232,6 @@ public class ClientUI extends JPanel implements Runnable {
         container.addKeyListener(clientui.inputer);
         container.addMouseListener(clientui.inputer);
         container.setResizable(true);
-        if (!(args.length > 0 && args[0].equals("Client"))) {
-            container.setVisible(true);
-        }
         clientui.requestFocus();
         clientui.add(clientui.jUs);
         clientui.jUs.setLocation(16, 16);
@@ -393,11 +385,6 @@ public class ClientUI extends JPanel implements Runnable {
             {
 
             }
-            if (args.length > 0 && args[0].equals("Client")) {
-                container.setVisible(false);
-            } else {
-                // me.ST.add(me.trayIcon);
-            }
             container.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         } catch (final Exception ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -412,7 +399,7 @@ public class ClientUI extends JPanel implements Runnable {
         clientui.connect.setEnabled(true);
 
         sess.gameService.getUnlocks(clientui.jtb.getText(), "I NOW DO NOTHING");
-
+        container.setVisible(true);
     }
 
     // @Override
