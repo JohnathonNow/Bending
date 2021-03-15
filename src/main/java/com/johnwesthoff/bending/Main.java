@@ -5,10 +5,29 @@ import java.net.URISyntaxException;
 public class Main {
     private static String ip_opt = Constants.DEFAULT_SERVER;
 
+    private enum Mode {
+        None, Client, Server
+    }
+
     public static void main(String[] args) {
+        Mode mode = Mode.None;
         try {
             for (int i = 0; i < args.length; i++) {
                 switch (args[i]) {
+                case "client":
+                    if (mode != Mode.None) {
+                        help(3);
+                    } else {
+                        mode = Mode.Client;
+                    }
+                    break;
+                case "server":
+                    if (mode != Mode.None) {
+                        help(3);
+                    } else {
+                        mode = Mode.Server;
+                    }
+                    break;
                 case "-i":
                 case "--ip":
                     ip_opt = args[++i];
@@ -25,7 +44,15 @@ public class Main {
         } catch (Exception e) {
             help(2);
         }
-        reload();
+        switch (mode) {
+        case None:
+        case Client:
+            reload();
+            break;
+        case Server:
+            Server.launch();
+            break;
+        }
     }
 
     public static void reload() {
@@ -41,9 +68,13 @@ public class Main {
         } catch (URISyntaxException e) {
         }
         System.out.println("Bending - an online 2d platforming shooter");
-        System.out.printf("Usage: java -jar %s [OPTIONS]\n\n", jarName);
+        System.out.printf("Usage: java -jar %s [COMMAND] [OPTIONS]\n\n", jarName);
+        System.out.println("Commands are:");
+        System.out.println("  client                  run in client mode (default)");
+        System.out.println("  server                  run in server mode\n");
         System.out.println("Optional flags are:");
-        System.out.println("  -i, --ip                the IP of the server to connect to");
+        System.out.println("  -i, --ip IP             the IP of the server for the client to connect to");
+        System.out.println("                          defaults to game.johnwesthoff.com");
         System.out.println("  -h, --help              print this help message");
         System.exit(exit_code);
     }

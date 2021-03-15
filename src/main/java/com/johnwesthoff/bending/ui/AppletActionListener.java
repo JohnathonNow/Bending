@@ -67,7 +67,7 @@ public class AppletActionListener implements ActionListener {
             }
         }
         if (command.equals(app.hosting.getText())) {
-            sess.hostingPlace = Server.main2(new String[] { "" + ("0.0.0.0"), "" });
+            sess.hostingPlace = Server.launch();
             gameService.tryToCreateServer(GameService.DEFAULT_SERVER_NAME, "0.0.0.0");
             app.hosting.setText("Started!");
             app.container.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

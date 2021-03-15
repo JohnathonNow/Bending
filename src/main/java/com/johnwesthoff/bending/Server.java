@@ -231,19 +231,9 @@ public final class Server implements Runnable {
         }
     }
 
-    public static Server main2(final String[] args) {
+    public static Server launch() {
         final Server me = new Server();
-        me.IP = args[0];
         return me;
-        // me.port = Integer.getInteger(WhyMustJavaBeSoArguementative[0]);
-        // me.earth.ground.ClearCircle(100, 100, 400);
-    }
-
-    public static void main(final String[] args) {
-        final Server me = new Server();
-        me.IP = args[0];
-        // me.port = Integer.getInteger(WhyMustJavaBeSoArguementative[0]);
-        // me.earth.ground.ClearCircle(100, 100, 400);
     }
 
     int runThrough = 0;
