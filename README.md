@@ -14,7 +14,7 @@ There should be no expectation that the code here is "good". It was almost entir
 written by a highschooler who was undeterred by two consecutive last-place finishes in
 [Java4k](https://en.wikipedia.org/wiki/Java_4K_Game_Programming_Contest).
 As such, most of the code is laid out very poorly, completely ignores all best practices, and is absolutely riddled with linter warnings. That said, the game compiles
-fine, and it even runs, too. In fact, it's been tested to run on both Linux and Windows!<sup  id="a2">[2](#fn2)</sup>
+fine, and it even runs, too. In fact, it's been tested to run on Linux, Windows, and MacOS!
 
 Building + Running
 ------------------
@@ -62,4 +62,3 @@ Controls
 | Reset Camera   | Z                 |
 
 <a name="fn1"><sup>1</sup></a>Where "working" means "almost certainly has terrible bugs, but probably works well enough."[↩](#a1)  
-<a name="fn2"><sup>2</sup></a>OK, well, on Linux it creates a folder named `null` wherever you run it, because back when I worked hard on this project I just wanted the game to work on my raspberry pi.[↩](#a2)
