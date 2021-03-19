@@ -83,7 +83,7 @@ public class SpellList1 extends javax.swing.JPanel implements ActionListener, Mo
         choochootrain2.setVisible(false);
         jTable1.addMouseListener(this);
         jTable4.addMouseListener(this);
-        XP.setText("XP: " + Session.getInstance().Xp);
+        XP.setText("XP: " + Session.getInstance().x_prev);
         USER.setText("USER: " + Session.getInstance().username);
         this.setLocation(0, 0);
         for (int i = 0; i < 5; i++) {

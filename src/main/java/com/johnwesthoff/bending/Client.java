@@ -86,8 +86,8 @@ public class Client {
             session.setSendRequest(false);
         }
         session.setPrevVspeed(world.vspeed);
-        session.setXp((int) world.x);
-        session.setYp((int) world.y);
+        session.setX_prev((int) world.x);
+        session.setY_prev((int) world.y);
         return willSendMovement;
     }
 

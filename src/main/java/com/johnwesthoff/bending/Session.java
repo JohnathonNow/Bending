@@ -20,7 +20,7 @@ public class Session {
     public ClientUI clientui;
     public ClientNetworking net;
     public boolean goodTeam = false;
-    public String chat[] = { "", "", "", "", "", "", "", "", "", "" };
+    public String[] chat = { "", "", "", "", "", "", "", "", "", "" };
     public static StringLongBoolean unlocks = new StringLongBoolean("0");
     public int score = 0;
     public int mapRotation = 0;
@@ -44,7 +44,7 @@ public class Session {
     public Thread mainProcess;
     public boolean notDone = true;
     public boolean ignored = true;
-    public URL base;// = getDocumentBase();
+    public URL base;
     public String temp;
     public static String username;
     public World world;
@@ -90,7 +90,7 @@ public class Session {
     public boolean isAlive = true;
     public Thread expander;
     public boolean sendRequest = true;
-    public int Xp = 0, Yp = 0;
+    public int x_prev = 0, y_prev = 0;
     public int pc = 0;
     public boolean refreshShadows = false;
     public long swagTime = 0;
@@ -122,7 +122,7 @@ public class Session {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(final Client client) {
         this.client = client;
     }
 
@@ -130,7 +130,7 @@ public class Session {
         return clientui;
     }
 
-    public void setClientui(ClientUI clientui) {
+    public void setClientui(final ClientUI clientui) {
         this.clientui = clientui;
     }
 
@@ -138,7 +138,7 @@ public class Session {
         return goodTeam;
     }
 
-    public void setGoodTeam(boolean goodTeam) {
+    public void setGoodTeam(final boolean goodTeam) {
         this.goodTeam = goodTeam;
     }
 
@@ -146,7 +146,7 @@ public class Session {
         return chat;
     }
 
-    public void setChat(String[] chat) {
+    public void setChat(final String[] chat) {
         this.chat = chat;
     }
 
@@ -154,7 +154,7 @@ public class Session {
         return unlocks;
     }
 
-    public static void setUnlocks(StringLongBoolean unlocks) {
+    public static void setUnlocks(final StringLongBoolean unlocks) {
         Session.unlocks = unlocks;
     }
 
@@ -162,7 +162,7 @@ public class Session {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(final int score) {
         this.score = score;
     }
 
@@ -170,7 +170,7 @@ public class Session {
         return mapRotation;
     }
 
-    public void setMapRotation(int mapRotation) {
+    public void setMapRotation(final int mapRotation) {
         this.mapRotation = mapRotation;
     }
 
@@ -178,7 +178,7 @@ public class Session {
         return chatActive;
     }
 
-    public void setChatActive(boolean chatActive) {
+    public void setChatActive(final boolean chatActive) {
         this.chatActive = chatActive;
     }
 
@@ -186,7 +186,7 @@ public class Session {
         return chatMessage;
     }
 
-    public void setChatMessage(String chatMessage) {
+    public void setChatMessage(final String chatMessage) {
         this.chatMessage = chatMessage;
     }
 
@@ -194,7 +194,7 @@ public class Session {
         return gameMode;
     }
 
-    public void setGameMode(int gameMode) {
+    public void setGameMode(final int gameMode) {
         this.gameMode = gameMode;
     }
 
@@ -202,7 +202,7 @@ public class Session {
         return fireTime;
     }
 
-    public void setFireTime(int fireTime) {
+    public void setFireTime(final int fireTime) {
         this.fireTime = fireTime;
     }
 
@@ -210,7 +210,7 @@ public class Session {
         return ticks;
     }
 
-    public void setTicks(int ticks) {
+    public void setTicks(final int ticks) {
         this.ticks = ticks;
     }
 
@@ -218,7 +218,7 @@ public class Session {
         return localPlayer;
     }
 
-    public void setLocalPlayer(Player localPlayer) {
+    public void setLocalPlayer(final Player localPlayer) {
         this.localPlayer = localPlayer;
     }
 
@@ -226,7 +226,7 @@ public class Session {
         return whoseTurn;
     }
 
-    public void setWhoseTurn(int whoseTurn) {
+    public void setWhoseTurn(final int whoseTurn) {
         this.whoseTurn = whoseTurn;
     }
 
@@ -234,7 +234,7 @@ public class Session {
         return matchOver;
     }
 
-    public void setMatchOver(short matchOver) {
+    public void setMatchOver(final short matchOver) {
         this.matchOver = matchOver;
     }
 
@@ -242,7 +242,7 @@ public class Session {
         return forcedRespawn;
     }
 
-    public void setForcedRespawn(short forcedRespawn) {
+    public void setForcedRespawn(final short forcedRespawn) {
         this.forcedRespawn = forcedRespawn;
     }
 
@@ -250,7 +250,7 @@ public class Session {
         return myTeam;
     }
 
-    public void setMyTeam(ArrayList<Integer> myTeam) {
+    public void setMyTeam(final ArrayList<Integer> myTeam) {
         this.myTeam = myTeam;
     }
 
@@ -258,7 +258,7 @@ public class Session {
         return badTeam;
     }
 
-    public void setBadTeam(ArrayList<Integer> badTeam) {
+    public void setBadTeam(final ArrayList<Integer> badTeam) {
         this.badTeam = badTeam;
     }
 
@@ -266,7 +266,7 @@ public class Session {
         return currentlyLoggedIn;
     }
 
-    public static void setCurrentlyLoggedIn(boolean currentlyLoggedIn) {
+    public static void setCurrentlyLoggedIn(final boolean currentlyLoggedIn) {
         Session.currentlyLoggedIn = currentlyLoggedIn;
     }
 
@@ -274,7 +274,7 @@ public class Session {
         return maxeng;
     }
 
-    public void setMaxeng(double maxeng) {
+    public void setMaxeng(final double maxeng) {
         this.maxeng = maxeng;
     }
 
@@ -282,7 +282,7 @@ public class Session {
         return dpyeng;
     }
 
-    public void setDpyeng(double dpyeng) {
+    public void setDpyeng(final double dpyeng) {
         this.dpyeng = dpyeng;
     }
 
@@ -290,7 +290,7 @@ public class Session {
         return energico;
     }
 
-    public void setEnergico(double energico) {
+    public void setEnergico(final double energico) {
         this.energico = energico;
     }
 
@@ -298,7 +298,7 @@ public class Session {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(final int port) {
         this.port = port;
     }
 
@@ -306,7 +306,7 @@ public class Session {
         return userpassinfo;
     }
 
-    public void setUserpassinfo(Properties userpassinfo) {
+    public void setUserpassinfo(final Properties userpassinfo) {
         this.userpassinfo = userpassinfo;
     }
 
@@ -314,7 +314,7 @@ public class Session {
         return engrecharge;
     }
 
-    public void setEngrecharge(double engrecharge) {
+    public void setEngrecharge(final double engrecharge) {
         this.engrecharge = engrecharge;
     }
 
@@ -322,7 +322,7 @@ public class Session {
         return random;
     }
 
-    public void setRandom(Random random) {
+    public void setRandom(final Random random) {
         this.random = random;
     }
 
@@ -330,7 +330,7 @@ public class Session {
         return serverIP;
     }
 
-    public void setServerIP(String serverIP) {
+    public void setServerIP(final String serverIP) {
         this.serverIP = serverIP;
     }
 
@@ -338,7 +338,7 @@ public class Session {
         return mainProcess;
     }
 
-    public void setMainProcess(Thread mainProcess) {
+    public void setMainProcess(final Thread mainProcess) {
         this.mainProcess = mainProcess;
     }
 
@@ -346,7 +346,7 @@ public class Session {
         return notDone;
     }
 
-    public void setNotDone(boolean notDone) {
+    public void setNotDone(final boolean notDone) {
         this.notDone = notDone;
     }
 
@@ -354,7 +354,7 @@ public class Session {
         return ignored;
     }
 
-    public void setIgnored(boolean ignored) {
+    public void setIgnored(final boolean ignored) {
         this.ignored = ignored;
     }
 
@@ -362,7 +362,7 @@ public class Session {
         return base;
     }
 
-    public void setBase(URL base) {
+    public void setBase(final URL base) {
         this.base = base;
     }
 
@@ -370,7 +370,7 @@ public class Session {
         return temp;
     }
 
-    public void setTemp(String temp) {
+    public void setTemp(final String temp) {
         this.temp = temp;
     }
 
@@ -378,7 +378,7 @@ public class Session {
         return username;
     }
 
-    public static void setUsername(String username) {
+    public static void setUsername(final String username) {
         Session.username = username;
     }
 
@@ -386,7 +386,7 @@ public class Session {
         return world;
     }
 
-    public void setWorld(World world) {
+    public void setWorld(final World world) {
         this.world = world;
     }
 
@@ -394,7 +394,7 @@ public class Session {
         return killingSpree;
     }
 
-    public void setKillingSpree(double killingSpree) {
+    public void setKillingSpree(final double killingSpree) {
         this.killingSpree = killingSpree;
     }
 
@@ -402,7 +402,7 @@ public class Session {
         return loggedOn;
     }
 
-    public void setLoggedOn(boolean loggedOn) {
+    public void setLoggedOn(final boolean loggedOn) {
         this.loggedOn = loggedOn;
     }
 
@@ -410,7 +410,7 @@ public class Session {
         return hostingPlace;
     }
 
-    public void setHostingPlace(Server hostingPlace) {
+    public void setHostingPlace(final Server hostingPlace) {
         this.hostingPlace = hostingPlace;
     }
 
@@ -418,7 +418,7 @@ public class Session {
         return spellBook;
     }
 
-    public void setSpellBook(int spellBook) {
+    public void setSpellBook(final int spellBook) {
         this.spellBook = spellBook;
     }
 
@@ -426,7 +426,7 @@ public class Session {
         return worldList;
     }
 
-    public void setWorldList(LinkedList<World> worldList) {
+    public void setWorldList(final LinkedList<World> worldList) {
         this.worldList = worldList;
     }
 
@@ -434,7 +434,7 @@ public class Session {
         return lastTime;
     }
 
-    public void setLastTime(long lastTime) {
+    public void setLastTime(final long lastTime) {
         this.lastTime = lastTime;
     }
 
@@ -442,7 +442,7 @@ public class Session {
         return input;
     }
 
-    public void setInput(InputStream input) {
+    public void setInput(final InputStream input) {
         this.input = input;
     }
 
@@ -450,7 +450,7 @@ public class Session {
         return out;
     }
 
-    public void setOut(OrderedOutputStream out) {
+    public void setOut(final OrderedOutputStream out) {
         this.out = out;
     }
 
@@ -458,7 +458,7 @@ public class Session {
         return connection;
     }
 
-    public void setConnection(Socket connection) {
+    public void setConnection(final Socket connection) {
         this.connection = connection;
     }
 
@@ -466,7 +466,7 @@ public class Session {
         return MAXHP;
     }
 
-    public void setMAXHP(short mAXHP) {
+    public void setMAXHP(final short mAXHP) {
         MAXHP = mAXHP;
     }
 
@@ -474,7 +474,7 @@ public class Session {
         return HP;
     }
 
-    public void setHP(short hP) {
+    public void setHP(final short hP) {
         HP = hP;
     }
 
@@ -482,7 +482,7 @@ public class Session {
         return gameAlive;
     }
 
-    public static void setGameAlive(boolean gameAlive) {
+    public static void setGameAlive(final boolean gameAlive) {
         Session.gameAlive = gameAlive;
     }
 
@@ -490,7 +490,7 @@ public class Session {
         return maxlungs;
     }
 
-    public void setMaxlungs(int maxlungs) {
+    public void setMaxlungs(final int maxlungs) {
         this.maxlungs = maxlungs;
     }
 
@@ -498,7 +498,7 @@ public class Session {
         return lungs;
     }
 
-    public void setLungs(int lungs) {
+    public void setLungs(final int lungs) {
         this.lungs = lungs;
     }
 
@@ -506,7 +506,7 @@ public class Session {
         return runningSpeed;
     }
 
-    public void setRunningSpeed(double runningSpeed) {
+    public void setRunningSpeed(final double runningSpeed) {
         this.runningSpeed = runningSpeed;
     }
 
@@ -514,7 +514,7 @@ public class Session {
         return swimmingSpeed;
     }
 
-    public void setSwimmingSpeed(double swimmingSpeed) {
+    public void setSwimmingSpeed(final double swimmingSpeed) {
         this.swimmingSpeed = swimmingSpeed;
     }
 
@@ -522,7 +522,7 @@ public class Session {
         return knockbackDecay;
     }
 
-    public void setKnockbackDecay(double knockbackDecay) {
+    public void setKnockbackDecay(final double knockbackDecay) {
         this.knockbackDecay = knockbackDecay;
     }
 
@@ -530,7 +530,7 @@ public class Session {
         return thisone;
     }
 
-    public static void setThisone(Client thisone) {
+    public static void setThisone(final Client thisone) {
         Session.thisone = thisone;
     }
 
@@ -538,7 +538,7 @@ public class Session {
         return XP;
     }
 
-    public static void setXP(int xP) {
+    public static void setXP(final int xP) {
         XP = xP;
     }
 
@@ -546,7 +546,7 @@ public class Session {
         return prevVspeed;
     }
 
-    public void setPrevVspeed(double prevVspeed) {
+    public void setPrevVspeed(final double prevVspeed) {
         this.prevVspeed = prevVspeed;
     }
 
@@ -554,7 +554,7 @@ public class Session {
         return shortJump;
     }
 
-    public static void setShortJump(boolean shortJump) {
+    public static void setShortJump(final boolean shortJump) {
         Session.shortJump = shortJump;
     }
 
@@ -562,7 +562,7 @@ public class Session {
         return killMessage;
     }
 
-    public void setKillMessage(String killMessage) {
+    public void setKillMessage(final String killMessage) {
         this.killMessage = killMessage;
     }
 
@@ -570,7 +570,7 @@ public class Session {
         return timeToHeal;
     }
 
-    public void setTimeToHeal(int timeToHeal) {
+    public void setTimeToHeal(final int timeToHeal) {
         this.timeToHeal = timeToHeal;
     }
 
@@ -578,7 +578,7 @@ public class Session {
         return hosts;
     }
 
-    public void setHosts(String[] hosts) {
+    public void setHosts(final String[] hosts) {
         this.hosts = hosts;
     }
 
@@ -586,7 +586,7 @@ public class Session {
         return spellList;
     }
 
-    public void setSpellList(Spell[][] spellList) {
+    public void setSpellList(final Spell[][] spellList) {
         this.spellList = spellList;
     }
 
@@ -594,7 +594,7 @@ public class Session {
         return passiveList;
     }
 
-    public void setPassiveList(Spell[] passiveList) {
+    public void setPassiveList(final Spell[] passiveList) {
         this.passiveList = passiveList;
     }
 
@@ -602,7 +602,7 @@ public class Session {
         return leftClick;
     }
 
-    public void setLeftClick(int leftClick) {
+    public void setLeftClick(final int leftClick) {
         this.leftClick = leftClick;
     }
 
@@ -610,7 +610,7 @@ public class Session {
         return rightClick;
     }
 
-    public void setRightClick(int rightClick) {
+    public void setRightClick(final int rightClick) {
         this.rightClick = rightClick;
     }
 
@@ -618,7 +618,7 @@ public class Session {
         return midClick;
     }
 
-    public void setMidClick(int midClick) {
+    public void setMidClick(final int midClick) {
         this.midClick = midClick;
     }
 
@@ -626,7 +626,7 @@ public class Session {
         return xspeed;
     }
 
-    public void setXspeed(double xspeed) {
+    public void setXspeed(final double xspeed) {
         this.xspeed = xspeed;
     }
 
@@ -634,7 +634,7 @@ public class Session {
         return prevMove;
     }
 
-    public void setPrevMove(double prevMove) {
+    public void setPrevMove(final double prevMove) {
         this.prevMove = prevMove;
     }
 
@@ -642,7 +642,7 @@ public class Session {
         return turnVisible;
     }
 
-    public void setTurnVisible(short turnVisible) {
+    public void setTurnVisible(final short turnVisible) {
         this.turnVisible = turnVisible;
     }
 
@@ -650,7 +650,7 @@ public class Session {
         return removeAura;
     }
 
-    public void setRemoveAura(short removeAura) {
+    public void setRemoveAura(final short removeAura) {
         this.removeAura = removeAura;
     }
 
@@ -658,7 +658,7 @@ public class Session {
         return gameService;
     }
 
-    public void setGameService(GameService gameService) {
+    public void setGameService(final GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -666,7 +666,7 @@ public class Session {
         return ID;
     }
 
-    public void setID(int iD) {
+    public void setID(final int iD) {
         ID = iD;
     }
 
@@ -674,7 +674,7 @@ public class Session {
         return started;
     }
 
-    public void setStarted(boolean started) {
+    public void setStarted(final boolean started) {
         this.started = started;
     }
 
@@ -682,7 +682,7 @@ public class Session {
         return dig;
     }
 
-    public void setDig(short dig) {
+    public void setDig(final short dig) {
         this.dig = dig;
     }
 
@@ -690,7 +690,7 @@ public class Session {
         return loggedIn;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
+    public void setLoggedIn(final boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
 
@@ -698,7 +698,7 @@ public class Session {
         return failed;
     }
 
-    public void setFailed(boolean failed) {
+    public void setFailed(final boolean failed) {
         this.failed = failed;
     }
 
@@ -706,7 +706,7 @@ public class Session {
         return communication;
     }
 
-    public void setCommunication(Thread communication) {
+    public void setCommunication(final Thread communication) {
         this.communication = communication;
     }
 
@@ -714,7 +714,7 @@ public class Session {
         return busy;
     }
 
-    public void setBusy(boolean busy) {
+    public void setBusy(final boolean busy) {
         this.busy = busy;
     }
 
@@ -722,7 +722,7 @@ public class Session {
         return isMyTurn;
     }
 
-    public void setMyTurn(boolean isMyTurn) {
+    public void setMyTurn(final boolean isMyTurn) {
         this.isMyTurn = isMyTurn;
     }
 
@@ -730,7 +730,7 @@ public class Session {
         return lastHit;
     }
 
-    public void setLastHit(int lastHit) {
+    public void setLastHit(final int lastHit) {
         this.lastHit = lastHit;
     }
 
@@ -738,7 +738,7 @@ public class Session {
         return sendcount;
     }
 
-    public void setSendcount(byte sendcount) {
+    public void setSendcount(final byte sendcount) {
         this.sendcount = sendcount;
     }
 
@@ -746,7 +746,7 @@ public class Session {
         return stuff;
     }
 
-    public void setStuff(ArrayList<int[]> stuff) {
+    public void setStuff(final ArrayList<int[]> stuff) {
         this.stuff = stuff;
     }
 
@@ -754,7 +754,7 @@ public class Session {
         return isAlive;
     }
 
-    public void setAlive(boolean isAlive) {
+    public void setAlive(final boolean isAlive) {
         this.isAlive = isAlive;
     }
 
@@ -762,7 +762,7 @@ public class Session {
         return expander;
     }
 
-    public void setExpander(Thread expander) {
+    public void setExpander(final Thread expander) {
         this.expander = expander;
     }
 
@@ -770,31 +770,31 @@ public class Session {
         return sendRequest;
     }
 
-    public void setSendRequest(boolean sendRequest) {
+    public void setSendRequest(final boolean sendRequest) {
         this.sendRequest = sendRequest;
     }
 
-    public int getXp() {
-        return Xp;
+    public int getX_prev() {
+        return x_prev;
     }
 
-    public void setXp(int xp) {
-        Xp = xp;
+    public void setX_prev(final int xp) {
+        x_prev = xp;
     }
 
     public int getYp() {
-        return Yp;
+        return y_prev;
     }
 
-    public void setYp(int yp) {
-        Yp = yp;
+    public void setY_prev(final int yp) {
+        y_prev = yp;
     }
 
     public int getPc() {
         return pc;
     }
 
-    public void setPc(int pc) {
+    public void setPc(final int pc) {
         this.pc = pc;
     }
 
@@ -802,7 +802,7 @@ public class Session {
         return refreshShadows;
     }
 
-    public void setRefreshShadows(boolean refreshShadows) {
+    public void setRefreshShadows(final boolean refreshShadows) {
         this.refreshShadows = refreshShadows;
     }
 
@@ -810,11 +810,11 @@ public class Session {
         return swagTime;
     }
 
-    public void setSwagTime(long swagTime) {
+    public void setSwagTime(final long swagTime) {
         this.swagTime = swagTime;
     }
 
-    public static void setInstance(Session instance) {
+    public static void setInstance(final Session instance) {
         Session.instance = instance;
     }
 }
