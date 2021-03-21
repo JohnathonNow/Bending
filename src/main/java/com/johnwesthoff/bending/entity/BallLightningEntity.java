@@ -15,7 +15,7 @@ import com.johnwesthoff.bending.logic.Player;
 import com.johnwesthoff.bending.logic.World;
 
 public class BallLightningEntity extends Entity {
-    public int maker = 0, radius = Constants.RADIUS_REGULAR, gravity = 1;
+    public int radius = Constants.RADIUS_REGULAR;
     public int BOUND = 10;
 
     public BallLightningEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -54,10 +54,7 @@ public class BallLightningEntity extends Entity {
                 alive = false;
             }
         }
-        if (gravity++ > 3) {
-            yspeed += 1;
-            gravity = 0;
-        }
+        yspeed += Constants.GRAVITY / 3;
 
         /*
          * if (yspeed<12) { yspeed++; }

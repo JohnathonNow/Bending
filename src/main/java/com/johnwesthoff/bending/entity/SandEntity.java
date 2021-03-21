@@ -20,7 +20,6 @@ import com.johnwesthoff.bending.util.math.Ops;
 public class SandEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;
-    public int gravity = 1;
     int a1, a2, a3, s1, s2, s3;
     int life = 0;
 
@@ -64,7 +63,7 @@ public class SandEntity extends Entity {
         if (life++ > 50) {
             alive = false;
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
 
         /*
          * if (yspeed<12) { yspeed++; }

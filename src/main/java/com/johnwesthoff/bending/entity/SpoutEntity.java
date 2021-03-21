@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 public class SpoutEntity extends Entity {
     // public int maker = 0;
     public int radius = 8;
-    public int gravity = 1;
     int a1, a2, a3;
     int s1, s2, s3;
 
@@ -67,7 +66,7 @@ public class SpoutEntity extends Entity {
                 alive = false;
             }
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
 
         /*
          * if (yspeed<12) { yspeed++; }

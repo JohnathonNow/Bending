@@ -20,7 +20,6 @@ import com.johnwesthoff.bending.networking.handlers.FreezeEvent;
 public class SnowEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;
-    public int gravity = 1;
 
     public SnowEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -47,10 +46,8 @@ public class SnowEntity extends Entity {
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
-        if (++timer >= 2) {
-            yspeed += gravity;
-            timer = 0;
-        }
+        yspeed += Constants.GRAVITY / 2;
+
 
         /*
          * if (yspeed<12) { yspeed++; }

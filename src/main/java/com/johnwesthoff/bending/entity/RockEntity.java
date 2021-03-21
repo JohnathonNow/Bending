@@ -19,7 +19,6 @@ import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
 public class RockEntity extends Entity {
     public int radius = Constants.RADIUS_REGULAR;
-    public int gravity = 1;
     int a1, a2, a3, s1, s2, s3;
 
     public RockEntity(int x, int y, int hspeed, int vspeed, int ma) {
@@ -63,7 +62,7 @@ public class RockEntity extends Entity {
                 alive = false;
             }
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
 
         /*
          * if (yspeed<12) { yspeed++; }

@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 public class FreezeEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;
-    public int gravity = 1;
 
     public FreezeEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -47,7 +46,8 @@ public class FreezeEntity extends Entity {
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
+
         if (life++ == 10) {
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed + 1, (int) yspeed + 1, maker));
             apples.entityList.add(new SnowEntity((int) X, (int) Y, (int) xspeed + 1, (int) yspeed - 1, maker));

@@ -24,7 +24,6 @@ import com.johnwesthoff.bending.networking.handlers.SteamEvent;
 public class LavaBallEntity extends Entity {
     // public int maker = 0;
     public int radius = Constants.RADIUS_REGULAR;
-    public int gravity = 1;
 
     public LavaBallEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -61,10 +60,7 @@ public class LavaBallEntity extends Entity {
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
-        if (next++ > 2) {
-            next = 0;
-            yspeed += gravity * World.deltaTime();
-        }
+        yspeed += Constants.GRAVITY / 2;
         /*
          * if (yspeed<12) { yspeed++; }
          */

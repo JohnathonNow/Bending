@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class FireDoom extends Entity {
     // public int maker = 0;
     public int radius = 16;
-    public int gravity = 1;
 
     public FireDoom(final int x, final int y, final int hspeed, final int vspeed, final int ma) {
         X = x;
@@ -53,10 +52,8 @@ public class FireDoom extends Entity {
         }
         // apples.ground.FillCircleW((int)X, (int)Y,
         // (int)Math.sqrt(xspeed*xspeed+yspeed*yspeed), World.LAVA);
-        if (next++ > 4) {
-            next = 0;
-            yspeed += gravity;
-        }
+        yspeed += Constants.GRAVITY / 4;
+
         /*
          * if (yspeed<12) { yspeed++; }
          */

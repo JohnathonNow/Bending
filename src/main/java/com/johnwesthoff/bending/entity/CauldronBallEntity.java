@@ -15,16 +15,21 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.DigEvent;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
+import com.johnwesthoff.bending.util.math.Ops;
 
 /**
  *
  * @author John
  */
 public class CauldronBallEntity extends Entity {
+    private enum Containing {
+        NOTHING, POISON
+    }
+
     public int radius = 16;
-    public int gravity = 1;
     int a1, a2, a3;
     int s1, s2, s3;
+    Containing substance;
 
     public CauldronBallEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
@@ -38,6 +43,7 @@ public class CauldronBallEntity extends Entity {
         s1 = r.nextInt(360);
         s2 = r.nextInt(360);
         s3 = r.nextInt(360);
+        substance = Containing.NOTHING;
     }
 
     @Override
@@ -59,7 +65,7 @@ public class CauldronBallEntity extends Entity {
 
             alive = false;
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
 
     }
 
@@ -70,9 +76,21 @@ public class CauldronBallEntity extends Entity {
             lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.STONE);
             lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.STONE));
             radius -= 8;
-            lol.earth.ground.clearCircle((int) X, (int) Y, radius);
-            lol.sendMessage(DigEvent.getPacket((int) (X), (int) (Y), radius));
+            if (substance == Containing.POISON) {
+                lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.GAS);
+                lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.GAS));
+            } else {
+                lol.earth.ground.clearCircle((int) X, (int) Y, radius);
+                lol.sendMessage(DigEvent.getPacket((int) (X), (int) (Y), radius));
+            }
             alive = false;
+        }
+        for (Entity e : lol.earth.entityList) {
+            if (e instanceof PoisonBallEntity && Ops.pointDis(X, Y, e.getX(), e.getY()) < 24
+                    && substance == Containing.NOTHING) {
+                substance = Containing.POISON;
+                e.destroy(lol);
+            }
         }
     }
 

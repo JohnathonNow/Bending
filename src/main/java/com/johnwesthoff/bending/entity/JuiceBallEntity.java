@@ -22,7 +22,6 @@ import com.johnwesthoff.bending.networking.handlers.FillEvent;
 public class JuiceBallEntity extends Entity {
     // public int maker = 0;
     public int radius = 16;
-    public int gravity = 1;
     int a1, a2, a3;
     int s1, s2, s3;
 
@@ -60,7 +59,8 @@ public class JuiceBallEntity extends Entity {
             alive = false;
             // apples.explode(X, Y, 32, 8, 16);
         }
-        yspeed += gravity;
+        yspeed += Constants.GRAVITY;
+
 
         /*
          * if (yspeed<12) { yspeed++; }

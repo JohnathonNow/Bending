@@ -21,7 +21,7 @@ public class DestroyEvent implements NetworkEvent {
         for (int i = 0; i < p.world.entityList.size(); i++) {
             if (p.world.entityList.get(i).MYID == idtokill) {
                 p.world.entityList.remove(i);
-                continue;
+                i--;
             }
         }
 

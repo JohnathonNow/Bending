@@ -8,6 +8,7 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.networking.handlers.DestroyEvent;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -199,5 +200,10 @@ public abstract class Entity extends Object {
 
     public void checkAndHandleCollision(Session client) {
         // do nothing
+    }
+
+    public void destroy(Server s) {
+        this.alive = false;
+        s.sendMessage(DestroyEvent.getPacket(this));
     }
 }
