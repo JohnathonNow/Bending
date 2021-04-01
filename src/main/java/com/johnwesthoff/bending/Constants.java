@@ -31,32 +31,38 @@ public class Constants {
 
     public static final int TRANSPARENT = 0;
 
-    public static final int ST_FLAMING = 0b1;
-    public static final int ST_SHOCKED = 0b10;
-    public static final int ST_BLOCKED = 0b100;
-    public static final int ST_INVISIBLE = 0b100000000;
-    public static final int ST_DRAIN = 0b1000000000;
-        /*
+    public static final int ST_FLAMING   = 0b1;
+    public static final int ST_SHOCKED   = 0b10;
+    public static final int ST_BLOCKED   = 0b100;
+    public static final int ST_INVISIBLE = 0b1000;
+    public static final int ST_DRAIN     = 0b100000;
+    public static final int ST_CHEM0     = 0b1000000;
+    public static final int ST_CHEM1     = 0b10000000;
+    public static final int ST_CHEM2     = 0b100000000;
+    public static final int ST_CHEM3     = 0b1000000000;
+    public static final int ST_CHEM4     = 0b10000000000;
+    public static final int ST_CHEM5     = 0b100000000000;
+
+    /*
      * ~~~~~~~~~~~~~~~~~~~~~Status values~~~~~~~~~~~~~~~~~~~~~ 
      * Index: Effect: 
      * 0      Flaming 
      * 1      Shocked 
      * 2      Blocked
-     * 8      Invisible 
-     * 9      Dark Cloud
-     *
+     * 4      Invisible 
+     * 8      Dark Cloud
+     * 16-512 Chemistry
      */
     public static final int AURA_RADIUS = 96;
 
     public static final int LAND_TEX_SIZE = 256;
     public static final byte FALLING = 64;
     public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8,
-            CRYSTAL = 9, ETHER = 10, JUICE = 11, GAS = 12;
+            CRYSTAL = 9, ETHER = 10, JUICE = 11, GAS = 12, INVISIBLE = 13;
     public static final byte UGROUND = GROUND | FALLING;
     public static final byte UICE = ICE | FALLING;
     public static final byte USTONE = STONE | FALLING;
-    //public static final byte[] SOLID_LIST = {SAND, GROUND, STONE, TREE, ICE, CRYSTAL};
-    public static final byte[] LIQUID_LIST = {WATER, OIL, LAVA, SAND, ETHER, UGROUND, UICE, USTONE, JUICE};
+    public static final byte[] LIQUID_LIST = {WATER, OIL, LAVA, SAND, ETHER, UGROUND, UICE, USTONE, JUICE, INVISIBLE};
 
     public static final Color WATER_COLOR = new Color(0, 255, 255, 127);
     public static final Color OIL_COLOR = new Color(12, 12, 12, 200);

@@ -15,12 +15,12 @@ import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.networking.handlers.FillEvent;
 
-public class JuiceBallEntity extends Entity {
+public class InvisibleBallEntity extends Entity {
     public int radius = 16;
     int a1, a2, a3;
     int s1, s2, s3;
 
-    public JuiceBallEntity(int x, int y, int hspeed, int vspeed, int ma) {
+    public InvisibleBallEntity(int x, int y, int hspeed, int vspeed, int ma) {
         X = x;
         Y = y;
         xspeed = hspeed;
@@ -37,7 +37,7 @@ public class JuiceBallEntity extends Entity {
     @Override
     public void onDraw(Graphics G, int viewX, int viewY) {
         if (X > viewX && X < viewX + Constants.WIDTH_INT && Y > viewY && Y < viewY + Constants.HEIGHT_INT) {
-            G.setColor(Color.green);
+            G.setColor(Color.black);
             G.fillArc((int) (X - radius / 2) - viewX, (int) (Y - radius / 2) - viewY, radius, radius, 0, 360);
 
             G.setColor(Color.yellow);
@@ -59,8 +59,8 @@ public class JuiceBallEntity extends Entity {
     public void onServerUpdate(Server lol) {
         if (lol.earth.checkCollision(X, Y)) {
             radius = 12;
-            lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.JUICE);
-            lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.JUICE));
+            lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.INVISIBLE);
+            lol.sendMessage(FillEvent.getPacket((int) (X), (int) (Y), radius, Constants.INVISIBLE));
             alive = false;
         }
     }
@@ -81,10 +81,10 @@ public class JuiceBallEntity extends Entity {
 
     public static void reconstruct(ByteBuffer in, World world) {
         try {
-            world.entityList.add(new JuiceBallEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
+            world.entityList
+                    .add(new InvisibleBallEntity(in.getInt(), in.getInt(), in.getInt(), in.getInt(), in.getInt()));
         } catch (Exception ex) {
-            Logger.getLogger(JuiceBallEntity.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InvisibleBallEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

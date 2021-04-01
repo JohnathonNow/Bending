@@ -27,14 +27,12 @@ public class Chemistry extends Spell {
 
     @Override
     public void getAction(Session app) {
-        // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
-        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
-                app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-        // direction+=180;
+        double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX, app.world.y - World.head - app.world.viewY,
+                app.world.mouseX, app.world.mouseY);
         mx = ((int) (Ops.lengthdir_x(9, direction)));
         my = ((int) (Ops.lengthdir_y(9, direction)));
         maker = ID;
@@ -57,13 +55,12 @@ public class Chemistry extends Spell {
     }
 
     @Override
-    public void getPassiveAction(Session app) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
         world.entityList.add(new JuiceBallEntity(px, py, mx, my, pid).setID(eid));
     }
-}
 
+    @Override
+    public void getPassiveAction(Session app) {
+        // Not a passive spell
+    }
+}

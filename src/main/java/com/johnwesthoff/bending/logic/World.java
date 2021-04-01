@@ -125,6 +125,7 @@ public class World implements Serializable {
         aList[UICE] = (byte) Arrays.binarySearch(LIQUID_LIST, UICE);
         aList[USTONE] = (byte) Arrays.binarySearch(LIQUID_LIST, USTONE);
         aList[JUICE] = (byte) Arrays.binarySearch(LIQUID_LIST, JUICE);
+        aList[Constants.INVISIBLE] = (byte) Arrays.binarySearch(LIQUID_LIST, Constants.INVISIBLE);
         // 0 is the down speed
         // 1 is the horizontal speed
         // 2 is the color
@@ -154,6 +155,13 @@ public class World implements Serializable {
         liquidStats[aList[JUICE]][2] = new Color(23, 240, 16).getRGB();
         liquidStats[aList[JUICE]][3] = 10;
 
+
+        liquidStats[aList[Constants.INVISIBLE]][0] = 5;// 5
+        liquidStats[aList[Constants.INVISIBLE]][1] = 6;// 6
+        liquidStats[aList[Constants.INVISIBLE]][2] = new Color(23, 20, 16).getRGB();
+        liquidStats[aList[Constants.INVISIBLE]][3] = 10;
+
+
         liquidStats[aList[SAND]][0] = 8;// 1
         liquidStats[aList[SAND]][1] = 1;// 1
         liquidStats[aList[SAND]][2] = 0;
@@ -169,7 +177,6 @@ public class World implements Serializable {
 
         wIdTh = width;
         hEigHt = height;
-        // terrain = terrai;//createImage(wIdTh,hEigHt);
         Sky = sky;
         Grass = grass;
         Sand = sand;

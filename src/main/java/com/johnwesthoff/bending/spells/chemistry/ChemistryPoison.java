@@ -27,14 +27,12 @@ public class ChemistryPoison extends Chemistry {
 
     @Override
     public void getAction(Session app) {
-        // throw new UnsupportedOperationException("Not supported yet.");
         X = app.world.x;
         Y = app.world.y - World.head;
         mx = app.world.viewX;
         my = app.world.mouseY - app.world.viewY;
         double direction = 360 - Ops.pointDir(app.world.x - app.world.viewX,
                 app.world.y - World.head - app.world.viewY, app.world.mouseX, app.world.mouseY);
-        // direction+=180;
         mx = ((int) (Ops.lengthdir_x(12, direction)));
         my = ((int) (Ops.lengthdir_y(12, direction)));
         maker = ID;
@@ -54,11 +52,6 @@ public class ChemistryPoison extends Chemistry {
     @Override
     public String getTip() {
         return "<html>A basic chemistry spell<br>Low Cooldown<br>Makes a poisonous gas cloud</html>";
-    }
-
-    @Override
-    public void getPassiveAction(Session app) {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
