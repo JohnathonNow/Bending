@@ -58,11 +58,11 @@ public class Constants {
     public static final int LAND_TEX_SIZE = 256;
     public static final byte FALLING = 64;
     public static final byte AIR = 0, GROUND = 1, WATER = 2, OIL = 3, LAVA = 4, SAND = 5, STONE = 6, TREE = 7, ICE = 8,
-            CRYSTAL = 9, ETHER = 10, JUICE = 11, GAS = 12, INVISIBLE = 13;
+            CRYSTAL = 9, ETHER = 10, JUICE = 11, GAS = 12, INVISIBLE = 13, ENERGY = 14;
     public static final byte UGROUND = GROUND | FALLING;
     public static final byte UICE = ICE | FALLING;
     public static final byte USTONE = STONE | FALLING;
-    public static final byte[] LIQUID_LIST = {WATER, OIL, LAVA, SAND, ETHER, UGROUND, UICE, USTONE, JUICE, INVISIBLE};
+    public static final byte[] LIQUID_LIST = {WATER, OIL, LAVA, SAND, ETHER, UGROUND, UICE, USTONE, JUICE, INVISIBLE, ENERGY};
 
     public static final Color WATER_COLOR = new Color(0, 255, 255, 127);
     public static final Color OIL_COLOR = new Color(12, 12, 12, 200);

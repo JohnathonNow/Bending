@@ -9,13 +9,13 @@ import java.util.logging.Logger;
 
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
-import com.johnwesthoff.bending.entity.InvisibleBallEntity;
+import com.johnwesthoff.bending.entity.EnergyBallEntity;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.util.math.Ops;
 
-public class ChemistryInvisibility extends Chemistry {
-    public ChemistryInvisibility() {
+public class ChemistryEnergy extends Chemistry {
+    public ChemistryEnergy() {
         ID = Constants.CHEMISTRY;
         subID = 0;
         try {
@@ -41,21 +41,21 @@ public class ChemistryInvisibility extends Chemistry {
 
     @Override
     public int getCoolDown() {
-        return (int) (3000 * Constants.FPS / 600);
+        return (int) (2000 * Constants.FPS / 600);
     }
 
     @Override
     public String getName() {
-        return "Invisibility Potion";
+        return "Energy Potion";
     }
 
     @Override
     public String getTip() {
-        return "<html>An advanced chemistry spell<br>High Cooldown<br>Makes invisibility potion</html>";
+        return "<html>An advanced chemistry spell<br>High Cooldown<br>Makes an energy potion</html>";
     }
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.entityList.add(new InvisibleBallEntity(px, py, mx, my, pid).setID(eid));
+        world.entityList.add(new EnergyBallEntity(px, py, mx, my, pid).setID(eid));
     }
 }

@@ -26,6 +26,7 @@ import static com.johnwesthoff.bending.Constants.TREE;
 import static com.johnwesthoff.bending.Constants.UGROUND;
 import static com.johnwesthoff.bending.Constants.UICE;
 import static com.johnwesthoff.bending.Constants.USTONE;
+import static com.johnwesthoff.bending.Constants.ENERGY;
 import static com.johnwesthoff.bending.Constants.WATER;
 import static com.johnwesthoff.bending.Constants.WATER_COLOR;
 
@@ -93,7 +94,7 @@ public class World implements Serializable {
     public final int[][] liquidStats = new int[Constants.LIQUID_LIST.length][6];
     public final byte[] aList = new byte[127];
     public int miGenH = 300, maGenH = 300, wIdTh = 900, hEigHt = 900;
-    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE, JUICE };
+    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE, JUICE, ENERGY };
     public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
 
     public int ID = 0;
@@ -125,6 +126,7 @@ public class World implements Serializable {
         aList[UICE] = (byte) Arrays.binarySearch(LIQUID_LIST, UICE);
         aList[USTONE] = (byte) Arrays.binarySearch(LIQUID_LIST, USTONE);
         aList[JUICE] = (byte) Arrays.binarySearch(LIQUID_LIST, JUICE);
+        aList[ENERGY] = (byte) Arrays.binarySearch(LIQUID_LIST, ENERGY);
         aList[Constants.INVISIBLE] = (byte) Arrays.binarySearch(LIQUID_LIST, Constants.INVISIBLE);
         // 0 is the down speed
         // 1 is the horizontal speed
@@ -155,6 +157,10 @@ public class World implements Serializable {
         liquidStats[aList[JUICE]][2] = new Color(23, 240, 16).getRGB();
         liquidStats[aList[JUICE]][3] = 10;
 
+        liquidStats[aList[ENERGY]][0] = 5;// 5
+        liquidStats[aList[ENERGY]][1] = 6;// 6
+        liquidStats[aList[ENERGY]][2] = new Color(240, 122, 200).getRGB();
+        liquidStats[aList[ENERGY]][3] = 10;
 
         liquidStats[aList[Constants.INVISIBLE]][0] = 5;// 5
         liquidStats[aList[Constants.INVISIBLE]][1] = 6;// 6

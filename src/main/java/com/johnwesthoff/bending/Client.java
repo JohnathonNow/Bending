@@ -149,10 +149,16 @@ public class Client {
                 session.HP++;
             }
         }
+
+        if (session.world.inBounds(session.world.x, session.world.y) && session.energico > 0
+                && session.world.isType((int) session.world.x, (int) session.world.y, Constants.ENERGY)) {
+                session.mana_drain -= Constants.MANA_REGEN_RATE * 1 / 4;
+        }
+
         if (session.world.inBounds(session.world.x, session.world.y) && session.energico > 0
                 && session.world.isType((int) session.world.x, (int) session.world.y, Constants.INVISIBLE)) {
             if (session.turnVisible < Constants.FPS * 5) {
-                session.turnVisible = (short)Constants.FPS * 5;
+                session.turnVisible = (short) Constants.FPS * 5;
             }
         }
         if (session.HP > session.MAXHP) {
