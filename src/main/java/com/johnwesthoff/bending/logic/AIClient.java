@@ -2,7 +2,6 @@ package com.johnwesthoff.bending.logic;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.SystemTray;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +9,7 @@ import com.johnwesthoff.bending.Client;
 import com.johnwesthoff.bending.ClientNetworking;
 import com.johnwesthoff.bending.ClientUI;
 import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
 import com.johnwesthoff.bending.spells.Spell;
@@ -49,11 +49,13 @@ public class AIClient extends ClientUI implements Runnable {
         Spell shield = Spell.lookup("EarthbendingShield");
         sess.passiveList = (new Spell[] { shield, shield, shield, shield, shield, shield });
         sess.notDone = false;
-            // app.setResizable(true);
-            sess.username = "Bot John";
-            //app.serverIP = JOptionPane.showInputDialog("Server IP?");
-            sess.net.startAi();
-            sess.net.sendMessage("it is a bus!");
+        // app.setResizable(true);
+        sess.username = "Bot John";
+        sess.mainProcess = new Thread(sess.clientui);
+        sess.mainProcess.start();
+        // app.serverIP = JOptionPane.showInputDialog("Server IP?");
+        sess.net.startAi();
+        sess.net.sendMessage("it is a bus!");
     }
 
     public void init() {
@@ -85,17 +87,8 @@ public class AIClient extends ClientUI implements Runnable {
             final long now = System.nanoTime();
 
             delta += (now - sess.lastTime) / (1000000000 / Constants.FPS);
-            owner.setTitle(
-                    " Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)) + " Delta: " + delta);
             sess.lastTime = now;
             boolean willSendMovement = false;
-            if (!owner.isVisible()) {
-                if (!SystemTray.isSupported()) {
-                    System.exit(0);
-                }
-
-                // System.out.println(started);
-            }
             if (!sess.started) {
                 delta = 0;
                 try {
@@ -120,6 +113,19 @@ public class AIClient extends ClientUI implements Runnable {
                     sess.world.ground.handleWater();
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+            if (sess.world.dead) {
+                if ((!(sess.gameMode == Server.THEHIDDEN && !sess.goodTeam)) || sess.lastHit == sess.ID) {
+                    sess.forcedRespawn = 0;
+                    sess.world.y = 0;
+                    sess.world.x = (sess.goodTeam ? sess.world.wIdTh / 2 : 0)
+                            + sess.random.nextInt(sess.world.wIdTh / 2);
+                    sess.world.dead = false;
+                    sess.passiveList[sess.spellBook].onSpawn(sess);
+                    sess.HP = sess.MAXHP;
+                    sess.net.sendMessage("My bones! How could you do this, " + sess.world.getPlayerName(sess.lastHit) + "?");
+                    sess.lastHit = sess.ID;
                 }
             }
             if (willSendMovement) {
