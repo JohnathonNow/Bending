@@ -17,6 +17,51 @@ import com.johnwesthoff.bending.util.network.NetworkMessage;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
 
 public class ClientNetworking {
+    public boolean startAi() {
+        Session sess = Session.getInstance();
+        try {
+            sess.connection = new Socket(sess.serverIP, Constants.PORT);
+            sess.isAlive = true;
+            sess.world = new World(true, Constants.WIDTH_EXT, Constants.HEIGHT_EXT,
+                    sess.clientui.createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), sess.clientui.Grass,
+                    sess.clientui.Sand, sess.clientui.Sky, sess.clientui.Stone, sess.clientui.Bark, sess.clientui.Ice,
+                    sess.clientui.LavaLand, sess.clientui.Crystal, sess.clientui.ether);
+            //sess.world.load(sess.clientui.Clothing, sess.clientui.Colors, sess.clientui.Colors2);
+            sess.world.serverWorld = false;
+            sess.connection.setKeepAlive(true);
+            sess.connection.setTcpNoDelay(true);
+            sess.out = new OrderedOutputStream(sess.connection.getOutputStream());
+            sess.input = sess.connection.getInputStream();
+            sess.localPlayer = new Player(0, 0, sess.clientui.Clothing, sess.clientui.Colors, sess.clientui.Colors2);
+            sess.localPlayer.username = sess.username;
+            sess.out.addMessage(LoginEvent.getPacket(sess.localPlayer));
+            sess.ID = -1;
+            sess.world.ID = sess.ID;
+            sess.communication = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        while (sess.gameAlive) {
+                            NetworkMessage m = NetworkMessage.read(sess.input);
+                            NetworkManager.getInstance().getHandler(m).clientReceived(sess, m.getContent());
+                            sess.pc++;
+                        }
+                    } catch (final Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            sess.communication.start();
+
+            sess.worldList.add(sess.world);
+            sess.started = true;
+        } catch (final Exception ex) {
+            sess.failed = true;
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }
     public boolean start() {
         Session sess = Session.getInstance();
         try {
@@ -57,6 +102,7 @@ public class ClientNetworking {
             sess.started = true;
         } catch (final Exception ex) {
             sess.failed = true;
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;

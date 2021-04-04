@@ -2,11 +2,13 @@ package com.johnwesthoff.bending;
 
 import java.net.URISyntaxException;
 
+import com.johnwesthoff.bending.logic.AIClient;
+
 public class Main {
     private static String ip_opt = Constants.DEFAULT_SERVER;
 
     private enum Mode {
-        None, Client, Server
+        None, Client, Server, AI
     }
 
     public static void main(String[] args) {
@@ -26,6 +28,13 @@ public class Main {
                         help(3);
                     } else {
                         mode = Mode.Server;
+                    }
+                    break;
+                case "ai":
+                    if (mode != Mode.None) {
+                        help(3);
+                    } else {
+                        mode = Mode.AI;
                     }
                     break;
                 case "-i":
@@ -52,6 +61,13 @@ public class Main {
         case Server:
             Server.launch();
             break;
+        case AI:
+            Session sess = Session.newInstance();
+            sess.serverIP = ip_opt;
+            AIClient.launch();
+            break;
+        default:
+            break;
         }
     }
 
@@ -71,7 +87,8 @@ public class Main {
         System.out.printf("Usage: java -jar %s [COMMAND] [OPTIONS]\n\n", jarName);
         System.out.println("Commands are:");
         System.out.println("  client                  run in client mode (default)");
-        System.out.println("  server                  run in server mode\n");
+        System.out.println("  server                  run in server mode");
+        System.out.println("  ai                      run in ai mode\n");
         System.out.println("Optional flags are:");
         System.out.println("  -i, --ip IP             the IP of the server for the client to connect to");
         System.out.println("                          defaults to game.johnwesthoff.com");
