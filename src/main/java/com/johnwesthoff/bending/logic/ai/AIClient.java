@@ -1,4 +1,4 @@
-package com.johnwesthoff.bending.logic;
+package com.johnwesthoff.bending.logic.ai;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,13 +12,36 @@ import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.app.game.GameServiceFactory;
+import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AIClient extends ClientUI implements Runnable {
+    /*
+     * Bot plan of action:
+     * 
+     * Have one of several moods
+     * 
+     * 1. Exploring - wanders around the map, preferring air travel and jumps. Fires
+     * at enemies it sees, maybe switching to an offensive or defensive mood
+     * accordingly.
+     * 
+     * 2. Offensive - jumps back and forth, attempts to either shoot at enemy or
+     * clear a path to the enemy.
+     * 
+     * 3. Defensive - jumps back and forth, attempts to build walls between enemy
+     * and self.
+     * 
+     * 4. Tunneler - digs a tunnel to a random location and attempts to build a
+     * fort.
+     * 
+     */
     private static final long serialVersionUID = 1L;
+    private Mover mover;
+    private SpellCaster spellCaster;
 
     public AIClient() {
-        // TODO: Do this
+        mover = new IMover();
+        spellCaster = new ISpellCaster();
     }
 
     public static void launch() {
@@ -108,6 +131,8 @@ public class AIClient extends ClientUI implements Runnable {
             while (delta >= 1) {
                 sess.ticks++;
                 delta -= 1;
+                mover.move(sess);
+                spellCaster.cast(sess);
                 willSendMovement |= sess.client.tick();
                 try {
                     sess.world.ground.handleWater();
@@ -124,10 +149,17 @@ public class AIClient extends ClientUI implements Runnable {
                     sess.world.dead = false;
                     sess.passiveList[sess.spellBook].onSpawn(sess);
                     sess.HP = sess.MAXHP;
-                    sess.net.sendMessage("My bones! How could you do this, " + sess.world.getPlayerName(sess.lastHit) + "?");
+                    sess.net.sendMessage(
+                            "My bones! How could you do this, " + sess.world.getPlayerName(sess.lastHit) + "?");
                     sess.lastHit = sess.ID;
                 }
             }
+            sess.world.viewX = (int) Math.min(
+                    Math.max((sess.world.x - (Constants.WIDTH_INT + 1) / 2) + sess.world.incX, 0),
+                    Math.max(0, sess.world.wIdTh - Constants.WIDTH_INT - 1));
+
+            sess.world.viewY = (int) Math.min(Math.max((sess.world.y - Constants.HEIGHT_INT / 2) + sess.world.incY, 0),
+                    Math.max(0, sess.world.hEigHt - Constants.HEIGHT_INT));
             if (willSendMovement) {
                 try {
                     sess.net.sendMovement();

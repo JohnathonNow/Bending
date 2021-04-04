@@ -2,7 +2,7 @@ package com.johnwesthoff.bending;
 
 import java.net.URISyntaxException;
 
-import com.johnwesthoff.bending.logic.AIClient;
+import com.johnwesthoff.bending.logic.ai.AIClient;
 
 public class Main {
     private static String ip_opt = Constants.DEFAULT_SERVER;
