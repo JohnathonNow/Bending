@@ -16,32 +16,14 @@ import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
 public class AIClient extends ClientUI implements Runnable {
-    /*
-     * Bot plan of action:
-     * 
-     * Have one of several moods
-     * 
-     * 1. Exploring - wanders around the map, preferring air travel and jumps. Fires
-     * at enemies it sees, maybe switching to an offensive or defensive mood
-     * accordingly.
-     * 
-     * 2. Offensive - jumps back and forth, attempts to either shoot at enemy or
-     * clear a path to the enemy.
-     * 
-     * 3. Defensive - jumps back and forth, attempts to build walls between enemy
-     * and self.
-     * 
-     * 4. Tunneler - digs a tunnel to a random location and attempts to build a
-     * fort.
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private Mover mover;
     private SpellCaster spellCaster;
 
     public AIClient() {
-        mover = new IMover();
-        spellCaster = new ISpellCaster();
+        Ai ai = new Ai();
+        mover = ai;
+        spellCaster = ai;
     }
 
     public static void launch() {
