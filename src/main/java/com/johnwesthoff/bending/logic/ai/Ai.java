@@ -76,6 +76,9 @@ public class Ai implements Mover, SpellCaster {
         if (target == null) {
             strategy = Strategy.Explore;
         } else {
+            if (target.sameTeam) {
+                playerTarget = -1; //New target since we are attacking a teammate
+            }
             if (sess.HP >= sess.MAXHP / 2) {
                 if (fightTimer-- <= 0) {
                     fightTimer = (int) Constants.FPS / 3 + r.nextInt((int) Constants.FPS * 4);
