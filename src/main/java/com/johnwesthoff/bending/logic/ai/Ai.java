@@ -62,7 +62,7 @@ public class Ai implements Mover, SpellCaster {
             double distance = 99999;
             for (Player p : sess.world.playerList) {
                 double d = Ops.pointDis(sess.world.x, sess.world.y, p.x, p.y);
-                if (d < distance) {
+                if (d < distance && !p.sameTeam) {
                     distance = d;
                     nearest = p.ID;
                 }
