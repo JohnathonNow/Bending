@@ -15,7 +15,7 @@ import com.johnwesthoff.bending.app.game.GameServiceFactory;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 
-public class AIClient extends ClientUI implements Runnable {
+public class AIClient extends ClientUI {
     private static final long serialVersionUID = 1L;
     private Mover mover;
     private SpellCaster spellCaster;
@@ -25,8 +25,7 @@ public class AIClient extends ClientUI implements Runnable {
         mover = ai;
         spellCaster = ai;
     }
-
-    public static void launch() {
+    public static void launch(String name) {
         Session sess = Session.getInstance();
         Spell.init();
         final Client client = new Client();
@@ -55,7 +54,7 @@ public class AIClient extends ClientUI implements Runnable {
         sess.passiveList = (new Spell[] { shield, shield, shield, shield, shield, shield });
         sess.notDone = false;
         // app.setResizable(true);
-        sess.username = "Bot John";
+        sess.username = name;
         sess.mainProcess = new Thread(sess.clientui);
         sess.mainProcess.start();
         // app.serverIP = JOptionPane.showInputDialog("Server IP?");

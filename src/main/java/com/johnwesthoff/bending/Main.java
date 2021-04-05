@@ -6,6 +6,7 @@ import com.johnwesthoff.bending.logic.ai.AIClient;
 
 public class Main {
     private static String ip_opt = Constants.DEFAULT_SERVER;
+    private static String name = "";
 
     private enum Mode {
         None, Client, Server, AI
@@ -41,6 +42,10 @@ public class Main {
                 case "--ip":
                     ip_opt = args[++i];
                     break;
+                case "-n":
+                case "--name":
+                    name = args[++i];
+                    break;
                 case "-h":
                 case "--help":
                     help(0);
@@ -64,7 +69,10 @@ public class Main {
         case AI:
             Session sess = Session.newInstance();
             sess.serverIP = ip_opt;
-            AIClient.launch();
+            if (name.isEmpty()) {
+                name = Constants.DEFAULT_AI_NAME;
+            }
+            AIClient.launch(name);
             break;
         default:
             break;
@@ -74,7 +82,7 @@ public class Main {
     public static void reload() {
         Session sess = Session.newInstance();
         sess.serverIP = ip_opt;
-        ClientUI.launch();
+        ClientUI.launch(name);
     }
 
     public static void help(int exit_code) {
@@ -92,6 +100,7 @@ public class Main {
         System.out.println("Optional flags are:");
         System.out.println("  -i, --ip IP             the IP of the server for the client to connect to");
         System.out.println("                          defaults to game.johnwesthoff.com");
+        System.out.println("  -n, --name NAME         the name to use for the player / bot");
         System.out.println("  -h, --help              print this help message");
         System.exit(exit_code);
     }

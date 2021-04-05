@@ -112,7 +112,7 @@ public class ClientUI extends JPanel implements Runnable {
     // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
     Polygon lineOfSight = new Polygon();
 
-    public static void launch() {
+    public static void launch(String name) {
         Session sess = Session.getInstance();
         System.out.println("Loading 1.2");
         Spell.init();
@@ -189,7 +189,7 @@ public class ClientUI extends JPanel implements Runnable {
             }
         }
         if (sess.userpassinfo.isEmpty()) {
-            sess.userpassinfo.setProperty("username", "");
+            sess.userpassinfo.setProperty("username", name);
             sess.userpassinfo.setProperty("password", "");
             sess.userpassinfo.setProperty("remember", "");
             try {
@@ -198,11 +198,11 @@ public class ClientUI extends JPanel implements Runnable {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if (!sess.userpassinfo.getProperty("remember", "").equals("")) {
-                clientui.jtb.setText(sess.userpassinfo.getProperty("username", ""));
-                clientui.jtp.setText(sess.userpassinfo.getProperty("password", ""));
-                clientui.JRB.setSelected(true);
-            }
+            clientui.jtb.setText(sess.userpassinfo.getProperty("username", name));
+            clientui.jtp.setText(sess.userpassinfo.getProperty("password", ""));
+        }
+        if (!name.isEmpty()) { 
+            clientui.jtb.setText(name);
         }
         clientui.setBackground(Color.white);
         clientui.setLayout(null);

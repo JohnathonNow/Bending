@@ -52,9 +52,17 @@ public class AppletActionListener implements ActionListener {
         final String command = e.getActionCommand();
         if (command.equals(app.connect.getText())) {
             sess.notDone = false;
+            sess.userpassinfo.setProperty("username", app.jtb.getText());
+            sess.userpassinfo.setProperty("password", "PASSWORD IGNORED");
+            sess.userpassinfo.setProperty("remember", "yes");
+            try {
+                sess.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")), "");
+            } catch (final Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
             // app.setResizable(true);
             sess.username = app.jtb.getText();
-            //app.serverIP = JOptionPane.showInputDialog("Server IP?");
+            // app.serverIP = JOptionPane.showInputDialog("Server IP?");
             app.init();
             if (sess.net.start()) {
                 app.spellselection.setVisible(false);
@@ -77,7 +85,7 @@ public class AppletActionListener implements ActionListener {
                 // Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
             app.serverOutput();
-            //app.getHosts();
+            // app.getHosts();
         }
         if (command.equals(app.ChooseSpells.getText())) {
             app.spellselection.XP.setText("XP: " + sess.XP);
@@ -92,7 +100,7 @@ public class AppletActionListener implements ActionListener {
             // app.add(app.cc.getPanel());
         }
         if (command.equals("Exit")) {
-            //gameService.tryToRemoveServer(gameService.getHostIp());
+            // gameService.tryToRemoveServer(gameService.getHostIp());
             app.ST.remove(app.trayIcon);
             System.exit(0);
         }
@@ -160,21 +168,7 @@ public class AppletActionListener implements ActionListener {
             // exactly.setVisible(true);
             if (!sess.currentlyLoggedIn) {
                 if (sess.currentlyLoggedIn = gameService.login(app.jtb.getText(), "PASSWORD IGNORED")) {
-                    if (app.JRB.isSelected()) {
-                        sess.userpassinfo.setProperty("username", app.jtb.getText());
-                        sess.userpassinfo.setProperty("password", "PASSWORD IGNORED");
-                        sess.userpassinfo.setProperty("remember", "yes");
-                    } else {
-                        sess.userpassinfo.setProperty("username", "");
-                        sess.userpassinfo.setProperty("password", "");
-                        sess.userpassinfo.setProperty("remember", "");
-                    }
-                    try {
-                        sess.userpassinfo.store(new FileOutputStream(new File(ResourceLoader.dir + "properties.xyz")),
-                                "");
-                    } catch (final Exception ex) {
-                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+
                     // verify.setEnabled(false);
                     app.jtb.setEditable(false);
                     app.jtp.setEditable(false);
