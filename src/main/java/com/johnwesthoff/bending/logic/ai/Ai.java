@@ -53,11 +53,11 @@ public class Ai implements Mover, SpellCaster {
         for (int i = 0; i < tryCasting.length; i++) {
             tryCasting[i] = false;
         }
-        if (enemyLastSeen > Constants.FPS * 10) {
+        if (sess.ticks - enemyLastSeen > Constants.FPS * 10) {
             playerTarget = -1;
         }
         Player target = sess.world.getPlayer(playerTarget);
-        if (target == null || Ops.pointDis(sess.world.x, sess.world.y, target.x, target.y) > 600) {
+        if (target == null || Ops.pointDis(sess.world.x, sess.world.y, target.x, target.y) > 300) {
             int nearest = -1;
             double distance = 99999;
             for (Player p : sess.world.playerList) {
@@ -77,7 +77,7 @@ public class Ai implements Mover, SpellCaster {
             strategy = Strategy.Explore;
         } else {
             if (target.sameTeam) {
-                playerTarget = -1; //New target since we are attacking a teammate
+                playerTarget = -1; // New target since we are attacking a teammate
             }
             if (sess.HP >= sess.MAXHP / 2) {
                 if (fightTimer-- <= 0) {
@@ -104,15 +104,20 @@ public class Ai implements Mover, SpellCaster {
         }
         switch (strategy) {
         case Chase:
-            move = target.x < sess.world.x ? Move.Left : Move.Right;
-            tryCasting[0] = true;
-            tryCasting[1] = true;
-            tryCasting[2] = true;
-            tryCasting[3] = true;
-            tryCasting[4] = true;
-            holdJump = r.nextInt(2) == 0;
-            sess.world.mouseX = (int) target.x - sess.world.viewX;
-            sess.world.mouseY = (int) target.y - sess.world.viewY + 100 - r.nextInt(200);
+            if (target != null) {
+                move = target.x < sess.world.x ? Move.Left : Move.Right;
+                tryCasting[0] = true;
+                tryCasting[1] = true;
+                tryCasting[2] = true;
+                tryCasting[3] = true;
+                tryCasting[4] = true;
+                holdJump = r.nextInt(2) == 0;
+                sess.world.mouseX = (int) target.x - sess.world.viewX;
+                sess.world.mouseY = (int) target.y - sess.world.viewY + 100 - r.nextInt(200);
+                if (Ops.pointDis(sess.world.x, sess.world.y, target.x, target.y) < 70) {
+                    strategy = Strategy.Strafe;
+                }
+            }
             break;
         case Explore:
             if (exploreTimer-- <= 0) {
@@ -133,14 +138,16 @@ public class Ai implements Mover, SpellCaster {
             }
             break;
         case Retreat:
-            sess.world.mouseY = r.nextInt(Constants.HEIGHT_INT);
-            move = target.x > sess.world.x ? Move.Left : Move.Right;
-            if (tryBlocking) {
-                tryCasting[1] = tryBlocking;
-                sess.world.mouseX = (int) target.x - sess.world.viewX;
-            } else {
-                tryCasting[2] = !tryBlocking;
-                sess.world.mouseX = move == Move.Left ? 0 : Constants.WIDTH_INT;
+            if (target != null) {
+                sess.world.mouseY = r.nextInt(Constants.HEIGHT_INT);
+                move = target.x > sess.world.x ? Move.Left : Move.Right;
+                if (tryBlocking) {
+                    tryCasting[1] = tryBlocking;
+                    sess.world.mouseX = (int) target.x - sess.world.viewX;
+                } else {
+                    tryCasting[2] = !tryBlocking;
+                    sess.world.mouseX = move == Move.Left ? 0 : Constants.WIDTH_INT;
+                }
             }
             break;
         case Strafe:
@@ -201,7 +208,7 @@ public class Ai implements Mover, SpellCaster {
         for (int i = 0; i < spellTimers.length; i++) {
             if (spellTimers[i]-- <= 0 && tryCasting[i]) {
                 sess.spellList[0][i].getEffectiveSpell(0).cast(sess, 0);
-                spellTimers[i] = (int) Constants.FPS / 4 + r.nextInt((int) Constants.FPS * 4);
+                spellTimers[i] = (int) Constants.FPS / 4 + r.nextInt((int) Constants.FPS * 3);
             }
         }
     }
