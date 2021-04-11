@@ -19,7 +19,7 @@ public class ChemistryInvisibility extends Chemistry {
         ID = Constants.CHEMISTRY;
         subID = 0;
         try {
-            icon = (loadIcon("healingjuice.png"));
+            icon = (loadIcon("invisible.png"));
         } catch (Exception ex) {
             Logger.getLogger(Spell.class.getName()).log(Level.SEVERE, null, ex);
         }
