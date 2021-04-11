@@ -4,14 +4,14 @@
  */
 package com.johnwesthoff.bending.logic;
 
-import static com.johnwesthoff.bending.Constants.AIR;ort static com.johnwesthoff.bending.Constants.ENERGY;
-impot java.awt.Color;
-import java.awt.Graphics;
-import java.art static com.johnwesthoff.bending.Constants.ETHER;
-import static com.johnwesthoff.bending.Constants.ICE;
+import static com.johnwesthoff.bending.Constants.AIR;
+import static com.johnwesthoff.bending.Constants.CRYSTAL;
+import static com.johnwesthoff.bending.Constants.ENERGY;
+import static com.johnwesthoff.bending.Constants.ETHER;
 import static com.johnwesthoff.bending.Constants.GAS;
 import static com.johnwesthoff.bending.Constants.GROUND;
 import static com.johnwesthoff.bending.Constants.HEAD;
+import static com.johnwesthoff.bending.Constants.ICE;
 import static com.johnwesthoff.bending.Constants.JUICE;
 import static com.johnwesthoff.bending.Constants.LAND_TEX_SIZE;
 import static com.johnwesthoff.bending.Constants.LAVA;
@@ -20,12 +20,16 @@ import static com.johnwesthoff.bending.Constants.OIL;
 import static com.johnwesthoff.bending.Constants.OIL_COLOR;
 import static com.johnwesthoff.bending.Constants.SAND;
 import static com.johnwesthoff.bending.Constants.STONE;
-impoic com.johnwesthoff.bending.Constants.UICE;
+import static com.johnwesthoff.bending.Constants.TREE;
+import static com.johnwesthoff.bending.Constants.UGROUND;
+import static com.johnwesthoff.bending.Constants.UICE;
 import static com.johnwesthoff.bending.Constants.USTONE;
 import static com.johnwesthoff.bending.Constants.WATER;
 import static com.johnwesthoff.bending.Constants.WATER_COLOR;
 
-imporwt.Graphics2D;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Rectangle;
