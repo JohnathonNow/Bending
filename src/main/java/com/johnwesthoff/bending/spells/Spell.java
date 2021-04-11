@@ -123,6 +123,7 @@ public abstract class Spell {
         registerSpell(new LightningStorm());
         registerSpell(new Chemistry());
         registerSpell(new ChemistryPoison());
+        registerSpell(new ChemistryEnergy());
         registerSpell(new ChemistryInvisibility());
         registerSpell(new ChemistryCauldron());
         registerSpell(randomSpell);

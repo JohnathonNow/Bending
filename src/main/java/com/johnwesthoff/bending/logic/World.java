@@ -59,7 +59,6 @@ import com.johnwesthoff.bending.util.Coordinate;
 import com.johnwesthoff.bending.util.math.Ops;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
 
-
 public class World implements Serializable {
     private static final long serialVersionUID = -5361438813968515971L;
     public int incX, incY, floatiness = 0, viewX = 0, viewY = 0, viewdX = 0, viewdY = 0, flowCount = 0, maxFlow = 5000;
@@ -94,7 +93,8 @@ public class World implements Serializable {
     public final int[][] liquidStats = new int[Constants.LIQUID_LIST.length][6];
     public final byte[] aList = new byte[127];
     public int miGenH = 300, maGenH = 300, wIdTh = 900, hEigHt = 900;
-    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE, JUICE, ENERGY };
+    public final byte liquidList[] = { WATER, OIL, LAVA, SAND, ETHER, UGROUND, USTONE, UICE, JUICE, ENERGY,
+            Constants.INVISIBLE };
     public final byte solidList[] = { SAND, GROUND, STONE, TREE, ICE, CRYSTAL };
 
     public int ID = 0;
@@ -166,7 +166,6 @@ public class World implements Serializable {
         liquidStats[aList[Constants.INVISIBLE]][1] = 6;// 6
         liquidStats[aList[Constants.INVISIBLE]][2] = new Color(23, 20, 16).getRGB();
         liquidStats[aList[Constants.INVISIBLE]][3] = 10;
-
 
         liquidStats[aList[SAND]][0] = 8;// 1
         liquidStats[aList[SAND]][1] = 1;// 1
@@ -1356,48 +1355,48 @@ public class World implements Serializable {
                     // final int minX = Math.min(X + 3 - xx, WIDTH_INT);
                     // final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
                     switch (ground.cellData[X][Y]) {
-                        default:
-                            break;
-                        case GROUND:
-                        case UGROUND:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Grass.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case SAND:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Sand.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case STONE:
-                        case USTONE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Stone.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case TREE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Bark.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case ICE:
-                        case UICE:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Ice.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case CRYSTAL:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Crystal.getRGB(X % landTexSize, Y % landTexSize));
-                            break;
-                        case ETHER:
-                            Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                    Ether.getRGB(X % 100, Y % 100));
-                            break;
-                        case WATER:
-                        case LAVA:
-                        case JUICE:
-                        case OIL:
-                            Iter.setRGB(X - xx, Y - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-                            break;
-                        case GAS:
-                            Iter.setRGB(X - xx, Y - yy, GAS_COLOR.getRGB());
-                            break;
+                    default:
+                        break;
+                    case GROUND:
+                    case UGROUND:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Grass.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case SAND:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Sand.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case STONE:
+                    case USTONE:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Stone.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case TREE:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Bark.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case ICE:
+                    case UICE:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Ice.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case CRYSTAL:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Crystal.getRGB(X % landTexSize, Y % landTexSize));
+                        break;
+                    case ETHER:
+                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
+                                Ether.getRGB(X % 100, Y % 100));
+                        break;
+                    case WATER:
+                    case LAVA:
+                    case JUICE:
+                    case OIL:
+                        Iter.setRGB(X - xx, Y - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
+                        break;
+                    case GAS:
+                        Iter.setRGB(X - xx, Y - yy, GAS_COLOR.getRGB());
+                        break;
                     }
                 }
             }
@@ -1519,10 +1518,10 @@ public class World implements Serializable {
     }
 
     /**
-     *  Moves a single player `p` as though `ticks` have passed
+     * Moves a single player `p` as though `ticks` have passed
      * 
      * @param ticks How many ticks to move
-     * @param p The player to move
+     * @param p     The player to move
      */
     public void movePlayer(int ticks, Player p) {
         for (int _i = 0; _i < ticks; _i++) {
@@ -1717,9 +1716,9 @@ public class World implements Serializable {
         return lol;
     }
 
-	public void playSound(String sound) {
-        if (!serverWorld) { 
+    public void playSound(String sound) {
+        if (!serverWorld) {
             ResourceLoader.loadSound(sound).start();
         }
-	}
+    }
 }
