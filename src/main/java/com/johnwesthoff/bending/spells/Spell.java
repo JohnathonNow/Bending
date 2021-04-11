@@ -26,6 +26,7 @@ import com.johnwesthoff.bending.spells.air.AirbendingJump;
 import com.johnwesthoff.bending.spells.air.AirbendingTornado;
 import com.johnwesthoff.bending.spells.chemistry.Chemistry;
 import com.johnwesthoff.bending.spells.chemistry.ChemistryCauldron;
+import com.johnwesthoff.bending.spells.chemistry.ChemistryEnergy;
 import com.johnwesthoff.bending.spells.chemistry.ChemistryInvisibility;
 import com.johnwesthoff.bending.spells.chemistry.ChemistryPassive;
 import com.johnwesthoff.bending.spells.chemistry.ChemistryPoison;
@@ -60,6 +61,7 @@ import com.johnwesthoff.bending.spells.water.Waterbending;
 import com.johnwesthoff.bending.spells.water.WaterbendingFreeze;
 import com.johnwesthoff.bending.spells.water.WaterbendingShard;
 import com.johnwesthoff.bending.util.network.OrderedOutputStream;
+
 /*
  * Cooldown reference table:
  * <100 ~ Very Low
@@ -149,7 +151,8 @@ public abstract class Spell {
     }
 
     public static void init() {
-        if (inited) return;
+        if (inited)
+            return;
         inited = true;
         spells.clear();
         spellnames.clear();
@@ -278,7 +281,6 @@ public abstract class Spell {
      */
     public abstract void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid,
             ByteBuffer buf);
-
 
     public abstract String getName();
 
