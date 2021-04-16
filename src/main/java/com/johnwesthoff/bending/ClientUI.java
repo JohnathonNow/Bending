@@ -53,6 +53,7 @@ import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.logic.World;
 import com.johnwesthoff.bending.spells.Spell;
 import com.johnwesthoff.bending.ui.AppletActionListener;
+import com.johnwesthoff.bending.ui.BadVersion;
 import com.johnwesthoff.bending.ui.ClothingChooser1;
 import com.johnwesthoff.bending.ui.Register;
 import com.johnwesthoff.bending.ui.ServerGUI;
@@ -111,6 +112,7 @@ public class ClientUI extends JPanel implements Runnable {
     // RadialGradientPaint cantSee = new RadialGradientPaint(150f,150f,150f,new
     // float[]{0f,1f},new Color[]{new Color(0,0,0,0),new Color(0,0,0,255)});
     Polygon lineOfSight = new Polygon();
+    public BadVersion bv;
 
     public static void launch(String name) {
         Session sess = Session.getInstance();
@@ -259,7 +261,7 @@ public class ClientUI extends JPanel implements Runnable {
         clientui.mapMaker.setLocation(80, 80 + 6 + 32 + 32 + 32 + 32);
         clientui.mapMaker.setSize(140, 16);
         /// me.JRB.setText("Remember me?");
-
+        clientui.bv = new BadVersion();
         clientui.JRB.setActionCommand("RM");
         clientui.spellselection = new SpellList1(clientui);
         clientui.spellselection.setVisible(false);
@@ -311,6 +313,7 @@ public class ClientUI extends JPanel implements Runnable {
         immaKeepTabsOnYou.addTab("SPELLLIST", clientui.spellselection.choochootrain);
         immaKeepTabsOnYou.addTab("PASSIVELIST", clientui.spellselection.choochootrain2);
         immaKeepTabsOnYou.addTab("ClothingChooser", clientui.cc);
+        immaKeepTabsOnYou.addTab("BADVERSION", clientui.bv);
         immaKeepTabsOnYou.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("LEFT"), "none");
         immaKeepTabsOnYou.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("RIGHT"), "none");
         immaKeepTabsOnYou.setLocation(-1, -1);

@@ -2,6 +2,7 @@ package com.johnwesthoff.bending.networking.handlers;
 
 import java.nio.ByteBuffer;
 
+import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.PlayerOnline;
 import com.johnwesthoff.bending.networking.NetworkEvent;
@@ -18,8 +19,12 @@ public class IdEvent implements NetworkEvent {
     @Override
     public void clientReceived(Session p, ByteBuffer message) {
         p.ID = message.getInt();
+        p.serverVersion = message.getInt();
+        if (p.serverVersion != Constants.VERSION) {
+            p.clientui.immaKeepTabsOnYou.setSelectedIndex(5);
+            p.clientui.bv.go();
+        }
         p.world.ID = p.ID;
-
     }
 
     @Override
@@ -29,8 +34,9 @@ public class IdEvent implements NetworkEvent {
     }
 
     public static NetworkMessage getPacket(int id) {
-        ByteBuffer bb = ByteBuffer.allocate(4);
+        ByteBuffer bb = ByteBuffer.allocate(8);
         bb.putInt(id);
+        bb.putInt(Constants.VERSION);
         return new NetworkMessage(bb, ID);
     }
 

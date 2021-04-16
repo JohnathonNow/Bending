@@ -146,7 +146,7 @@ public abstract class Spell {
         registerPassive(new FireProof());
         registerPassive(new LightningOvercharge());
         registerPassive(new LightningShield());
-        registerPassive(new ChemistryPassive());
+        //registerPassive(new ChemistryPassive());
 
     }
 

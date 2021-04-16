@@ -96,6 +96,7 @@ public class Session {
     public long swagTime = 0;
     public int mana_flow = 0;
     public int mana_drain = 0;
+    public int serverVersion = 0;
 
 
     private static Session instance = null;

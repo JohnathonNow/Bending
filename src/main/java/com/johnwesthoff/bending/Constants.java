@@ -106,4 +106,5 @@ public class Constants {
 	public static final double RUNNING_SPEED = 1.5d;
 	protected static final int PING_RATE = (int) (FPS * 10);
     public static final String DEFAULT_AI_NAME = "BotJohn";
+    public static final int VERSION = 1002;
 }

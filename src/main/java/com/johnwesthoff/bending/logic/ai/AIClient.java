@@ -59,7 +59,6 @@ public class AIClient extends ClientUI {
         sess.mainProcess.start();
         // app.serverIP = JOptionPane.showInputDialog("Server IP?");
         sess.net.startAi();
-        sess.net.sendMessage("it is a bus!");
     }
 
     public void init() {
@@ -130,8 +129,6 @@ public class AIClient extends ClientUI {
                     sess.world.dead = false;
                     sess.passiveList[sess.spellBook].onSpawn(sess);
                     sess.HP = sess.MAXHP;
-                    sess.net.sendMessage(
-                            "My bones! How could you do this, " + sess.world.getPlayerName(sess.lastHit) + "?");
                     sess.lastHit = sess.ID;
                 }
             }
