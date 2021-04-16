@@ -20,11 +20,11 @@ public class IdEvent implements NetworkEvent {
     public void clientReceived(Session p, ByteBuffer message) {
         p.ID = message.getInt();
         p.serverVersion = message.getInt();
+        p.world.ID = p.ID;
         if (p.serverVersion != Constants.VERSION) {
             p.clientui.immaKeepTabsOnYou.setSelectedIndex(5);
             p.clientui.bv.go();
         }
-        p.world.ID = p.ID;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class IdEvent implements NetworkEvent {
     }
 
     public static NetworkMessage getPacket(int id) {
-        ByteBuffer bb = ByteBuffer.allocate(8);
+        ByteBuffer bb = ByteBuffer.allocate(16);
         bb.putInt(id);
         bb.putInt(Constants.VERSION);
         return new NetworkMessage(bb, ID);
