@@ -60,6 +60,6 @@ public class AirbendingAir extends Airbending {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.ground.clearCircle(px, py, 24);
+        world.clearCircleOnGround(px, py, 24);
     }
 }
