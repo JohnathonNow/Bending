@@ -1718,4 +1718,12 @@ public class World implements Serializable {
             ResourceLoader.loadSound(sound).start();
         }
     }
+
+    public void addEntity(Entity entity) {
+        entityList.add(entity);
+    }
+
+    public void clearCircleOnGround(int px, int py, int radius) {
+        ground.clearCircle(px, py, radius);
+    }
 }
