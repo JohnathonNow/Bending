@@ -32,8 +32,8 @@ class AirbendingAirTest {
     void actionNetwork() {
         World world = mock(World.class);
 
-        airbendingAir.getActionNetwork(world, 0, 0, 0, 0, 0, 0, mock(ByteBuffer.class));
+        airbendingAir.getActionNetwork(world, 10, 20, 30, 40, 50, 100, mock(ByteBuffer.class));
 
-        verify(world).clearCircleOnGround(0, 0, 24);
+        verify(world).clearCircleOnGround(10, 20, 24);
     }
 }
