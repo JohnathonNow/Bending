@@ -1,16 +1,16 @@
 package com.johnwesthoff.bending.spells.air;
 
-import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
+import com.johnwesthoff.bending.Constants;
+import com.johnwesthoff.bending.Session;
+import com.johnwesthoff.bending.entity.TornadoEntity;
+import com.johnwesthoff.bending.logic.World;
+import com.johnwesthoff.bending.spells.Spell;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.johnwesthoff.bending.Session;
-import com.johnwesthoff.bending.Constants;
-import com.johnwesthoff.bending.entity.TornadoEntity;
-import com.johnwesthoff.bending.logic.World;
-import com.johnwesthoff.bending.spells.Spell;
+import static com.johnwesthoff.bending.util.network.ResourceLoader.loadIcon;
 
 public class AirbendingTornado extends Spell {
     public AirbendingTornado() {
@@ -57,7 +57,7 @@ public class AirbendingTornado extends Spell {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.entityList.add(new TornadoEntity(px, py, mx, pid).setID(eid));
+        world.addEntity(new TornadoEntity(px, py, mx, pid).setID(eid));
     }
 }
 

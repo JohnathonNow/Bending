@@ -4,13 +4,14 @@ package com.johnwesthoff.bending.entity;
  * and open the template in the editor.
  */
 
-import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.Constants;
 import com.johnwesthoff.bending.Server;
+import com.johnwesthoff.bending.Session;
 import com.johnwesthoff.bending.logic.World;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,5 +124,18 @@ public class TornadoEntity extends Entity {
             client.lastHit = maker;
             client.killMessage = "~ was sucked into `'s Tornado.";
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TornadoEntity that = (TornadoEntity) o;
+        return radius == that.radius && life == that.life;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(radius, life);
     }
 }

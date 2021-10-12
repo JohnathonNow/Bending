@@ -69,7 +69,7 @@ public class AirbendingGust extends Airbending {
         for (int i = -30; i <= 30; i+= 30) {
             mx = (int)Ops.lengthdir_x(dis, dir + i);
             my = -(int)Ops.lengthdir_y(dis, dir + i);
-            world.entityList.add(new GustEntity(px, py, mx, my, pid).setID(eid));
+            world.addEntity(new GustEntity(px, py, mx, my, pid).setID(eid));
         }
     }
 }

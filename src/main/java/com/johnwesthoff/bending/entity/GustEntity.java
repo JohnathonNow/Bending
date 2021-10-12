@@ -7,6 +7,7 @@ package com.johnwesthoff.bending.entity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,5 +115,18 @@ public class GustEntity extends Entity {
             client.lungs = client.maxlungs;
             client.killMessage = "~ met `'s gust of air!";
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GustEntity that = (GustEntity) o;
+        return radius == that.radius;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(radius);
     }
 }
