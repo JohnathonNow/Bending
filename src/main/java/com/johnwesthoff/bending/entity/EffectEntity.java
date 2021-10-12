@@ -8,6 +8,7 @@ import com.johnwesthoff.bending.logic.World;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 
 public class EffectEntity extends Entity {
@@ -48,5 +49,18 @@ public class EffectEntity extends Entity {
          * Logger.getLogger(ExplosionEntity.class.getName()).log(Level.SEVERE, null,
          * ex); }
          */
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EffectEntity that = (EffectEntity) o;
+        return life == that.life && gravity == that.gravity && Objects.equals(c, that.c);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(c, life, gravity);
     }
 }

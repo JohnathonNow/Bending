@@ -1726,4 +1726,8 @@ public class World implements Serializable {
     public void clearCircleOnGround(int px, int py, int radius) {
         ground.clearCircle(px, py, radius);
     }
+
+    public int randomInt(int bound) {
+        return random.nextInt(bound);
+    }
 }

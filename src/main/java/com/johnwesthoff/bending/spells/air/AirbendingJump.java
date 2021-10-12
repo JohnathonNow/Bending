@@ -63,7 +63,7 @@ public class AirbendingJump extends Spell {
 
     @Override
     public void getActionNetwork(World world, int px, int py, int mx, int my, int pid, int eid, ByteBuffer buf) {
-        world.entityList.add(new EffectEntity(px, py, mx, my, world.random.nextInt(40), Color.WHITE).setID(eid));
+        world.addEntity(new EffectEntity(px, py, mx, my, world.randomInt(40), Color.WHITE).setID(eid));
     }
 
 }
