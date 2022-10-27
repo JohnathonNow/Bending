@@ -70,7 +70,7 @@ public class LavaBallEntity extends Entity {
     public void onServerUpdate(Server lol) {
         for (Player p : lol.playerList) {
             if (p.ID != maker && p.checkCollision((int) X, (int) Y)) {
-                radius = 12;
+                radius = 36;
                 lol.earth.ground.fillCircleW((int) X, (int) Y, radius, Constants.LAVA);
                 lol.sendMessage(FillEvent.getPacket((int) X, (int) Y, radius, Constants.LAVA));
                 alive = false;
