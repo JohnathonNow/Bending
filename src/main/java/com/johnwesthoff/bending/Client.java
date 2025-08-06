@@ -59,16 +59,9 @@ public class Client {
         if (Math.signum(session.getWorld().move) == 1) {
             localPlayer.left = 1;
         }
-        if (oldLeft != localPlayer.left) {
-            double t = world.leftArmAngle;
-            world.leftArmAngle = world.rightArmAngle;
-            world.rightArmAngle = t;
-        }
         localPlayer.x = session.getWorld().x;
         localPlayer.y = session.getWorld().y;
         localPlayer.status = session.getWorld().status;
-        localPlayer.leftArmAngle = session.getWorld().leftArmAngle;
-        localPlayer.rightArmAngle = session.getWorld().rightArmAngle;
 
         if (((Math.signum(session.getPrevVspeed()) != Math.signum(session.getWorld().vspeed))
                 || ((session.getPrevMove()) != (world.move))) || counting++ > Constants.NETWORK_UPDATE_POSITION_RATE) {

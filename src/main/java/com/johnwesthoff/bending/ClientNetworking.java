@@ -22,10 +22,7 @@ public class ClientNetworking {
         try {
             sess.connection = new Socket(sess.serverIP, Constants.PORT);
             sess.isAlive = true;
-            sess.world = new World(true, Constants.WIDTH_EXT, Constants.HEIGHT_EXT,
-                    sess.clientui.createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), sess.clientui.Grass,
-                    sess.clientui.Sand, sess.clientui.Sky, sess.clientui.Stone, sess.clientui.Bark, sess.clientui.Ice,
-                    sess.clientui.LavaLand, sess.clientui.Crystal, sess.clientui.ether);
+            sess.world = new World(true, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
             //sess.world.load(sess.clientui.Clothing, sess.clientui.Colors, sess.clientui.Colors2);
             sess.world.serverWorld = false;
             sess.connection.setKeepAlive(true);
@@ -67,10 +64,7 @@ public class ClientNetworking {
         try {
             sess.connection = new Socket(sess.serverIP, Constants.PORT);
             sess.isAlive = true;
-            sess.world = new World(false, Constants.WIDTH_EXT, Constants.HEIGHT_EXT,
-                    sess.clientui.createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT), sess.clientui.Grass,
-                    sess.clientui.Sand, sess.clientui.Sky, sess.clientui.Stone, sess.clientui.Bark, sess.clientui.Ice,
-                    sess.clientui.LavaLand, sess.clientui.Crystal, sess.clientui.ether);
+            sess.world = new World(false, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
             sess.world.load(sess.clientui.Clothing, sess.clientui.Colors, sess.clientui.Colors2);
 
             sess.connection.setKeepAlive(true);
@@ -134,7 +128,6 @@ public class ClientNetworking {
         sess.world.x = toRead.getInt();
         sess.world.y = toRead.getInt();
         sess.mapRotation = toRead.getInt();
-        sess.world.map = sess.mapRotation;
         sess.gameMode = toRead.getInt();
         sess.myTeam.clear();
         sess.badTeam.clear();
@@ -208,7 +201,7 @@ public class ClientNetworking {
         }
         try {
             sess.out.addMessage(MoveEvent.getPacket(sess.world.x, sess.world.y, sess.world.move, sess.world.vspeed,
-                    sess.world.leftArmAngle, sess.world.rightArmAngle, sess.world.status, sess.HP, sess.world.ID,
+                    0, 0, sess.world.status, sess.HP, sess.world.ID,
                     sess.world.floatiness));
 
         } catch (final Exception e) {

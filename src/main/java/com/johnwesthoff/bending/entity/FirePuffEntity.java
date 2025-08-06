@@ -52,11 +52,9 @@ public class FirePuffEntity extends Entity {
     }
 
     int next = 0;
-    boolean nightTime = false;
 
     @Override
     public void onUpdate(World apples) {
-        nightTime = apples.map != 0;
         if (!apples.inBounds(X, Y) || apples.checkCollision(X, Y) || life-- < 0) {
             alive = false;
         }

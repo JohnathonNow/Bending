@@ -59,18 +59,27 @@ import com.johnwesthoff.bending.ui.Register;
 import com.johnwesthoff.bending.ui.ServerGUI;
 import com.johnwesthoff.bending.ui.SpellList1;
 import com.johnwesthoff.bending.ui.Verify;
+import com.johnwesthoff.bending.util.graphics.Renderer;
+import com.johnwesthoff.bending.util.graphics.TextureAtlas;
 import com.johnwesthoff.bending.util.network.ResourceLoader;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
+
+import javax.swing.JPanel;
+import java.io.IOException;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientUI extends JPanel implements Runnable {
     private static final long serialVersionUID = 1L;
-    public BufferedImage Grass, Sky, Sand, Stone, screenBuffer, Bark, Ice, LavaLand, Crystal, ether, bigscreenBuffer;
+    public transient TextureAtlas textureAtlas;
+    private final Renderer renderer = new Renderer();
+    private long window;
     public ClothingChooser1 cc = new ClothingChooser1(this);
     public Color chatcolor[] = new Color[] { Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK,
             Color.PINK, Color.PINK, Color.PINK, Color.PINK, Color.PINK };
-    public Color purple = new Color(0xA024C2), backgroundChat = new Color(0, 0, 0, 200),
-            deadbg = new Color(255, 255, 255, 127), dark = new Color(0, 0, 0, 128);
-    public Graphics2D graphicsBuffer, biggraphicsBuffer;
-    public Image doubleBuffer;
     public JButton connect, hosting, refresh, register, verify, ChooseSpells, chooseclothing, mapMaker;
     public JCheckBox JRB;
     public JComboBox<Object> menu;
@@ -103,6 +112,7 @@ public class ClientUI extends JPanel implements Runnable {
         new File(ResourceLoader.dir + "sounds").mkdirs();
         try {
             bimage = ResourceLoader.loadImage("AgedPaper.png");
+            textureAtlas = new TextureAtlas();
             // Thread.sleep(100);
         } catch (final Exception ex) {
             // ex.printStackTrace();
@@ -138,17 +148,7 @@ public class ClientUI extends JPanel implements Runnable {
 
         // JPanel e = new JPanel();
         // e.setSize(300,300);
-        container = new JFrame() {
-            private static final long serialVersionUID = 1255782830759040881L;
-
-            @Override
-            public void paintComponents(final Graphics g) {
-                // super.paintComponent(g);
-
-                g.drawImage(clientui.bimage, 0, 0, getWidth(), getHeight(), null);
-                super.paintComponents(g);
-            }
-        };
+        container = new JFrame();
         clientui.owner = container;
         // container.setUndecorated(true);
         clientui.form.setVisible(false);
@@ -172,15 +172,7 @@ public class ClientUI extends JPanel implements Runnable {
         Spell shield = Spell.lookup("EarthbendingShield");
         sess.passiveList = (new Spell[] { shield, shield, shield, shield, shield, shield });
         // container.add(me);
-        clientui.JRB = new JCheckBox() {
-            private static final long serialVersionUID = -3327024393489960573L;
-
-            @Override
-            public void paintComponent(final Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(bimage, getX(), getY(), getWidth(), getHeight(), null);
-            }
-        };
+        clientui.JRB = new JCheckBox();
 
         sess.userpassinfo = new Properties();
         if (new File(ResourceLoader.dir + "properties.xyz").exists()) {
@@ -411,15 +403,6 @@ public class ClientUI extends JPanel implements Runnable {
         try {
             sess.loggedOn = true;
             sess.temp = "C:";// (System.getenv("TEMP"));
-            Grass = ResourceLoader.loadImage("GrassTexture.jpg");
-            Sky = ResourceLoader.loadImage("SkyTexture.jpg");
-            Sand = ResourceLoader.loadImage("SandTexture.jpg");
-            Stone = ResourceLoader.loadImage("StoneTexture.jpg");
-            Bark = ResourceLoader.loadImage("BarkTexture.jpg");
-            Ice = ResourceLoader.loadImage("iceTexture.png");
-            Crystal = ResourceLoader.loadImage("crystalTexture.png");
-            LavaLand = ResourceLoader.loadImage("lavalandTexture.png");
-            ether = ResourceLoader.loadImage("ether.png");
         } catch (final Exception ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -435,7 +418,35 @@ public class ClientUI extends JPanel implements Runnable {
         chatcolor[sess.chat.length - 1] = color;
     }
 
+    public void initGL() {
+        GLFWErrorCallback.createPrint(System.err).set();
+
+        if (!glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
+
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
+        window = glfwCreateWindow(Constants.WIDTH_EXT, Constants.HEIGHT_EXT, "Bending", NULL, NULL);
+        if (window == NULL) {
+            throw new RuntimeException("Failed to create the GLFW window");
+        }
+
+        glfwMakeContextCurrent(window);
+        glfwSwapInterval(1);
+        glfwShowWindow(window);
+
+        GL.createCapabilities();
+
+        renderer.init(textureAtlas);
+    }
+
     public void destroy() {
+        renderer.destroy();
+        glfwDestroyWindow(window);
+        glfwTerminate();
         Session.getInstance().isAlive = false;
         Session.getInstance().gameAlive = false;
     }
@@ -446,329 +457,16 @@ public class ClientUI extends JPanel implements Runnable {
     @Override
     public void run() {
         Session sess = Session.getInstance();
-        int counting = 150;
-        Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-        sess.lastTime = System.nanoTime();
-        double delta = 0;
-        while (sess.gameAlive) {
-            try {
-                // Thread.yield();
-            } catch (final Exception e2) {
-                e2.printStackTrace();
-            }
-            final long now = System.nanoTime();
-
-            delta += (now - sess.lastTime) / (1000000000 / Constants.FPS);
-            owner.setTitle(
-                    " Packet Count: " + sess.pc + " FPS: " + (1000000000 / (now - sess.lastTime)) + " Delta: " + delta);
-            sess.lastTime = now;
-            boolean willSendMovement = false;
-            if (!owner.isVisible()) {
-                if (!SystemTray.isSupported()) {
-                    System.exit(0);
-                }
-
-                // System.out.println(started);
-            }
-            if (!sess.started) {
-                delta = 0;
-                try {
-                    Thread.sleep(10);
-                } catch (final InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-                continue;
-            }
-            if (sess.matchOver > 0) {
-                try {
-                    Thread.sleep(10);
-                } catch (final InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            while (delta >= 1) {
-                sess.ticks++;
-                delta -= 1;
-                willSendMovement |= sess.client.tick();
-                try {
-                    sess.world.ground.handleWater();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (willSendMovement) {
-                try {
-                    sess.net.sendMovement();
-                } catch (final Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if ((now - swagTime) >= (1000000000 / Constants.FPS)) {
-                draw();
-                repaint();
-                swagTime = now;
-            }
-            World.setTime();
+        initGL();
+        while (!glfwWindowShouldClose(window)) {
+            sess.client.tick();
+            renderer.draw(sess.world, textureAtlas);
+            glfwSwapBuffers(window);
+            glfwPollEvents();
         }
-
+        destroy();
     }
 
-    @Override
-    public void update(final Graphics GameGraphics) {
-        if (doubleBuffer == null) {
-            doubleBuffer = createImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
-        }
-        final Graphics DoubleBufferGraphics = doubleBuffer.getGraphics();
-        DoubleBufferGraphics.setColor(this.getBackground());
-        DoubleBufferGraphics.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
-        DoubleBufferGraphics.setColor(getForeground());
-        paint(DoubleBufferGraphics);
-        // paint(GameGraphics);
-        GameGraphics.drawImage(doubleBuffer, 0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT, this);
-    }
-
-    @Override
-    public void paint(final Graphics g) {
-        if (Session.getInstance().notDone) {
-            super.paint(g);
-            return;
-        }
-        g.drawImage(bigscreenBuffer, 0, 0, getWidth(), getHeight(), null);
-    }
-
-    public void draw() {
-        Session sess = Session.getInstance();
-        World world = sess.getWorld();
-        if (sess.notDone) {
-            return;
-        }
-        if (screenBuffer == null) {
-            screenBuffer = new BufferedImage(Constants.WIDTH_INT, Constants.HEIGHT_INT, BufferedImage.TYPE_INT_ARGB);
-            graphicsBuffer = screenBuffer.createGraphics();
-        }
-        if (bigscreenBuffer == null) {
-            bigscreenBuffer = new BufferedImage(Constants.WIDTH_EXT, Constants.HEIGHT_EXT, BufferedImage.TYPE_INT_ARGB);
-            biggraphicsBuffer = bigscreenBuffer.createGraphics();
-            biggraphicsBuffer.setFont(chatFont);
-        }
-        graphicsBuffer.setColor(Color.black);
-        if (sess.world != null) {
-
-            // world.drawPlayers(graphicsBuffer);
-            if (sess.matchOver > 0) {
-                if (!spellselection.isVisible()) {
-                    sess.matchOver--;
-                }
-                sess.HP = sess.MAXHP;
-                sess.world.dead = false;
-                if (sess.matchOver == 0) {
-                    sess.world.y = 0;
-                    sess.world.x = (sess.goodTeam ? sess.world.wIdTh / 2 : 0)
-                            + sess.random.nextInt(sess.world.wIdTh / 2);
-                    sess.world.dead = false;
-                    sess.passiveList[sess.spellBook].onSpawn(sess);
-                    spellselection.setVisible(false);
-                    Spell.randomSpellMatch.setSpells();
-                }
-                biggraphicsBuffer.drawImage(bimage, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
-                        null);
-                biggraphicsBuffer.setColor(Color.white);
-                biggraphicsBuffer.fillRect(399, 199, 120, 50);
-                biggraphicsBuffer.setColor(Color.black);
-                biggraphicsBuffer.drawRect(400, 200, 120, 50);
-                biggraphicsBuffer.drawRect(399, 199, 120, 50);
-                biggraphicsBuffer.drawString("LOADOUTS", 404, 230);
-                biggraphicsBuffer.drawString("Starting match in " + (1 + (sess.matchOver / 40)) + "...", 360, 300);
-                biggraphicsBuffer.drawString("Combatants:", 400, 326);
-                for (int i = 0; i < sess.world.playerList.size(); i++) {
-                    final Player p = sess.world.playerList.get(i);
-                    biggraphicsBuffer.setColor(sess.gameMode > 0 ? (p.myTeam ? Color.GREEN : Color.red) : Color.red);
-                    biggraphicsBuffer.drawString(p.username, 424, 336 + 16 + (i * 16));
-                }
-                if (sess.chatActive) {
-                    biggraphicsBuffer.setColor(Color.gray);
-                    biggraphicsBuffer.fillRect(32, 810,
-                            biggraphicsBuffer.getFontMetrics().stringWidth(sess.chatMessage), 20);
-                    biggraphicsBuffer.setColor(Color.white);
-                    biggraphicsBuffer.drawString(sess.chatMessage, 32, 830);
-                }
-                drawChat();
-            } else {
-                sess.world.onDraw(graphicsBuffer);
-                sess.world.drawEntities(graphicsBuffer);
-                // if (timeToHeal % 10 == 0)
-
-                // calculateLoS();
-                // graphicsBuffer.setColor(dark);
-                // graphicsBuffer.fill(hideFromMe);
-                // graphicsBuffer.setPaint(null);
-                graphicsBuffer.setColor(Color.black);
-                graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 64, 32, 4);
-                if (world.keys[KeyEvent.VK_S]) {
-                    graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 61, 32, 4);
-                }
-                if (sess.lungs < sess.maxlungs) {
-                    graphicsBuffer.drawRect((int) world.x - world.viewX - 16, (int) world.y - world.viewY - 66, 32, 4);
-                }
-                graphicsBuffer.setColor(Color.green);
-                graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 63,
-                        (int) (30d * ((double) sess.HP / (double) sess.MAXHP)), 2);
-                if (sess.lungs < sess.maxlungs) {
-                    graphicsBuffer.setColor(Color.white);
-                    graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 67,
-                            (int) (30d * ((double) sess.lungs / (double) sess.maxlungs)), 2);
-                }
-                if (world.keys[KeyEvent.VK_S]) {
-                    graphicsBuffer.setColor(Color.RED);
-                    graphicsBuffer.drawRect((int) world.x - world.viewX - 15, (int) world.y - world.viewY - 60,
-                            (int) (30d * ((double) sess.dig / (double) 100)), 2);
-                }
-                for (int i = 0; i < 5; i++) {
-                    graphicsBuffer.drawImage(
-                            sess.spellList[sess.spellBook][i].getEffectiveSpell(i).getImage().getImage(), 4 + i * 34, 0,
-                            32, 16, this);
-                    if (sess.leftClick == i) {
-                        graphicsBuffer.setColor(Color.orange);
-                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                        graphicsBuffer.drawString("L", 4 + i * 34, 10);
-                    } else if (sess.rightClick == i) {
-                        graphicsBuffer.setColor(Color.red);
-                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                        graphicsBuffer.drawString("R", 4 + i * 34, 10);
-                    } else if (sess.midClick == i) {
-                        graphicsBuffer.setColor(Color.YELLOW);
-                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                        graphicsBuffer.drawString("M", 4 + i * 34, 10);
-                    } else if (inputer.setTo == i) {
-                        graphicsBuffer.setColor(Color.GREEN);
-                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                    } else {
-                        graphicsBuffer.setColor(Color.white);
-                        graphicsBuffer.drawRect(4 + i * 34, 0, 32, 16);
-                    }
-                    if (!sess.spellList[sess.spellBook][i].isCooledDown(sess, i)) {
-                        graphicsBuffer.setColor(Color.CYAN);
-                        graphicsBuffer.drawRect(5 + i * 34, 1, 30, 12);
-                    }
-                }
-                // graphicsBuffer.drawImage(this.sightSeeing, 0, 0, null);
-                biggraphicsBuffer.drawImage(screenBuffer, 0, 0, bigscreenBuffer.getWidth(), bigscreenBuffer.getHeight(),
-                        this);
-                world.drawPlayers(biggraphicsBuffer);
-                sess.localPlayer.onDraw(biggraphicsBuffer, world.viewX, world.viewY);
-                for (final Entity e : world.entityList) {
-                    e.drawOverlay(biggraphicsBuffer, world.viewX, world.viewY);
-                }
-                // The below lines are commented out until we get a faster way to do this
-                // Composite c = biggraphicsBuffer.getComposite();
-                // biggraphicsBuffer.setComposite(Additive.additive);
-                for (final Entity e : world.entityList) {
-                    e.drawAdditive(biggraphicsBuffer, world.viewX, world.viewY);
-                }
-                // biggraphicsBuffer.setComposite(c);
-                if (sess.chatActive) {
-                    biggraphicsBuffer.setColor(Color.gray);
-                    biggraphicsBuffer.fillRect(32, 810,
-                            biggraphicsBuffer.getFontMetrics().stringWidth(sess.chatMessage), 20);
-                    biggraphicsBuffer.setColor(Color.white);
-                    biggraphicsBuffer.drawString(sess.chatMessage, 32, 830);
-                }
-                drawChat();
-                if (world.keys[KeyEvent.VK_SPACE]) {
-                    biggraphicsBuffer.setColor(Color.black);
-                    biggraphicsBuffer.fillRect(128, 128, 644, 644);
-                    biggraphicsBuffer.setColor(Color.yellow);
-                    biggraphicsBuffer.drawString(sess.username, 256, 256);
-                    biggraphicsBuffer.drawString("" + sess.score, 512, 256);
-                    for (int i = 0; i < world.playerList.size(); i++) {
-                        final Player p = world.playerList.get(i);
-                        biggraphicsBuffer
-                                .setColor(sess.gameMode > 0 ? (p.myTeam ? Color.GREEN : Color.red) : Color.red);
-                        biggraphicsBuffer.drawString(p.username, 256, 256 + 16 + (i * 16));
-                        biggraphicsBuffer.drawString("" + p.score, 512, 256 + 16 + (i * 16));
-                    }
-                }
-                /*
-                 * if (world.keys[KeyEvent.VK_ALT]) { biggraphicsBuffer.setColor(Color.red);
-                 * this.checkCollision(0, 0); AffineTransform prevTrans =
-                 * biggraphicsBuffer.getTransform(); biggraphicsBuffer.scale(3, 3);
-                 * biggraphicsBuffer.translate(-world.viewX, -world.viewY);
-                 * biggraphicsBuffer.draw(playerHitbox);
-                 * biggraphicsBuffer.setTransform(prevTrans);
-                 * 
-                 * }
-                 */
-                if (world.dead) {
-                    biggraphicsBuffer.setColor(deadbg);
-                    biggraphicsBuffer.fillRect(0, 0, Constants.WIDTH_EXT, Constants.HEIGHT_EXT);
-                    biggraphicsBuffer.setColor(Color.BLACK);
-                    if (sess.gameMode == Server.THEHIDDEN && !sess.goodTeam) {
-                        if (sess.lastHit == sess.ID) {
-                            biggraphicsBuffer.drawString("You killed yourself... That's The Hidden's Job!", 128, 128);
-                        } else {
-                            biggraphicsBuffer.drawString("You were defeated by The Hidden!", 128, 128);
-                        }
-                    } else {
-                        biggraphicsBuffer.drawString("You were defeated, press space to get back in on the action!",
-                                128, 128);
-                        biggraphicsBuffer.drawString("In the meantime, use S and W to switch loadouts.", 128, 144);
-                        biggraphicsBuffer.drawString(
-                                "Forced respawn in " + (1 + ((400 - sess.forcedRespawn) / 40))
-                                        + (!sess.isMyTurn ? " seconds after your turn starts" : " seconds..."),
-                                128, 160);
-                    }
-                    if (sess.chatActive) {
-                        biggraphicsBuffer.setColor(Color.gray);
-                        biggraphicsBuffer.fillRect(32, 810,
-                                biggraphicsBuffer.getFontMetrics().stringWidth(sess.chatMessage), 20);
-                        biggraphicsBuffer.setColor(Color.white);
-                        biggraphicsBuffer.drawString(sess.chatMessage, 32, 830);
-                    }
-                    drawChat();
-                    for (int yyy = 0; yyy < 5; yyy++) {
-                        if (yyy == sess.spellBook) {
-                            biggraphicsBuffer.setColor(Color.BLUE);
-                        } else {
-                            biggraphicsBuffer.setColor(Color.BLACK);
-                        }
-                        for (int xxx = 0; xxx < sess.spellList[yyy].length; xxx++) {
-                            biggraphicsBuffer.drawString(sess.spellList[yyy][xxx].getEffectiveSpell(xxx).getName(),
-                                    128 + (xxx * 128), 300 + (yyy * 64));
-                        }
-                    }
-                    if (world.keys[KeyEvent.VK_W]) {
-                        if (sess.spellBook > 0) {
-                            sess.spellBook--;
-                        }
-                        world.keys[KeyEvent.VK_W] = false;
-                    }
-                    if (world.keys[KeyEvent.VK_S]) {
-                        if (sess.spellBook < 4) {
-                            sess.spellBook++;
-                        }
-                        world.keys[KeyEvent.VK_S] = false;
-                    }
-                    if (sess.isMyTurn) {
-                        sess.forcedRespawn++;
-                    }
-                    if ((!(sess.gameMode == Server.THEHIDDEN && !sess.goodTeam)) || sess.lastHit == sess.ID) {
-                        if (world.keys[KeyEvent.VK_SPACE] || sess.forcedRespawn > 400) {
-                            sess.forcedRespawn = 0;
-                            world.y = 0;
-                            world.x = (sess.goodTeam ? world.wIdTh / 2 : 0) + sess.random.nextInt(world.wIdTh / 2);
-                            world.dead = false;
-                            sess.passiveList[sess.spellBook].onSpawn(sess);
-                            sess.HP = sess.MAXHP;
-                            sess.lastHit = sess.ID;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public Font chatFont = new Font("Arial", Font.BOLD, 18);
-    public Font nameFont = new Font("Arial", Font.BOLD, 12);
 
     public ServerGUI sgui;
 
@@ -839,7 +537,7 @@ public class ClientUI extends JPanel implements Runnable {
             if (isSelected) {
                 getSelectionModel().setSelectionInterval(0, 0);
             }
-            return this;
+            return this.getComponent(0);
         }
     }
 
@@ -877,17 +575,6 @@ public class ClientUI extends JPanel implements Runnable {
                 return row.getExtra();
             }
             return null;
-        }
-    }
-
-    public void drawChat() {
-        Session sess = Session.getInstance();
-        for (int i = 0; i < sess.chat.length; i++) {
-            biggraphicsBuffer.setColor(backgroundChat);
-            biggraphicsBuffer.fillRect(32, 826 - (16 * ((sess.chat.length - i) + 1)),
-                    biggraphicsBuffer.getFontMetrics().stringWidth(sess.chat[i]), 16);
-            biggraphicsBuffer.setColor(chatcolor[i]);
-            biggraphicsBuffer.drawString(sess.chat[i], 32, 840 - (16 * ((sess.chat.length - i) + 1)));
         }
     }
 

@@ -69,7 +69,6 @@ public class AppletActionListener implements ActionListener {
                 app.spellselection.choochootrain.setVisible(false);
                 app.immaKeepTabsOnYou.setSelectedIndex(0);
                 if (!sess.failed) {
-                    app.removeAll();
                     app.owner.setBackground(Color.black);
                 }
             }
@@ -145,7 +144,6 @@ public class AppletActionListener implements ActionListener {
                 app.container.removeAll();
                 // this.expander.interrupt();
                 app.ST.remove(app.trayIcon);
-                app.removeAll();
 
                 final WindowEvent windowClosing = new WindowEvent(app.container, WindowEvent.WINDOW_CLOSING);
                 app.container.dispatchEvent(windowClosing);

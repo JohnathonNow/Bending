@@ -67,11 +67,9 @@ public class World implements Serializable {
 
     public final ArrayList<Player> playerList = new ArrayList<>();
     public boolean serverWorld = false, dead = false;
-    // public Image terrain;
-    public BufferedImage Grass, Sky, Sand, Stone, Ice, Night, Crystal, Ether, Bark;// at the moon
-    // public Graphics2D G2D;
     public double vspeed = 0, move = 0, fr;
     public int mouseX = 150, mouseY = 0, previousX = 0, previousY = 0, pressX, pressY;
+    public double leftArmAngle, rightArmAngle;
     public boolean[] keys = new boolean[3200];
     public float jump = 0;
     public boolean MB1, MB2, MB3;
@@ -81,11 +79,8 @@ public class World implements Serializable {
     public int falledFrames = 0;
     public static int head = 26;
     public static int body = 13;
-    public TexturePaint skyPaint, grassPaint, sandPaint, stonePaint, barkPaint, icePaint, nightPaint;
     public Color waterColor = new Color(0, 255, 255, 127), oilColor = new Color(12, 12, 12, 200);
     public final Color GAS_COLOR = new Color(20, 195, 20, 127);
-    public BufferedImage Iter = new BufferedImage(Constants.WIDTH_INT + 12, Constants.HEIGHT_INT + 12,
-            BufferedImage.TYPE_INT_ARGB);
 
     public final int[][] liquidStats = new int[Constants.LIQUID_LIST.length][6];
     public final byte[] aList = new byte[127];
@@ -98,17 +93,14 @@ public class World implements Serializable {
     public boolean cameraMoved = false;
     public Server lol = null;
     public Player following = null;
-    public Graphics2D Gter = Iter.createGraphics();
 
     public World() {
-        this(true, 900, 900, null, null, null, null, null, null, null, null, null, null);
+        this(true, 900, 900);
         x = 150;
         maxFlow = 150000;
     }
 
-    public World(boolean server, int width, int height, Image terrai, BufferedImage grass, BufferedImage sand,
-            BufferedImage sky, BufferedImage stone, BufferedImage bark, BufferedImage ice, BufferedImage lavaland,
-            BufferedImage crystal, BufferedImage ether) {
+    public World(boolean server, int width, int height) {
         serverWorld = server;
         Arrays.sort(LIQUID_LIST);
         for (int i = 0; i < aList.length; i++) {
@@ -179,29 +171,7 @@ public class World implements Serializable {
 
         wIdTh = width;
         hEigHt = height;
-        Sky = sky;
-        Grass = grass;
-        Sand = sand;
-        Stone = stone;
-        Bark = bark;
-        Ice = ice;
-        Night = lavaland;
-        Crystal = crystal;
-        Ether = ether;
-        if (!serverWorld) {
-            skyPaint = new TexturePaint(Sky, new Rectangle(200, 200));
-            grassPaint = new TexturePaint(Grass, new Rectangle(LAND_TEX_SIZE, LAND_TEX_SIZE));
-            sandPaint = new TexturePaint(Sand, new Rectangle(LAND_TEX_SIZE, LAND_TEX_SIZE));
-            stonePaint = new TexturePaint(Stone, new Rectangle(LAND_TEX_SIZE, LAND_TEX_SIZE));
-            barkPaint = new TexturePaint(Bark, new Rectangle(LAND_TEX_SIZE, LAND_TEX_SIZE));
-            icePaint = new TexturePaint(Ice, new Rectangle(LAND_TEX_SIZE, LAND_TEX_SIZE));
-            nightPaint = new TexturePaint(Night, new Rectangle(300, 300));
-        }
-        // G2D = (Graphics2D)terrain.getGraphics();
-        // G2D.setPaint(new TexturePaint(Grass,new Rectangle(256,256)));
-        // G2D.fill(new Rectangle(0,0,wIdTh,hEigHt));
         ground = new CollisionChecker(wIdTh, hEigHt);
-        // G2D.setPaint(null);
         if (!serverWorld) {
             ground.clearCircle(150, 1, 150);
             ground.clearCircle(450, 1, 150);
@@ -1127,85 +1097,6 @@ public class World implements Serializable {
         // {
         // ground.destroyExpansion(x,y,ETHER);
         // }
-        if (burn++ > 2) {
-            firePolygonred.reset();
-            int[] xx = new int[12];
-            int[] yy = new int[12];
-            xx[0] = (0) * Constants.WIDTH_SCALE;
-            yy[0] = (0);
-            firePolygonred.addPoint(xx[0], yy[0]);
-            int dir = 100 + random.nextInt(45), len = 48 + random.nextInt(48);
-            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
-            firePolygonred.addPoint(xx[1], yy[1]);
-            for (int i = 2; i < xx.length; i++) {
-                if (i % 2 == 1) {
-                    dir = 35 + random.nextInt(90);
-                    len = 48 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                } else {
-                    dir = 225 + random.nextInt(90);
-                    len = 20 + random.nextInt(36);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                }
-                firePolygonred.addPoint(xx[i], yy[i]);
-            }
-
-            firePolygonorange.reset();
-            xx = new int[12];
-            yy = new int[12];
-            xx[0] = (0);
-            yy[0] = (0);
-            firePolygonorange.addPoint(xx[0], yy[0]);
-            dir = 100 + random.nextInt(45);
-            len = 40 + random.nextInt(40);
-            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
-            firePolygonorange.addPoint(xx[1], yy[1]);
-            for (int i = 2; i < xx.length; i++) {
-                if (i % 2 == 1) {
-                    dir = 35 + random.nextInt(90);
-                    len = 40 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                } else {
-                    dir = 225 + random.nextInt(90);
-                    len = 12 + random.nextInt(28);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                }
-                firePolygonorange.addPoint(xx[i], yy[i]);
-            }
-
-            firePolygonyellow.reset();
-            xx = new int[12];
-            yy = new int[12];
-            xx[0] = (0);
-            yy[0] = (0);
-            firePolygonyellow.addPoint(xx[0], yy[0]);
-            dir = 100 + random.nextInt(45);
-            len = 32 + random.nextInt(32);
-            xx[1] = xx[0] + (int) Ops.lengthdir_x(len, dir);
-            yy[1] = yy[0] + (int) Ops.lengthdir_y(len, dir);
-            firePolygonyellow.addPoint(xx[1], yy[1]);
-            for (int i = 2; i < xx.length; i++) {
-                if (i % 2 == 1) {
-                    dir = 35 + random.nextInt(90);
-                    len = 32 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                } else {
-                    dir = 225 + random.nextInt(90);
-                    len = 4 + random.nextInt(20);
-                    xx[i] = xx[i - 1] + (int) Ops.lengthdir_x(len, dir);
-                    yy[i] = yy[i - 1] + (int) Ops.lengthdir_y(len, dir);
-                }
-                firePolygonyellow.addPoint(xx[i], yy[i]);
-            }
-            burn = 0;
-        }
         if (x > wIdTh) {
             x--;
         }
@@ -1214,195 +1105,6 @@ public class World implements Serializable {
         }
     }
 
-    public void onDraw(Graphics g) {
-        // int incX, incY;
-        // incX = (int)Ops.lengthdir_x(Client.pointDis(x, y, mouseX,
-        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        // incY = (int)Ops.lengthdir_y(Client.pointDis(x, y, mouseX,
-        // mouseY)/8,Client.pointDir(x, y, mouseX, mouseY));
-        double followx = x;
-        double followy = y;
-        if (following != null) {
-            incX = 0;
-            incY = 0;
-            cameraMoved = false;
-            followx = (int) following.showx;
-            followy = (int) following.showy;
-        }
-        viewX = (int) Math.min(Math.max((followx - (Constants.WIDTH_INT + 1) / 2) + incX, 0),
-                Math.max(0, wIdTh - Constants.WIDTH_INT - 1));
-        /*
-         * if ((x-150)+incX>wIdTh-300) { incX=(wIdTh-300)-(x-150); } if ((x-150)+incX<0)
-         * { incX=(-(x-150)); }
-         */
-        viewY = (int) Math.min(Math.max((followy - Constants.HEIGHT_INT / 2) + incY, 0),
-                Math.max(0, hEigHt - Constants.HEIGHT_INT));
-        if (dead) {
-            viewX = viewdX;
-            viewY = viewdY;
-        }
-
-        if (viewX < 0) {
-            viewX = 0;
-        }
-        if (viewY < 0) {
-            viewY = 0;
-        }
-
-        try {
-            drawTerrain((Graphics2D) g);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ;
-        // g.drawImage(terrain,-viewX,-viewY, null);
-
-    }
-
-    public int left = 1;
-    public static int burn = 0;
-    public double leftArmAngle = 90, rightArmAngle = 90;
-
-    /**
-     * Draws the entities
-     * 
-     * @param g Graphics
-     */
-    public void drawEntities(Graphics g) {
-        for (int i = 0; i < entityList.size(); i++) {
-            Entity e = entityList.get(i);
-            e.onDraw(g, viewX, viewY);
-        }
-    }
-
-    public static Polygon firePolygonred = new Polygon(), firePolygonyellow = new Polygon(),
-            firePolygonorange = new Polygon();
-
-    /**
-     * Draws the players
-     * 
-     * @param g Graphics
-     */
-    public void drawPlayers(Graphics g) {
-        if (!playerList.isEmpty()) {
-
-            for (Player r : playerList) {
-                r.onDraw(g, viewX, viewY);
-            }
-        }
-    }
-
-    public int map;
-
-    /**
-     * Draws fire
-     * 
-     * @param g2 Graphics
-     * @param xx
-     * @param yy
-     */
-    public static void drawFire(Graphics g2, int xx, int yy) {
-        firePolygonred.translate(xx, yy);
-        firePolygonorange.translate(xx, yy);
-        firePolygonyellow.translate(xx, yy);
-        g2.setColor(Color.RED);
-        g2.fillPolygon(firePolygonred);
-        g2.setColor(Color.ORANGE);
-        g2.fillPolygon(firePolygonorange);
-        g2.setColor(Color.YELLOW);
-        g2.fillPolygon(firePolygonyellow);
-        g2.setColor(Color.BLACK);
-        g2.drawPolygon(firePolygonred);
-        g2.drawPolygon(firePolygonorange);
-        g2.drawPolygon(firePolygonyellow);
-        firePolygonred.translate(-xx, -yy);
-        firePolygonorange.translate(-xx, -yy);
-        firePolygonyellow.translate(-xx, -yy);
-    }
-
-    /**
-     * Draws terrain
-     * 
-     * @param G2 Graphics (in 2D)
-     */
-    public synchronized void drawTerrain(Graphics2D G2) {
-        try {
-            int xx = viewX, yy = viewY;
-
-            // G2.drawImage(Iter, -3, -3, null);
-            Gter.setPaint(map == 1 ? nightPaint : skyPaint);//
-            Gter.fillRect(0, 0, Constants.WIDTH_INT, Constants.HEIGHT_INT);
-
-            // for (int X = xx; X<xx+300; X++)
-            // {
-            // for (int Y = yy; Y<yy+300; Y++)
-            // {
-            // if (aList[ground.cellData[X][Y]]!=-1)
-            // {
-            // if (ground.cellData[X][Y]==liquidList[aList[ground.cellData[X][Y]]])
-            // {
-            // Iter.setRGB(X+4-xx, Y+4-yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-            // }
-            // }
-            // }
-            // }
-
-            for (int X = xx; X < Math.min(xx + Constants.WIDTH_INT, wIdTh); X++) {
-                for (int Y = yy; Y < Math.min(yy + Constants.HEIGHT_INT, hEigHt); Y++) {
-                    // final int minX = Math.min(X + 3 - xx, WIDTH_INT);
-                    // final int minY = Math.min(Y + 3 - yy, HEIGHT_INT);
-                    switch (ground.cellData[X][Y]) {
-                    default:
-                        break;
-                    case GROUND:
-                    case UGROUND:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Grass.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case SAND:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Sand.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case STONE:
-                    case USTONE:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Stone.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case TREE:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Bark.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case ICE:
-                    case UICE:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Ice.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case CRYSTAL:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Crystal.getRGB(X % landTexSize, Y % landTexSize));
-                        break;
-                    case ETHER:
-                        Iter.setRGB(Math.min(X - xx, Constants.WIDTH_INT), Math.min(Y - yy, Constants.HEIGHT_INT),
-                                Ether.getRGB(X % 100, Y % 100));
-                        break;
-                    case WATER:
-                    case LAVA:
-                    case JUICE:
-                    case OIL:
-                        Iter.setRGB(X - xx, Y - yy, liquidStats[aList[ground.cellData[X][Y]]][2]);
-                        break;
-                    case GAS:
-                        Iter.setRGB(X - xx, Y - yy, GAS_COLOR.getRGB());
-                        break;
-                    }
-                }
-            }
-            G2.drawImage(Iter, 0, 0, null);
-        } catch (Exception e) {
-            System.err.println("X: " + viewX + "\tY:" + viewY);
-            e.printStackTrace();
-        }
-    }
 
     public void loseFocus() {
         MB1 = false;

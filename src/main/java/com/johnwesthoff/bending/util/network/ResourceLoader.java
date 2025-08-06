@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -176,4 +177,14 @@ public class ResourceLoader {
         return soundTable.get(name);
     }
 
+    public static String loadResourceAsString(String name) throws IOException {
+        try (InputStream in = ResourceLoader.class.getResourceAsStream(name)) {
+            if (in == null) {
+                throw new IOException("Resource not found: " + name);
+            }
+            // Read the stream into a string
+            java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A");
+            return s.hasNext() ? s.next() : "";
+        }
+    }
 }

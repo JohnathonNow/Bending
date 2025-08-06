@@ -206,9 +206,6 @@ public class Player {
         }
         g.setColor(myTeam ? Color.GREEN : Color.MAGENTA);
         g.drawString(username, (((int)showx - (username.length())) - viewX) * Constants.MULTIPLIER, ((int)showy - 40 - viewY) * Constants.MULTIPLIER);
-        if (((status & Constants.ST_FLAMING)) != 0) {
-            World.drawFire(g, ((int)x + 4 - viewX) * Constants.WIDTH_SCALE, ((int)y - viewY) * Constants.HEIGHT_SCALE);
-        }
         if (((status & Constants.ST_DRAIN)) != 0) {
             g.setColor(Color.BLACK);
             g.drawArc(((int)x - viewX - (Constants.AURA_RADIUS / 2)) * Constants.WIDTH_SCALE,
